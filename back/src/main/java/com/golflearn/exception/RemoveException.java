@@ -1,4 +1,4 @@
-package com.my.exception;
+package com.golflearn.exception;
 
 public class RemoveException extends Exception {
 	public RemoveException() {

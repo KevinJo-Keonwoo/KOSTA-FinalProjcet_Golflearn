@@ -1,4 +1,4 @@
-package com.my.exception;
+package com.golflearn.exception;
 
 /*
 Class 만들때 java.lang.Exception  --> 우클릭 -> source generate constructors from Superclass'
