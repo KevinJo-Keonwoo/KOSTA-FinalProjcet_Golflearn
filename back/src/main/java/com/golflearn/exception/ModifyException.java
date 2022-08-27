@@ -1,4 +1,5 @@
-package com.my.exception;
+package com.golflearn.exception;
+
 
 public class ModifyException extends Exception{
 	public ModifyException() {
