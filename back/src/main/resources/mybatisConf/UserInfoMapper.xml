@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.golflearn.mapper.UserInfoMapper">
+	<select id="selectByUserNameAndPhone" parameterType="Hashmap" resultType="UserInfo">
+		SELECT user_id 
+		FROM user_info 
+		WHERE user_name = #{userName} AND user_phone = #{userPhone}
+	</select>
+	
+	<select id="selectByUserIdAndPhone" parameterType="Hashmap" resultType="UserInfo">
+		SELECT user_phone 
+		FROM user_info 
+		WHERE user_id = #{userId} AND user_phone = #{userPhone}
+	</select>
+	
+	<update id="updateByUserPwd" parameterType="Hashmap">
+		UPDATE user_info 
+		FROM user_pwd=#{userPwd}
+		WHERE user_id = #{userId}
+	</update>	
+</mapper>
