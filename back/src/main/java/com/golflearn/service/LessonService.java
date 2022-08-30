@@ -26,4 +26,8 @@ public class LessonService {
 	public List<Lesson> viewMain() throws FindException {
 		return lsnRepository.selectAll();
 	}
+	
+//	public List<Lesson> viewSelectedLessons() throws FindException {
+//		return lsnRepository.selectSidogu();
+//	}
 }
