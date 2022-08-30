@@ -254,7 +254,7 @@ public class UserInfoController {
 			session.setAttribute("userType", userType);
 		} catch (FindException e) {
 			e.printStackTrace();
-			rb.setMsg("로그인 실패");
+			rb.setMsg("로그인 실패. 아이디 비밀번호를 확인 해 주세요");
 		}
 		return rb;
 	}
