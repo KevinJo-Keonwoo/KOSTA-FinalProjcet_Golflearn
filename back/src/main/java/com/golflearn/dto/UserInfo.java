@@ -31,7 +31,7 @@ public class UserInfo {
 	private int userQuitStatus;
 	
 // @Nonnull 사용방법 붙이는 경우 질문 
-//	private Pro pro;
+	private ProInfo proInfo;
 	
 	
 }

@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.golflearn.dto.ProInfo;
 import com.golflearn.dto.UserInfo;
@@ -37,6 +38,7 @@ public class UserInfoOracleRepository implements UserInfoRepository {
 	}
 	
 	// 프로 회원가입
+	@Transactional
 	@Override
 	public void insertPro(UserInfo userInfo, ProInfo proInfo) throws AddException {
 		SqlSession session = null;
@@ -55,7 +57,7 @@ public class UserInfoOracleRepository implements UserInfoRepository {
 	
 	//아이디 중복확인
 	@Override
-	public UserInfo selectByuserId(String userId) throws FindException {
+	public UserInfo selectByUserId(String userId) throws FindException {
 		SqlSession session = null; // sqlSession : 실제 sql을 날리는 역할
 		try {
 			session = sqlSessionFactory.openSession();

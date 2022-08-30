@@ -56,7 +56,7 @@ public class UserInfoOracleRepositoryTest {
 	public void testSelectByUserId() throws FindException{
 		String userId = "hanmr@nate.com";
 		String expectedUserName = "한미래";
-		UserInfo ui = repository.selectByuserId(userId);
+		UserInfo ui = repository.selectByUserId(userId);
 				
 //		assertEquals(userId, ui.getUserId());
 		assertEquals(expectedUserName, ui.getUserName());

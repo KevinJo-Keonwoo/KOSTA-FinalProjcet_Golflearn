@@ -27,14 +27,14 @@ public interface UserInfoRepository {
 	 * 프로 회원 정보를 추가한다
 	 * @throws AddException
 	 */
-	void insertPro(UserInfo userInfo, ProInfo proInfo) throws AddException ;
+	void insertPro(UserInfo userInfo, ProInfo proInfo) throws AddException;
 	
 	
 	/**
 	 * 아이디 중복확인
 	 * @param userId
 	 */
-	UserInfo selectByuserId(String userId) throws FindException;
+	UserInfo selectByUserId(String userId) throws FindException;
 	
 	/**
 	 * 닉네임 중복확인
