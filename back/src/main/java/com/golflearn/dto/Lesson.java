@@ -41,12 +41,12 @@ public class Lesson {
 //	private List<LessonClsfc> lsnClsfcs;
 //	private List<LessonLine> lsnLines;
 	
-	//살릴것
-	//private UserInfo userInfo;
+	private UserInfo userInfo;
 	
 	//레슨분류(many) : 레슨(one) 관계이기에 레슨분류에서 레슨을 갖고있어야함 
 //	private LessonClassification lessonClassification;
 	
 	//살릴것
-	//private LessonLine lsnLine;
+	private LessonLine lsnLine;
+	private LessonReview lsnReview;
 }

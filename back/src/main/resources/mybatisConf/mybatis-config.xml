@@ -7,11 +7,16 @@
 		<setting name="jdbcTypeForNull" value="NULL"/>
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
 	</settings>
-	<typeAliases>
-		<typeAlias type="com.my.dto.Board" alias="Board"/> <!-- 각자바꾸기 -->
+	
+ 	<typeAliases>
+		<typeAlias type="com.golflearn.dto.LessonLine" alias="LessonLine"/>
+		<typeAlias type="com.golflearn.dto.Lesson" alias="Lesson"/>
+		<typeAlias type="com.golflearn.dto.LessonReview" alias="LessonReview"/>
+		<typeAlias type="com.golflearn.dto.LessonHistory" alias="LessonHistory"/>
 	</typeAliases>
  
   <mappers>
-  	<mapper resource="mybatisConf/BoardMapper.xml"/>
+  	<mapper resource="mybatisConf/LessonLineMapper.xml"/>
+  	<mapper resource="mybatisConf/LessonReviewMapper.xml"/>
   </mappers>
 </configuration>
