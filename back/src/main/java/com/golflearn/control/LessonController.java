@@ -48,12 +48,12 @@ public class LessonController {
 	public ResultBean<LessonLine> viewHistory(@PathVariable int optCp, HttpSession session) {
 		ResultBean<LessonLine> rb = new ResultBean<>();
 		// 로그인 여부를 받아와야한다 HttpSession?
-		String loginedId = (String)session.getAttribute("loginInfo");
-		if(loginedId == null) {
-			rb.setStatus(0);
-			rb.setMsg("로그인하세요");
-			return rb;
-		}else {
+//		String loginedId = (String)session.getAttribute("loginInfo");
+//		if(loginedId == null) {
+//			rb.setStatus(0);
+//			rb.setMsg("로그인하세요");
+//			return rb;
+//		}else {
 			try {
 				List<LessonLine> lsnHistories = service.viewLessonHistory(optCp);
 				rb.setStatus(1);
@@ -64,7 +64,7 @@ public class LessonController {
 				rb.setStatus(-1);
 				rb.setMsg(e.getMessage());
 				return rb;
-			}
+//			}
 		}
 	}
 	
