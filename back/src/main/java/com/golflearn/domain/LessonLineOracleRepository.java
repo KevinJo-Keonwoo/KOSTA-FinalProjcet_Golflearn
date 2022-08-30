@@ -51,20 +51,20 @@ public class LessonLineOracleRepository implements LessonLineRepository {
 		}
 	}
 
-	@Override
-	public int selectTypeById(String userId) throws FindException {
-		SqlSession session = null;
-		try {
-			session = sqlSessionFactory.openSession();
-			int userType = session.selectOne("com.golflearn.mapper.LessonLineMapper.selectTypeById", userId);
-			return userType;
-		}catch (Exception e) {
-			e.printStackTrace();
-			throw new FindException(e.getMessage());
-		}finally {
-			if(session != null) {
-				session.close();
-			}
-		}
-	}
+//	@Override
+//	public int selectTypeById(String userId) throws FindException {
+//		SqlSession session = null;
+//		try {
+//			session = sqlSessionFactory.openSession();
+//			int userType = session.selectOne("com.golflearn.mapper.LessonLineMapper.selectTypeById", userId);
+//			return userType;
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//			throw new FindException(e.getMessage());
+//		}finally {
+//			if(session != null) {
+//				session.close();
+//			}
+//		}
+//	}
 }

@@ -15,18 +15,26 @@ public class LessonLineService {
 	@Autowired
 	private LessonLineRepository repository;
 	
-	List<LessonLine> myLessonList(String userId) throws FindException{
+
+
+	
+	public List<LessonLine> myLessonList(String userId) throws FindException{
+//		int userType = repository.selectTypeById(userId);  //0수강생 1프로
+//		if (userType == 0) {
+//			return lsnLineList;
+//		}else {
+//		}
 		List<LessonLine> list = repository.selectById(userId);
 		return list;
 	}
 	
-	List<Lesson> proLessonList(String userId) throws FindException{
-		List<Lesson> list = repository.selectByProdId(userId);
+	public List<Lesson> proLessonList(String userId) throws FindException{
+		List<Lesson> lessonList = repository.selectByProdId(userId);
 		return null; 
 	}
 	
-	int returnUserType(String userId) throws FindException{
-		int type = repository.selectTypeById(userId);
-		return type;
-	}
+//	public int returnUserType(String userId) throws FindException{
+//		int type = repository.selectTypeById(userId);
+//		return type;
+//	}
 }

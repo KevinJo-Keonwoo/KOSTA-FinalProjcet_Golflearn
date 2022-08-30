@@ -23,13 +23,13 @@ public interface LessonLineRepository {
 	 */
 	List<Lesson> selectByProdId(String userProId) throws FindException;
 	
-	/**
-	 * 세션에 로그인된 유저아이디의 타입을 반환한다 (수강생인지 프로인지)
-	 * @param userId 로그인된 유저 아이디
-	 * @return
-	 * @throws FindException
-	 */
-	int selectTypeById(String userId) throws FindException;
+//	/**
+//	 * 세션에 로그인된 유저아이디의 타입을 반환한다 (수강생인지 프로인지)
+//	 * @param userId 로그인된 유저 아이디
+//	 * @return
+//	 * @throws FindException
+//	 */
+//	int selectTypeById(String userId) throws FindException;
 	
 	
 	

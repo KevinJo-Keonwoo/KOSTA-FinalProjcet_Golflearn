@@ -21,7 +21,7 @@
 	        ,le.lsn_cnt_sum  
 	FROM lesson_line ll JOIN lesson le ON (ll.lsn_no = le.lsn_no)
 	                    LEFT JOIN lesson_review lr ON(ll.lsn_line_no = lr.lsn_line_no)
-	WHERE ll.user_id = 'jokw@gmail.com' 
+	WHERE ll.user_id = #{userId} 
 	ORDER BY ll.lsn_line_no
   </select>
   <select id="selectByProId" resultType="Lesson" parameterType="string">

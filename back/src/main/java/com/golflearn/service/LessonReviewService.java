@@ -17,12 +17,12 @@ public class LessonReviewService {
 	private LessonReviewRepository repository;
 	
 	public Lesson newReview(int lsnLineNo) throws FindException {
-		Lesson lsn = repository.selectTitleByLsnLineNo(lsnLineNo);
-		return lsn;
+		Lesson lesson = repository.selectTitleByLsnLineNo(lsnLineNo);
+		return lesson;
 	}
 	public LessonLine previousReview(int lsnLineNo) throws FindException {
-		LessonLine lsnLine = repository.selectReviewByLsnLineNo(lsnLineNo);
-		return lsnLine;
+		LessonLine lessonLine = repository.selectReviewByLsnLineNo(lsnLineNo);
+		return lessonLine;
 	}
 	public void writeReview(LessonReview lsnReview) throws AddException{
 		repository.insertReview(lsnReview);

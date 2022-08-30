@@ -17,13 +17,13 @@ public class LessonReviewOracleRepository implements LessonReviewRepository {
 	@Autowired
 	private SqlSessionFactory sqlSessionFactory;
 	
-	@Override
+	@Override //LessonLine>?
 	public Lesson selectTitleByLsnLineNo(int lsnLineNo) throws FindException {
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-			Lesson le = session.selectOne("com.golflearn.mapper.LessonReviewMapper.selectTitleByLsnLineNo", lsnLineNo);
-			return le;
+			Lesson lesson = session.selectOne("com.golflearn.mapper.LessonReviewMapper.selectTitleByLsnLineNo", lsnLineNo);
+			return lesson;
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw new FindException(e.getMessage());

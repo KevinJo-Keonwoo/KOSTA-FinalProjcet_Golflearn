@@ -38,10 +38,10 @@ class LessonLineOracleRepositoryTest {
 		List<Lesson> list = repository.selectByProdId(proId);
 		assertTrue(list.size() == 3);
 	}
-	@Test
-	void testType() throws FindException{
-		String userId = "jokw@gmail.com";
-		int type = repository.selectTypeById(userId);
-		assertTrue(type == 0);
-	}
+//	@Test
+//	void testType() throws FindException{
+//		String userId = "jokw@gmail.com";
+//		int type = repository.selectTypeById(userId);
+//		assertTrue(type == 0);
+//	}
 }
