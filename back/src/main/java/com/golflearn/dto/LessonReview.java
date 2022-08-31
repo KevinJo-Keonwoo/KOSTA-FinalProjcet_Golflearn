@@ -16,24 +16,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-@EqualsAndHashCode(of = {"userId"})
-
-public class UserInfo {
-	private String userId;
-	private String userName;
-	private String userNickname;
-	private String userPwd;
-	private String userPhone;
-	
+@EqualsAndHashCode(of = {"lsnLine"})//lessonLine의 lsnLineNo가 pkey
+public class LessonReview {
+	private String review;
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
-	private Date userJoinDt;
-	private int userType;
-	private int userQuitStatus;
-	
-// @Nonnull 사용방법 붙이는 경우 질문 
-//	private Pro pro;
-	
-	private ProInfo proInfo;
-	
-	
+	private Date reviewDt;
+	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
+	private Date reviewEditDt;
+	private int myStarScore;
+	private LessonLine lsnLine;//이거 lessonLine으로 함? 아님 line으로 함? => 통일할 것
 }
