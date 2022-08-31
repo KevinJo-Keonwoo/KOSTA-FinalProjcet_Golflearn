@@ -42,14 +42,16 @@ class UserInfoRepositoryTest {
 	
 	@Test
 	void testupdateByUserPwd() throws ModifyException {
+		UserInfo userInfo = new UserInfo();
 		String userId = "zzeonsh@gmail.com";
 		String userPwd = "1234";
 		
-		String expectedUserPwd = "1234";
+		userInfo.setUserPwd(userPwd);
 		
-		UserInfo userInfo = repository.updateByUserPwd(userId, userPwd);
-		assertNotNull(userInfo);
+		repository.updateByUserPwd(userId, userPwd);
+		
+		String expectedUserPwd = "1234";
+
 		assertEquals(expectedUserPwd, userInfo.getUserPwd());
 	}
-
 }

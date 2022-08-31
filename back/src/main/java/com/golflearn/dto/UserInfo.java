@@ -5,6 +5,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = {"userId"})
-
+@Data
 public class UserInfo {
 	private String userId;
 	private String userName;

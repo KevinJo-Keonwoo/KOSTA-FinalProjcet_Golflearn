@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Repository;
 
 import com.golflearn.dto.UserInfo;
@@ -42,13 +43,16 @@ public class UserInfoOracleRepository implements UserInfoRepository {
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
+			
 			HashMap<String, String> hashMap = new HashMap<>();
 			hashMap.put("userName", userName);
 			hashMap.put("userPhone", userPhone);
-			userInfo = session.selectOne("com.golflearn.mapper.UserInfoMapper.selectByUserNameAndPhone",hashMap);
+			userInfo = session.selectOne("com.golflearn.mapper.UserInfoMapper.selectByUserNameAndPhone", hashMap);
+			
 			if (userInfo == null) {
-				throw new FindException("고객이 없습니다.");
+				throw new FindException("Id조회실패");
 			}
+			
 			return userInfo;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -85,19 +89,14 @@ public class UserInfoOracleRepository implements UserInfoRepository {
 	}
 	
 	@Override
-	public UserInfo updateByUserPwd(String userId, String userPwd) throws ModifyException{
-		UserInfo userInfo = null;
+	public void updateByUserPwd(String userId, String userPwd) throws ModifyException{
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
 			HashMap<String, String> hashMap = new HashMap<>();
 			hashMap.put("userId", userId);
 			hashMap.put("userPwd", userPwd);
-			userInfo = session.selectOne("com.golflearn.mapper.UserInfoMapper.selectByUserIdAndPhone",hashMap);
-			if (userInfo == null) {
-				throw new ModifyException("고객이 없습니다.");
-			}
-			return userInfo;
+			session.update("com.golflearn.mapper.UserInfoMapper.updateByUserPwd",hashMap);
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new ModifyException(e.getMessage());
