@@ -1,10 +1,8 @@
 package com.golflearn.dto;
 
 import java.util.Date;
-
 import java.util.List;
 
-import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
