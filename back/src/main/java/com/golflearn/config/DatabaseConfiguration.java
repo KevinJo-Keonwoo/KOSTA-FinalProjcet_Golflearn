@@ -12,7 +12,6 @@ import org.springframework.context.annotation.PropertySource;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-
 @Configuration
 //application.yml파일을 application.properties파일로 변경
 @PropertySource("classpath:/application.properties")
@@ -34,7 +33,6 @@ public class DatabaseConfiguration {
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {//<bean id="sqlSessionFactory">
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource);
-
 		sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:/mybatisConf/mybatis-config.xml"));
 		return sqlSessionFactoryBean.getObject();
 	}
