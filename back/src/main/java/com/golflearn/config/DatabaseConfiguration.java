@@ -39,3 +39,5 @@ public class DatabaseConfiguration {
 		return sqlSessionFactoryBean.getObject();
 	}
 }
+
+

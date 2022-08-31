@@ -52,6 +52,7 @@ nb-configuration.xml
 # Sql
 back/src/main/java/com/golflearn/sql/MyConnection.java
 back/src/main/resources/application.properties
+application.properties
 # Maven
 log/
 target/
