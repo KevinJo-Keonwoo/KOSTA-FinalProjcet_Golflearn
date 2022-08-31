@@ -22,4 +22,4 @@ public class LessonReview {
 	private Date reviewEditDt;
 	private int myStarScore;
 	private LessonLine lsnLine;
-}
+  }

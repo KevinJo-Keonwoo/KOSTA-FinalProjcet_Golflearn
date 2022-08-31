@@ -19,33 +19,36 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.golflearn.dto.ProInfo;
 import com.golflearn.dto.ResultBean;
+import com.golflearn.dto.SmsResponse;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
+import com.golflearn.service.SmsService;
 import com.golflearn.service.UserInfoService;
+
+import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins="*") // 누구든 ajax로 요청할 수 있음 (다른 포트번호도O)
 @RestController // @Controller + @ResponseBody
 @RequestMapping("/user/*") // 각 메서드 앞에 붙여도됨
+@RequiredArgsConstructor
 public class UserInfoController {
 	private Logger logger = Logger.getLogger(getClass());
-
+  private final SmsService smsService;
+  
 	@Autowired // 빈 객체 주입받음
 	private UserInfoService service;
 
 	@Autowired 
-	// 톰캣 컨테이너 실행 시 각 컨텍스트마다 하나의 ServletContext 생성
-	// 톰캣 종료 시 ServletContext 객체 소멸
-	// 서블릿에서 파일 접근, 로그파일 기능, 컨텍스트에서 제공하는 설정 정보 제공
-	// 서블릿 컨테이너와 통신하기 위해 사용되는 메소드를 지원하는 인터페이스
 	private ServletContext sc;
 
 
@@ -340,6 +343,19 @@ public class UserInfoController {
 		}
 		return rb;
 	}
+  
+  @PostMapping(value="find/id", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResultBean <UserInfo> selectByUserNameAndPhone(@RequestParam String userName, @RequestParam String userPhone) throws FindException {
+		ResultBean<UserInfo> rb = new ResultBean<>();
+		UserInfo userInfo = new UserInfo();
+		try {
+			userInfo = service.selectByUserNameAndPhone(userName, userPhone);
+			rb.setStatus(1);
+			rb.setT(userInfo);
+		}catch(FindException e) {
+			rb.setStatus(0);
+			rb.setMsg(e.getMessage());
+		}
+		return rb;
+	}	
 }
-
-

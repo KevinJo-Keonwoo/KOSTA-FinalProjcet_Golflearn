@@ -15,6 +15,22 @@ public class UserInfoService {
 	@Autowired // 빈 객체 주입받음
 	private UserInfoRepository repository;
 	
+	//아이디 찾기
+	public UserInfo selectByUserNameAndPhone(String userName, String userPhone) throws FindException{
+		UserInfo userInfo = repository.selectByUserNameAndPhone(userName, userPhone);
+		System.out.println(userInfo.getUserId());
+
+		return userInfo;
+	}
+	//비밀번호 찾기
+	public  UserInfo selectByUserIdAndPhone(String userId, String userPhone) throws FindException{
+		UserInfo userInfo = repository.selectByUserIdAndPhone(userId, userPhone);
+		if(!userInfo.getUserId().equals(userId)|| userInfo.getUserPhone().equals(userPhone)) {
+    			throw new FindException();
+		}
+		return userInfo;
+	}
+	
 	// 회원가입 - 수강생
 	public void signupStdt(UserInfo userInfo) throws AddException {
 		repository.insertStdt(userInfo);
@@ -43,6 +59,5 @@ public class UserInfoService {
 		}
 		return userInfo;
 	}
-	
 	
 }
