@@ -1,4 +1,4 @@
-package com.golflearn.domain.repository;
+package com.golflearn.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.golflearn.domain.LessonOracleRepository;
 import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonClassification;
 import com.golflearn.dto.UserInfo;
@@ -19,10 +20,10 @@ import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 import com.golflearn.service.LessonService;
 @SpringBootTest
-class LessonOracleRepositoryTest {
+class LessonRepositoryTest {
 
 	@Autowired
-	private LessonOracleRepository repository;
+	private LessonRepository repository;
 	
 	@Autowired
 	private LessonService lessonService;

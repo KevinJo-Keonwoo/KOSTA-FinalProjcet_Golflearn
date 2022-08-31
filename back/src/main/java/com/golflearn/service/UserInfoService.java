@@ -3,7 +3,7 @@ package com.golflearn.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.golflearn.domain.repository.UserInfoRepository;
+import com.golflearn.domain.UserInfoRepository;
 import com.golflearn.dto.ProInfo;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;

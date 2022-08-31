@@ -1,4 +1,4 @@
-package com.golflearn.domain.repository;
+package com.golflearn.domain;
 
 import com.golflearn.dto.ProInfo;
 import com.golflearn.dto.UserInfo;
