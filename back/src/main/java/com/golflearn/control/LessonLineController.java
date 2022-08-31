@@ -23,9 +23,10 @@ public class LessonLineController {
 	@Autowired
 	private LessonLineService service;
 	
-	public int userType(String userId) {
-		return 0;
-	}	
+	//front딴에서 구별해버리기 
+//	public int userType(String userId) {
+//		return 0;
+//	}	
 	
 	@GetMapping(value = "student") //userId로 가는것이 맞나? 
 	public ResultBean<LessonLine> myPage(HttpSession session) {
