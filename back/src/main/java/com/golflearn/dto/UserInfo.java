@@ -44,8 +44,8 @@ public class UserInfo {
 	private String userNickname;
 	
 	@NotBlank(message = "비밀번호는 필수 입력값입니다.")
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{4,10}$",
-	    	 message = "비밀번호는 4~10자 영문 대소문자, 숫자, 특수문자를 사용하세요.")
+//	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{4,10}$",
+//	    	 message = "비밀번호는 4~10자 영문 대소문자, 숫자, 특수문자를 사용하세요.")
 	private String userPwd;
 	
 	@NotBlank(message = "휴대폰 번호는 필수 입력값입니다.")
