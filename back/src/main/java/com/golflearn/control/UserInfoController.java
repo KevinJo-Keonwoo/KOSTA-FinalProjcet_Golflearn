@@ -61,8 +61,20 @@ public class UserInfoController {
 		return rb;
 	}	
 
-    //@PostMapping("sms")
-   
+    @PostMapping(value="find/pwd", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResultBean <UserInfo> selectByUserIdAndPhone(@RequestParam String userId, @RequestParam String userPhone) throws FindException {
+		ResultBean<UserInfo> rb = new ResultBean<>();
+		UserInfo userInfo = new UserInfo();
+		try {
+			userInfo = service.selectByUserIdAndPhone(userId, userPhone);
+			rb.setStatus(1);
+			rb.setT(userInfo);
+		}catch(FindException e) {
+			rb.setStatus(0);
+			rb.setMsg(e.getMessage());
+		}
+		return rb;
+	}	
 
 }
 

@@ -52,7 +52,6 @@ public class UserInfoOracleRepository implements UserInfoRepository {
 			if (userInfo == null) {
 				throw new FindException("Id조회실패");
 			}
-			
 			return userInfo;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -70,12 +69,14 @@ public class UserInfoOracleRepository implements UserInfoRepository {
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
+			
 			HashMap<String, String> hashMap = new HashMap<>();
 			hashMap.put("userId", userId);
 			hashMap.put("userPhone", userPhone);
 			userInfo = session.selectOne("com.golflearn.mapper.UserInfoMapper.selectByUserIdAndPhone",hashMap);
+			
 			if (userInfo == null) {
-				throw new FindException("고객이 없습니다.");
+				throw new FindException("정보조회 실패");
 			}
 			return userInfo;
 		}catch(Exception e) {

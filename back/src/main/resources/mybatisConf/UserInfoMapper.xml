@@ -11,7 +11,7 @@
 		WHERE user_name = #{userName} AND user_phone = #{userPhone}
 	</select>
 	
-	<select id="selectByUserIdAndPhone" parameterType="UserInfo" resultType="UserInfo">
+	<select id="selectByUserIdAndPhone" parameterType="hashMap" resultType="UserInfo">
 		SELECT user_phone 
 		FROM user_info 
 		WHERE user_id = #{userId} AND user_phone = #{userPhone}

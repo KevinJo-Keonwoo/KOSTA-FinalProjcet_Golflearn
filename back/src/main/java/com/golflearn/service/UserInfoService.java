@@ -54,9 +54,7 @@ public class UserInfoService {
 	//비밀번호 찾기
 	public  UserInfo selectByUserIdAndPhone(String userId, String userPhone) throws FindException{
 		UserInfo userInfo = repository.selectByUserIdAndPhone(userId, userPhone);
-		if(!userInfo.getUserId().equals(userId)|| userInfo.getUserPhone().equals(userPhone)) {
-			throw new FindException();
-		}
+		System.out.println(userInfo.getUserPhone());
 		return userInfo;
 	}
 	//비밀번호 변경
