@@ -1,4 +1,4 @@
-package com.golflearn.domain;
+package com.golflearn.domain.entity;
 
 import java.util.Date;
 
@@ -26,7 +26,6 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter @Setter
 @EqualsAndHashCode(of = {"noticeNo"})
 @Table(name= "notice_board")
 @SequenceGenerator(name = "noticeboard_seq_generator",

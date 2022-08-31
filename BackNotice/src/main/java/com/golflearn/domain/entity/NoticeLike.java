@@ -1,4 +1,4 @@
-package com.golflearn.domain;
+package com.golflearn.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +22,6 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter @Setter
 @EqualsAndHashCode(of = {"noticeLikeNo"})
 @Table(name= "notice_like")
 @SequenceGenerator(name = "noticelike_seq_generator",
