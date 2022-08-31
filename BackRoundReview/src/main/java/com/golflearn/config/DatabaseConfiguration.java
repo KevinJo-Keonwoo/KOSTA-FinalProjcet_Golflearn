@@ -1,8 +1,6 @@
 package com.golflearn.config;
 import javax.sql.DataSource;
 
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -27,15 +25,6 @@ public class DatabaseConfiguration {
 		DataSource dataSource = new HikariDataSource(hikariConfig());
 		return dataSource;
 	}
-
 	@Autowired
-	private ApplicationContext applicationContext
-	@Bean
-	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {//<bean id="sqlSessionFactory">
-		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-		sqlSessionFactoryBean.setDataSource(dataSource);
-
-		sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:/mybatisConf/mybatis-config.xml"));
-		return sqlSessionFactoryBean.getObject();
-	}
+	private ApplicationContext applicationContext;
 }

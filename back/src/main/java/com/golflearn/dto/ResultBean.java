@@ -16,5 +16,5 @@ public class ResultBean<T> {
 	private int status;
 	private String msg;
 	private T t;
-	List<T> lt;
+	private List<T> lt;
 }

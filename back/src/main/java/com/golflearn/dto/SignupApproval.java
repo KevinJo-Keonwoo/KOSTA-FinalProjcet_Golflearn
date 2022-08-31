@@ -1,10 +1,8 @@
 package com.golflearn.dto;
 
 import java.util.Date;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,12 +12,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-@EqualsAndHashCode(of = {"lsnLineNo, lsnChkDt"})
-public class LessonHistory {
-	private LessonLine lsnLine;
-	private Lesson lsn;
-	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
-	private Date lsnChkDt;
-	private Date minChkDt;
-	private int cntChkDt;
+@EqualsAndHashCode(of = {"approvalUserId"})
+public class SignupApproval {
+	
+	private String approvalUserId;
+	private String approvalUserName;
+	private String approvalUserNickname;
+	private String approvalUserPwd;
+	private String approvalUserPhone;
 }

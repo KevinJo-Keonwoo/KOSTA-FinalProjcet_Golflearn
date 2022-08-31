@@ -16,6 +16,8 @@
 		<typeAlias type="com.golflearn.dto.LessonReview" alias="LessonReview"/>
 	</typeAliases>
   <mappers>
+  	<mapper resource="mybatisConf/LessonLineMapper.xml"/>
+  	<mapper resource="mybatisConf/LessonReviewMapper.xml"/>
   	<mapper resource="mybatisConf/LessonHistoryMapper.xml"/>
   	<mapper resource="mybatisConf/LessonMapper.xml"/>
   </mappers>

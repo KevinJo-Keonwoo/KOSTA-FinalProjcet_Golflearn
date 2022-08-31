@@ -3,8 +3,6 @@ package com.golflearn.dto;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.ManyToOne;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -24,8 +22,11 @@ public class LessonLine {
 	private int stdtLsnStatus;
 	private UserInfo userInfo;
 	private Lesson lsn;
+  
+	private List<Lesson> lsns;
 	private LessonReview lsnReview;
-	private LessonHistory lsnHistory;
+	private Payment payment;
+	private int lsnCnt;
+  private LessonHistory lsnHistory;
 	private List<LessonHistory> lsnHistoryLines;
-	
 }
