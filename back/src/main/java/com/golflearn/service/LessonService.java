@@ -1,18 +1,24 @@
 package com.golflearn.service;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.golflearn.domain.repository.LessonRepository;
 import com.golflearn.dto.Lesson;
+import com.golflearn.domain.repository.LessonHistoryRepository;
+import com.golflearn.dto.LessonLine;
 import com.golflearn.exception.AddException;
+
 import com.golflearn.exception.FindException;
 
 @Service(value="lessonService")
 public class LessonService {
-	
 	@Autowired
-	private LessonRepository lessonRepo;
+	private LessonHistoryRepository lsnHistoryRepository;
+  
+	@Autowired
+	private LessonRepository lsnRepository;
 	
 	/**
 	 * 레슨번호의 레슨을 반환한다
@@ -21,7 +27,7 @@ public class LessonService {
 	 * @throws FindException
 	 */
 	public Lesson viewLessonDetail(int lsnNo) throws FindException{
-			Lesson l = lessonRepo.selectByLsnNo(lsnNo);
+			Lesson l = lsnRepo.selectByLsnNo(lsnNo);
 			return l;
 	}
 	
@@ -36,6 +42,14 @@ public class LessonService {
 		
 		//레슨분류정보를 추가한다
 		lessonRepo.insertLsnClassification(lesson);
+	}
+  
+  public List<LessonLine> viewLessonHistory(int lsnNo) throws FindException{
+		return lsnHistoryRepository.selectLessonHistoryByLsnNo(lsnNo);
+	}
+	
+	public List<Lesson> viewMain() throws FindException {
+		return lsnRepository.selectAll();
 	}
 	
 }

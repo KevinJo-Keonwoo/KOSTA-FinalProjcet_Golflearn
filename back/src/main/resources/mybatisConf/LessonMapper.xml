@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -28,6 +28,20 @@
 			</association>
 		</collection>
 	</resultMap>
+  <resultMap id="lessonsMap" type="Lesson" autoMapping="true">
+	<id property="lsnNo" column="lsn_no"/>
+	<association property="userInfo" javaType="UserInfo">
+	    <id property="userId" column="user_id"/>
+	    <result property="userName" column="user_name"/>
+  	</association>
+</resultMap>
+<resultMap id="filterLessonsMap" type="Lesson" autoMapping="true">
+	<id property="lsnNo" column="lsn_no"/>
+	<association property="userInfo" javaType="UserInfo">
+	    <id property="userId" column="user_id"/>
+	    <result property="userName" column="user_name"/>
+  	</association>
+</resultMap>
 	<!-- 레슨 상세보기 : 레슨정보와 레슨후기들을 SELECT -->
 	<select id="selectByLsnNo" parameterType="int" resultMap="lessonDetailMap">
 	SELECT l.lsn_no, l.lsn_title, l.loc_no, l.lsn_lv, l.lsn_days,
@@ -85,4 +99,20 @@
     	SELECT *
   		FROM DUAL
 	</insert>
+  <select id="selectAll" resultMap="lessonsMap">
+	SELECT lsn_no, loc_no, lsn_title, lsn_star_sum, lsn_star_ppl_cnt, ui.user_name
+	FROM lesson l JOIN user_info ui ON(l.user_id = ui.user_id)
+	ORDER BY 1 DESC
+</select>
+
+<select id="selectSidogu" resultMap="filterLessonsMap"  parameterType="int">
+SELECT lsn_no, loc_no, lsn_title, lsn_star_sum, lsn_star_ppl_cnt, ui.user_name
+		FROM lesson l JOIN user_info ui ON(l.user_id = ui.user_id)
+		<where> 
+			<foreach item="locNo" index="index" collection="array"
+				open="l.loc_no IN (" separator="," close=")">
+				#{locNo}
+			</foreach>
+		</where>
+</select>
 </mapper>

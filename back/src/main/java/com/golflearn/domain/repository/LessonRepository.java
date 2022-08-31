@@ -29,5 +29,15 @@ public interface LessonRepository {
 	 * @throws AddException
 	 */
 	void insertLsnClassification(Lesson lesson) throws AddException;
+  
+  /**
+	 * 전체레슨을 불러온다.
+	 * @return List<Lesson>
+	 * @throws FindException
+	 */
+	List<Lesson> selectAll() throws FindException;
+	
+	List<Lesson> selectSidogu(int[] locNoArr) throws FindException;
 	
 }
+

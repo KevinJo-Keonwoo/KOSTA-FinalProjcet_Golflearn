@@ -44,8 +44,9 @@ public class Lesson {
 	private List<LessonClassification> lsnClassifications;
 	
 	private UserInfo userInfo;
-	
-	
+
 	private List<LessonLine> lsnLines;//하나의 레슨에 여러 레슨내역
-	
+
+	private LessonLine lsnLine;
+	private LessonReview lsnReview;
 }
