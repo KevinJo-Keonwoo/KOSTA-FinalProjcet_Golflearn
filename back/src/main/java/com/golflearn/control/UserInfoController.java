@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,7 +60,7 @@ public class UserInfoController {
 	public ResponseEntity<?> signuppro (
 			@RequestPart(required = false) List<MultipartFile> certifFiles, 
 			@RequestPart(required = false) MultipartFile profileImg,
-			UserInfo userInfo, ProInfo proInfo,
+			@Valid UserInfo userInfo, @Valid ProInfo proInfo, Errors error,
 			HttpSession session) {
 
 		logger.info("요청전달데이터 userNickname=" + userInfo.getUserNickname());
@@ -97,66 +99,66 @@ public class UserInfoController {
 				if(certifFileSize > 0) { // 첨부 되었을 경우
 					String paramName = certifFile.getName(); //파라미터로 받아올 값 
 					// 파라미터 값이 user_profile이거나 user_certf인 경우
-//					if(paramName.equals("user_profile") || paramName.equals("pro_certf")) {
-						// 파일 확장자 가져오기
-						String originFileName = certifFile.getOriginalFilename(); // 첨부된 오리지널 파일의 이름 가지고 옴
-						String fileExtension = originFileName.substring(originFileName.lastIndexOf(".")); // .으로 나누어 뒤의 확장자 가지고 옴
-						logger.info("파일 확장자는 " + fileExtension);					
-
-//						if(paramName.equals("user_profile")) {
-							// 저장 파일 이름 설정
-							String CertifFileName = "Certification_" + savedCertifFileCnt +"_"+ fileExtension; //+ UUID.randomUUID() 
-							File savedCertifFile = new File(uploadPath, CertifFileName); // 경로, 저장될 파일 이름
-							// 부모 파일의 경로와, 그 하위의 파일명을 각각 매개변수로 지정하여 
-							// 해당 경로를 조합하여 그 위치에 대한 File 객체를 생성
-
-							//왜 이 과정이 필요한가?
-							try {
-								FileCopyUtils.copy(certifFile.getBytes(), savedCertifFile);
-								logger.info("자격증 파일 저장 경로" + savedCertifFile.getAbsolutePath());// 파일 저장 경로 확인
-							} catch (IOException e) {
-								e.printStackTrace();
-								return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-							}
-							savedCertifFileCnt++;
-						}
-						logger.info("저장된 자격증 파일 개수" + savedCertifFileCnt);
-					}
-//				}
-			}
-			// 프로필 파일 저장
-			long profileImgSize = profileImg.getSize();
-			if(profileImgSize > 0) {
-				String paramName = profileImg.getName(); //파라미터로 받아올 값 
-				// 파라미터 값이 user_profile이거나 user_certf인 경우
-
-//				if(paramName.equals("user_profile") || paramName.equals("pro_certf")) {
-
+					//					if(paramName.equals("user_profile") || paramName.equals("pro_certf")) {
 					// 파일 확장자 가져오기
-					String originFileName = profileImg.getOriginalFilename(); // 첨부된 오리지널 파일의 이름 가지고 옴
+					String originFileName = certifFile.getOriginalFilename(); // 첨부된 오리지널 파일의 이름 가지고 옴
 					String fileExtension = originFileName.substring(originFileName.lastIndexOf(".")); // .으로 나누어 뒤의 확장자 가지고 옴
 					logger.info("파일 확장자는 " + fileExtension);					
 
-//					if(paramName.equals("user_profile")) {
+					//						if(paramName.equals("user_profile")) {
+					// 저장 파일 이름 설정
+					String CertifFileName = "Certification_" + savedCertifFileCnt +"_"+ fileExtension; //+ UUID.randomUUID() 
+					File savedCertifFile = new File(uploadPath, CertifFileName); // 경로, 저장될 파일 이름
+					// 부모 파일의 경로와, 그 하위의 파일명을 각각 매개변수로 지정하여 
+					// 해당 경로를 조합하여 그 위치에 대한 File 객체를 생성
 
-						// 저장 파일 이름 설정
-						String profileImgName = "Profile" +fileExtension; //+ UUID.randomUUID() 
-						File savedCertifFile = new File(uploadPath, profileImgName); // 경로, 저장될 파일 이름
-						// 부모 파일의 경로와, 그 하위의 파일명을 각각 매개변수로 지정하여 
-						// 해당 경로를 조합하여 그 위치에 대한 File 객체를 생성
-
-						//왜 이 과정이 필요한가?
-						try {
-							FileCopyUtils.copy(profileImg.getBytes(), savedCertifFile);
-							logger.info("프로필 저장 경로는" + savedCertifFile.getAbsolutePath());// 파일 저장 경로 확인
-						} catch (IOException e) {
-							e.printStackTrace();
-							return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-						}
+					//왜 이 과정이 필요한가?
+					try {
+						FileCopyUtils.copy(certifFile.getBytes(), savedCertifFile);
+						logger.info("자격증 파일 저장 경로" + savedCertifFile.getAbsolutePath());// 파일 저장 경로 확인
+					} catch (IOException e) {
+						e.printStackTrace();
+						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 					}
-//				}
-//			} 
-//		}
+					savedCertifFileCnt++;
+				}
+				logger.info("저장된 자격증 파일 개수" + savedCertifFileCnt);
+			}
+			//				}
+		}
+		// 프로필 파일 저장
+		long profileImgSize = profileImg.getSize();
+		if(profileImgSize > 0) {
+			String paramName = profileImg.getName(); //파라미터로 받아올 값 
+			// 파라미터 값이 user_profile이거나 user_certf인 경우
+
+			//				if(paramName.equals("user_profile") || paramName.equals("pro_certf")) {
+
+			// 파일 확장자 가져오기
+			String originFileName = profileImg.getOriginalFilename(); // 첨부된 오리지널 파일의 이름 가지고 옴
+			String fileExtension = originFileName.substring(originFileName.lastIndexOf(".")); // .으로 나누어 뒤의 확장자 가지고 옴
+			logger.info("파일 확장자는 " + fileExtension);					
+
+			//					if(paramName.equals("user_profile")) {
+
+			// 저장 파일 이름 설정
+			String profileImgName = "Profile" +fileExtension; //+ UUID.randomUUID() 
+			File savedCertifFile = new File(uploadPath, profileImgName); // 경로, 저장될 파일 이름
+			// 부모 파일의 경로와, 그 하위의 파일명을 각각 매개변수로 지정하여 
+			// 해당 경로를 조합하여 그 위치에 대한 File 객체를 생성
+
+			//왜 이 과정이 필요한가?
+			try {
+				FileCopyUtils.copy(profileImg.getBytes(), savedCertifFile);
+				logger.info("프로필 저장 경로는" + savedCertifFile.getAbsolutePath());// 파일 저장 경로 확인
+			} catch (IOException e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+		//				}
+		//			} 
+		//		}
 		logger.error("이미지 파일 저장 완료");
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -165,24 +167,33 @@ public class UserInfoController {
 	//	@Value("${spring.servlet.multiple.location}")
 	//	String uploadDirectory;
 	@PostMapping("signupstdt")
-	public ResponseEntity<?> signupstdt (
+	public ResultBean<UserInfo> signupstdt (
 			@RequestPart(required = false) MultipartFile profileImg,
-			UserInfo userInfo, ProInfo proInfo,
-			HttpSession session) {
+			@Valid UserInfo userInfo, 
+			Errors error) {
+
+		ResultBean<UserInfo> rb = new ResultBean<>();
 
 		logger.info("요청전달데이터 userNickname=" + userInfo.getUserNickname());
 		logger.info("요청전달데이터 userId=" + userInfo.getUserId());
 		logger.info("요청전달데이터 userName=" + userInfo.getUserName());
 		logger.info("imageFile.getsize()" + profileImg.getSize());
 		logger.info("업로드한 프로필 사진명" + profileImg.getOriginalFilename());		
+		if(error.hasErrors()) {
+			//			return new ResponseEntity<String> (error.getAllErrors().get(0).getDefaultMessage(), HttpStatus.CHECKPOINT);			
+			rb.setStatus(0);
+			rb.setMsg("유효성 검사 실패");
+			return rb;			 
+		}
 
 		//가입 입력 내용 DB에 저장
 		try {
 			service.signupStdt(userInfo);
-
 		}catch (AddException e) {
 			e.printStackTrace();
-			return new ResponseEntity<> (HttpStatus.INTERNAL_SERVER_ERROR);
+			//			return new ResponseEntity<> (HttpStatus.INTERNAL_SERVER_ERROR);
+			rb.setStatus(0);
+			return rb;
 		}
 
 		String userNickname = userInfo.getUserNickname(); // 저장될 폴더의 이름으로 사용
@@ -203,33 +214,36 @@ public class UserInfoController {
 			String paramName = profileImg.getName(); //파라미터로 받아올 값 
 			// 파라미터 값이 user_profile이거나 user_certf인 경우
 
-//			if(paramName.equals("user_profile") || paramName.equals("pro_certf")) {
+			//			if(paramName.equals("user_profile") || paramName.equals("pro_certf")) {
 
-				// 파일 확장자 가져오기
-				String originFileName = profileImg.getOriginalFilename(); // 첨부된 오리지널 파일의 이름 가지고 옴
-				String fileExtension = originFileName.substring(originFileName.lastIndexOf(".")); // .으로 나누어 뒤의 확장자 가지고 옴
-				logger.info("파일 확장자는 " + fileExtension);					
+			// 파일 확장자 가져오기
+			String originFileName = profileImg.getOriginalFilename(); // 첨부된 오리지널 파일의 이름 가지고 옴
+			String fileExtension = originFileName.substring(originFileName.lastIndexOf(".")); // .으로 나누어 뒤의 확장자 가지고 옴
+			logger.info("파일 확장자는 " + fileExtension);					
 
-//				if(paramName.equals("user_profile")) {
+			//				if(paramName.equals("user_profile")) {
 
-					// 저장 파일 이름 설정
-					String profileImgName = "Profile" +fileExtension; //+ UUID.randomUUID() 
-					File savedCertifFile = new File(uploadPath, profileImgName); // 경로, 저장될 파일 이름
-					// 부모 파일의 경로와, 그 하위의 파일명을 각각 매개변수로 지정하여 
-					// 해당 경로를 조합하여 그 위치에 대한 File 객체를 생성
+			// 저장 파일 이름 설정
+			String profileImgName = "Profile" +fileExtension; //+ UUID.randomUUID() 
+			File savedCertifFile = new File(uploadPath, profileImgName); // 경로, 저장될 파일 이름
+			// 부모 파일의 경로와, 그 하위의 파일명을 각각 매개변수로 지정하여 
+			// 해당 경로를 조합하여 그 위치에 대한 File 객체를 생성
 
-					//왜 이 과정이 필요한가?
-					try {
-						FileCopyUtils.copy(profileImg.getBytes(), savedCertifFile);
-						logger.info("프로필 저장 경로는" + savedCertifFile.getAbsolutePath());// 파일 저장 경로 확인
-					} catch (IOException e) {
-						e.printStackTrace();
-						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-					}
-				}
-//			}
-//		} 
-		return new ResponseEntity<>(HttpStatus.OK);
+			//왜 이 과정이 필요한가?
+			try {
+				FileCopyUtils.copy(profileImg.getBytes(), savedCertifFile);
+				logger.info("프로필 저장 경로는" + savedCertifFile.getAbsolutePath());// 파일 저장 경로 확인
+			} catch (IOException e) {
+				e.printStackTrace();
+				//						rb.setStatus(0);
+				//						return rb;
+			}
+		}
+		//			}
+		//		} 
+		//		return new ResponseEntity<>(HttpStatus.OK);
+		rb.setStatus(1);
+		return rb;
 	}
 
 
