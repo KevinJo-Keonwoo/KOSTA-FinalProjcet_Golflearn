@@ -56,7 +56,6 @@ public class LessonOracleRepository implements LessonRepository {
 		}
 	}
 
-	
 	@Override
 	public List<Lesson> selectAll() throws FindException {
 		SqlSession session = null;

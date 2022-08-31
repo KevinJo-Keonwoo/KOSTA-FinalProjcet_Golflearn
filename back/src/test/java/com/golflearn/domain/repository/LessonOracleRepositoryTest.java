@@ -1,6 +1,5 @@
 package com.golflearn.domain.repository;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
