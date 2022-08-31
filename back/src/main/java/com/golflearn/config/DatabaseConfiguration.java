@@ -26,6 +26,7 @@ public class DatabaseConfiguration {
 		DataSource dataSource = new HikariDataSource(hikariConfig());
 		return dataSource;
 	}
+
 	@Autowired
 	private ApplicationContext applicationContext;
 	@Bean
