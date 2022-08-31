@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.golflearn.dto.Messages;
+import com.golflearn.dto.Message;
 import com.golflearn.dto.SmsRequest;
 import com.golflearn.dto.SmsResponse;
 
@@ -43,7 +43,7 @@ public class SmsService {
 	@Value("${sms.senderPhone}")
 	private String senderPhone;
 
-	public SmsResponse sendSms(Messages messages) throws JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, URISyntaxException {
+	public SmsResponse sendSms(Message msg) throws JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, URISyntaxException {
 		Long time = System.currentTimeMillis();
 		
 		HttpHeaders headers = new HttpHeaders();
@@ -53,15 +53,15 @@ public class SmsService {
 		headers.set("x-ncp-apigw-signature-v2", makeSignature(time));
 //		String sig = makeSignature(time); //암호화
 		
-		List<Messages> messages = new ArrayList<>();
-		messages.add(messages);
+		List<Message> messages = new ArrayList<>();
+		messages.add(msg);
 
 		SmsRequest smsRequest = SmsRequest.builder()
 				.type("SMS")
-				.contetnType("COMM")
+				.contentType("COMM")
 				.countryCode("82")
 				.from(senderPhone)
-				.content(messages.getContent())
+				.content(msg.getContent())
 				.messages(messages)
 				.build();
 		ObjectMapper objectMapper = new ObjectMapper();
