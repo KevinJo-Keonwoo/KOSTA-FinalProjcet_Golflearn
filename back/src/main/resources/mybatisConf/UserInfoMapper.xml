@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace = "com.golflearn.mapper.UserInfoMapper">
+    <select id="selectByUserNameAndPhone" parameterType="hashMap" resultType="UserInfo">
+      SELECT user_id 
+      FROM user_info 
+      WHERE user_name = #{userName} AND user_phone = #{userPhone}
+    </select>
+
+    <select id="selectByUserIdAndPhone" parameterType="UserInfo" resultType="UserInfo">
+      SELECT user_phone 
+      FROM user_info 
+      WHERE user_id = #{userId} AND user_phone = #{userPhone}
+    </select>
+
+    <update id="updateByUserPwd" parameterType="Hashmap">
+      UPDATE user_info 
+      SET user_pwd= #{userPwd}
+      WHERE user_id = #{userId}
+    </update>	
+    
+  	<!-- 수강생 회원가입 -->
+  	<insert id="insertStdt" parameterType="UserInfo"> 
+  	INSERT INTO user_info(user_id, user_name, user_nickname, user_pwd, user_phone, user_join_dt, user_type,user_quit_status)
+  	VALUES(#{userId},#{userName},#{userNickname},#{userPwd},#{userPhone},SYSDATE,0,0)
+  	</insert>
+  	
+  	<!-- 프로 회원가입 -->
+  	<insert id="insertPro" parameterType="UserInfo"> 
+  	INSERT INTO user_info(user_id, user_name, user_nickname, user_pwd, user_phone, user_join_dt, user_type,user_quit_status)
+  	VALUES(#{userId},#{userName},#{userNickname},#{userPwd},#{userPhone},SYSDATE ,1,0)
+  	</insert>
+  	
+  	<!-- 프로테이블에도 데이터 저장 -->
+  	<insert id="insertProInfo" parameterType="ProInfo">
+  	INSERT INTO pro_info(user_id, pro_career)
+  	VALUES(#{userId}, #{proCareer})
+  	</insert>
+  	
+	<!-- 아이디 중복확인 -->
+	<select id ="selectByUserId" resultType="UserInfo" parameterType ="string">
+	SELECT * FROM user_info WHERE user_id=#{userId}	
+	</select>
+	
+	<!-- 닉네임 중복확인 -->
+	<select id ="selectByUserNickname" resultType="UserInfo" parameterType="string">
+	SELECT * FROM user_info WHERE user_nickname = #{userNickname}
+>>>>>>> 1e16e74dd5a4b6203106bd2d090d71e938a24bf1
+	</select>
+	
+	<!-- 로그인 -->
+	<select id="selectByUserIdAndPwd" resultType="UserInfo" parameterType="hashMap">
+	SELECT * FROM user_info WHERE user_id = #{userId} AND user_pwd = #{userPwd}	
+	</select>
+
+  </mapper>

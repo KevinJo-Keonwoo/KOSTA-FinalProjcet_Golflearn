@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+	<typeAliases>
+		<typeAlias type="com.golflearn.dto.Lesson" alias="Lesson"/>
+		<typeAlias type="com.golflearn.dto.LessonHistory" alias="LessonHistory"/>
+		<typeAlias type="com.golflearn.dto.LessonLine" alias="LessonLine"/>
+		<typeAlias type="com.golflearn.dto.UserInfo" alias="UserInfo"/>
+    <typeAlias type="com.golflearn.dto.ProInfo" alias="ProInfo"/>
+    <typeAlias type="com.golflearn.dto.Payment" alias="Payment"/> 
+		<typeAlias type="com.golflearn.dto.SignupApproval" alias="SignupApproval"/>
+		<typeAlias type="com.golflearn.dto.LessonClassification" alias="LessonClassification"/>
+		<typeAlias type="com.golflearn.dto.LessonReview" alias="LessonReview"/>
+	</typeAliases>
+  <mappers>
+  	<mapper resource="mybatisConf/UserInfoMapper.xml"/>
+  	<mapper resource="mybatisConf/LessonLineMapper.xml"/>
+  	<mapper resource="mybatisConf/LessonReviewMapper.xml"/>
+  	<mapper resource="mybatisConf/LessonHistoryMapper.xml"/>
+  	<mapper resource="mybatisConf/LessonMapper.xml"/>
+  </mappers>
+</configuration>

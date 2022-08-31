@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.golflearn.mapper.LessonHistoryMapper">
+<resultMap id="lessonMap" type="LessonLine" autoMapping="true">
+	<id property="lsnLineNo" column="lsn_line_no"/>
+	<association property="userInfo" javaType="UserInfo">
+	    <id property="userId" column="user_id"/>
+	    <result property="userName" column="user_name"/>
+	    <result property="userPhone" column="user_phone"/>
+  	</association>
+  	<association property="lsn" javaType="Lesson">
+  		<id property="lsnNo" column="lsn_no"/>
+  		<result property="lsnTitle" column="lsn_title"/>
+  		<result property="lsnCntSum" column="lsn_cnt_sum"/>
+  	</association>
+	<collection property="lsnHistoryLines" ofType="LessonHistory" autoMapping="true">
+		<id property="lsnChkDt" column="lsn_chk_dt"/>
+	</collection>
+</resultMap>
+  <select id="selectLessonHistoryByLsnNo" resultMap="lessonMap" parameterType="int">
+    SELECT ll.lsn_no,
+		le.lsn_title,
+		ui.user_name,
+		ui.user_phone,
+		MIN(lh.lsn_chk_dt) min_chk_dt,
+		ll.lsn_exp_dt,
+		COUNT(lh.lsn_chk_dt) cnt_chk_dt,
+		le.lsn_cnt_sum,
+		ll.stdt_lsn_status
+	FROM lesson_line ll 
+	JOIN user_info ui ON (ui.user_id = ll.user_id)
+	LEFT JOIN lesson_history lh ON (lh.lsn_line_no = ll.lsn_line_no)
+	JOIN lesson le ON (le.lsn_no = ll.lsn_no)
+	WHERE ll.lsn_no = #{lsnNo}
+	GROUP BY ll.lsn_no, ui.user_name, le.lsn_title,
+		ui.user_phone,
+		ll.lsn_exp_dt, le.lsn_cnt_sum,
+		ll.stdt_lsn_status
+  </select>
+</mapper>

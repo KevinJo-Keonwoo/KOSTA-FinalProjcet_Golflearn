@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.golflearn.mapper.LessonLineMapper">
+<resultMap type="LessonLine" id="LessonLineMap" autoMapping="true">
+	<id property="lsnLineNo" column="lsn_line_no"/>
+	<result property="lsnExpDt" column="lsn_exp_dt"/>
+	<result property="stdtLsnStatus" column="stdt_lsn_status"/>
+	<collection property="lsns" ofType="Lesson" autoMapping="true">
+		<id property="lsnNo" column="lsn_no"/>
+		<result property="lsnCntSum" column="lsn_cnt_sum"/>
+		<association property="lsnReview" javaType="LessonReview" autoMapping="true">
+		</association>
+	</collection>
+</resultMap>
+  <select id="selectById" resultMap="LessonLineMap" parameterType="string" >
+	SELECT ll.lsn_line_no, le.lsn_no, le.lsn_title, ll.lsn_exp_dt,
+	        ll.stdt_lsn_status, lr.my_star_score
+	        ,(SELECT COUNT(lsn_chk_dt) FROM lesson_history WHERE lsn_line_no=ll.lsn_line_no ) lsn_cnt
+	        ,le.lsn_cnt_sum  
+	FROM lesson_line ll JOIN lesson le ON (ll.lsn_no = le.lsn_no)
+	                    LEFT JOIN lesson_review lr ON(ll.lsn_line_no = lr.lsn_line_no)
+	WHERE ll.user_id = #{userId} 
+	ORDER BY ll.lsn_line_no
+  </select>
+  <select id="selectByProId" resultType="Lesson" parameterType="string">
+  	SELECT lsn_no, lsn_title, lsn_status
+	FROM lesson
+	WHERE user_id = #{userId}
+  </select>
+  <select id="selectTypeById" resultType="int" parameterType="string">
+  	SELECT user_type
+	FROM user_info
+	WHERE user_id = #{userId}
+  </select>
+</mapper>
