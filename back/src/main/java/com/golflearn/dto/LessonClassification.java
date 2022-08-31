@@ -14,5 +14,4 @@ public class LessonClassification {
 	private int clubNo;
 	
 	private Lesson lesson;
-
 }

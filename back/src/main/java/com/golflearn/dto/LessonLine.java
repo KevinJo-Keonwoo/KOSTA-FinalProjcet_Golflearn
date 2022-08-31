@@ -21,10 +21,8 @@ public class LessonLine {
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	private Date lsnExpDt;
 	private int stdtLsnStatus;
-
 	private UserInfo userInfo;
 	private Lesson lsn;
-  
 	private List<Lesson> lsns;
 	private LessonReview lsnReview;
 	private Payment payment;
@@ -32,4 +30,3 @@ public class LessonLine {
   private LessonHistory lsnHistory;
 	private List<LessonHistory> lsnHistoryLines;
 }
-

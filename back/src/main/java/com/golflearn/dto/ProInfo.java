@@ -15,6 +15,6 @@ import lombok.Setter;
 @EqualsAndHashCode(of = {"userInfo"})
 public class ProInfo {
 	private UserInfo userInfo;
-	
+	private String userId;
 	private String proCareer;
 }
