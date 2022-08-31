@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.golflearn.domain.LessonOracleRepository;
 import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonClassification;
 import com.golflearn.dto.UserInfo;

@@ -1,6 +1,5 @@
-package com.golflearn.domain.repository;
+package com.golflearn.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -9,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.golflearn.dto.Lesson;
-import com.golflearn.dto.LessonClassification;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
+
 @Repository(value = "lessonOracleRepository")
 public class LessonOracleRepository implements LessonRepository {
 	@Autowired 
@@ -46,6 +45,7 @@ public class LessonOracleRepository implements LessonRepository {
 		try {
 			session = sqlSessionFactory.openSession();
 			session.insert("com.golflearn.mapper.LessonMapper.insertLsnInfo", lesson);
+			session.insert("com.golflearn.mapper.LessonMapper.insertLsnClassification", lesson);
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new AddException(e.getMessage());
@@ -55,22 +55,7 @@ public class LessonOracleRepository implements LessonRepository {
 			}
 		}
 	}
-@Override
-	public void insertLsnClassification(Lesson lesson) throws AddException {
-		SqlSession session = null;
-		try {//다중insert
-				session = sqlSessionFactory.openSession();
-				session.insert("com.golflearn.mapper.LessonMapper.insertLsnClassification", lesson);
-		}catch(Exception e) {
-			e.printStackTrace();
-			throw new AddException(e.getMessage());
-		}finally {
-			if(session != null) {
-				session.close();
-			}
-		}
-	}
-	
+
 	@Override
 	public List<Lesson> selectAll() throws FindException {
 		SqlSession session = null;

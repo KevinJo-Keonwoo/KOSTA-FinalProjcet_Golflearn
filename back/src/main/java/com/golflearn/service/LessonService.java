@@ -4,9 +4,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.golflearn.domain.repository.LessonRepository;
+import com.golflearn.domain.LessonHistoryRepository;
+import com.golflearn.domain.LessonRepository;
 import com.golflearn.dto.Lesson;
-import com.golflearn.domain.repository.LessonHistoryRepository;
 import com.golflearn.dto.LessonLine;
 import com.golflearn.exception.AddException;
 
@@ -39,11 +39,9 @@ public class LessonService {
 	public void addLesson(Lesson lesson) throws AddException{
 		//레슨정보를 추가한다
 		lsnRepository.insertLsnInfo(lesson);
-		
-		//레슨분류정보를 추가한다
-		lsnRepository.insertLsnClassification(lesson);
+
 	}
-  
+
   public List<LessonLine> viewLessonHistory(int lsnNo) throws FindException{
 		return lsnHistoryRepository.selectLessonHistoryByLsnNo(lsnNo);
 	}
