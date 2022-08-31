@@ -21,6 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -43,20 +44,25 @@ public class NoticeComment {
 	
 	@ManyToOne
 	@JoinColumn(name="notice_board_no")
+	@NonNull
 	private NoticeBoard noticeBoard;
 	
 	@Column(name="user_nickname")
+	@NonNull
 	private String userNickname;
 	
 	@Column(name="user_cmt_content")
+	@NonNull
 	private String noticeCmtContent;
 	
 	@Column(name="notice_dt")
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	@ColumnDefault(value = "SYSDATE")
+	@NonNull
 	private Date noticeCmtDt;
 	
 	@Column(name="notice_cmt_parent_no")
 	@ColumnDefault(value = "-1")
+	@NonNull
 	private Long noticeCmtParentNo;
 }

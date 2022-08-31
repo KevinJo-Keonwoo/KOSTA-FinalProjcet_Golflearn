@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -40,9 +41,11 @@ public class NoticeLike {
 	
 	@ManyToOne
 	@JoinColumn(name="notice_board_no")
+	@NonNull
 	private NoticeBoard noticeBoard;
 	
 	@Column(name="user_nickname")
+	@NonNull
 	private String userNickname;
 	
 }

@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -43,28 +44,35 @@ public class NoticeBoard {
 	private Long noticeNo;
 	
 	@Column(name="notice_title")
+	@NonNull
 	private String noticeTitle;
 	
 	@Column(name="notice_content")
+	@NonNull
 	private String noticContent;
 	
 	@Column(name="notice_dt")
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	@ColumnDefault(value = "SYSDATE")
+	@NonNull
 	private Date noticeDt;
 	
 	@Column(name="notice_view_cnt")
 	@ColumnDefault(value = "0")
+	@NonNull
 	private Long noticeViewCnt;
 	
 	@Column(name="user_nickname")
+	@NonNull
 	private String userNickname;
 	
 	@Column(name="notice_like_cnt")
 	@ColumnDefault(value = "0")
+	@NonNull
 	private Long noticeLikeCnt;
 	
 	@Column(name="notice_cmt_cnt")
 	@ColumnDefault(value = "0")
+	@NonNull
 	private Long noticeCmtCnt;
 }
