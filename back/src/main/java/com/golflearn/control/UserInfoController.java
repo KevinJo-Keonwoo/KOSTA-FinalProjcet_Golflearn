@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -166,13 +167,14 @@ public class UserInfoController {
 	// 수강생 회원가입
 	//	@Value("${spring.servlet.multiple.location}")
 	//	String uploadDirectory;
+	@Transactional
 	@PostMapping("signupstdt")
-	public ResultBean<UserInfo> signupstdt (
+	public ResultBean<?> signupstdt (
 			@RequestPart(required = false) MultipartFile profileImg,
 			@Valid UserInfo userInfo, 
 			Errors error) {
 
-		ResultBean<UserInfo> rb = new ResultBean<>();
+		ResultBean<?> rb = new ResultBean<>();
 
 		logger.info("요청전달데이터 userNickname=" + userInfo.getUserNickname());
 		logger.info("요청전달데이터 userId=" + userInfo.getUserId());
