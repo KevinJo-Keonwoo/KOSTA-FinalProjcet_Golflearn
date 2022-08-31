@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.golflearn.dto.Lesson;
+import com.golflearn.dto.LessonClassification;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 @Repository(value = "lessonOracleRepository")
@@ -22,12 +23,12 @@ public class LessonOracleRepository implements LessonRepository {
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-			Lesson l = session.selectOne("com.golflearn.mapper.LessonMapper.selectByLsnNo", lsnNo);
+			Lesson lesson = session.selectOne("com.golflearn.mapper.LessonMapper.selectByLsnNo", lsnNo);
 			
-			if (l == null) {
-				throw new FindException("해당하는 게시글이 없습니다");
+			if (lesson == null) {
+				throw new FindException("해당하는 레슨이 없습니다");
 			}
-			return l;
+			return lesson;
 		} catch (FindException e) {
 			e.printStackTrace();
 			throw new FindException(e.getMessage());
@@ -44,7 +45,22 @@ public class LessonOracleRepository implements LessonRepository {
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-			session.insert("com.my.mapper.BoardMapper.insert", lesson);
+			session.insert("com.golflearn.mapper.LessonMapper.insertLsnInfo", lesson);
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new AddException(e.getMessage());
+		}finally {
+			if(session != null) {
+				session.close();
+			}
+		}
+	}
+@Override
+	public void insertLsnClassification(Lesson lesson) throws AddException {
+		SqlSession session = null;
+		try {//다중insert
+				session = sqlSessionFactory.openSession();
+				session.insert("com.golflearn.mapper.LessonMapper.insertLsnClassification", lesson);
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new AddException(e.getMessage());

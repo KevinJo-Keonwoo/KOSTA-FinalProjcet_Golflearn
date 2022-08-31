@@ -12,6 +12,7 @@
 		<typeAlias type="com.golflearn.dto.LessonHistory" alias="LessonHistory"/>
 		<typeAlias type="com.golflearn.dto.LessonLine" alias="LessonLine"/>
 		<typeAlias type="com.golflearn.dto.UserInfo" alias="UserInfo"/>
+    <typeAlias type="com.golflearn.dto.ProInfo" alias="ProInfo"/>
 		<typeAlias type="com.golflearn.dto.LessonClassification" alias="LessonClassification"/>
 		<typeAlias type="com.golflearn.dto.LessonReview" alias="LessonReview"/>
 	</typeAliases>
