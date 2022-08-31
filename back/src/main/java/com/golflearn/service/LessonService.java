@@ -27,7 +27,7 @@ public class LessonService {
 	 * @throws FindException
 	 */
 	public Lesson viewLessonDetail(int lsnNo) throws FindException{
-			Lesson l = lsnRepo.selectByLsnNo(lsnNo);
+			Lesson l = lsnRepository.selectByLsnNo(lsnNo);
 			return l;
 	}
 	
@@ -38,10 +38,10 @@ public class LessonService {
 	 */
 	public void addLesson(Lesson lesson) throws AddException{
 		//레슨정보를 추가한다
-		lessonRepo.insertLsnInfo(lesson);
+		lsnRepository.insertLsnInfo(lesson);
 		
 		//레슨분류정보를 추가한다
-		lessonRepo.insertLsnClassification(lesson);
+		lsnRepository.insertLsnClassification(lesson);
 	}
   
   public List<LessonLine> viewLessonHistory(int lsnNo) throws FindException{
