@@ -1,6 +1,7 @@
 package com.golflearn.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class Messages {
+@Builder
+public class Message {
     private String to;
     private String content;
 }
