@@ -14,7 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = {"lsnNo"})
-
 public class Lesson {
 	private int lsnNo;
 	private String locNo;
@@ -41,6 +40,7 @@ public class Lesson {
 //	private List<LessonClsfc> lsnClsfcs;
 //	private List<LessonLine> lsnLines;
 	
+
 	private UserInfo userInfo;
 	
 	//레슨분류(many) : 레슨(one) 관계이기에 레슨분류에서 레슨을 갖고있어야함 
