@@ -29,7 +29,7 @@ public class DatabaseConfiguration {
 	}
 
 	@Autowired
-	private ApplicationContext applicationContext
+	private ApplicationContext applicationContext;
 	@Bean
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {//<bean id="sqlSessionFactory">
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
