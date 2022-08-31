@@ -64,5 +64,5 @@ public interface UserInfoRepository {
 	 * @param
 	 * @throws ModifyException
 	 */
-	public UserInfo updateByUserPwd(String userId, String userPwd) throws ModifyException;
+	public void updateByUserPwd(String userId, String userPwd) throws ModifyException;
 }
