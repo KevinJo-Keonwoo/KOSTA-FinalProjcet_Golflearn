@@ -34,8 +34,6 @@ public class LessonService {
 		//레슨정보를 추가한다
 		lessonRepo.insertLsnInfo(lesson);
 		
-		//레슨분류정보를 추가한다
-		lessonRepo.insertLsnClassification(lesson);
 	}
 	
 }
