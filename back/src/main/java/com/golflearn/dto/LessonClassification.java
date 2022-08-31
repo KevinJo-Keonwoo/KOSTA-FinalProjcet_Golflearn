@@ -9,10 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-@EqualsAndHashCode(of = {"clubNo"})
+//@EqualsAndHashCode(of = {"clubNo"})
 public class LessonClassification {
 	private int clubNo;
 	
-	//살릴 것
-//	private Lesson lesson;
+	private Lesson lesson;
 }

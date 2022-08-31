@@ -12,8 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-@EqualsAndHashCode(of = {"userId"})
+@EqualsAndHashCode(of = {"userInfo"})
 public class ProInfo {
+	private UserInfo userInfo;
 	private String userId;
 	private String proCareer;
 }

@@ -21,5 +21,5 @@ public class LessonReview {
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	private Date reviewEditDt;
 	private int myStarScore;
-	private LessonLine line;
-}
+	private LessonLine lsnLine;
+  }

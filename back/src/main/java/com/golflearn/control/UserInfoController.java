@@ -8,10 +8,12 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
@@ -30,22 +32,24 @@ import com.golflearn.dto.ResultBean;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
+import com.golflearn.service.SmsService;
 import com.golflearn.service.UserInfoService;
+
+import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins="*") // 누구든 ajax로 요청할 수 있음 (다른 포트번호도O)
 @RestController // @Controller + @ResponseBody
 @RequestMapping("/user/*") // 각 메서드 앞에 붙여도됨
+@RequiredArgsConstructor
 public class UserInfoController {
-	private Logger logger = Logger.getLogger(getClass());
-
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	private final SmsService smsService;
+  
 	@Autowired // 빈 객체 주입받음
 	private UserInfoService service;
 
 	@Autowired 
-	// 톰캣 컨테이너 실행 시 각 컨텍스트마다 하나의 ServletContext 생성
-	// 톰캣 종료 시 ServletContext 객체 소멸
-	// 서블릿에서 파일 접근, 로그파일 기능, 컨텍스트에서 제공하는 설정 정보 제공
-	// 서블릿 컨테이너와 통신하기 위해 사용되는 메소드를 지원하는 인터페이스
 	private ServletContext sc;
 
 	// 프로 회원가입 (파일 업로드를 곁들인..)
@@ -329,6 +333,19 @@ public class UserInfoController {
 		}
 		return rb;
 	}
+  
+  @PostMapping(value="find/id", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResultBean <UserInfo> selectByUserNameAndPhone(@RequestParam String userName, @RequestParam String userPhone) throws FindException {
+		ResultBean<UserInfo> rb = new ResultBean<>();
+		UserInfo userInfo = new UserInfo();
+		try {
+			userInfo = service.selectByUserNameAndPhone(userName, userPhone);
+			rb.setStatus(1);
+			rb.setT(userInfo);
+		}catch(FindException e) {
+			rb.setStatus(0);
+			rb.setMsg(e.getMessage());
+		}
+		return rb;
+	}	
 }
-
-
