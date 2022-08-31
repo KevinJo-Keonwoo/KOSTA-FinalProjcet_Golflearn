@@ -2,6 +2,9 @@ package com.golflearn.dto;
 
 import java.util.Date;
 
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,5 +22,6 @@ public class ResaleComment {
 	private Date resaleCmtDt;
 	private Long resaleCmtParentNo;
 	private String userNickname;
+	
 	
 }
