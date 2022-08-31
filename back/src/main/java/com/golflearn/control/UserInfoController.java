@@ -48,21 +48,21 @@ public class UserInfoController {
 	// 서블릿 컨테이너와 통신하기 위해 사용되는 메소드를 지원하는 인터페이스
 	private ServletContext sc;
 
-
 	// 프로 회원가입 (파일 업로드를 곁들인..)
 	// 파일 업로드 시 formData 필요 > PathVariable 사용 불가
 	// 파일 업로드 시 요청전달데이터 꼭 필요 > RestfulAPI 사용 불가
 	// 파일 업로드 가능 방법 
 	// 1. @RequestPart MultipartFile 타입 사용
 	// 2. ServletRequest or MultipartHttpServletRequest
-	@Value("${spring.servlet.multipart.location}")
+	@Value("${spring.servlet.multipart.location}") //@Value("${…}") application.properties파일에 설정 되어있는 것을 가지고 오는 것
 	String uploadDirectory;
+	@Transactional
 	@PostMapping("signuppro")
 	public ResponseEntity<?> signuppro (
 			@RequestPart(required = false) List<MultipartFile> certifFiles, 
 			@RequestPart(required = false) MultipartFile profileImg,
-			@Valid UserInfo userInfo, @Valid ProInfo proInfo, Errors error,
-			HttpSession session) {
+			@Valid UserInfo userInfo, @Valid ProInfo proInfo, Errors error
+			){
 
 		logger.info("요청전달데이터 userNickname=" + userInfo.getUserNickname());
 		logger.info("요청전달데이터 userId=" + userInfo.getUserId());
@@ -70,6 +70,10 @@ public class UserInfoController {
 		logger.info("letterFiles.size()" + certifFiles.size());
 		logger.info("imageFile.getsize()" + profileImg.getSize());
 		logger.info("업로드한 프로필 사진명" + profileImg.getOriginalFilename());		
+
+		if(error.hasErrors()) {
+			return new ResponseEntity<> (error.getAllErrors().get(0).getDefaultMessage(), HttpStatus.CHECKPOINT);
+		}
 
 		//가입 입력 내용 DB에 저장
 		try {
@@ -119,7 +123,7 @@ public class UserInfoController {
 						logger.info("자격증 파일 저장 경로" + savedCertifFile.getAbsolutePath());// 파일 저장 경로 확인
 					} catch (IOException e) {
 						e.printStackTrace();
-						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+						//						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 					savedCertifFileCnt++;
 				}
@@ -157,9 +161,6 @@ public class UserInfoController {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		//				}
-		//			} 
-		//		}
 		logger.error("이미지 파일 저장 완료");
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -169,23 +170,19 @@ public class UserInfoController {
 	//	String uploadDirectory;
 	@Transactional
 	@PostMapping("signupstdt")
-	public ResultBean<?> signupstdt (
+	public ResponseEntity<?> signupstdt (
 			@RequestPart(required = false) MultipartFile profileImg,
 			@Valid UserInfo userInfo, 
 			Errors error) {
-
-		ResultBean<?> rb = new ResultBean<>();
 
 		logger.info("요청전달데이터 userNickname=" + userInfo.getUserNickname());
 		logger.info("요청전달데이터 userId=" + userInfo.getUserId());
 		logger.info("요청전달데이터 userName=" + userInfo.getUserName());
 		logger.info("imageFile.getsize()" + profileImg.getSize());
 		logger.info("업로드한 프로필 사진명" + profileImg.getOriginalFilename());		
+
 		if(error.hasErrors()) {
-			//			return new ResponseEntity<String> (error.getAllErrors().get(0).getDefaultMessage(), HttpStatus.CHECKPOINT);			
-			rb.setStatus(0);
-			rb.setMsg("유효성 검사 실패");
-			return rb;			 
+			return new ResponseEntity<> (error.getAllErrors().get(0).getDefaultMessage(), HttpStatus.INTERNAL_SERVER_ERROR);			
 		}
 
 		//가입 입력 내용 DB에 저장
@@ -193,9 +190,7 @@ public class UserInfoController {
 			service.signupStdt(userInfo);
 		}catch (AddException e) {
 			e.printStackTrace();
-			//			return new ResponseEntity<> (HttpStatus.INTERNAL_SERVER_ERROR);
-			rb.setStatus(0);
-			return rb;
+			//return new ResponseEntity<> (HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		String userNickname = userInfo.getUserNickname(); // 저장될 폴더의 이름으로 사용
@@ -237,15 +232,9 @@ public class UserInfoController {
 				logger.info("프로필 저장 경로는" + savedCertifFile.getAbsolutePath());// 파일 저장 경로 확인
 			} catch (IOException e) {
 				e.printStackTrace();
-				//						rb.setStatus(0);
-				//						return rb;
 			}
 		}
-		//			}
-		//		} 
-		//		return new ResponseEntity<>(HttpStatus.OK);
-		rb.setStatus(1);
-		return rb;
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 
