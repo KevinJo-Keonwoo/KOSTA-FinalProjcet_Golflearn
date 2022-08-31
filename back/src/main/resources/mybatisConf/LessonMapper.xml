@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.golflearn.mapper.LessonMapper">
+	<!-- 레슨 상세보기 ResultMap -->
+	<resultMap type="Lesson" id="lessonDetailMap" autoMapping="true">
+		<id property="lsnNo" column="lsn_no"/>
+		<association property="userInfo" javaType="UserInfo" autoMapping="true">
+			<id property="userId" column="user_id"/>
+     		<result property="userName" column="user_name"/>
+     		<association property="proInfo" javaType="ProInfo" autoMapping="true">
+				<id property="userInfo.userId" column="user_id"/>
+     			<result property="proCareer" column="pro_career"/>
+			</association>
+		</association>
+		<collection property="lsnLines" ofType="LessonLine" autoMapping="true" >
+			<id property="lsnLineNo" column="lsn_line_no" />
+			<association property="userInfo" javaType="UserInfo" autoMapping="true">
+				<id property="userId" column="user_id" />
+				<result property="userNickname" column="user_nickname"/>
+			</association>
+			<association property="lsnReview" javaType="LessonReview" autoMapping="true">
+				<id property="lsnLine.lsnLineNo" column="lsn_line_no"/>
+				<result property="review" column="review"/>
+				<result property="reviewDt" column="review_dt"/>
+				<result property="reviewEditDt" column="review_edit_dt"/>
+			</association>
+		</collection>
+	</resultMap>
+  <resultMap id="lessonsMap" type="Lesson" autoMapping="true">
+	<id property="lsnNo" column="lsn_no"/>
+	<association property="userInfo" javaType="UserInfo">
+	    <id property="userId" column="user_id"/>
+	    <result property="userName" column="user_name"/>
+  	</association>
+</resultMap>
+<resultMap id="filterLessonsMap" type="Lesson" autoMapping="true">
+	<id property="lsnNo" column="lsn_no"/>
+	<association property="userInfo" javaType="UserInfo">
+	    <id property="userId" column="user_id"/>
+	    <result property="userName" column="user_name"/>
+  	</association>
+</resultMap>
+	<!-- 레슨 상세보기 : 레슨정보와 레슨후기들을 SELECT -->
+	<select id="selectByLsnNo" parameterType="int" resultMap="lessonDetailMap">
+	SELECT l.lsn_no, l.lsn_title, l.loc_no, l.lsn_lv, l.lsn_days,
+		   l.lsn_intro, l.lsn_price, l.lsn_per_time, l.lsn_cnt_sum,
+		   l.lsn_star_ppl_cnt, l.user_id,
+		   TRUNC((l.lsn_star_sum/l.lsn_star_ppl_cnt), 2) lsnStarScore,
+		   TRUNC((SELECT SUM(lsn_star_sum/lsn_star_ppl_cnt)/COUNT(lsn_no)
+		   	      FROM lesson
+				  WHERE user_id= l.user_id), 2) proStarScore,
+		   u.user_name,
+		   p.pro_career,
+		   ll.lsn_line_no ,
+		   
+		    (SELECT ui.user_nickname
+		  				    FROM lesson_review lr2 LEFT JOIN lesson_line ll ON (lr2.lsn_line_no = ll.lsn_line_no)
+												   LEFT JOIN user_info ui ON (ll.user_id = ui.user_id)
+					        WHERE lr2.lsn_line_no = lr.lsn_line_no) lsnNickname,
+		  lr.review, lr.review_dt, lr.review_edit_dt
+	FROM lesson l JOIN user_info u ON (l.user_id = u.user_id)
+			      JOIN pro_info p ON (u.user_id = p.user_id)
+				  LEFT JOIN lesson_line ll ON (l.lsn_no = ll.lsn_no) 
+			      LEFT JOIN lesson_review lr ON (ll.lsn_line_no = lr.lsn_line_no) 
+	WHERE l.lsn_no=#{lsnNo}
+	
+	</select>
+	
+	<!-- 레슨승인요청하기 : 레슨의 레슨분류정보 외 정보를 INSERT -->
+	<insert id="insertLsnInfo" parameterType="Lesson">
+	INSERT INTO lesson (lsn_no, user_id, loc_no, lsn_title, lsn_lv, lsn_days, lsn_intro, lsn_price, lsn_per_time, lsn_cnt_sum, lsn_status, lsn_req_dt)
+						VALUES (lsn_no_seq.NEXTVAL, #{userInfo.userId}, #{locNo}, 
+						#{lsnTitle}, 
+						#{lsnLv}, 
+						#{lsnDays}, 
+						#{lsnIntro}, 
+						#{lsnPrice}, 
+						#{lsnPerTime}, 
+						#{lsnCntSum}, 
+						2, 
+						SYSDATE)
+	</insert>
+	
+	<!-- 레슨승인요청하기 : 레슨의 레슨분류정보들을 INSERT-->
+	<insert id="insertLsnClassification" parameterType="Lesson">
+		<selectKey
+  		keyProperty="lsnNo" 
+  		resultType="int"
+  		order="AFTER"
+ 		statementType="PREPARED">
+ 			SELECT lsn_no_seq.currval FROM dual
+ 		</selectKey>
+		INSERT ALL 
+		<foreach collection="lsnClassifications" item="list">
+    	INTO lesson_classification (lsn_no, club_no) VALUES (lsn_no_seq.currval, #{list.clubNo})
+    	</foreach>
+    	SELECT *
+  		FROM DUAL
+	</insert>
+  <select id="selectAll" resultMap="lessonsMap">
+	SELECT lsn_no, loc_no, lsn_title, lsn_star_sum, lsn_star_ppl_cnt, ui.user_name
+	FROM lesson l JOIN user_info ui ON(l.user_id = ui.user_id)
+	ORDER BY 1 DESC
+</select>
+
+<select id="selectSidogu" resultMap="filterLessonsMap"  parameterType="int">
+SELECT lsn_no, loc_no, lsn_title, lsn_star_sum, lsn_star_ppl_cnt, ui.user_name
+		FROM lesson l JOIN user_info ui ON(l.user_id = ui.user_id)
+		<where> 
+			<foreach item="locNo" index="index" collection="array"
+				open="l.loc_no IN (" separator="," close=")">
+				#{locNo}
+			</foreach>
+		</where>
+</select>
+</mapper>

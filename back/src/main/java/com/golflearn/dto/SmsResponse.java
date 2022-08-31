@@ -10,7 +10,8 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter @Getter
+@Setter
+@Getter
 @Builder
 public class SmsResponse {
     private String requestId;

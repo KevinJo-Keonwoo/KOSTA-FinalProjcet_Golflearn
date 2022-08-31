@@ -71,10 +71,10 @@ public class SmsService {
 		headers.set("x-ncp-apigw-timestamp", time.toString());
 		headers.set("x-ncp-iam-access-key", this.accessKey);
 		headers.set("x-ncp-apigw-signature-v2", makeSignature(time));
-		//		String sig = makeSignature(time); //암호화
+//		String sig = makeSignature(time); //암호화
+		
 		List<Message> messages = new ArrayList<>();
 		messages.add(msg);
-
 
 		SmsRequest smsRequest = SmsRequest.builder()
 				.type("SMS")
