@@ -1,4 +1,6 @@
-package com.golflearn.domain.repository;
+package com.golflearn.domain;
+
+import java.util.List;
 
 import com.golflearn.dto.Lesson;
 import com.golflearn.exception.AddException;
@@ -28,15 +30,7 @@ public interface LessonRepository {
 	List<Lesson> selectAll() throws FindException;
 	
 	List<Lesson> selectSidogu(int[] locNoArr) throws FindException;
-	
-  /**
-	 * 전체레슨을 불러온다.
-	 * @return List<Lesson>
-	 * @throws FindException
-	 */
-	List<Lesson> selectAll() throws FindException;
-	
-	List<Lesson> selectSidogu(int[] locNoArr) throws FindException;
+
 
 }
 

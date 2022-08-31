@@ -1,6 +1,5 @@
-package com.golflearn.domain.repository;
+package com.golflearn.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.golflearn.dto.Lesson;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
+
 @Repository(value = "lessonOracleRepository")
 public class LessonOracleRepository implements LessonRepository {
 	@Autowired 
