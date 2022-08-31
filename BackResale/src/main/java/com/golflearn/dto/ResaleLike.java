@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,13 +14,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-@EqualsAndHashCode(of = {"lsnLineNo, lsnChkDt"})
-public class LessonHistory {
-	private LessonLine lsnLine;
-
-	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
-	private Date lsnChkDt;
-	private Lesson lsn;
-	private Date minChkDt;
-	private int cntChkDt;
+@EqualsAndHashCode(of = {"resaleLikeNo"})
+public class ResaleLike {
+	private Long resaleLikeNo;
+//	private Long resaleBoardNo;
+	private ResaleBoard resaleBoard;
+	private String userNickname;
 }
