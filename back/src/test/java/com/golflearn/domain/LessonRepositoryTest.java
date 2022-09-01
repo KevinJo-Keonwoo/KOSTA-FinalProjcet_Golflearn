@@ -1,18 +1,18 @@
-package com.golflearn.domain.repository;
+package com.golflearn.domain;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.golflearn.domain.LessonOracleRepository;
 import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonClassification;
 import com.golflearn.dto.UserInfo;
@@ -20,10 +20,10 @@ import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 import com.golflearn.service.LessonService;
 @SpringBootTest
-class LessonOracleRepositoryTest {
+class LessonRepositoryTest {
 
 	@Autowired
-	private LessonOracleRepository repository;
+	private LessonRepository repository;
 	
 	@Autowired
 	private LessonService lessonService;

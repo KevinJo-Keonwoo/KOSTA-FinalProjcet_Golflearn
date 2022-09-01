@@ -15,7 +15,7 @@ import com.golflearn.exception.FindException;
 import com.golflearn.exception.ModifyException;
 
 @SpringBootTest
-class LessonReviewOracleRepositoryTest {
+class LessonReviewRepositoryTest {
 	@Autowired
 	private LessonReviewOracleRepository repository;
 	

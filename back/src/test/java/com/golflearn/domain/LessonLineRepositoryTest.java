@@ -14,9 +14,9 @@ import com.golflearn.dto.LessonLine;
 import com.golflearn.exception.FindException;
 
 @SpringBootTest
-class LessonLineOracleRepositoryTest {
+class LessonLineRepositoryTest {
 	@Autowired
-	private LessonLineOracleRepository repository;
+	private LessonLineRepository repository;
 	
 	@Test
 	void testSelectById() throws FindException{

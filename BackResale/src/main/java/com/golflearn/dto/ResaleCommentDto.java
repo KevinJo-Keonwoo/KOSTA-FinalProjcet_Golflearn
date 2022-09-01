@@ -2,8 +2,7 @@ package com.golflearn.dto;
 
 import java.util.Date;
 
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -14,10 +13,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = {"resaleCmtNo"})
-public class ResaleComment {
+public class ResaleCommentDto {
 	private Long resaleCmtNo;
-//	Long resaleBoardNo;
-	private ResaleBoard resaleBoard;
+	private ResaleBoardDto resaleBoard;
+	
+	@NotEmpty(message="내용은 필수 입력값입니다.")
 	private String resaleCmtContent;
 	private Date resaleCmtDt;
 	private Long resaleCmtParentNo;

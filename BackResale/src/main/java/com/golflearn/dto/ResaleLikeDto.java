@@ -10,9 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = {"resaleLikeNo"})
-public class ResaleLike {
+public class ResaleLikeDto {
 	private Long resaleLikeNo;
-//	private Long resaleBoardNo;
-	private ResaleBoard resaleBoard;
+	private ResaleBoardDto resaleBoard;
 	private String userNickname;
 }
