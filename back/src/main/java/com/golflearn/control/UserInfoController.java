@@ -52,12 +52,14 @@ public class UserInfoController {
 	@Autowired 
 	private ServletContext sc;
 
-	// 프로 회원가입 (파일 업로드를 곁들인..)
 	// 파일 업로드 시 formData 필요 > PathVariable 사용 불가
 	// 파일 업로드 시 요청전달데이터 꼭 필요 > RestfulAPI 사용 불가
 	// 파일 업로드 가능 방법 
 	// 1. @RequestPart MultipartFile 타입 사용
 	// 2. ServletRequest or MultipartHttpServletRequest
+	/*
+	 * 프로 회원가입
+	 */
 	@Value("${spring.servlet.multipart.location}") //@Value("${…}") application.properties파일에 설정 되어있는 것을 가지고 오는 것
 	String uploadDirectory;
 	@Transactional
@@ -293,7 +295,7 @@ public class UserInfoController {
 		session.removeAttribute("loginNickname");
 		session.removeAttribute("userType");
 		String result = ("로그아웃 되었습니다");
-		System.out.println(result);
+//		System.out.println(result);
 
 		return null;
 	}
