@@ -1,4 +1,4 @@
-package com.golflearn.dto;
+package com.golflearn.domain.entity;
 
 import java.util.Date;
 
@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -27,24 +26,26 @@ import lombok.Setter;
 @NoArgsConstructor 
 @AllArgsConstructor 
 @Setter @Getter 
-@EqualsAndHashCode(of= {"qnaBoardNo"})
+@EqualsAndHashCode(of= {"boardNo"})
 
 @Entity
-@Table(name = "board_jpa")
-@SequenceGenerator(name = "boardjpa_seq_generator",
-					sequenceName = "board_jpa_seq",
+@Table(name = "qna_board")
+@SequenceGenerator(name = "qna_board_seq_generator",
+					sequenceName = "qna_board_seq",
 					initialValue = 1,
 					allocationSize = 1
 					)
+
+//@SecondaryTable(name="qna_board_commment", pkJoinColumns = @PrimaryKeyJoinColumn(name="qna_board_no", referencedColumnName = "qna_board_no"))
 
 @DynamicInsert  
 @DynamicUpdate
 public class QnABoard {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
-		 	generator = "qnaboard_seq_generator")
+		 	generator = "qna_board_seq_generator")
 	@Column(name = "qna_board_no")
-	private Long boardNo;
+	private Long bNo;
 //	@ColumnDefault          
 	@Column(name = "qna_board_title")
 	private String boardTitle;
@@ -60,8 +61,13 @@ public class QnABoard {
 	@Column(name = "qna_board_secret")
 	private int qnaBoardSecret;
 	
-	@OneToOne   
-	@JoinColumn(name = "qna_board_no")
-	private QnAComment comment;
+	
+	//1. 부모쪽 1:N	
+//	@OneToMany
+//	@JoinColumn(name = "qna_comment_no")
+//	private List<QnAComment> list;
 
+	//2. 부모쪽 1:1
+	@OneToOne (mappedBy = "board")
+	private QnAComment comment;
 }
