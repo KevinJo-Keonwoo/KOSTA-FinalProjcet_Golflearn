@@ -45,6 +45,7 @@ class ResaleBoardCommentRepositoryTest {
 		logger.error("작성자" + resaleComment.getUserNickname());
 	}
 	
+	
 	//댓글 수 증가 (댓글 작성 시)
 	@Test
 	void testResaleCmtCnt() {
