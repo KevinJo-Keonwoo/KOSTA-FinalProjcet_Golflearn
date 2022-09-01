@@ -16,7 +16,7 @@ import com.golflearn.service.SmsService;
 
 import lombok.RequiredArgsConstructor;
 
-@RestController
+//@RestController
 //@RequiredArgsConstructor
 public class SmsController {
 

@@ -1,4 +1,4 @@
-package com.golflearn.domain.repository;
+package com.golflearn.domain;
 
 import java.util.HashMap;
 
