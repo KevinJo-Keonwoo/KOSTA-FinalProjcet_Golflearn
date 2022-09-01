@@ -16,7 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter @Getter
 @EqualsAndHashCode(of = {"roundReviewBoardNo"})
-public class RoundReviewBoard {
+public class RoundReviewBoardDto {
 private Long roundReviewBoardNo;
 	private String roundReviewBoardTitle; 
 	private String roundReviewBoardContent;

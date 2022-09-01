@@ -16,7 +16,9 @@ import org.hibernate.annotations.ColumnDefault;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 @Entity
 @Table(name = "round_review_comment")
@@ -24,9 +26,11 @@ import lombok.NonNull;
 					sequenceName = "roundReviewComment_seq",
 					initialValue = 10,
 					allocationSize = 1)
+
+@Getter @Setter
 //@DynamicInsert
 //@DynamicUpdate
-public class RoundReviewComment {
+public class RoundReviewCommentEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
 					generator = "roundReviewComment_seq_generator")
@@ -36,7 +40,7 @@ public class RoundReviewComment {
 	@NonNull
 	@ManyToOne
 	@JoinColumn(name="round_review_board_no")
-	private RoundReviewBoard roundReviewBoard;
+	private RoundReviewBoardEntity roundReviewBoard;
 	
 	@NonNull
 	@Column(name="round_review_cmt_content")

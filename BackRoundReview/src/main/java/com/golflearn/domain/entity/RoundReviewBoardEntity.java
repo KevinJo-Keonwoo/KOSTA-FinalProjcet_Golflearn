@@ -14,7 +14,9 @@ import org.hibernate.annotations.ColumnDefault;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 @Entity
 @Table(name = "round_review_board")
@@ -22,28 +24,25 @@ import lombok.NonNull;
 					sequenceName = "roundReviewBoard_seq",
 					initialValue = 26,
 					allocationSize = 1)
+@Getter @Setter
 //@DynamicInsert
 //@DynamicUpdate			
-public class RoundReviewBoard {
+public class RoundReviewBoardEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
 					generator = "roundReviewBoard_seq_generator")
 	@Column(name="round_review_board_no")
 	private Long roundReviewBoardNo;
 	
-	@NonNull
 	@Column(name="round_review_board_title")
 	private String roundReviewBoardTitle; 
 	
-	@NonNull
 	@Column(name="round_review_board_content")
 	private String roundReviewBoardContent;
 	
-	@NonNull
 	@Column(name="user_nickname")
 	private String userNickname;
 	
-	@NonNull
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	@ColumnDefault(value = "SYSDATE")
 	@Column(name="round_review_board_dt")

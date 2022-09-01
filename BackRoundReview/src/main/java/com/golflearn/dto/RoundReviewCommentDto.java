@@ -3,7 +3,7 @@ package com.golflearn.dto;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.golflearn.domain.entity.RoundReviewBoard;
+import com.golflearn.domain.entity.RoundReviewBoardEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -15,9 +15,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter @Getter
 @EqualsAndHashCode(of = {"roundReviewCmtNo"})
-public class RoundReviewComment {
+public class RoundReviewCommentDto {
 private Long roundReviewCmtNo;
-	private RoundReviewBoard roundReviewBoard;
+	private RoundReviewBoardEntity roundReviewBoard;
 	private String roundReviewCmtContent;
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	private Date roundReviewCmtDt;
