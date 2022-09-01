@@ -1,9 +1,15 @@
 package com.golflearn.service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.golflearn.domain.repository.UserInfoRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.golflearn.domain.UserInfoRepository;
 import com.golflearn.dto.ProInfo;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;
@@ -22,15 +28,13 @@ public class UserInfoService {
 
 		return userInfo;
 	}
+	
 	//비밀번호 찾기
-	public  UserInfo selectByUserIdAndPhone(String userId, String userPhone) throws FindException{
+	public UserInfo selectByUserIdAndPhone(String userId, String userPhone) throws FindException, JsonProcessingException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException{
 		UserInfo userInfo = repository.selectByUserIdAndPhone(userId, userPhone);
-
-		System.out.println(userInfo.getUserPhone());
-
-		if(!userInfo.getUserId().equals(userId)|| userInfo.getUserPhone().equals(userPhone)) {
-    			throw new FindException();
-		}
+		
+		System.out.println(userInfo.getUserPhone());		
+		
 		return userInfo;
 	}
 	

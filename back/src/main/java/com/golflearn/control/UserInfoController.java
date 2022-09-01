@@ -2,7 +2,12 @@ package com.golflearn.control;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -20,16 +25,16 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.golflearn.dto.Message;
 import com.golflearn.dto.ProInfo;
 import com.golflearn.dto.ResultBean;
-import com.golflearn.dto.SmsResponse;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
@@ -44,6 +49,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserInfoController {
 	private Logger logger = Logger.getLogger(getClass());
+	
 	private final SmsService smsService;
 
 	@Autowired // 빈 객체 주입받음
@@ -344,7 +350,8 @@ public class UserInfoController {
 		}
 		return rb;
 	}
-
+	
+	//아이디 찾기
 	@PostMapping(value="find/id", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean <UserInfo> selectByUserNameAndPhone(@RequestParam String userName, @RequestParam String userPhone) throws FindException {
 		ResultBean<UserInfo> rb = new ResultBean<>();
@@ -360,15 +367,42 @@ public class UserInfoController {
 		return rb;
 	}	
 
-
+	//비밀번호 변경 인증 문자 발송
 	@PostMapping(value="find/pwd", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResultBean <UserInfo> selectByUserIdAndPhone(@RequestParam String userId, @RequestParam String userPhone) throws FindException {
+	//Requestparam으로 userId와 userPhone값을 받아옴
+	public ResultBean <UserInfo> selectByUserIdAndPhone(@RequestParam String userId, @RequestParam String userPhone) throws FindException, JsonProcessingException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
 		ResultBean<UserInfo> rb = new ResultBean<>();
 		UserInfo userInfo = new UserInfo();
 		try {
+			//받아올 값을 담아줄 UserInfo 타입의 userInfo 객체를 생성한다
+			//userId와 userPhone를 매개변수를 가진 UserInfoService에 있는 selectByIdAndPhone 메서드를 호출한다.(서비스호출)
 			userInfo = service.selectByUserIdAndPhone(userId, userPhone);
+			//조회 성공일 시 다시 컨트롤러단으로 넘어오기 때문에 성공인 1값을 status에 set해준다.
 			rb.setStatus(1);
-			rb.setT(userInfo);
+			
+			//Message타입의 객체 생성해줌 => 조회해온 폰번호와 발생시킨 난수 set 시켜주기 위해
+			Message message = new Message();
+			
+			//받아온 전화번호 값에서 "-" 제거해줘야함
+			String str = userInfo.getUserPhone();
+			String userNum = str.replaceAll("-","");
+			System.out.println(userNum);
+			message.setTo(userNum);
+			
+			//난수 발생
+			Random rnd = new Random();
+			String randomKey = "";
+			for (int i = 0; i < 5; i++) {
+				//0~9 사이의 숫자들로 난수 발생시킴 => 5번 반복 & 숫자를 문자열로 바꿈
+				String ran = Integer.toString(rnd.nextInt(10));
+				//randomKey에 발생시킨 난수들이 계속 붙음
+				randomKey += ran;
+			}
+			System.out.println(randomKey);
+			
+			message.setContent("GolfLearn 인증번호["+randomKey+"]를 입력해주세요 성공했따 짱이지");
+			//smsService에 있는 sendSms 메서드 호출(message를 매개변수로 함-> set한 정보 넘어감)
+			smsService.sendSms(message);
 		}catch(FindException e) {
 			rb.setStatus(0);
 			rb.setMsg(e.getMessage());
@@ -377,5 +411,3 @@ public class UserInfoController {
 	}	
 
 }
-
-

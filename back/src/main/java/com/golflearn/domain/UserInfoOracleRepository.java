@@ -1,4 +1,4 @@
-package com.golflearn.domain.repository;
+package com.golflearn.domain;
 
 import java.util.HashMap;
 
@@ -128,7 +128,8 @@ public class UserInfoOracleRepository implements UserInfoRepository {
 		}
 		
 	}
-
+	
+	//아이디 찾기
 	@Override
 	public UserInfo selectByUserNameAndPhone(String userName, String userPhone) throws FindException {
 		UserInfo userInfo = null; 
@@ -154,7 +155,8 @@ public class UserInfoOracleRepository implements UserInfoRepository {
 			}
 		}
 	}
-
+	
+	//핸드폰번호 조회
 	@Override
 	public UserInfo selectByUserIdAndPhone(String userId, String userPhone) throws FindException {
 		UserInfo userInfo = null;
@@ -168,7 +170,7 @@ public class UserInfoOracleRepository implements UserInfoRepository {
 			userInfo = session.selectOne("com.golflearn.mapper.UserInfoMapper.selectByUserIdAndPhone",hashMap);
 
 			if (userInfo == null) {
-				throw new FindException("정보조회 실패");
+				throw new FindException("정보조회 실패");		
 			}
 			return userInfo;
 		}catch(Exception e) {
@@ -180,7 +182,8 @@ public class UserInfoOracleRepository implements UserInfoRepository {
 			}
 		}
 	}
-
+	
+	//비밀번호 변경
 	@Override
 	public void updateByUserPwd(String userId, String userPwd) throws ModifyException{
 		SqlSession session = null;
