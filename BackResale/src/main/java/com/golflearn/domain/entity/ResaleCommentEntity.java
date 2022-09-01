@@ -25,7 +25,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
-@Getter @Setter @NoArgsConstructor
+@NoArgsConstructor
+@Getter @Setter 
 @Entity
 @Table(name = "resale_comment")
 @SequenceGenerator(name="resale_cmt_generator",
