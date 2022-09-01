@@ -1,6 +1,7 @@
 package com.golflearn.domain.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.beans.Transient;
 import java.util.List;
@@ -14,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.golflearn.domain.entity.ResaleBoardEntity;
-import com.golflearn.domain.repository.ResaleBoardRepository;
 
 @SpringBootTest
 class ResaleBoardRepositoryTest {
@@ -41,10 +41,8 @@ class ResaleBoardRepositoryTest {
 	@Test
 	void testFindDetail() {
 		Long resaleBoardNo = 26L;
-		List<ResaleBoardEntity> list = resaleBoardRepo.findDetail(resaleBoardNo);
-		list.forEach(rb ->{
-			logger.error(rb.toString());
-		});
+		ResaleBoardEntity resaleBoardEntity = resaleBoardRepo.findDetail(resaleBoardNo);
+		assertTrue(resaleBoardEntity != null);
 	}	
 	
 	// 조회수 증가
