@@ -193,6 +193,7 @@ public class UserInfoOracleRepository implements UserInfoRepository {
 			hashMap.put("userId", userId);
 			hashMap.put("userPwd", userPwd);
 			session.update("com.golflearn.mapper.UserInfoMapper.updateByUserPwd",hashMap);
+
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new ModifyException(e.getMessage());

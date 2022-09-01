@@ -14,6 +14,7 @@ import com.golflearn.dto.ProInfo;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
+import com.golflearn.exception.ModifyException;
 
 @Service
 public class UserInfoService {
@@ -24,18 +25,19 @@ public class UserInfoService {
 	//아이디 찾기
 	public UserInfo selectByUserNameAndPhone(String userName, String userPhone) throws FindException{
 		UserInfo userInfo = repository.selectByUserNameAndPhone(userName, userPhone);
-		System.out.println(userInfo.getUserId());
 
 		return userInfo;
 	}
 	
-	//비밀번호 찾기
+	//핸드폰번호조회
 	public UserInfo selectByUserIdAndPhone(String userId, String userPhone) throws FindException, JsonProcessingException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException{
-		UserInfo userInfo = repository.selectByUserIdAndPhone(userId, userPhone);
-		
-		System.out.println(userInfo.getUserPhone());		
-		
+		UserInfo userInfo = repository.selectByUserIdAndPhone(userId, userPhone);	
 		return userInfo;
+	}
+	
+	//비밀번호 변경
+	public void updateByUserPwd(String userId, String userPwd) throws ModifyException{
+		repository.updateByUserPwd(userId, userPwd);
 	}
 	
 	// 회원가입 - 수강생

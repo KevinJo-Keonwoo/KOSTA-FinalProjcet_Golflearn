@@ -38,6 +38,7 @@ import com.golflearn.dto.ResultBean;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
+import com.golflearn.exception.ModifyException;
 import com.golflearn.service.SmsService;
 import com.golflearn.service.UserInfoService;
 
@@ -370,16 +371,13 @@ public class UserInfoController {
 	//비밀번호 변경 인증 문자 발송
 	@PostMapping(value="find/pwd", produces = MediaType.APPLICATION_JSON_VALUE)
 	//Requestparam으로 userId와 userPhone값을 받아옴
-	public ResultBean <UserInfo> selectByUserIdAndPhone(@RequestParam String userId, @RequestParam String userPhone) throws FindException, JsonProcessingException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
+	public ResultBean <UserInfo> selectByUserIdAndPhone(HttpSession session, @RequestParam String userId, @RequestParam String userPhone) throws FindException, JsonProcessingException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
 		ResultBean<UserInfo> rb = new ResultBean<>();
 		UserInfo userInfo = new UserInfo();
 		try {
 			//받아올 값을 담아줄 UserInfo 타입의 userInfo 객체를 생성한다
 			//userId와 userPhone를 매개변수를 가진 UserInfoService에 있는 selectByIdAndPhone 메서드를 호출한다.(서비스호출)
 			userInfo = service.selectByUserIdAndPhone(userId, userPhone);
-			//조회 성공일 시 다시 컨트롤러단으로 넘어오기 때문에 성공인 1값을 status에 set해준다.
-			rb.setStatus(1);
-			
 			//Message타입의 객체 생성해줌 => 조회해온 폰번호와 발생시킨 난수 set 시켜주기 위해
 			Message message = new Message();
 			
@@ -400,14 +398,51 @@ public class UserInfoController {
 			}
 			System.out.println(randomKey);
 			
-			message.setContent("GolfLearn 인증번호["+randomKey+"]를 입력해주세요 성공했따 짱이지");
+			message.setContent("GolfLearn 인증번호["+randomKey+"]를 입력해주세요." );
 			//smsService에 있는 sendSms 메서드 호출(message를 매개변수로 함-> set한 정보 넘어감)
 			smsService.sendSms(message);
+			
+			rb.setStatus(1);
+			
+			//세션에 userId와 randomKey 저장
+			session.setAttribute("userId", userId);
+			session.setAttribute("authenticationKey", randomKey);
 		}catch(FindException e) {
 			rb.setStatus(0);
 			rb.setMsg(e.getMessage());
 		}
 		return rb;
 	}	
+	@PostMapping(value="change/pwd", produces = MediaType.APPLICATION_JSON_VALUE) 
+	public ResultBean <?> updateByUserPwd(HttpSession session, @RequestParam String authenticationUser, @RequestParam String newPwd, @RequestParam String chkNewPwd) throws FindException {
+		ResultBean<?> rb = new ResultBean<>();
+		Message message = new Message();
+		//세션에 저장되어있는 Id와 인증번호 가져옴
+		String userId = (String)session.getAttribute("userId");
+		String authenticationKey = (String)session.getAttribute("authenticationKey");
+//		//userInfo의 userId에 가져온 세션값 저장
+//		UserInfo userInfo = new UserInfo();
+//		userInfo.setUserId((String)session.getAttribute("userId"));
+		if (!authenticationUser.equals(authenticationKey)) {
+			rb.setStatus(0);
+			rb.setMsg("인증번호가 일치하지 않습니다.");
+			System.out.println(authenticationKey);
+			System.out.println(authenticationUser);
+		}else {
+			if(newPwd.equals(chkNewPwd)) {
+				try {
+					service.updateByUserPwd(userId, newPwd);
+					rb.setStatus(1);
+					rb.setMsg("비밀번호가 변경되었습니다");
+				} catch (ModifyException e) {
+					e.printStackTrace();
+				}
+			}else {
+				rb.setStatus(0);
+				rb.setMsg("비밀번호가 일치하지 않습니다");
+			}
+		}
+		return rb;
+	}
 
 }
