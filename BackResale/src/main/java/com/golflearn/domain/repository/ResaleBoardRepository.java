@@ -2,13 +2,13 @@ package com.golflearn.domain.repository;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 
 import com.golflearn.domain.entity.ResaleBoardEntity;
 
-public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, Long> {
+public interface ResaleBoardRepository extends CrudRepository<ResaleBoardEntity, Long> {
 	// 첫번째 인자 : ResaleBoard
 	// 두번째 인자 : pk의 자료형
 //	List<ResaleBoard> findAll(Pageable paging); //Pageable -> 페이지 처리를 도와주는
@@ -28,7 +28,7 @@ public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, 
 				+ 		")\r\n"
 				+ "WHERE r BETWEEN ?1 AND ?2",
 				 nativeQuery= true) //startrow, endrow
-	List<ResaleBoardEntity>findByPage(int startRow, int endRow);
+	public List<ResaleBoardEntity>findByPage(int startRow, int endRow);
 
 	/**
 	 * 게시글 상세 조회 (댓글 조회)
@@ -37,8 +37,8 @@ public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, 
 	 */
 	@Query(value = "SELECT rb.*, rc.* "
 				 + "FROM resale_board rb LEFT JOIN resale_comment rc ON (rb.resale_board_no = rc.resale_board_no)"
-				 + "WHERE rc.resale_board_no = ?1", nativeQuery= true)
-	List<ResaleBoardEntity> findDetail(Long resaleBoardNo);
+				 + "WHERE rb.resale_board_no = ?1", nativeQuery= true)
+	public ResaleBoardEntity findDetail(Long resaleBoardNo);
 	
 	/**
 	 * 댓글, 대댓글 삭제
@@ -46,7 +46,7 @@ public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, 
 	 */
 	@Modifying
 	@Query(value = "DELETE FROM resale_comment WHERE resale_board_no= ?1", nativeQuery =true)
-	void deleteComments(Long resaleBoardNo);
+	public void deleteComments(Long resaleBoardNo);
 	
 	/**
 	 * 좋아요 삭제
@@ -54,7 +54,7 @@ public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, 
 	 */
 	@Modifying
 	@Query(value = "DELETE FROM resale_like WHERE resale_board_no =?1", nativeQuery = true)
-	void deleteLike(Long resaleBoardNo);
+	public void deleteLike(Long resaleBoardNo);
 	
 	/**
 	 * 검색어로 검색
@@ -71,7 +71,7 @@ public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, 
 					+ "ORDER BY resale_board_no DESC) a ) WHERE r BETWEEN ?2 AND ?3"
 			, 
 			nativeQuery=true)
-	List<ResaleBoardEntity> findByWord(String word, int startRow, int endRow);
+	public List<ResaleBoardEntity> findByWord(String word, int startRow, int endRow);
 	
 	/**
 	 * 대댓글 수를 조회한다
@@ -81,6 +81,6 @@ public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, 
 	@Query(value = "SELECT SUM(COUNT(resale_cmt_no))\r\n"
 			+ "FROM resale_comment WHERE resale_cmt_parent_no = ?1 "
 			+ "GROUP BY resale_cmt_no", nativeQuery=true)
-	int findCmtCnt(Long resaleCmtParentNo); 
+	public int findCmtCnt(Long resaleCmtParentNo); 
 	
 }
