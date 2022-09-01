@@ -3,6 +3,7 @@ package com.golflearn.domain.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.golflearn.domain.entity.ResaleBoardEntity;
@@ -43,6 +44,7 @@ public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, 
 	 * 댓글, 대댓글 삭제
 	 * @param resaleBoardNo
 	 */
+	@Modifying
 	@Query(value = "DELETE FROM resale_comment WHERE resale_board_no= ?1", nativeQuery =true)
 	void deleteComments(Long resaleBoardNo);
 	
@@ -50,6 +52,7 @@ public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, 
 	 * 좋아요 삭제
 	 * @param resaleBoardNo
 	 */
+	@Modifying
 	@Query(value = "DELETE FROM resale_like WHERE resale_board_no =?1", nativeQuery = true)
 	void deleteLike(Long resaleBoardNo);
 	
@@ -69,5 +72,15 @@ public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, 
 			, 
 			nativeQuery=true)
 	List<ResaleBoardEntity> findByWord(String word, int startRow, int endRow);
+	
+	/**
+	 * 대댓글 수를 조회한다
+	 * @param resaleCmtParentNo
+	 * @return
+	 */
+	@Query(value = "SELECT SUM(COUNT(resale_cmt_no))\r\n"
+			+ "FROM resale_comment WHERE resale_cmt_parent_no = ?1 "
+			+ "GROUP BY resale_cmt_no", nativeQuery=true)
+	int findCmtCnt(Long resaleCmtParentNo); 
 	
 }

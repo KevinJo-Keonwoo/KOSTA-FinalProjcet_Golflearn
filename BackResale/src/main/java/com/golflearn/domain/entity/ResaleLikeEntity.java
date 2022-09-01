@@ -1,5 +1,7 @@
 package com.golflearn.domain.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,10 +15,12 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
 @Getter @Setter @NoArgsConstructor
 @Entity
 @Table(name = "resale_like")
@@ -33,7 +37,7 @@ public class ResaleLikeEntity {
 					generator = "resale_like_generator")	
 	private Long resaleLikeNo;
 
-	@Column(name = "resale_nickname")
+	@Column(name = "user_nickname")
 	private String userNickname;
 	
 	@ManyToOne

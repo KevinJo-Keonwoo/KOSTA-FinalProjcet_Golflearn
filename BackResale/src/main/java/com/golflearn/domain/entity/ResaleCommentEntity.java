@@ -19,10 +19,12 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
 @Getter @Setter @NoArgsConstructor
 @Entity
 @Table(name = "resale_comment")
@@ -44,9 +46,9 @@ public class ResaleCommentEntity {
 	@NotBlank(message="내용은 필수 입력값입니다.")
 	private String resaleCmtContent;
 	
-	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	@Column(name="resale_cmt_dt")
-	@ColumnDefault(value="SYSDATE")
+	@ColumnDefault(value="sysdate")
+	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	private Date resaleCmtDt;
 	
 	@Column(name="resale_cmt_parent_no")

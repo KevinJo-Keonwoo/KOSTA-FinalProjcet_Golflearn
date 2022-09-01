@@ -1,15 +1,17 @@
 package com.golflearn.domain.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 
-import com.golflearn.domain.entity.ResaleLikeEntity;
+import com.golflearn.domain.entity.ResaleCommentEntity;
 
-public interface ResaleCommentRepository extends JpaRepository<ResaleLikeEntity, Long> {
+public interface ResaleCommentRepository extends CrudRepository<ResaleCommentEntity, Long> {
 	/**
 	 * 대댓글 삭제
 	 * @param resaleCmtParentNo
 	 */
+	@Modifying
 	@Query(value="DELETE FROM resale_comment WHERE resale_cmt_parent_no= ?1", 
 			nativeQuery=true)
 	void deleteReComment(Long resaleCmtParentNo);

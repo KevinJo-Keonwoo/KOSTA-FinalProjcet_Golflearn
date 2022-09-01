@@ -115,4 +115,6 @@ class ResaleBoardRepositoryTest {
 			logger.error(rb.toString());
 		});	
 	}
+	
+	
 }

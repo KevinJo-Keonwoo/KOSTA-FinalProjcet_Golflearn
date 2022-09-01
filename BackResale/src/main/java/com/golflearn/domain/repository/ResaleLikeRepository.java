@@ -2,8 +2,8 @@ package com.golflearn.domain.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.golflearn.domain.entity.ResaleCommentEntity;
+import com.golflearn.domain.entity.ResaleLikeEntity;
 
-public interface ResaleLikeRepository extends JpaRepository<ResaleCommentEntity, Long> {
+public interface ResaleLikeRepository extends JpaRepository<ResaleLikeEntity, Long> {
 
 }
