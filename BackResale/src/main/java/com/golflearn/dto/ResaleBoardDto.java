@@ -38,6 +38,5 @@ public class ResaleBoardDto {
 	private Long resaleBoardCmtCnt;
 	
 	private List<ResaleCommentEntity> resaleComment;
-	
-	private List<ResaleLikeEntity> resaleLike;
+//	private List<ResaleLikeEntity> resaleLike;
 }

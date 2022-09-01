@@ -23,5 +23,4 @@ public class ResaleCommentDto {
 	private Long resaleCmtParentNo;
 	private String userNickname;
 	
-	
 }
