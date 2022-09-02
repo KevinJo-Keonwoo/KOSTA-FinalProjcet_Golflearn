@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -59,8 +60,9 @@ public class ResaleCommentEntity {
 	@Column(name="user_nickname")
 	private String userNickname;
 	
-	@ManyToOne
-	@JoinColumn(name = "resale_board_no")
-	private ResaleBoardEntity resaleBoard;
+	// Board쪽에서 List로 가지고 있음
+//	@ManyToOne(fetch=FetchType.LAZY) 
+//	@JoinColumn(name = "resale_board_no")
+//	private ResaleBoardEntity resaleBoard;
 	
 }
