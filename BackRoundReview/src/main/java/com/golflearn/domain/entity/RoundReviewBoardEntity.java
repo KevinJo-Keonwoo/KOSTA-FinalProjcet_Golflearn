@@ -1,12 +1,16 @@
 package com.golflearn.domain.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -15,7 +19,6 @@ import org.hibernate.annotations.ColumnDefault;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -62,5 +65,13 @@ public class RoundReviewBoardEntity {
 	
 	@Column(name="round_review_board_longitude")
 	private String roundReviewBoardLongitude;
+	
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name="round_review_board_no")
+	private List<RoundReviewCommentEntity> roundReviewCommentList;
+	
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name="round_review_board_no")
+	private List<RoundReviewLikeEntity> roundReviewLikeList;
 	
 }

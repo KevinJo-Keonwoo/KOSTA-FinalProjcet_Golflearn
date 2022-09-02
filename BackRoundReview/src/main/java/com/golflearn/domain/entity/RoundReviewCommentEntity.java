@@ -37,26 +37,22 @@ public class RoundReviewCommentEntity {
 	@Column(name="round_review_cmt_no")
 	private Long roundReviewCmtNo;
 	
-	@NonNull
-	@ManyToOne
-	@JoinColumn(name="round_review_board_no")
-	private RoundReviewBoardEntity roundReviewBoard;
+//	@NonNull
+//	@ManyToOne
+//	@JoinColumn(name="round_review_board_no")
+//	private RoundReviewBoardEntity roundReviewBoard;
 	
-	@NonNull
 	@Column(name="round_review_cmt_content")
 	private String roundReviewCmtContent;
 	
-	@NonNull
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	@ColumnDefault(value = "SYSDATE")
 	@Column(name="round_review_cmt_dt")
 	private Date roundReviewCmtDt;
 	
-	@NonNull
 	@Column(name="round_review_cmt_parent_no")
 	private Long roundReviewCmtParentNo;
 	
-	@NonNull
 	@Column(name="user_nickname")
 	private String userNickname; 
 }

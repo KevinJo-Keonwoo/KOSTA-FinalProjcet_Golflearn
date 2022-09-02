@@ -35,10 +35,10 @@ public class RoundReviewLikeEntity {
 	@Column(name="round_review_like_no")
 	public Long roundReviewLikeNo;
 	
-	@NonNull
-	@ManyToOne
-	@JoinColumn(name="round_review_board_no")
-	public RoundReviewBoardEntity roundReviewBoard;
+//	@NonNull
+//	@ManyToOne
+//	@JoinColumn(name="round_review_board_no")
+//	public RoundReviewBoardEntity roundReviewBoard;
 	
 	@NonNull
 	@Column(name="user_nickname")
