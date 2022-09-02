@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.golflearn.domain.entity.ResaleCommentEntity;
 import com.golflearn.domain.entity.ResaleLikeEntity;
 
@@ -27,16 +28,18 @@ public class ResaleBoardDto {
 	private String resaleBoardTitle;
 
 	@NotEmpty(message="내용은 필수 입력값입니다.")
-	private String reslaeBoardContent;
+	private String resaleBoardContent;
 	
+	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	private Date resaleBoardDt;
 	
-	private Long resaleBoardViewCnt;
+	private Integer resaleBoardViewCnt;
 	
-	private Long resaleBoardLikeCnt;
+	private Integer resaleBoardLikeCnt;
 	
-	private Long resaleBoardCmtCnt;
+	private Integer resaleBoardCmtCnt;
 	
 	private List<ResaleCommentEntity> resaleComment;
-//	private List<ResaleLikeEntity> resaleLike;
+	
+	private List<ResaleLikeEntity> resaleLike;
 }
