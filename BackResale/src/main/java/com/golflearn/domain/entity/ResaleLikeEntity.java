@@ -2,6 +2,7 @@ package com.golflearn.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,8 +39,9 @@ public class ResaleLikeEntity {
 
 	@Column(name = "user_nickname")
 	private String userNickname;
-	
-	@ManyToOne
-	@JoinColumn(name="resale_board_no", nullable = false)
-	private ResaleBoardEntity resaleBoard;
+
+	//Board쪽에서 OneToMany로 가지고 있음
+//	@ManyToOne(fetch=FetchType.LAZY)
+//	@JoinColumn(name="resale_board_no", nullable = false)
+//	private ResaleBoardEntity resaleBoard;
 }
