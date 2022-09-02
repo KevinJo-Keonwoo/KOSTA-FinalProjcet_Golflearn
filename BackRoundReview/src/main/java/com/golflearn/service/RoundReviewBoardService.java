@@ -12,13 +12,19 @@ import com.golflearn.domain.entity.PageBean;
 import com.golflearn.domain.entity.RoundReviewBoardEntity;
 import com.golflearn.domain.repository.RoundReviewBoardRepository;
 import com.golflearn.dto.RoundReviewBoardDto;
+import com.golflearn.dto.RoundReviewLikeDto;
 import com.golflearn.exception.FindException;
+import com.golflearn.exception.ModifyException;
+import com.golflearn.exception.RemoveException;
 
 @Service
 public class RoundReviewBoardService {
 	private static final int CNT_PER_PAGE = 5;
 	@Autowired
 	private RoundReviewBoardRepository repo;
+//	private RoundReviewBoardRepository boardRepo;
+//	private RoundReviewCommentRepository commentRepo;
+//	private RoundReviewLikeRepository likeRepo;
 	/**
 	 * 정렬 기준에 따라 게시글의 목록을 보여줌 
 	 * @param currentPage 현재 페이지 
@@ -68,21 +74,29 @@ public class RoundReviewBoardService {
 	 * @return
 	 * @throws FindException 
 	 */
+	
 	public RoundReviewBoardDto viewBoard(Long roundReviewBoardNo) throws FindException {
-		RoundReviewBoardEntity entity = repo.findDetail(roundReviewBoardNo);
-		Optional<RoundReviewBoardEntity> optB = Optional.of(entity);
+		Optional<RoundReviewBoardEntity> optB = repo.findById(roundReviewBoardNo);
+//		RoundReviewBoardEntity boardEntity = repo.findDetail(roundReviewBoardNo);
+//		Optional<RoundReviewBoardEntity> optB = Optional.of(boardEntity);
+//		Optional<RoundReviewBoardEntity> boardEntity = boardRepo.findById(roundReviewBoardNo);
+//		Optional<List<RoundReviewCommentEntity>> commentEntity = commentRepo.findAllById(roundReviewCommentNo);
+		//조회수 증가
 		if(optB.isPresent()) {
-			RoundReviewBoardEntity b = optB.get();
-			b.setRoundReviewBoardViewCnt(b.getRoundReviewBoardViewCnt()+1);
-			repo.save(b);
+			RoundReviewBoardEntity entity = optB.get();
+			entity.setRoundReviewBoardViewCnt(entity.getRoundReviewBoardViewCnt()+1);
+			repo.save(entity);
 		}else {
 			throw new FindException("게시글이 없습니다");
 		}
 		
+		RoundReviewBoardEntity entity = optB.get();
 		ModelMapper modelMapper = new ModelMapper();
 		RoundReviewBoardDto dto = modelMapper.map(entity, RoundReviewBoardDto.class);
 		
+		//게시글내용반환
 		Optional<RoundReviewBoardDto> optB1 = Optional.of(dto);
+		
 		if (optB1.isPresent()) {
 			RoundReviewBoardDto b1 = optB1.get();
 			return b1;
@@ -91,19 +105,85 @@ public class RoundReviewBoardService {
 		}
 	}
 	
-	// 조회수 증가
-	// 게시글 수정
-	
-	//원글 + 댓글 + 대댓글 + 좋아요 삭제
-	public void removeBoard (Long roundReviewBoardNo) {
+	//게시글 수정
+	/**
+	 * 기존 게시글 내용을 가져온후 제목, 내용, 지도 수정된 값을 다시 update 해줌
+	 * @param dto
+	 * @throws ModifyException
+	 */
+	public void modifyBoard(RoundReviewBoardDto dto) throws ModifyException {
+		Long boardNo = dto.getRoundReviewBoardNo();
+		Optional<RoundReviewBoardEntity> optB = repo.findById(boardNo);
+		if(!optB.isPresent()) {
+			throw new ModifyException("글이 없습니다");
+		}else {
+			RoundReviewBoardEntity entity = optB.get();
+			//제목, 내용, 지도 수정가능하게
+			entity.setRoundReviewBoardTitle(dto.getRoundReviewBoardTitle());
+			entity.setRoundReviewBoardContent(dto.getRoundReviewBoardContent());
+			entity.setRoundReviewBoardLatitude(dto.getRoundReviewBoardLatitude());
+			entity.setRoundReviewBoardLongitude(dto.getRoundReviewBoardLongitude());
+			repo.save(entity);
+		}
+	}
+	//원글 + (댓글 + 대댓글) + 좋아요 삭제
+	/**
+	 * 원글번호를 입력하면 해당하는 댓글, 대댓글, 좋아요 모두 삭제 
+	 * @param roundReviewBoardNo
+	 * @throws RemoveException
+	 */
+	public void removeBoard (Long roundReviewBoardNo) throws RemoveException {
+		Optional<RoundReviewBoardEntity> optB = repo.findById(roundReviewBoardNo);
+		if(!optB.isPresent()) {
+			throw new RemoveException("삭제할 글이 없습니다");
+		}else {
+			repo.deleteLike(roundReviewBoardNo);
+			repo.deleteComments(roundReviewBoardNo);
+			repo.deleteById(roundReviewBoardNo);
+		}
 		
 	}
 	//댓글 + 대댓글 삭제
-	
+	public void removeComment (Long roundReviewBoardNo) throws RemoveException {
+		Optional<RoundReviewBoardEntity> optB = repo.findById(roundReviewBoardNo);
+		if(!optB.isPresent()) {
+			throw new RemoveException("삭제할 댓글이 없습니다");
+		}else {
+			repo.deleteComments(roundReviewBoardNo);
+		}
+	}
 	//대댓글 삭제
+	public void removeRecomment (Long roundReviewCmtNo) throws RemoveException {
+		Optional<RoundReviewBoardEntity> optB = repo.findById(roundReviewCmtNo);
+		if(!optB.isPresent()) {
+			throw new RemoveException("삭제할 대댓글이 없습니다");
+		}else {
+			repo.deleteRecomment(roundReviewCmtNo);
+		}
+	}
+	//좋아요 추가 + 좋아요 수 증가 / 좋아요 취소 좋아요 수 감소 
+	//유저 아이디로 구분한 것이 존재하는지 컨트롤러에서 
+	public void addLike (Long roundReviewBoardNo, RoundReviewLikeDto roundReviewLike) throws RemoveException {
+		Optional<RoundReviewBoardEntity> optB = repo.findById(roundReviewBoardNo);
+		
+		RoundReviewBoardEntity boardEntity = optB.get();
+		boardEntity.setRoundReviewBoardLikeCnt(boardEntity.getRoundReviewBoardLikeCnt()+1);
+		repo.save(boardEntity);
+		
+		ModelMapper modelMapper = new ModelMapper();
+		RoundReviewBoardEntity likeEntity = modelMapper.map(roundReviewLike, RoundReviewBoardEntity.class);
+		repo.save(likeEntity);
+	}
 	
-	//좋아요 삭제
-	
+	public void removeLike (Long roundReviewBoardNo) {
+		Optional<RoundReviewBoardEntity> optB = repo.findById(roundReviewBoardNo);
+		
+		RoundReviewBoardEntity boardEntity = optB.get();
+		boardEntity.setRoundReviewBoardLikeCnt(boardEntity.getRoundReviewBoardLikeCnt()-1);
+		repo.save(boardEntity);
+		
+		repo.deleteLike(roundReviewBoardNo); //좋아요 취소 
+	}
 	//게시글 검색
 	
 	//댓글 등록 + 댓글 수 증가
@@ -121,6 +201,7 @@ public class RoundReviewBoardService {
 	//좋아요 취소
 	//좋아요 수 감소 
 	
+	//게시글 작성
 	
 	
 	

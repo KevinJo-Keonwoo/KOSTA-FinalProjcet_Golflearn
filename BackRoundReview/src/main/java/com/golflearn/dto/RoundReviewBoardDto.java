@@ -1,10 +1,13 @@
 package com.golflearn.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.golflearn.domain.entity.RoundReviewCommentEntity;
+import com.golflearn.domain.entity.RoundReviewLikeEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -29,4 +32,6 @@ private Long roundReviewBoardNo;
 	private Long roundReviewBoardCmtCnt;
 	private String roundReviewBoardLatitude;
 	private String roundReviewBoardLongitude;
+	private List<RoundReviewCommentEntity> roundReviewCommentList;
+	private List<RoundReviewLikeEntity> roundReviewLikeList;
 }

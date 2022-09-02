@@ -1,10 +1,18 @@
 package com.golflearn.control;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,16 +20,18 @@ import com.golflearn.domain.entity.PageBean;
 import com.golflearn.dto.ResultBean;
 import com.golflearn.dto.RoundReviewBoardDto;
 import com.golflearn.exception.FindException;
+import com.golflearn.exception.ModifyException;
+import com.golflearn.exception.RemoveException;
 import com.golflearn.service.RoundReviewBoardService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("roundreviewboard/*")
+@RequestMapping("roundreview/*")
 public class RoundReviewBoardController {
 	@Autowired
 	private RoundReviewBoardService service;
 	
-	@GetMapping(value = "list")
+	@GetMapping(value = "board/list") //급하게 만들어서 다시 뜯어보기  boardlist 테스트용 
 	public ResultBean<PageBean<RoundReviewBoardDto>> list (HttpSession session, int currentPage, int orderType) throws FindException{
 		ResultBean<PageBean<RoundReviewBoardDto>> rb = new ResultBean<PageBean<RoundReviewBoardDto>>();
 		try {
@@ -31,5 +41,46 @@ public class RoundReviewBoardController {
 			e.printStackTrace();
 		}
 		return rb;
+	}
+	@GetMapping(value = "board/{roundReviewBoardNo}")
+	public ResultBean<RoundReviewBoardDto> viewBoard(@PathVariable Long roundReviewBoardNo){
+		ResultBean<RoundReviewBoardDto> rb = new ResultBean<>();
+		try {
+			RoundReviewBoardDto dto = service.viewBoard(roundReviewBoardNo);
+			rb.setStatus(1);
+			rb.setT(dto);
+		}catch(FindException e) {
+			e.printStackTrace();
+			rb.setStatus(0);
+			rb.setMsg(e.getMessage());
+		}
+		return rb;
+	}
+	@PutMapping(value = "board/{roundReviewBoardNo}", produces = MediaType.APPLICATION_JSON_VALUE) //세션 유저아이디 잡아오기
+	public ResponseEntity<Object> modifyBoard(@PathVariable Long roundReviewBoardNo, @RequestBody RoundReviewBoardDto roundReviewBoard){
+		try {
+			if(roundReviewBoard.getRoundReviewBoardContent() == null || roundReviewBoard.getRoundReviewBoardContent().equals("") ||
+					roundReviewBoard.getRoundReviewBoardTitle() == null || roundReviewBoard.getRoundReviewBoardTitle().equals("")){
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			roundReviewBoard.setRoundReviewBoardNo(roundReviewBoardNo); //해주는 이유는? 
+			service.modifyBoard(roundReviewBoard);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (ModifyException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);			
+		}
+	}
+	//cascade할 수 있을지 
+	@Transactional
+	@DeleteMapping(value = "board/{roundReviewBoardNo}")
+	public ResponseEntity<String> removeBoard(@PathVariable Long roundReviewBoardNo){
+		try {
+			service.removeBoard(roundReviewBoardNo);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (RemoveException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }
