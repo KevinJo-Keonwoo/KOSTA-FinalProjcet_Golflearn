@@ -31,14 +31,14 @@ public interface ResaleBoardRepository extends CrudRepository<ResaleBoardEntity,
 	public List<ResaleBoardEntity>findByPage(int startRow, int endRow);
 
 	/**
-	 * 게시글 상세 조회 (댓글 조회)
+	 * 게시글 상세 조회 (댓글 조회) - findById로
 	 * @param resaleBoardNo
 	 * @return
 	 */
-	@Query(value = "SELECT rb.*, rc.* "
-				 + "FROM resale_board rb LEFT JOIN resale_comment rc ON (rb.resale_board_no = rc.resale_board_no)"
-				 + "WHERE rb.resale_board_no = ?1", nativeQuery= true)
-	public ResaleBoardEntity findDetail(Long resaleBoardNo);
+//	@Query(value = "SELECT rb.*, rc.* "
+//				 + "FROM resale_board rb LEFT JOIN resale_comment rc ON (rb.resale_board_no = rc.resale_board_no)"
+//				 + "WHERE rb.resale_board_no = ?1", nativeQuery= true)
+//	public ResaleBoardEntity findDetail(Long resaleBoardNo);
 	
 	/**
 	 * 댓글, 대댓글 삭제
