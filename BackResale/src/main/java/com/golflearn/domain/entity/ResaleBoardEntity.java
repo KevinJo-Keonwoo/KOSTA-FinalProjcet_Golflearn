@@ -1,12 +1,17 @@
 package com.golflearn.domain.entity;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -52,7 +57,7 @@ public class ResaleBoardEntity {
 	private String resaleBoardContent;
 	
 	@Column(name="resale_board_dt")
-	@ColumnDefault(value = "sysdate")
+	@ColumnDefault(value="sysdate")
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	private Date resaleBoardDt;
 	
@@ -67,7 +72,15 @@ public class ResaleBoardEntity {
 	@Column(name="resale_board_cmt_cnt")
 	@ColumnDefault(value="0")
 	private Integer resaleBoardCmtCnt;
-		
+	
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL) //EAGER
+	@JoinColumn(name = "resale_board_no") //referencedColumnName="resale_board_no")
+	// OneToMany , ManyToOne -> 유스케이스별로 만듦. 게시글을 조회할 때 댓글도 같이 불러 오는 경우가 훨씬 많음
+	private List<ResaleCommentEntity> resaleCommentEntity;
+
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL) //LAZY
+	@JoinColumn(name = "resale_board_no")
+	private List<ResaleLikeEntity> resaleLikeEntity;
 }
 
 // @NonNull : 롬복 어노테이션. Setter, Getter와 관련 있기 때문에 DB와는 아무 관계가 없음
