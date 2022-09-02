@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.golflearn.domain.entity.RoundReviewBoardEntity;
+import com.golflearn.domain.entity.RoundReviewCommentEntity;
 
 public interface RoundReviewBoardRepository extends JpaRepository<RoundReviewBoardEntity, Long> {
 	
@@ -61,17 +62,17 @@ public interface RoundReviewBoardRepository extends JpaRepository<RoundReviewBoa
 			,nativeQuery = true)
 	List<RoundReviewBoardEntity> findListByLike(int startRow, int endRow);
 	
-	/**
-	 * 게시글 번호에 맞는 상세내용(게시글, 댓글 모두) 가져오기
-	 * @param roundReviewBoardNo
-	 * @return
-	 */
-	@Query(value = "SELECT rrb.*, rrc.*\r\n"
-			+ "FROM round_review_board rrb LEFT JOIN round_review_comment rrc \r\n"
-			+ "                            ON (rrb.round_review_board_no = rrc.round_review_board_no)               \r\n"
-			+ "WHERE rrc.round_review_board_no = ?1"
-			,nativeQuery = true)
-	RoundReviewBoardEntity findDetail(Long roundReviewBoardNo);
+//	/**
+//	 * 게시글 번호에 맞는 상세내용(게시글, 댓글 모두) 가져오기
+//	 * @param roundReviewBoardNo
+//	 * @return
+//	 */
+//	@Query(value = "SELECT rrb.*, rrc.round_review_cmt_dt , rrc.*\r\n"
+//			+ "FROM round_review_board rrb LEFT JOIN round_review_comment rrc \r\n"
+//			+ "                            ON (rrb.round_review_board_no = rrc.round_review_board_no)               \r\n"
+//			+ "WHERE rrb.round_review_board_no = ?1"
+//			,nativeQuery = true)
+//	RoundReviewBoardEntity findDetail(Long roundReviewBoardNo);
 	
 	/**
 	 * 댓글 및 대댓글 한번에 삭제

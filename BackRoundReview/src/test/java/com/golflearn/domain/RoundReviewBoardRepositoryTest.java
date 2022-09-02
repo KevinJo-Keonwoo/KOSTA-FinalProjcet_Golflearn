@@ -3,16 +3,17 @@ package com.golflearn.domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.golflearn.domain.entity.RoundReviewBoardEntity;
+import com.golflearn.domain.entity.RoundReviewCommentEntity;
 import com.golflearn.domain.repository.RoundReviewBoardRepository;
 import com.golflearn.exception.FindException;
 import com.golflearn.exception.RemoveException;
@@ -39,7 +40,13 @@ class RoundReviewBoardRepositoryTest {
 	@Test
 	void testFindDetail() throws FindException {
 		Long roundReviewBoardNo = 1L;
-		repo.findDetail(roundReviewBoardNo);
+		Optional<RoundReviewBoardEntity> entity= repo.findById(roundReviewBoardNo);
+		assertEquals("true", entity.isPresent());
+//		List<RoundReviewBoardEntity> list = repo.findDetail(roundReviewBoardNo);
+//		assertEquals(entity.getRoundReviewBoardNo(), entity.getRoundReviewBoardNo());
+//		assertEquals(entity.getUserNickname(), "쩐승");
+//		assertEquals(entity.getRoundReviewComment().getRoundReviewCmtNo(), 1);
+//		assertEquals(entity.getRoundReviewComment().getRoundReviewCmtNo(), 2);
 	}
 	
 	@Test
