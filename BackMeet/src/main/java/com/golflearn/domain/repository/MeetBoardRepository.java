@@ -1,12 +1,13 @@
-package com.golflearn.domain;
+package com.golflearn.domain.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface MeetBoardRepository extends JpaRepository<MeetBoard, Long>{
-//	List<MeetMember> findAll(org.springframework.data.domain.Pageable paging);
+import com.golflearn.domain.entity.MeetBoardEntity;
+
+public interface MeetBoardRepository extends JpaRepository<MeetBoardEntity, Long>{
 	
 	@Query(value ="SELECT *\r\n"
 			+ "FROM (SELECT rownum r, a.*\r\n"
@@ -17,7 +18,7 @@ public interface MeetBoardRepository extends JpaRepository<MeetBoard, Long>{
 			+ "			)\r\n"
 			+ "WHERE r BETWEEN ?1 AND ?2"
 			,nativeQuery = true)
-	List<MeetBoard> findByPage(int startRow, int endRow);
+	List<MeetBoardEntity> findByPage(int startRow, int endRow);
 	//모든 목록을 페이징처리하여 최신순으로 보여준다
 	
 	
@@ -31,9 +32,15 @@ public interface MeetBoardRepository extends JpaRepository<MeetBoard, Long>{
 			+ "			)\r\n"
 			+ "WHERE r BETWEEN ?2 AND ?3"
 			,nativeQuery = true)
-	List<MeetBoard> findByPageByStatus(Long meetBoardStatus, int startRow, int endRow);
+	List<MeetBoardEntity> findByStatusAndPage(Long meetBoardStatus, int startRow, int endRow);
 	//모집상태별로 필터링하여 최신순으로 보여준다
 	
+	@Query(value ="	SELECT COUNT(*)\r\n"
+			+ "	FROM meet_board\r\n"
+			+ "	WHERE meet_board_status= ?1"
+			, nativeQuery = true)
+	int countByMeetBoardStatus(Long meetBoardStatus);
+	//특정 모집상태인 모임글의 수를 반환한다
 	
 	@Query(value ="SELECT *\r\n"
 			+ "FROM (SELECT rownum r, a.*\r\n"
@@ -45,15 +52,14 @@ public interface MeetBoardRepository extends JpaRepository<MeetBoard, Long>{
 			+ "			)\r\n"
 			+ "WHERE r BETWEEN ?2 AND ?3"
 			,nativeQuery = true)
-	List<MeetBoard> findByWordAndPage(String word, int startRow, int endRow);
+	List<MeetBoardEntity> findByWordAndPage(String word, int startRow, int endRow);
 	//검색어가 제목에 포함된 모임글의 목록을 불러온다
 	
-	@Query(value ="DELETE FROM meet_member\r\n"
-			+ "WHERE meet_board_no = ?1 AND user_nickname = ?2"
-			,nativeQuery = true)
-	void deleteByIdAndUserNickName(Long meetBoardNo, String UserNickname);
-	//모임글의 모임참가자목록에서 삭제된다
 	
-	
-	
+	@Query(value ="	SELECT COUNT(*)\r\n"
+			+ "	FROM meet_board\r\n"
+			+ "	WHERE meet_board_title LIKE %?1%"
+			, nativeQuery = true)
+	int countByWord(String word);
+	//검색어가 제목에 포함된 모임글의 수를 반환한다
 }
