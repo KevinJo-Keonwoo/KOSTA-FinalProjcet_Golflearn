@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.golflearn.dto.PageBean;
 import com.golflearn.dto.ResaleBoardDto;
+import com.golflearn.dto.ResaleLikeDto;
 import com.golflearn.dto.ResultBean;
+import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 import com.golflearn.exception.ModifyException;
 import com.golflearn.exception.RemoveException;
@@ -40,10 +42,32 @@ public class ResaleBoardContoller {
 	@Autowired
 	private ServletContext sc;
 
-	// 게시글 목록보기
-	@GetMapping(value="board/{optCp}")
+	/**
+	 * 게시글 목록보기
+	 * @param optCp
+	 * @return
+	 */
+	@GetMapping(value={"board/list","board/list/{optCp}"})
 	public ResultBean<PageBean<ResaleBoardDto>> BoardList(@PathVariable Optional<Integer> optCp){
-		return null;
+		// 요청전달데이터 전달 되지 않을 때를 대비하여 사용하는 RESTful의  @PathVariable은 Optional로 설정해줘야함 
+
+		ResultBean<PageBean<ResaleBoardDto>> rb = new ResultBean<>();
+		try {
+			int currentPage;
+			if(optCp.isPresent()) { //currentPage 가 있으면(optional)
+				currentPage = optCp.get();
+			}else { // 없으면
+				currentPage = 1;
+			}
+			PageBean<ResaleBoardDto> pb = service.boardList(currentPage);
+			rb.setStatus(1);
+			rb.setT(pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			rb.setStatus(0);
+			rb.setMsg(e.getMessage());
+		}
+		return rb;
 	}
 
 	/**
@@ -75,7 +99,9 @@ public class ResaleBoardContoller {
 	 * @return
 	 */
 	@PutMapping(value="{resaleBoardNo}",produces = MediaType.APPLICATION_JSON_VALUE) 
-	public ResponseEntity<?> modifyBoard(@PathVariable Long resaleBoardNo, @RequestBody ResaleBoardDto dto, HttpSession session){
+	public ResponseEntity<?> modifyBoard(@PathVariable Long resaleBoardNo,
+										 @RequestBody ResaleBoardDto dto,
+										 HttpSession session){
 		String loginedNickname = (String)session.getAttribute("loginNickname");
 		// String loginedNickname = "박공주";
 		logger.error(loginedNickname);
@@ -112,23 +138,41 @@ public class ResaleBoardContoller {
 	//		return null;
 	//	}
 
-	// 게시글 삭제
-	@DeleteMapping(value="{resaleBoardNo}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResultBean<ResaleBoardDto> removeBoard (@PathVariable Long resaleBoardNo){
+	/**
+	 * 게시글 삭제
+	 * @param resaleBoardNo
+	 * @param dto
+	 * @param session
+	 * @return
+	 */
+	@DeleteMapping(value="board/{resaleBoardNo}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResultBean<ResaleBoardDto> removeBoard (@PathVariable Long resaleBoardNo, HttpSession session, @RequestBody ResaleBoardDto dto) { //,{
+		String loginedNickname = (String) session.getAttribute("loginNickname");
+		//테스트용 닉네임
+//		String loginedNickname = "박공주";
+		
 		ResultBean<ResaleBoardDto> rb = new ResultBean<>();
-
-		try {
-			service.removeBoard(resaleBoardNo);
-//			service.removeBoard(resaleBoardNo);
-			rb.setStatus(1);
-			rb.setMsg("삭제 성공");
-		} catch (RemoveException e) {
-			e.printStackTrace();
-			rb.setStatus(0);
-			rb.setMsg(e.getMessage());
+		if(loginedNickname == null) { // 로그인된 아이디가 없으면
+			rb.setMsg("로그인 하세요");			
+			return rb;
+		} else if(loginedNickname.equals(dto.getUserNickname())) { // 로그인 아이디와 글 작성자가 일치하면
+			try {
+				dto.setResaleBoardNo(resaleBoardNo);
+				service.removeBoard(resaleBoardNo);
+				rb.setStatus(1);
+				rb.setMsg("삭제 성공");
+			} catch (RemoveException e) {
+				e.printStackTrace();
+				rb.setStatus(0);
+				rb.setMsg(e.getMessage());
+			}
+			return rb; 
+		}else {
+			rb.setMsg("작성자 아이디와 로그인된 아이디가 일치하지 않습니다");
+			return rb;
 		}
-		return rb; 
 	}
+	
 	//검색어로 게시글 조회
 
 	// (대)댓글 등록 + 댓글 수 증가
@@ -136,7 +180,88 @@ public class ResaleBoardContoller {
 	// 대댓글 삭제
 	// 댓글 삭제 (대댓글 삭제, 댓글 삭제, 댓글 수 감소)
 	// 좋아요 추가
-	// 좋아요 삭제
+//	@GetMapping(value = "like/add", produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResultBean<ResaleLikeDto> addLike(ResaleLikeDto likeDto,
+//											@RequestParam Long resaleBoardNo,
+//											HttpSession session){
+//		
+//		String loginedNickname = (String) session.getAttribute("loginNickname");
+//		
+//		ResultBean<ResaleLikeDto> rb = new ResultBean<>();
+//		try {
+//			likeDto.setUserNickname(loginedNickname);
+//			System.out.println(" 글번호 " + resaleBoardNo);
+//			likeDto.setResaleBoard(
+//			service.addLike(likeDto,resaleBoardNo);
+//			rb.setStatus(1);
+//			rb.setMsg("좋아요 추가 성공");
+//		} catch (AddException e) {
+//			e.printStackTrace();
+//			rb.setStatus(1);
+//			rb.setMsg("좋아요 추가 실패");
+//		}
+//		return rb;
+//	}
+//	
+	@GetMapping(value = "like/add", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResultBean<ResaleLikeDto> addLike(ResaleLikeDto likeDto,
+											@RequestBody ResaleBoardDto boardDto,
+											HttpSession session){
+		
+		String loginedNickname = (String) session.getAttribute("loginNickname");
+		
+		ResultBean<ResaleLikeDto> rb = new ResultBean<>();
+		try {
+			likeDto.setUserNickname(loginedNickname);
+
+//			System.out.println(likeDto.getResaleBoard().getResaleBoardNo());
+			System.out.println(" 글번호 " + boardDto.getResaleBoardNo());
+			
+			service.addLike(likeDto, boardDto);
+			rb.setStatus(1);
+			rb.setMsg("좋아요 추가 성공");
+		} catch (AddException e) {
+			e.printStackTrace();
+			rb.setStatus(1);
+			rb.setMsg("좋아요 추가 실패");
+		}
+		return rb;
+	}
+
+	/**
+	 * 좋아요 삭제
+	 * @param resaleLikeNo
+	 * @param dto
+	 * @param session
+	 * @return
+	 */
+	@DeleteMapping(value = "like/{resaleLikeNo}", produces = MediaType.APPLICATION_JSON_VALUE) //Json 형태로 return?!
+	public ResultBean<ResaleLikeDto> removeLike(@PathVariable Long resaleLikeNo, 
+												@RequestBody ResaleBoardDto dto, 
+												HttpSession session){
+//		String loginedNickname = (String)session.getAttribute("loginNickname");
+		String loginedNickname = "데빌";
+		ResultBean<ResaleLikeDto> rb = new ResultBean<>(); // 객체 생성
+		
+		if(loginedNickname == null) {
+			rb.setMsg("로그인하세요");
+		}else if(loginedNickname.equals(dto.getUserNickname())) { // 로그인된 닉네임과 좋아요한 닉네임 같으면
+			try {
+				logger.error("글번호는" + dto.getResaleBoardNo());
+				service.removeLike(resaleLikeNo, dto);
+				rb.setStatus(1);
+				rb.setMsg("좋아요 삭제 성공");
+			} catch (RemoveException e) {
+				e.printStackTrace();
+				rb.setStatus(0);
+				rb.setMsg("좋아요 삭제 실패");
+			}
+		}else {
+			rb.setMsg("로그인된 아이디와 좋아요한 아이디가 일치하지 않습니다");
+		}
+		return rb;
+	}
+	
 }
 
 
