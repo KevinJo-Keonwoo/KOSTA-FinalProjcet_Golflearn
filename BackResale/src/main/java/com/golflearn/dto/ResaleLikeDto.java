@@ -12,6 +12,6 @@ import lombok.Setter;
 @EqualsAndHashCode(of = {"resaleLikeNo"})
 public class ResaleLikeDto {
 	private Long resaleLikeNo;
-	private ResaleBoardDto resaleBoard;
+//	private ResaleBoardDto resaleBoard;
 	private String userNickname;
 }
