@@ -12,10 +12,15 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,24 +29,24 @@ import lombok.Setter;
 
 @NoArgsConstructor 
 @AllArgsConstructor 
-@Setter @Getter 
-
-
-@Entity
-@Table(name = "qna_commment")
-//@IdClass(QnACommentId.class)
-
+@Getter 
+@Setter
+@Builder
+@Table(name = "qna_comment")
 @DynamicInsert 
 @DynamicUpdate
-public class QnAComment {
+@Entity
+public class QnACommentEntity {
 	@Id
-	@Column(name = "qna_comment_no")
-	private Long cNo;
+	@Column(name = "qna_cmt_no")
+	private Long commentNo;
 	
 	@Column(name = "qna_cmt_content")	
 	private String qnaCmtContent;
 	
-	@Column(name = "qna_cmt_dt")		
+	@Column(name = "qna_cmt_dt")
+	@JsonFormat(pattern = "yy/MM/dd", timezone ="Asia/Seoul")
+	@ColumnDefault(value = "SYSDATE")
 	private Date qnaCmtDt;
 	
 	@Column(name = "user_nickname")
@@ -51,7 +56,7 @@ public class QnAComment {
 	
 //2. 자식쪽 1:1	
 	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinColumn(name = "qna_comment_no")//insertable = false, updatable = false, nullable = true)
-	@MapsId(value =  "bNo")
-	private QnABoard board;
+	@JoinColumn(name = "qna_cmt_no")//insertable = false, updatable = false, nullable = true)
+	@MapsId(value =  "boardNo")  //부모클래스를 참조한다.
+	private QnABoardEntity board;
 }

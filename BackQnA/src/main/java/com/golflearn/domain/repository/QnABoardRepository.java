@@ -26,12 +26,12 @@ public interface QnABoardRepository extends JpaRepository <QnABoardEntity, Long>
 	@Query(value = "SELECT *\r\n"
 			+ "		FROM( SELECT rownum r, a.*\r\n"
 			+ "     	   FROM (\r\n"
-			+ "           		 SELECT \r\n"
+			+ "           		 SELECT *\r\n"
 			+ "            		 FROM qna_board  \r\n"
 			+ "            		 WHERE qna_board_secret ='0' \r\n"
 			+ "            		 ORDER BY qna_board_dt DESC\r\n"
-			+ "            		)a\r\n"
-			+ "   		 )\r\n"
+			+ "            		) a\r\n"
+			+ "   		 ) \r\n"
 			+ "		WHERE r BETWEEN ?1 AND ?2"
 			, nativeQuery=true)
 	List<QnABoardEntity> findByOpenPost(int startRow, int endRow);
@@ -69,5 +69,19 @@ public interface QnABoardRepository extends JpaRepository <QnABoardEntity, Long>
 			+ "     WHERE r BETWEEN ?2 AND ?3"
 			, nativeQuery=true)
 	List<QnABoardEntity>findByNickname(String nicknameWord, int startRow, int endRow);
-	
+
+	//답변 대기중인 게시글만 리스트로 보기
+	@Query(value = "SELECT * \r\n"
+			+ "		FROM (SELECT rownum r, a.*\r\n "
+			+ "			  FROM (SELECT *\r\n"
+			+ "					FROM qna_board b \r\n"
+			+ "                	WHERE (SELECT COUNT(*) \r\n"
+			+ "                         FROM qna_board JOIN qna_comment c "
+			+ "								ON (b.qna_board_no = c.qna_cmt_no) ) < 1"
+			+ "							)a\r\n"
+			+ "                  )\r\n"
+			+ "		WHERE r BETWEEN ?1 AND ?2"
+			, nativeQuery=true)
+	List<QnABoardEntity> findByAnswerStatus(int startRow, int endRow);
+
 }
