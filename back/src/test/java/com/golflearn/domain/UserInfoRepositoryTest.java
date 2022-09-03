@@ -84,6 +84,7 @@ class UserInfoRepositoryTest {
 	}
 	
 	@Test
+	//아이디 조회
 	void testSelectByUserNameAndPhone() throws FindException {
 		String userName = "전승현";
 		String userPhone = "010-4465-9015";
@@ -95,6 +96,7 @@ class UserInfoRepositoryTest {
 	}
 	
 	@Test
+	//핸드폰 번호 조회
 	void testselectByUserIdAndPhone() throws FindException {
 		String userId = "zzeonsh@gmail.com";
 		String userPhone = "010-7186-5611";
@@ -106,6 +108,7 @@ class UserInfoRepositoryTest {
 	}
 	
 	@Test
+	//비밀번호 변경
 	void testupdateByUserPwd() throws ModifyException {
 		UserInfo userInfo = new UserInfo();
 		String userId = "zzeonsh@gmail.com";

@@ -21,7 +21,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = {"userId"})
-@Data
 public class UserInfo {
 	//@NotBlank : null, "", " " 모두 허용하지 않음
 	//@NotEmpty : null과 "" 허용하지 않음
