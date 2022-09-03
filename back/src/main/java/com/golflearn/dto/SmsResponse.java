@@ -11,7 +11,6 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Setter
 @Getter
 @Builder
 public class SmsResponse {

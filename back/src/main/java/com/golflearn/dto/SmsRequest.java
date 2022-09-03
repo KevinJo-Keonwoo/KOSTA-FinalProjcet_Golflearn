@@ -10,7 +10,6 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @Getter
 @Builder
 public class SmsRequest {
