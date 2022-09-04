@@ -27,11 +27,11 @@ public class PageBean<T> {
 	 * @param cntPerPageGroup //페이지그룹별 보여줄 페이지수
 	 * @param cntPerPage //한페이지당 보여줄 목록수
 	 */
-	public PageBean(List<T>list, long totalCnt, int currentPage, int cntPerPageGroup, int cntPerPage) {
+	public PageBean(List<T>list, long totalCnt, int currentPage, 
+					int cntPerPageGroup, int cntPerPage) {
 		this.list = list;
 		this.currentPage = currentPage;
-		this.cntPerPageGroup = cntPerPageGroup;
-		
+		this.cntPerPageGroup = cntPerPageGroup;	//5
 		this.totalPage =  (int)Math.ceil((double)totalCnt/cntPerPage); //총페이지수 4, 5
 		
 		//currentPage  startPage  totalPage endPage
