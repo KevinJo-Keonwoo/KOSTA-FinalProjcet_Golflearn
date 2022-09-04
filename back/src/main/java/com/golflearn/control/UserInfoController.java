@@ -108,7 +108,7 @@ public class UserInfoController {
 			for(MultipartFile certifFile : certifFiles) {
 				long certifFileSize = certifFile.getSize();
 				if(certifFileSize > 0) { // 첨부 되었을 경우
-					String paramName = certifFile.getName(); //파라미터로 받아올 값 
+					// String paramName = certifFile.getName(); //파라미터로 받아올 값 
 					// 파라미터 값이 user_profile이거나 user_certf인 경우
 					//					if(paramName.equals("user_profile") || paramName.equals("pro_certf")) {
 					// 파일 확장자 가져오기
@@ -118,7 +118,7 @@ public class UserInfoController {
 
 					//						if(paramName.equals("user_profile")) {
 					// 저장 파일 이름 설정
-					String CertifFileName = "Certification_" + savedCertifFileCnt +"_"+ fileExtension; //+ UUID.randomUUID() 
+					String CertifFileName = "Certification_" + (savedCertifFileCnt+1) + fileExtension; //+ UUID.randomUUID() 
 					File savedCertifFile = new File(uploadPath, CertifFileName); // 경로, 저장될 파일 이름
 					// 부모 파일의 경로와, 그 하위의 파일명을 각각 매개변수로 지정하여 
 					// 해당 경로를 조합하여 그 위치에 대한 File 객체를 생성
@@ -335,7 +335,10 @@ public class UserInfoController {
 		}
 		return rb;
 	}
-  
+	
+	/*
+	 * 아이디 찾기
+	 */
   @PostMapping(value="find/id", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean <UserInfo> selectByUserNameAndPhone(@RequestParam String userName, @RequestParam String userPhone) throws FindException {
 		ResultBean<UserInfo> rb = new ResultBean<>();
