@@ -83,4 +83,11 @@ public interface ResaleBoardRepository extends CrudRepository<ResaleBoardEntity,
 			+ "GROUP BY resale_cmt_no", nativeQuery=true)
 	public int findCmtCnt(Long resaleCmtParentNo); 
 	
+
+	@Query(value="SELECT count(*) FROM resale_board "
+			+ "WHERE resale_board_title LIKE %?1% "
+			+ "OR resale_board_content LIKE %?1% "
+			+ "OR user_nickname LIKE %?1% "
+			+ "ORDER BY resale_board_no DESC", nativeQuery=true)
+	public int findCountByWord(String word);
 }
