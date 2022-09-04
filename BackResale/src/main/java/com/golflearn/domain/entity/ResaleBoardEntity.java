@@ -10,7 +10,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -20,7 +19,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +39,7 @@ import lombok.Setter;
 					allocationSize=1) // 1씩 증가
 @DynamicInsert
 @DynamicUpdate
+
 public class ResaleBoardEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
@@ -72,14 +74,17 @@ public class ResaleBoardEntity {
 	@Column(name="resale_board_cmt_cnt")
 	@ColumnDefault(value="0")
 	private Integer resaleBoardCmtCnt;
-	
-	@OneToMany(fetch=FetchType.EAGER)// cascade=CascadeType.ALL) //EAGER
-	@JoinColumn(name = "resale_board_no") //referencedColumnName="resale_board_no")
+
+	@JsonBackReference
+	@OneToMany(mappedBy="resaleBoard",fetch=FetchType.EAGER, cascade=CascadeType.REMOVE) //EAGER
+	// @JoinColumn(name = "resale_board_no") //referencedColumnName="resale_board_no")
 	// OneToMany , ManyToOne -> 유스케이스별로 만듦. 게시글을 조회할 때 댓글도 같이 불러 오는 경우가 훨씬 많음
 	private List<ResaleCommentEntity> resaleCommentEntity;
-
-	@OneToMany(fetch=FetchType.LAZY) // cascade=CascadeType.ALL) //LAZY
-	@JoinColumn(name = "resale_board_no")
+	
+	
+	@JsonManagedReference //연관관계의 주인이 아닌 쪽에 선언. 정상적으로 직렬화 수행
+	@OneToMany(mappedBy="resaleBoard",fetch=FetchType.LAZY, cascade=CascadeType.REMOVE) //LAZY
+	//@JoinColumn(name = "resale_board_no")
 	private List<ResaleLikeEntity> resaleLikeEntity;
 }
 

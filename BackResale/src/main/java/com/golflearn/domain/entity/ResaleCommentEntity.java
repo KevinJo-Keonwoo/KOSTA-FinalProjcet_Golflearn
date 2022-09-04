@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +17,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -60,9 +61,12 @@ public class ResaleCommentEntity {
 	@Column(name="user_nickname")
 	private String userNickname;
 	
+	@JsonBackReference //연관관계의 주인 Entity 에 선언. 직렬화 되지 않도록 수행
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "resale_board_no")
+	private ResaleBoardEntity resaleBoard;
 	// Board쪽에서 List로 가지고 있음
 //	@ManyToOne(fetch=FetchType.LAZY) 
 //	@JoinColumn(name = "resale_board_no")
-//	private ResaleBoardEntity resaleBoard;
 	
 }

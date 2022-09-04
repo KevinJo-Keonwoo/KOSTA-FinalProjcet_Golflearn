@@ -2,7 +2,6 @@ package com.golflearn.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +12,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,7 +43,9 @@ public class ResaleLikeEntity {
 	private String userNickname;
 
 	//Board쪽에서 OneToMany로 가지고 있음
-//	@ManyToOne(fetch=FetchType.LAZY)
+	@JsonBackReference //연관관계의 주인 Entity 에 선언. 직렬화 되지 않도록 수행
+	@ManyToOne (optional = false) //(fetch=FetchType.LAZY)
+	@JoinColumn(name = "resale_board_no")
+	private ResaleBoardEntity resaleBoard;
 //	@JoinColumn(name="resale_board_no", nullable = false)
-//	private ResaleBoardEntity resaleBoard;
 }
