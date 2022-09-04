@@ -17,7 +17,8 @@ import lombok.Setter;
 @EqualsAndHashCode(of = {"resaleCmtNo"})
 public class ResaleCommentDto {
 	private Long resaleCmtNo;
-//	private ResaleBoardDto resaleBoard;
+
+	//	private ResaleBoardDto resaleBoard;
 	
 	@NotEmpty(message="내용은 필수 입력값입니다.")
 	private String resaleCmtContent;
