@@ -31,7 +31,7 @@ public interface ResaleBoardRepository extends CrudRepository<ResaleBoardEntity,
 	public List<ResaleBoardEntity>findByPage(int startRow, int endRow);
 
 	/**
-	 * 게시글 상세 조회 (댓글 조회) - findById로
+	 * 게시글 상세 조회 (댓글 조회) - findById로 사용
 	 * @param resaleBoardNo
 	 * @return
 	 */
@@ -41,20 +41,20 @@ public interface ResaleBoardRepository extends CrudRepository<ResaleBoardEntity,
 //	public ResaleBoardEntity findDetail(Long resaleBoardNo);
 	
 	/**
-	 * 댓글, 대댓글 삭제
+	 * 댓글, 대댓글 삭제 - cascade속성으로 한번에 삭제
 	 * @param resaleBoardNo
 	 */
-	@Modifying
-	@Query(value = "DELETE FROM resale_comment WHERE resale_board_no= ?1", nativeQuery =true)
-	public void deleteComments(Long resaleBoardNo);
-	
+//	@Modifying
+//	@Query(value = "DELETE FROM resale_comment WHERE resale_board_no= ?1", nativeQuery =true)
+//	public void deleteComments(Long resaleBoardNo);
+//	
 	/**
-	 * 좋아요 삭제
+	 * 좋아요 삭제 - cascade속성으로 한번에 삭제
 	 * @param resaleBoardNo
 	 */
-	@Modifying
-	@Query(value = "DELETE FROM resale_like WHERE resale_board_no =?1", nativeQuery = true)
-	public void deleteLike(Long resaleBoardNo);
+//	@Modifying
+//	@Query(value = "DELETE FROM resale_like WHERE resale_board_no =?1", nativeQuery = true)
+//	public void deleteLike(Long resaleBoardNo);
 	
 	/**
 	 * 검색어로 검색
@@ -83,7 +83,12 @@ public interface ResaleBoardRepository extends CrudRepository<ResaleBoardEntity,
 			+ "GROUP BY resale_cmt_no", nativeQuery=true)
 	public int findCmtCnt(Long resaleCmtParentNo); 
 	
-
+	
+	/**
+	 * 검색어로 검색한 결과 행 수를 조회
+	 * @param word
+	 * @return
+	 */
 	@Query(value="SELECT count(*) FROM resale_board "
 			+ "WHERE resale_board_title LIKE %?1% "
 			+ "OR resale_board_content LIKE %?1% "

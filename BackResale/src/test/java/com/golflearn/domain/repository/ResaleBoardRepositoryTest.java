@@ -31,7 +31,7 @@ class ResaleBoardRepositoryTest {
 	// 페이지별 목록 불러오기
 	@Test
 	void testFindByPage() {
-		int currentPage = 1; // 현재페이지
+		int currentPage = 4; // 현재페이지
 		int cntPerPage = 5; // 페이지당 보여줄 게시글 수
 		int endRow = currentPage * cntPerPage;
 		int startRow = endRow - cntPerPage +1;
@@ -98,7 +98,7 @@ class ResaleBoardRepositoryTest {
 	@Test
 //	@Transactional
 	void testDeleteBoard() {
-		Long resaleBoardNo = 76L;
+		Long resaleBoardNo = 8L;
 		Optional<ResaleBoardEntity> optRb = resaleBoardRepo.findById(resaleBoardNo);
 		if(optRb.isPresent()) {
 			resaleBoardRepo.deleteById(resaleBoardNo);
