@@ -73,12 +73,12 @@ public class ResaleBoardEntity {
 	@ColumnDefault(value="0")
 	private Integer resaleBoardCmtCnt;
 	
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL) //EAGER
+	@OneToMany(fetch=FetchType.EAGER)// cascade=CascadeType.ALL) //EAGER
 	@JoinColumn(name = "resale_board_no") //referencedColumnName="resale_board_no")
 	// OneToMany , ManyToOne -> 유스케이스별로 만듦. 게시글을 조회할 때 댓글도 같이 불러 오는 경우가 훨씬 많음
 	private List<ResaleCommentEntity> resaleCommentEntity;
 
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL) //LAZY
+	@OneToMany(fetch=FetchType.LAZY) // cascade=CascadeType.ALL) //LAZY
 	@JoinColumn(name = "resale_board_no")
 	private List<ResaleLikeEntity> resaleLikeEntity;
 }
