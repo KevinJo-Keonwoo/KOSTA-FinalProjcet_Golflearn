@@ -101,6 +101,33 @@ public class ResaleBoardService {
 	}
 
 	/**
+	 * 검색어로 게시글 목록 보기
+	 * 검색어를 이용한 게시글 검색 목록과 페이지 그룹정보 반환
+	 * @param word
+	 * @param currentPage
+	 * @return
+	 * @throws FindException
+	 */
+	public PageBean<ResaleBoardDto> searchBoard(String word, int currentPage) throws FindException{
+		
+		int endRow = currentPage * CNT_PER_PAGE;
+		int startRow = endRow - CNT_PER_PAGE + 1;
+		List<ResaleBoardEntity> entityList = resaleBoardRepo.findByWord(word, startRow, endRow);
+		
+		int totalCnt = resaleBoardRepo.findCountByWord(word);
+		int cntPerPageGroup = 5;
+		
+		ModelMapper modelMapper = new ModelMapper();
+		List<ResaleBoardDto> dtoList = 
+				entityList.stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
+				.collect(Collectors.toList());
+		
+		PageBean<ResaleBoardDto> pb = 
+				new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
+		return pb;
+	}
+	
+	/**
 	 * 게시글 작성
 	 * @param resaleBoard
 	 * @throws AddException
@@ -143,8 +170,7 @@ public class ResaleBoardService {
 
 	/**
 	 * 게시글 삭제
-	 * 댓글, 대댓글, 좋아요 같이 삭제 (미완)
-	 * boardRepo에 있는데 각각 commentRepo와 likeRepo로 옮겨야하는 것이 아닌가?
+	 * 댓글, 대댓글, 좋아요 같이 삭제 
 	 * @param resaleBoardNo
 	 * @throws RemoveException
 	 */
@@ -154,13 +180,13 @@ public class ResaleBoardService {
 		// 해당 게시글이 있는지 확인
 		Optional<ResaleBoardEntity> optRb = resaleBoardRepo.findById(resaleBoardNo);
 		if(optRb.isPresent()) { // 게시글 존재하면
-			//			resaleBoardRepo.deleteById(resaleBoardNo);
-			//			//댓글, 대댓글 삭제
-			resaleBoardRepo.deleteComments(resaleBoardNo);
-			//			//좋아요 삭제
-			resaleBoardRepo.deleteLike(resaleBoardNo);
-			//			//원글 삭제
 			resaleBoardRepo.deleteById(resaleBoardNo);
+			//	댓글, 대댓글 삭제
+//			resaleBoardRepo.deleteComments(resaleBoardNo);
+			//	좋아요 삭제
+//			resaleBoardRepo.deleteLike(resaleBoardNo);
+			//	원글 삭제
+//			resaleBoardRepo.deleteById(resaleBoardNo);
 		}else {
 			throw new RemoveException("게시글이 없습니다");
 		}
@@ -168,36 +194,73 @@ public class ResaleBoardService {
 
 
 	/**
-	 * 검색어로 게시글 목록 보기
-	 * 검색어를 이용한 게시글 검색 목록과 페이지 그룹정보 반환
-	 * @param word
-	 * @param currentPage
-	 * @return
-	 * @throws FindException
+	 * 댓글 등록(완성?!)
+	 * 댓글 수도 같이 증가
+	 * @param commentDto
+	 * @throws AddException
 	 */
-	public PageBean<ResaleBoardDto> searchBoard(String word, int currentPage) throws FindException{
-		
-		int endRow = currentPage * CNT_PER_PAGE;
-		int startRow = endRow - CNT_PER_PAGE + 1;
-		List<ResaleBoardEntity> entityList = resaleBoardRepo.findByWord(word, startRow, endRow);
-		
-		int totalCnt = resaleBoardRepo.findCountByWord(word);
-		int cntPerPageGroup = 5;
-		
+	@Transactional
+	public void writeComment(ResaleCommentDto commentDto) throws AddException{
+		// 댓글 등록
 		ModelMapper modelMapper = new ModelMapper();
-		List<ResaleBoardDto> dtoList = 
-				entityList.stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
-				.collect(Collectors.toList());
+		ResaleCommentEntity commentEntity = modelMapper.map(commentDto, ResaleCommentEntity.class);
+		resaleCommentRepo.save(commentEntity);
 		
-		PageBean<ResaleBoardDto> pb = 
-				new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
-		return pb;
+		Long resaleBoardNo = commentEntity.getResaleBoard().getResaleBoardNo();
+		logger.error("게시글 번호 " + resaleBoardNo);
+		
+		// 댓글 수 증가
+		Optional <ResaleBoardEntity> optRb = resaleBoardRepo.findById(resaleBoardNo);
+		ResaleBoardEntity boardEntity = optRb.get(); 
+		int oldCmtCnt = boardEntity.getResaleBoardCmtCnt();
+		boardEntity.setResaleBoardCmtCnt(oldCmtCnt+1);
+		resaleBoardRepo.save(boardEntity);
+	}
+	
+	
+	/**
+	 * 댓글 삭제(미완성)
+	 * 대댓글 삭제, 댓글 삭제, 댓글 수 감소
+	 * @param resaleCmtNo
+	 * @throws RemoveException
+	 */
+	@Transactional
+	public void deleteComment(ResaleCommentDto commentDto) throws RemoveException{
+		
+		Long resaleBoardNo = commentDto.getResaleBoard().getResaleBoardNo();
+		logger.error("원글번호"+ resaleBoardNo);
+		
+		Long resaleCmtNo = commentDto.getResaleCmtNo();
+		logger.error("댓글번호"+ resaleCmtNo);
+
+		Optional<ResaleBoardEntity> optRb =resaleBoardRepo.findById(resaleBoardNo);
+		if(optRb.isPresent()) {
+			// 댓글 삭제
+			resaleCommentRepo.deleteReComment(resaleCmtNo); // 대댓글 삭제
+			resaleCommentRepo.deleteById(resaleCmtNo); // 원글 삭제
+			
+			// 댓글 수 감소
+			ResaleBoardEntity boardEntity = optRb.get();
+			int oldCmtCnt = boardEntity.getResaleBoardCmtCnt();
+
+			int TotalCmtCnt = resaleCommentRepo.findReCommentCnt(resaleCmtNo);
+			
+			boardEntity.setResaleBoardCmtCnt(oldCmtCnt- TotalCmtCnt);
+			resaleBoardRepo.save(boardEntity);
+			
+		}else {
+			throw new RemoveException("글이 없습니다");
+		}
+		
+		
 	}
 
-	// (대)댓글 등록 + 댓글 수 증가
-	// 댓글 삭제 (대댓글 삭제, 댓글 삭제, 댓글 수 감소)
-
-	// (대)댓글 수정
+	
+	/**
+	 * (대)댓글 수정
+	 * @param dto
+	 * @throws ModifyException
+	 */
 	public void modifyComment(ResaleCommentDto dto) throws ModifyException {
 		Long resaleCmtNo = dto.getResaleCmtNo();
 		Optional<ResaleCommentEntity> optRc = resaleCommentRepo.findById(resaleCmtNo);
@@ -217,8 +280,8 @@ public class ResaleBoardService {
 	 * @param resaleCmtNo
 	 */
 	@Transactional
-	public void deleteRecomment(Long resaleCmtNo, ResaleCommentDto cmtDto) throws RemoveException{
-		Long resaleBoardNo = cmtDto.get
+	public void deleteRecomment(ResaleCommentDto cmtDto) throws RemoveException{
+		Long resaleBoardNo = cmtDto.getResaleBoard().getResaleBoardNo();
 		
 		Optional<ResaleBoardEntity> optRb = resaleBoardRepo.findById(resaleBoardNo);
 		if(optRb.isPresent()) {
@@ -267,8 +330,8 @@ public class ResaleBoardService {
 	 * @throws RemoveException
 	 */
 	@Transactional
-	public void removeLike(Long resaleLikeNo, ResaleBoardDto dto) throws RemoveException{
-		Long resaleBoardNo = dto.getResaleBoardNo();
+	public void removeLike(ResaleLikeDto likeDto) throws RemoveException{
+		Long resaleBoardNo = likeDto.getResaleBoard().getResaleBoardNo();
 		logger.error("글번호는"+resaleBoardNo);
 
 		Optional<ResaleBoardEntity> optRb = resaleBoardRepo.findById(resaleBoardNo); // 좋아요 수 불러오기
@@ -276,7 +339,7 @@ public class ResaleBoardService {
 			ResaleBoardEntity entity = optRb.get();
 			int oldLikeCnt = entity.getResaleBoardLikeCnt();
 			if(oldLikeCnt > 0) { // 좋아요 수가 0보다 크면
-				resaleLikeRepo.deleteById(resaleLikeNo); // 좋아요 삭제
+				resaleLikeRepo.deleteById(likeDto.getResaleLikeNo()); // 좋아요 삭제
 				entity.setResaleBoardLikeCnt(oldLikeCnt-1); // 좋아요 수 감소
 			} 
 		} else {
