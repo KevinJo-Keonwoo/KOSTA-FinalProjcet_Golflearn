@@ -2,6 +2,8 @@ package com.golflearn.control;
 
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +40,8 @@ public class MeetBoardController {
 	private MeetBoardService service;
 	
 	//게시글 목록보기
-	@GetMapping(value = { "list", "list/{optCp}" }) // PathBariable이 전달될 수도, 안될수도 있음
-	public ResultBean<PageBean<MeetBoardDto>> list(@PathVariable Optional<Integer> optCp) {// PathVariable이 전달되지 않은 경우 null인지 아닌지 비교 가능케 함
-
+	@GetMapping(value = { "list", "list/{optCp}" }) 
+	public ResultBean<PageBean<MeetBoardDto>> list(@PathVariable Optional<Integer> optCp) {
 		ResultBean<PageBean<MeetBoardDto>> rb = new ResultBean<>();
 		try {
 			int currentPage;
@@ -92,7 +93,7 @@ public class MeetBoardController {
 		return rb;
 	}
 
-	// 게시글목록에서 제목 검색하기-테스트완료
+	// 게시글목록에서 제목 검색하기
 	// GET /meet/search/검색어/페이지번호 
 	// GET /meet/search/검색어 
 	@GetMapping(value = { "search", "search/{optWord}", "search/{optWord}/{optCp}" })
@@ -114,7 +115,6 @@ public class MeetBoardController {
 				pb = service.meetBoardList(currentPage);
 			} else {//있는경우
 				pb = service.searchMeetBoard(word, currentPage);
-
 			}
 			rb.setStatus(1);
 			rb.setT(pb);
@@ -128,11 +128,11 @@ public class MeetBoardController {
 	
 	//참여중인 모임글 목록보기
 	@GetMapping(value = { "mylist", "mylist/{optCp}"})
-	public ResultBean<PageBean<MeetBoardDto>> myList(@PathVariable Optional<Integer> optCp) {
+	public ResultBean<PageBean<MeetBoardDto>> myList(@PathVariable Optional<Integer> optCp, HttpSession session) {
 		ResultBean<PageBean<MeetBoardDto>> rb = new ResultBean<>();
 		try {
 			PageBean<MeetBoardDto> pb;
-//			String loginedNickname = (String)session.getAttribute("loginedNickname");//front에서 로그인여부 확인?
+//			String loginedNickname = (String)session.getAttribute("loginedNickname");//js에서 로그인여부 확인
 			//---로그인대신할 샘플데이터---
 			String loginedNickname = "케빈";
 			int currentPage = 1;
@@ -153,7 +153,6 @@ public class MeetBoardController {
 		return rb;
 	}
 	
-	
 	//게시글 상세보기
 	@GetMapping("{meetBoardNo}")
 	public ResultBean<MeetBoardDto> viewBoard(@PathVariable long meetBoardNo) {
@@ -172,38 +171,47 @@ public class MeetBoardController {
 	
 	//게시글 작성하기
 	@PostMapping("write")
-	public ResponseEntity<Object> write(@RequestParam Long meetCtgNo, @RequestBody MeetBoardDto m){
+	public ResponseEntity<Object> write(@RequestParam Long meetCtgNo, @RequestBody MeetBoardDto m, HttpSession session){
 //		logger.error("title: " + m.getMeetBoardTitle() );
 		
-		try {//모집유형리스트 드롭다운에 불러오기
-			service.meetCategoryList();
-		} catch (FindException e1) {
-			e1.printStackTrace();
-		}
-		
-		if (m.getMeetBoardTitle() == null || m.getMeetBoardTitle().equals("") || m.getMeetBoardContent() == null
-				|| m.getMeetBoardLocation() == null || m.getMeetBoardMaxCnt() == null || m.getMeetBoardMeetDt() == null
-				|| meetCtgNo == null) {
-			return new ResponseEntity<>("항목을 모두 입력하세요", HttpStatus.BAD_REQUEST);
-		}
-//		String loginedNickname = (String)session.getAttribute("loginedNickname");//front에서 로그인여부 확인?
-		//---로그인대신할 샘플데이터---
-		String loginedNickname = "케빈";
-		m.setUserNickname(loginedNickname);
-		try {
-			service.writeMeetBoard(m, meetCtgNo);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (AddException e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		String loginedNickname = (String)session.getAttribute("loginNickname");//로그인닉네임 받기
+		//---테스트용 닉네임-----------------
+		//String loginedNickname = "케빈";
+		//--------------------------------
+		if(loginedNickname == null) {//로그인하지 않은 경우
+			return new ResponseEntity<>("로그인이 필요합니다", HttpStatus.BAD_REQUEST);
+		}else {
+			try {//모집유형리스트 드롭다운에 불러오기
+				service.meetCategoryList();
+			} catch (FindException e1) {
+				e1.printStackTrace();
+			}
+			
+			//내용입력 유효성검사
+			if (m.getMeetBoardTitle() == null || m.getMeetBoardTitle().equals("") || m.getMeetBoardContent() == null
+					|| m.getMeetBoardLocation() == null || m.getMeetBoardMaxCnt() == null || m.getMeetBoardMeetDt() == null
+					|| meetCtgNo == null) {
+				return new ResponseEntity<>("항목을 모두 입력하세요", HttpStatus.BAD_REQUEST);
+			}
+			m.setUserNickname(loginedNickname);
+			try {
+				service.writeMeetBoard(m, meetCtgNo);
+				return new ResponseEntity<>(HttpStatus.OK);
+			} catch (AddException e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 		}
 	}
 	
 	//게시글 삭제하기
 	@DeleteMapping(value = "{meetBoardNo}")
-	public ResponseEntity<String> remove(@PathVariable Long meetBoardNo) {
+	public ResponseEntity<String> remove(@PathVariable Long meetBoardNo, HttpSession session) {
+//		String loginedNickname = (String)session.getAttribute("loginNickname");
+		//---테스트용 유저닉네임-----------------
+		String loginedNickname = "용오";
 		try {
-			service.removeMeetBoard(meetBoardNo);
+			service.removeMeetBoard(loginedNickname, meetBoardNo);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (RemoveException e) {
 			e.printStackTrace();
@@ -213,16 +221,21 @@ public class MeetBoardController {
 	
 	//게시글 수정하기
 	@PutMapping(value = "{meetBoardNo}")
-	public ResponseEntity<Object> modify(@PathVariable long meetBoardNo, @RequestBody MeetBoardDto m) {
-		
+	public ResponseEntity<Object> modify(@PathVariable long meetBoardNo, @RequestBody MeetBoardDto m, HttpSession session) {
+//		String loginedNickname = (String)session.getAttribute("loginNickname");//js에서 헤당닉네임이 작성자인지 확인
+		//---테스트용 유저닉네임-----------------
+		String loginedNickname = "용오";
 		try {
-			if (m.getMeetBoardContent() == null || m.getMeetBoardContent().equals("") || m.getMeetBoardTitle() == null
-				|| m.getMeetBoardLocation() == null || m.getMeetBoardMaxCnt() == null) {
+			if(loginedNickname.equals(m.getUserNickname())){//글작성자여부 확인
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}else if (m.getMeetBoardContent() == null || m.getMeetBoardContent().equals("") || m.getMeetBoardTitle() == null
+				|| m.getMeetBoardLocation() == null || m.getMeetBoardMaxCnt() == null) {//글내용 입력확인
 				return new ResponseEntity<>("항목을 모두 입력하세요", HttpStatus.BAD_REQUEST);
+			}else {
+				m.setMeetBoardNo(meetBoardNo);
+				service.modifyMeetBoard(m);
+				return new ResponseEntity<>(HttpStatus.OK);
 			}
-			m.setMeetBoardNo(meetBoardNo);
-			service.modifyMeetBoard(m);
-			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (ModifyException e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -231,10 +244,12 @@ public class MeetBoardController {
 
 	// 글 작성자가 모임글의 상태를 수정한다
 	@PutMapping(value = "update/{meetBoardNo}/{meetBoardStatus}")	
-	public ResponseEntity<Object> modifySatus(@PathVariable Long meetBoardNo, @PathVariable Long meetBoardStatus) {
-		//글작성자 유효성검사 필요
+	public ResponseEntity<Object> modifySatus(@PathVariable Long meetBoardNo, @PathVariable Long meetBoardStatus, HttpSession session) {
+//		String loginedNickname = (String)session.getAttribute("loginNickname");
+		//---테스트용 유저닉네임-----------------
+		String loginedNickname = "용오";
 		try {
-			service.modifyStatus(meetBoardNo, meetBoardStatus);
+			service.modifyStatus(loginedNickname, meetBoardNo, meetBoardStatus);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (ModifyException e) {
 			e.printStackTrace();
@@ -242,17 +257,16 @@ public class MeetBoardController {
 		}
 	}
 	
-	//모임에 참여한다
-	//모임글 참여가 모임상세보기에서 이루어지니까 상세보기랑 한 컨트롤러인가? //유효성검사 서비스단에서 하는것이 맞나?
+	//모임에 참여한다//유효성검사 서비스단에서 하는것이 맞나?
 	@PostMapping(value = "add")	
-	public ResponseEntity<Object> addMember(@RequestBody MeetMemberDto m) {
+	public ResponseEntity<Object> addMember(@RequestBody MeetMemberDto m, HttpSession session) {
 		
 //		String loginedNickname = (String)session.getAttribute("loginedNickname");
 		//---로그인대신할 샘플데이터---
 		String loginedNickname = "용오";
 		m.setUserNickname(loginedNickname);
 		try {
-			service.addMember(m);
+			service.addMember(loginedNickname, m);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AddException e) {
 			e.printStackTrace();
@@ -262,7 +276,7 @@ public class MeetBoardController {
 	
 	//모임에서 나간다
 	@DeleteMapping(value = "leave/{meetBoardNo}")
-	public ResponseEntity<Object>  deleteMember(@PathVariable Long meetBoardNo) throws RemoveException{
+	public ResponseEntity<Object>  deleteMember(@PathVariable Long meetBoardNo, HttpSession session) throws RemoveException{
 //		String loginedNickname = (String)session.getAttribute("loginedNickname");
 		//---로그인대신할 샘플데이터---
 		String loginedNickname = "용오";
