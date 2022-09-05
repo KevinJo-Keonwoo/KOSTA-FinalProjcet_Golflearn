@@ -2,6 +2,7 @@ package com.golflearn.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.golflearn.domain.entity.QnACommentEntity;
 
 import lombok.Builder;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class QnACommentDto {
 	private Long commentNo;
 	private String qnaCmtContent;
+	@JsonFormat(pattern = "yy/MM/dd", timezone ="Asia/Seoul")
 	private Date qnaCmtDt;
 	private String userNickname;
 
@@ -25,13 +27,27 @@ public class QnACommentDto {
 		this.qnaCmtDt = qnaCmtDt;
 		this.userNickname = userNickname;
 	}
-	public QnACommentEntity toEntity() {
+	public QnACommentDto(QnACommentEntity cmtentity) {
+		this.commentNo =cmtentity.getCommentNo();
+		this.qnaCmtContent = cmtentity.getQnaCmtContent();
+		this.qnaCmtDt = cmtentity.getQnaCmtDt();
+		this.userNickname = cmtentity.getUserNickname();
+	}
+	
+	public QnACommentEntity toEntity() { //QnACommentDto dto) {
+
 		return QnACommentEntity.builder()
 				.commentNo(commentNo)
 				.qnaCmtContent(qnaCmtContent)
 				.qnaCmtDt(qnaCmtDt)
 				.userNickname(userNickname)
 				.build();
+	}
+	public void setUserNickname(String userNickname) {
+		this.userNickname = userNickname;
+	}
+	public void setCommentNo(Long commentNo) {
+		this.commentNo = commentNo;
 	}
 
 
