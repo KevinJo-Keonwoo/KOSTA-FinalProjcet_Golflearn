@@ -16,6 +16,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +27,7 @@ import lombok.Setter;
 
 @NoArgsConstructor 
 @AllArgsConstructor 
-@Setter @Getter 
+@Getter @Setter
 @EqualsAndHashCode(of= {"boardNo"})
 @Builder
 @Entity
@@ -72,6 +73,7 @@ public class QnABoardEntity {
 //	private List<QnAComment> list;
 
 	//2. 부모쪽 1:1
+	@JsonManagedReference
 	@OneToOne (mappedBy = "board")
 	private QnACommentEntity comment;
 }
