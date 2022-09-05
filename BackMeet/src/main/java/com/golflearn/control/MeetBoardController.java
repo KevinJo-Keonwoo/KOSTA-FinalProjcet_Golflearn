@@ -37,7 +37,7 @@ public class MeetBoardController {
 	@Autowired
 	private MeetBoardService service;
 	
-	//게시글 목록보기 -테스트완료
+	//게시글 목록보기
 	@GetMapping(value = { "list", "list/{optCp}" }) // PathBariable이 전달될 수도, 안될수도 있음
 	public ResultBean<PageBean<MeetBoardDto>> list(@PathVariable Optional<Integer> optCp) {// PathVariable이 전달되지 않은 경우 null인지 아닌지 비교 가능케 함
 
@@ -60,7 +60,7 @@ public class MeetBoardController {
 		return rb;
 	}
 	
-	//모집상태에 따른 게시글 목록보기 -테스트완료
+	//모집상태에 따른 게시글 목록보기
 	@GetMapping(value = { "filter", "filter/{optStatus}", "filter/{optStatus}/{optCp}" })
 	public ResultBean<PageBean<MeetBoardDto>> filter(@PathVariable Optional<Integer> optCp, @PathVariable Optional<Long> optStatus) {
 		ResultBean<PageBean<MeetBoardDto>> rb = new ResultBean<>();
@@ -126,7 +126,35 @@ public class MeetBoardController {
 		return rb;
 	}
 	
-	//게시글 상세보기 - 테스트완료
+	//참여중인 모임글 목록보기
+	@GetMapping(value = { "mylist", "mylist/{optCp}"})
+	public ResultBean<PageBean<MeetBoardDto>> myList(@PathVariable Optional<Integer> optCp) {
+		ResultBean<PageBean<MeetBoardDto>> rb = new ResultBean<>();
+		try {
+			PageBean<MeetBoardDto> pb;
+//			String loginedNickname = (String)session.getAttribute("loginedNickname");//front에서 로그인여부 확인?
+			//---로그인대신할 샘플데이터---
+			String loginedNickname = "케빈";
+			int currentPage = 1;
+
+			if (optCp.isPresent()) {//선택한 페이지가 있는 경우
+				currentPage = optCp.get();
+				pb = service.viewMyMeetBoard(loginedNickname, currentPage);
+			} else {//선택한 페이지가 없는 경우
+				pb = service.viewMyMeetBoard(loginedNickname, currentPage);
+			}
+			rb.setStatus(1);
+			rb.setT(pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			rb.setStatus(0);
+			rb.setMsg(e.getMessage());
+		}
+		return rb;
+	}
+	
+	
+	//게시글 상세보기
 	@GetMapping("{meetBoardNo}")
 	public ResultBean<MeetBoardDto> viewBoard(@PathVariable long meetBoardNo) {
 		ResultBean<MeetBoardDto> rb = new ResultBean<>();
@@ -142,7 +170,7 @@ public class MeetBoardController {
 		return rb;
 	}
 	
-	//게시글 작성하기-테스트완료
+	//게시글 작성하기
 	@PostMapping("write")
 	public ResponseEntity<Object> write(@RequestParam Long meetCtgNo, @RequestBody MeetBoardDto m){
 //		logger.error("title: " + m.getMeetBoardTitle() );
@@ -158,7 +186,6 @@ public class MeetBoardController {
 				|| meetCtgNo == null) {
 			return new ResponseEntity<>("항목을 모두 입력하세요", HttpStatus.BAD_REQUEST);
 		}
-		
 //		String loginedNickname = (String)session.getAttribute("loginedNickname");//front에서 로그인여부 확인?
 		//---로그인대신할 샘플데이터---
 		String loginedNickname = "케빈";
@@ -172,7 +199,7 @@ public class MeetBoardController {
 		}
 	}
 	
-	//게시글 삭제하기 -테스트완료
+	//게시글 삭제하기
 	@DeleteMapping(value = "{meetBoardNo}")
 	public ResponseEntity<String> remove(@PathVariable Long meetBoardNo) {
 		try {
@@ -184,7 +211,7 @@ public class MeetBoardController {
 		}
 	}
 	
-	//게시글 수정하기-테스트완료
+	//게시글 수정하기
 	@PutMapping(value = "{meetBoardNo}")
 	public ResponseEntity<Object> modify(@PathVariable long meetBoardNo, @RequestBody MeetBoardDto m) {
 		
@@ -202,7 +229,7 @@ public class MeetBoardController {
 		}
 	}
 
-	// 글 작성자가 모임글의 상태를 수정한다 -테스트완료
+	// 글 작성자가 모임글의 상태를 수정한다
 	@PutMapping(value = "update/{meetBoardNo}/{meetBoardStatus}")	
 	public ResponseEntity<Object> modifySatus(@PathVariable Long meetBoardNo, @PathVariable Long meetBoardStatus) {
 		//글작성자 유효성검사 필요
@@ -215,7 +242,7 @@ public class MeetBoardController {
 		}
 	}
 	
-	//모임에 참여한다 --테스트완료
+	//모임에 참여한다
 	//모임글 참여가 모임상세보기에서 이루어지니까 상세보기랑 한 컨트롤러인가? //유효성검사 서비스단에서 하는것이 맞나?
 	@PostMapping(value = "add")	
 	public ResponseEntity<Object> addMember(@RequestBody MeetMemberDto m) {
@@ -234,8 +261,20 @@ public class MeetBoardController {
 	}
 	
 	//모임에서 나간다
-	
-
+	@DeleteMapping(value = "leave/{meetBoardNo}")
+	public ResponseEntity<Object>  deleteMember(@PathVariable Long meetBoardNo) throws RemoveException{
+//		String loginedNickname = (String)session.getAttribute("loginedNickname");
+		//---로그인대신할 샘플데이터---
+		String loginedNickname = "용오";
+		//front에서 해당 모임글의 멤버인지 검사 필요
+		try {
+			service.removeMeetMember(meetBoardNo, loginedNickname);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (RemoveException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	
 }

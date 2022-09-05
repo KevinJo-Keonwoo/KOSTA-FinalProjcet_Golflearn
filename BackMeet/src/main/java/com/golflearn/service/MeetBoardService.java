@@ -114,6 +114,30 @@ public class MeetBoardService {
 		return pb;
 	}
 	
+	/**
+	 * 내가 참여한 모임 게시글 모곡과 페이지 그룹정보를 반환한다
+	 * @param currentPage
+	 * @return
+	 * @throws FindException
+	 */
+	public PageBean<MeetBoardDto> viewMyMeetBoard(String userNickname, int currentPage) throws FindException{
+		ModelMapper modelMapper = new ModelMapper();
+
+		int endRow = currentPage * CNT_PER_PAGE;
+		int startRow = endRow - CNT_PER_PAGE + 1;
+		List<MeetBoardEntity> list = meetBoardRepo.findByUserNickNameAndPage(userNickname, startRow, endRow);
+		long totalCnt = meetBoardRepo.countByUserNicakname(userNickname);//총건수
+		int CntPerPageGroup = 5;//페이지별 보여줄 페이지수 
+		
+		List<MeetBoardDto> dtoList = list.stream()
+									 	  .map(MeetBoardEntity -> modelMapper
+									      .map(MeetBoardEntity, MeetBoardDto.class))
+									 		   .collect(Collectors.toList());
+		
+		PageBean<MeetBoardDto>  pb = new PageBean<>(dtoList, totalCnt, currentPage, CntPerPageGroup, CNT_PER_PAGE);
+		return pb;
+	}
+	
 	/** 
 	 * 모임글번호의 조회수를 1증가한다
 	 * 게시글번호의 게시글을 반환한다
@@ -251,7 +275,6 @@ public class MeetBoardService {
 		ModelMapper modelMapper = new ModelMapper();
 		Optional <MeetBoardEntity> optM = meetBoardRepo.findById(meetMemberDto.getMeetBoard().getMeetBoardNo());
 		MeetBoardEntity m = optM.get();
-		
 		if(!optM.isPresent()) {//글이 없는 경우
 			throw new AddException("글이 없습니다");
 		}else if(m.getMeetBoardStatus() == 1 ){//글이 있는데 모집마감인 경우
@@ -268,6 +291,7 @@ public class MeetBoardService {
 	 * @param meetBoardNo 글 번호
 	 * @param UserNickname 모임에서 나가는 회원의 닉네임 
 	 */
+	@Transactional
 	public void removeMeetMember(Long meetBoardNo, String UserNickname) throws RemoveException{
 		meetMemberRepo.DeleteByIdAndUserNickName(meetBoardNo, UserNickname);
 	}
