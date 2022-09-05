@@ -25,7 +25,6 @@ public class UserInfoService {
 	//아이디 찾기
 	public UserInfo selectByUserNameAndPhone(String userName, String userPhone) throws FindException{
 		UserInfo userInfo = repository.selectByUserNameAndPhone(userName, userPhone);
-
 		return userInfo;
 	}
 	
