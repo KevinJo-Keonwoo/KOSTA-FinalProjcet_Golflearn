@@ -36,18 +36,6 @@ public interface QnABoardRepository extends JpaRepository <QnABoardEntity, Long>
 			, nativeQuery=true)
 	List<QnABoardEntity> findByOpenPost(int startRow, int endRow);
 
-//	@Query(value = "SELECT *\r\n"
-//			+ "		FROM( SELECT rownum r, a.*\r\n"
-//			+ "     	   FROM (\r\n"
-//			+ "           		 SELECT qna_board_no, qna_board_title, user_nickname, qna_board_dt\r\n"
-//			+ "            		 FROM qna_board  \r\n"
-//			+ "            		 WHERE qna_board_secret ='0' \r\n"
-//			+ "            		 ORDER BY qna_board_dt DESC\r\n"
-//			+ "            		)a\r\n"
-//			+ "   		 )\r\n"
-//			+ "		WHERE r BETWEEN ?1 AND ?2"
-//			, nativeQuery=true)
-//	List<Object[]> findByOpenPost(int startRow, int endRow);
 
 	//상세보기
 	@Query(value = "SELECT qb.*, qc.*\r\n"
@@ -85,3 +73,16 @@ public interface QnABoardRepository extends JpaRepository <QnABoardEntity, Long>
 	List<QnABoardEntity> findByAnswerStatus(int startRow, int endRow);
 
 }
+
+//	@Query(value = "SELECT *\r\n"
+//			+ "		FROM( SELECT rownum r, a.*\r\n"
+//			+ "     	   FROM (\r\n"
+//			+ "           		 SELECT qna_board_no, qna_board_title, user_nickname, qna_board_dt\r\n"
+//			+ "            		 FROM qna_board  \r\n"
+//			+ "            		 WHERE qna_board_secret ='0' \r\n"
+//			+ "            		 ORDER BY qna_board_dt DESC\r\n"
+//			+ "            		)a\r\n"
+//			+ "   		 )\r\n"
+//			+ "		WHERE r BETWEEN ?1 AND ?2"
+//			, nativeQuery=true)
+//	List<Object[]> findByOpenPost(int startRow, int endRow);
