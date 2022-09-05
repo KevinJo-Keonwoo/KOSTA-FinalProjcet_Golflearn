@@ -120,10 +120,11 @@ class MeetBoardRepositoryTest {
 	@Test
 	void testWrite() {
 		MeetCategoryEntity ccc = new MeetCategoryEntity();
-//		ccc.setMeetCtgNo(3L);
-//		ccc.setMeetCtgTitle("매치");
+		ccc.setMeetCtgNo(3L);
+		ccc.setMeetCtgTitle("매치");
+		
 		MeetBoardEntity m = new MeetBoardEntity();
-		m.getMeetCategory().setMeetCtgNo(3L);
+		m.setMeetCategory(ccc);
 		m.setMeetBoardContent("골린이들 모이세요 즐거운 주말 보냅시다");
 		m.setMeetBoardLocation("분당 오리역");
 		m.setMeetBoardTitle("골린이들 모두 모여라");
@@ -135,4 +136,5 @@ class MeetBoardRepositoryTest {
 		
 		meetBoardRepo.save(m);
 	}	
+
 }
