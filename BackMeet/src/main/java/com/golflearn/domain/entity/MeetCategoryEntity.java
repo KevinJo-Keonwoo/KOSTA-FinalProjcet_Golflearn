@@ -1,13 +1,18 @@
-package com.golflearn.domain;
+package com.golflearn.domain.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -15,7 +20,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Component
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
@@ -26,7 +30,7 @@ import lombok.Setter;
 
 @DynamicInsert
 @DynamicUpdate
-public class MeetCategory {
+public class MeetCategoryEntity {
 	
 	@Id
 	@Column(name="meet_ctg_no")
