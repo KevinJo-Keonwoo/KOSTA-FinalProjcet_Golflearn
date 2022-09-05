@@ -27,7 +27,6 @@ import com.golflearn.exception.RemoveException;
 @Service
 public class MeetBoardService {
 	private static final int CNT_PER_PAGE = 5; //페이지별 보여줄 목록수
-	
 	@Autowired
 	private MeetBoardRepository meetBoardRepo;
 	@Autowired
@@ -52,7 +51,6 @@ public class MeetBoardService {
 		
 		//List타입의 Entity 생성후 findByPage반환
 		List<MeetBoardEntity> list = meetBoardRepo.findByPage(startRow, endRow);
-		
 		//ModelMapper로 Entity를 Dto로 변환하여 Dto객체에 반환
 		List<MeetBoardDto> dtoList = list.stream()
 									 .map(MeetBoardEntity -> modelMapper
@@ -115,7 +113,7 @@ public class MeetBoardService {
 	}
 	
 	/**
-	 * 내가 참여한 모임 게시글 모곡과 페이지 그룹정보를 반환한다
+	 * 내가 참여한 모임 게시글 목록과 페이지 그룹정보를 반환한다
 	 * @param currentPage
 	 * @return
 	 * @throws FindException
@@ -132,7 +130,7 @@ public class MeetBoardService {
 		List<MeetBoardDto> dtoList = list.stream()
 									 	  .map(MeetBoardEntity -> modelMapper
 									      .map(MeetBoardEntity, MeetBoardDto.class))
-									 		   .collect(Collectors.toList());
+									 	  .collect(Collectors.toList());
 		
 		PageBean<MeetBoardDto>  pb = new PageBean<>(dtoList, totalCnt, currentPage, CntPerPageGroup, CNT_PER_PAGE);
 		return pb;
@@ -165,10 +163,9 @@ public class MeetBoardService {
 			MeetBoardDto dto = modelMapper.map(entity, MeetBoardDto.class);//Entity -> Dto
 			return dto;
 		}else {
-			throw new FindException("게시글이 없습니다");
+			throw new FindException("게시글이 없습니다.");
 		}
 	}
-	
 
 	/**
 	 * 글 작성시 모집유형 리스트를 반환한다
@@ -200,15 +197,14 @@ public class MeetBoardService {
 		MeetCategoryEntity entity = optC.get();
 		
 		//-------글 내용을 작성한다---------
-		MeetBoardEntity meetBoardEntity = modelMapper.map(meetBoardDto, MeetBoardEntity.class);
-		meetBoardEntity.setMeetCategory(entity);//선택한 모집유형 set
-		meetBoardRepo.save(meetBoardEntity);
+		MeetBoardEntity meetBoardEntity = modelMapper.map(meetBoardDto, MeetBoardEntity.class);//Dto->Entity
+		meetBoardEntity.setMeetCategory(entity);//선택한 모집유형 저장 
+		meetBoardRepo.save(meetBoardEntity);//글 저장
 		
 		//-------작성자는 자동으로 모임참가자목록에 추가된다---------
 		MeetMemberEntity member = new MeetMemberEntity();
-		member.setMeetBoard(meetBoardEntity);//작성된 게시글 번호
-		member.setUserNickname(meetBoardEntity.getUserNickname());//작성된 게시글의 작성자
-		
+		member.setMeetBoard(meetBoardEntity);//작성된 게시글 번호 저장
+		member.setUserNickname(meetBoardEntity.getUserNickname());//세션의 로그인닉네임으로 작성된 게시글의 작성자 저장
 		meetMemberRepo.save(member);
 	}
 	
@@ -218,10 +214,16 @@ public class MeetBoardService {
 	 * @throws RemoveException
 	 */
 	@Transactional
-	public void removeMeetBoard(Long meetBoardNo) throws RemoveException{
-		meetMemberRepo.DeleteByBoardNo(meetBoardNo);
-		meetBoardRepo.findById(meetBoardNo).orElseThrow(() ->  new RemoveException("존재하지 않는 게시글입니다."));
-		meetBoardRepo.deleteById(meetBoardNo);
+	public void removeMeetBoard(String userNickname, Long meetBoardNo) throws RemoveException{
+		Optional<MeetBoardEntity> meetBoard = meetBoardRepo.findById(meetBoardNo);//선택된 게시글 반환
+		String writer = meetBoard.get().getUserNickname();//해당 게시글의 작성자 유저네임 반환
+		if(userNickname.equals(writer)) {//로그인된 유저가 작성자인지 확인
+			throw new RemoveException("삭제할 수 있는 권한이 없습니다.");
+		}else {
+			meetMemberRepo.DeleteByBoardNo(meetBoardNo);
+			meetBoardRepo.findById(meetBoardNo).orElseThrow(() ->  new RemoveException("존재하지 않는 게시글입니다."));
+			meetBoardRepo.deleteById(meetBoardNo);
+		}
 	}
 
 	/**
@@ -254,14 +256,17 @@ public class MeetBoardService {
 	 * @param meetBoardStatus 모집상태
 	 * @throws ModifyException
 	 */
-	public void modifyStatus(Long meetBoardNo, Long meetBoardStatus) throws ModifyException{
-		Optional<MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
-		if(!optM.isPresent()) {
-			throw new ModifyException("글이 없습니다");
-		}else {
-			MeetBoardEntity m = optM.get();
-			m.setMeetBoardStatus(meetBoardStatus);
-			meetBoardRepo.save(m);
+	public void modifyStatus(String userNickname, Long meetBoardNo, Long meetBoardStatus) throws ModifyException{
+		Optional <MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
+		MeetBoardEntity meetBoard = optM.get();
+		String writer = meetBoard.getUserNickname();//해당 게시글의 작성자 유저네임 반환
+		if(!optM.isPresent()){//게시글 존재여부 확인
+			throw new ModifyException("존재하지 않는 게시글입니다.");
+		}else if(userNickname.equals(writer)){//작성자 여부 확인
+			throw new ModifyException("삭제할 수 있는 권한이 없습니다.");
+		}else{
+			meetBoard.setMeetBoardStatus(meetBoardStatus);
+			meetBoardRepo.save(meetBoard);
 		}
 	}
 	
@@ -271,15 +276,18 @@ public class MeetBoardService {
 	 * @param meetMemberDto
 	 * @throws AddException
 	 */
-	public void addMember(MeetMemberDto meetMemberDto) throws AddException{//사용자의 입력없이 자동처리되는 경우 dto를 사용해야할까?
+	public void addMember(String userNickname, MeetMemberDto meetMemberDto) throws AddException{//사용자의 입력없이 자동처리되는 경우 dto를 사용해야할까?
 		ModelMapper modelMapper = new ModelMapper();
 		Optional <MeetBoardEntity> optM = meetBoardRepo.findById(meetMemberDto.getMeetBoard().getMeetBoardNo());
 		MeetBoardEntity m = optM.get();
+		String member = m.getUserNickname();
 		if(!optM.isPresent()) {//글이 없는 경우
 			throw new AddException("글이 없습니다");
 		}else if(m.getMeetBoardStatus() == 1 ){//글이 있는데 모집마감인 경우
 			throw new AddException("모집중인 모임이 아닙니다");
-		}else {
+		}else if(userNickname.equals(member)){//이미 참가중인 경우
+			throw new AddException("이미 참여중인 모임입니다.");
+		}else{
 			MeetMemberEntity meetMemberEntity = modelMapper.map(meetMemberDto, MeetMemberEntity.class);
 			meetMemberEntity.setMeetBoard(m);
 			meetMemberRepo.save(meetMemberEntity);
@@ -293,7 +301,12 @@ public class MeetBoardService {
 	 */
 	@Transactional
 	public void removeMeetMember(Long meetBoardNo, String UserNickname) throws RemoveException{
-		meetMemberRepo.DeleteByIdAndUserNickName(meetBoardNo, UserNickname);
+		Optional <MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
+		if(!optM.isPresent()) {//글이 없는 경우
+			throw new RemoveException("글이 없습니다");
+		}else {
+			meetMemberRepo.DeleteByIdAndUserNickName(meetBoardNo, UserNickname);
+		}
 	}
 	
 	/** 잡 스케쥴러 이용할 것
@@ -303,12 +316,7 @@ public class MeetBoardService {
 	 */
 	public void endMeetBoard(Long meetBoardNo) throws ModifyException{
 		//--------------모집상태가 변화한다----------
-		ModelMapper modelMapper = new ModelMapper();
-		
-		MeetBoardDto dto = null;
-		MeetBoardEntity meetBoardEntity = modelMapper.map(dto , MeetBoardEntity.class);
-
-		Optional<MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardEntity.getMeetBoardNo());
+		Optional<MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
 		if(!optM.isPresent()) {
 			throw new ModifyException("글이 없습니다");
 		}else {
@@ -316,7 +324,6 @@ public class MeetBoardService {
 			m.setMeetBoardStatus(meetBoardNo);
 			meetBoardRepo.save(m);
 		}
-		
 		//---------모임일 지난 모임의 참가자가 삭제된다-----------
 		meetMemberRepo.DeleteByBoardNo(meetBoardNo);
 	}
