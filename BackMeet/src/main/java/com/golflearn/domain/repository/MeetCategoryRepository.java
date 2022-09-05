@@ -1,6 +1,8 @@
-package com.golflearn.domain;
+package com.golflearn.domain.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-public interface MeetCategoryRepository extends JpaRepository<MeetCategory, Long>{
+
+import com.golflearn.domain.entity.MeetCategoryEntity;
+public interface MeetCategoryRepository extends JpaRepository<MeetCategoryEntity, Long>{
 
 }
