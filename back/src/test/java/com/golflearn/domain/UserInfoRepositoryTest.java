@@ -70,7 +70,7 @@ public class UserInfoRepositoryTest {
 		assertEquals(userNickname, ui.getUserNickname());
 	}
 	
-	
+	//로그인
 	@Test
 	public void testSelectByUserIdAndPwd() throws FindException {
 		String userNicakName = "프로한";

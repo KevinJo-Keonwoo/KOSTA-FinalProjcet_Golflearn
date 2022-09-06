@@ -54,11 +54,11 @@ public class UserInfoService {
 	// 로그인
 	public UserInfo login(String userId, String userPwd) throws FindException {
 		UserInfo userInfo = repository.selectByUserIdAndPwd(userId, userPwd);
-		System.out.println("정보는"+userInfo);
+		System.out.println("정보는"+ userInfo);
 		
-		if(!userInfo.getUserPwd().equals(userPwd)) {
-			throw new FindException();
-		}
+//		if(!userInfo.getUserPwd().equals(userPwd)) {
+//			throw new FindException();
+//		}
 		return userInfo;
 	}
 	

@@ -243,19 +243,20 @@ public class UserInfoController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-
 	// 로그인
 	@PostMapping("login")
-	private ResultBean<UserInfo> login(HttpSession session, @RequestParam String userId, @RequestParam String userPwd, String userNickname, String userType) {
-
+	public ResultBean<UserInfo> login(@RequestParam String userId, @RequestParam String userPwd, 
+			String userNickname, String userType, HttpSession session) {
+		
 		ResultBean<UserInfo> rb = new ResultBean<>();
-
+		
 		rb.setStatus(0);
 		rb.setMsg("로그아웃 상태");
+		
 		session.removeAttribute("loginInfo");
 		session.removeAttribute("loginNickname");
 		session.removeAttribute("userType");
-
+		
 		try {
 			service.login(userId, userPwd);
 			rb.setStatus(1);
@@ -270,8 +271,10 @@ public class UserInfoController {
 		return rb;
 	}
 
+
+
 	// 로그인상태
-	@GetMapping(value = "loginstatus")
+	@GetMapping(value = "loginstatus", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean<UserInfo> loginstatus (HttpSession session) {
 
 		String loginedId = (String)session.getAttribute("loginInfo");
@@ -319,7 +322,7 @@ public class UserInfoController {
 	}
 
 	// 닉네임 중복확인
-	@GetMapping(value="nicknamedupchk")
+	@GetMapping(value="nicknamedupchk", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean<UserInfo> nicknamedupchk(@RequestParam String userNickname) {
 
 		ResultBean<UserInfo> rb = new ResultBean<>();
@@ -336,10 +339,11 @@ public class UserInfoController {
 		return rb;
 	}
 	
+	
 	/*
 	 * 아이디 찾기
 	 */
-  @PostMapping(value="find/id", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value="find/id", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean <UserInfo> selectByUserNameAndPhone(@RequestParam String userName, @RequestParam String userPhone) throws FindException {
 		ResultBean<UserInfo> rb = new ResultBean<>();
 		UserInfo userInfo = new UserInfo();
