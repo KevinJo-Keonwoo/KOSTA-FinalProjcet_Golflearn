@@ -260,7 +260,7 @@ public class ResaleBoardService {
 	
 	
 	/**
-	 * 댓글 삭제(미완성)
+	 * 댓글 삭제
 	 * 대댓글 삭제, 댓글 삭제, 댓글 수 감소
 	 * @param resaleCmtNo
 	 * @throws RemoveException
@@ -317,33 +317,7 @@ public class ResaleBoardService {
 		
 		
 	}
-	
-//	/**
-//	 * 대댓글 삭제(미완)
-//	 * @param resaleCmtNo
-//	 */
-//	@Transactional
-//	public void deleteRecomment(ResaleCommentDto cmtDto) throws RemoveException{
-//		
-//		Long resaleBoardNo = cmtDto.getResaleBoardDto().getResaleBoardNo();
-//		System.out.println("원글번호" + resaleBoardNo);
-//		
-//		Long resaleCmtNo = cmtDto.getResaleCmtNo();
-//		System.out.println("댓글번호" + resaleCmtNo);
-//		
-//		Optional<ResaleBoardEntity> optRb = resaleBoardRepo.findById(resaleBoardNo);
-//		if(optRb.isPresent()) {
-//			// 대댓글 삭제
-//			resaleCommentRepo.deleteById(resaleCmtNo);
-//			// 댓글 수 감소
-//			ResaleBoardEntity entity = optRb.get();
-//			int oldCmtCnt = entity.getResaleBoardCmtCnt();
-//			entity.setResaleBoardCmtCnt(oldCmtCnt-1);
-//			resaleBoardRepo.save(entity);
-//		} else {
-//			throw new RemoveException("게시글이 없습니다");
-//		}
-//	}
+
 
 	/** 
 	 * 좋아요 추가(완성)

@@ -358,7 +358,7 @@ public class ResaleBoardContoller {
 	}
 	
 	/**
-	 * 댓글, 대댓글 삭제(미완성)
+	 * 댓글, 대댓글 삭제
 	 * @param commentDto
 	 * @param session
 	 * @return
