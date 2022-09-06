@@ -2,8 +2,10 @@ package com.golflearn.domain.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +19,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.golflearn.dto.QnACommentDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -74,6 +77,6 @@ public class QnABoardEntity {
 
 	//2. 부모쪽 1:1
 	@JsonManagedReference
-	@OneToOne (mappedBy = "board")
+	@OneToOne (mappedBy = "board", cascade = CascadeType.REMOVE, fetch=FetchType.EAGER)
 	private QnACommentEntity comment;
 }

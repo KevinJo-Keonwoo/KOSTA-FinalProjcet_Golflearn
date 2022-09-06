@@ -55,7 +55,7 @@ public class QnACommentEntity {
 	
 //2. 자식쪽 1:1	
 	@JsonBackReference
-	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "qna_cmt_no")//insertable = false, updatable = false, nullable = true)
 	@MapsId(value =  "boardNo")  //부모클래스를 참조한다.
 	private QnABoardEntity board;
