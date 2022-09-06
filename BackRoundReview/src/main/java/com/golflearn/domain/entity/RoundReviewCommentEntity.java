@@ -14,10 +14,10 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -37,10 +37,11 @@ public class RoundReviewCommentEntity {
 	@Column(name="round_review_cmt_no")
 	private Long roundReviewCmtNo;
 	
-//	@NonNull
-//	@ManyToOne
-//	@JoinColumn(name="round_review_board_no")
-//	private RoundReviewBoardEntity roundReviewBoard;
+	//양방향 연관관계 
+	@JsonBackReference //연관관계의 주인 Entity 에 선언. 직렬화 되지 않도록 수행
+	@ManyToOne
+	@JoinColumn(name="round_review_board_no")
+	private RoundReviewBoardEntity roundReviewBoard;
 	
 	@Column(name="round_review_cmt_content")
 	private String roundReviewCmtContent;

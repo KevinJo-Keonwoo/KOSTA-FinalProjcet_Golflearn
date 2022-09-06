@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.golflearn.domain.entity.PageBean;
@@ -34,7 +33,7 @@ import com.golflearn.service.RoundReviewBoardService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("roundreview/*")
+//@RequestMapping("roundreview/*")
 public class RoundReviewBoardController {
 	@Autowired
 	private RoundReviewBoardService service;
@@ -130,23 +129,32 @@ public class RoundReviewBoardController {
 		}
 	}
 	@PostMapping(value = "like/{roundReviewBoardNo}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> addLike(@PathVariable Long roundReviewBoardNo, @RequestBody RoundReviewLikeDto roundReviewLike){
-		
-		
+	public ResponseEntity<?> addlike(@PathVariable Long roundReviewBoardNo, @RequestBody RoundReviewLikeDto dto){
 		//테스트닉네임
 		String loginedNickName = "데빌";
-		Long rr = 1L;
-		roundReviewLike.setRoundReviewLikeNo(rr);
+//		Long rr = 1L;
+//		roundReviewLike.setRoundReviewLikeNo(rr);
 //		dto.setRoundReviewLikeNo(roundReviewBoardNo);
-		roundReviewLike.setUserNickname(loginedNickName);
-		roundReviewLike.getRoundReviewBoard().setRoundReviewBoardNo(rr);
-		logger.error(roundReviewLike.getUserNickname());
-		logger.error(roundReviewLike.getRoundReviewLikeNo().toString());
-		logger.error(roundReviewLike.getRoundReviewBoard().getRoundReviewBoardNo().toString());
+//		roundReviewLike.getRoundReviewBoard().setRoundReviewBoardNo(rr);
+		dto.setUserNickname(loginedNickName);
+		logger.error(roundReviewBoardNo.toString());
 		try {
-			service.addLike(rr, roundReviewLike);
+			service.addLike(roundReviewBoardNo, dto);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AddException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@Transactional
+	@DeleteMapping(value = "like/{roundReviewBoardNo}")
+	public ResponseEntity<?> removeLike(@PathVariable Long roundReviewBoardNo, String userNickname){
+		try {
+			//테스트
+			String nickname = userNickname;
+			service.removeLike(roundReviewBoardNo, nickname);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (RemoveException e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -184,6 +192,10 @@ public class RoundReviewBoardController {
 	@PostMapping(value = "board")
 	public ResponseEntity<?> writeBoard(@RequestBody RoundReviewBoardDto dto){
 		try {
+			//테스트 dt
+//			java.util.Date utilDate = new java.util.Date();
+//			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+//			dto.setRoundReviewBoardDt(sqlDate);
 			service.writeBoard(dto);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AddException e) {
@@ -191,9 +203,13 @@ public class RoundReviewBoardController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	@PostMapping(value = "comment")
+	@PostMapping(value = "comment/{roundReviewBoardNo}")
 	public ResponseEntity<?> addComment(@PathVariable Long roundReviewBoardNo,@RequestBody RoundReviewCommentDto dto){
 		try {
+			//테스트 DT
+			java.util.Date utilDate = new java.util.Date();
+			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+			dto.setRoundReviewCmtDt(sqlDate);
 			service.addComment(roundReviewBoardNo, dto);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AddException e) {
@@ -201,8 +217,8 @@ public class RoundReviewBoardController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	@PutMapping(value = "comment")
-	public ResponseEntity<?> modifyComment(@RequestBody RoundReviewCommentDto dto){
+	@PutMapping(value = "comment/{roundReviewCmtNo}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> modifyComment(@PathVariable Long roundReviewCmtNo, @RequestBody RoundReviewCommentDto dto){
 		try {
 			if(dto.getRoundReviewCmtContent() == null || dto.getRoundReviewCmtContent().equals("")){
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -214,8 +230,8 @@ public class RoundReviewBoardController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);			
 		}
 	}
-	@PutMapping(value = "recomment")
-	public ResponseEntity<?> modifyRecomment(@RequestBody RoundReviewCommentDto dto){
+	@PutMapping(value = "recomment/{roundReviewCmtNo}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> modifyRecomment(@PathVariable Long roundReviewCmtNo, @RequestBody RoundReviewCommentDto dto){
 		try {
 			if(dto.getRoundReviewCmtContent() == null || dto.getRoundReviewCmtContent().equals("")){
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

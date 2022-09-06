@@ -12,8 +12,8 @@ public interface RoundReviewLikeRepository extends JpaRepository<RoundReviewLike
 	 * @param roundReviewBoardNo
 	 */
 	@Modifying
-	@Query(value = "DELETE FROM round_review_like"
-			+ "WHERE round_review_board_no= ?1"
+	@Query(value = "DELETE FROM round_review_like "
+			+ "WHERE round_review_board_no= ?1 AND user_nickname = ?2"
 			,nativeQuery = true)
-	void deleteLike(Long roundReviewBoardNo);
+	void deleteLike(Long roundReviewBoardNo, String userNickname);
 }

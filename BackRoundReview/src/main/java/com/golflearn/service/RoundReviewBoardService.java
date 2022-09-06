@@ -31,7 +31,11 @@ public class RoundReviewBoardService {
 	@Autowired
 //	private RoundReviewBoardRepository repo;
 	private RoundReviewBoardRepository boardRepo;
+	
+	@Autowired
 	private RoundReviewCommentRepository commentRepo;
+	
+	@Autowired
 	private RoundReviewLikeRepository likeRepo;
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -148,8 +152,8 @@ public class RoundReviewBoardService {
 			throw new RemoveException("삭제할 글이 없습니다");
 		}else {
 //			likeRepo.deleteLike(roundReviewBoardNo);
-			likeRepo.deleteById(roundReviewBoardNo);
-			commentRepo.deleteById(roundReviewBoardNo);
+//			likeRepo.deleteById(roundReviewBoardNo);
+//			commentRepo.deleteById(roundReviewBoardNo);
 			boardRepo.deleteById(roundReviewBoardNo);
 		}
 	}
@@ -185,25 +189,48 @@ public class RoundReviewBoardService {
 	}
 	//좋아요 추가 + 좋아요 수 증가 / 좋아요 취소 좋아요 수 감소 
 	//유저 아이디로 구분한 것이 존재하는지 컨트롤러에서 
+//	public void addLike (RoundReviewLikeDto dto) throws AddException {
+//		Optional<RoundReviewBoardEntity> optB = boardRepo.findById(dto.getRoundReviewBoard().getRoundReviewBoardNo());
+//		if (optB.isPresent()) {
+//			//좋아요 수 증가
+//			RoundReviewBoardEntity boardEntity = optB.get();
+//			boardEntity.setRoundReviewBoardLikeCnt(boardEntity.getRoundReviewBoardLikeCnt()+1);
+//			boardRepo.save(boardEntity);
+//			
+//			//좋아요 추가 
+//			logger.error(dto.getUserNickname());
+//	//		logger.error(dto.getRoundReviewBoard().getRoundReviewBoardNo().toString());
+////			logger.error(roundReviewBoardNo.toString());
+//			ModelMapper modelMapper = new ModelMapper();
+//			RoundReviewLikeEntity likeEntity = modelMapper.map(dto, RoundReviewLikeEntity.class);
+//			likeRepo.save(likeEntity);
+//		} else {
+//			throw new AddException("게시글이 존재하지 않습니다");
+//		}
+//	}
 	public void addLike (Long roundReviewBoardNo, RoundReviewLikeDto dto) throws AddException {
 		Optional<RoundReviewBoardEntity> optB = boardRepo.findById(roundReviewBoardNo);
-		RoundReviewBoardEntity boardEntity = optB.get();
-		boardEntity.setRoundReviewBoardLikeCnt(boardEntity.getRoundReviewBoardLikeCnt()+1);
-		boardRepo.save(boardEntity);
-		
-		ModelMapper modelMapper = new ModelMapper();
-		RoundReviewLikeEntity likeEntity = modelMapper.map(dto, RoundReviewLikeEntity.class);
-		logger.error(likeEntity.getUserNickname());
-		logger.error(likeEntity.getRoundReviewLikeNo().toString());
-		likeRepo.save(likeEntity);
+		if (optB.isPresent()) {
+			//좋아요 수 증가
+			RoundReviewBoardEntity boardEntity = optB.get();
+			boardEntity.setRoundReviewBoardLikeCnt(boardEntity.getRoundReviewBoardLikeCnt()+1);
+			boardRepo.save(boardEntity);
+			
+			//좋아요 추가 
+			ModelMapper modelMapper = new ModelMapper();
+			RoundReviewLikeEntity likeEntity = modelMapper.map(dto, RoundReviewLikeEntity.class);
+			likeRepo.save(likeEntity);
+		} else {
+			throw new AddException("게시글이 존재하지 않습니다");
+		}
 	}
-	public void removeLike (Long roundReviewBoardNo) throws RemoveException{
+	public void removeLike (Long roundReviewBoardNo, String userNickname) throws RemoveException{
 		Optional<RoundReviewBoardEntity> optB = boardRepo.findById(roundReviewBoardNo);
 		RoundReviewBoardEntity boardEntity = optB.get();
 		boardEntity.setRoundReviewBoardLikeCnt(boardEntity.getRoundReviewBoardLikeCnt()-1);
 		boardRepo.save(boardEntity);
 		
-		likeRepo.deleteLike(roundReviewBoardNo); //좋아요 취소 
+		likeRepo.deleteLike(roundReviewBoardNo, userNickname); //좋아요 취소 
 	}
 	//검색하기    제목 or 내용 or 닉네임
 	public PageBean<RoundReviewBoardDto> searchBoard(String word, int currentPage) throws FindException{

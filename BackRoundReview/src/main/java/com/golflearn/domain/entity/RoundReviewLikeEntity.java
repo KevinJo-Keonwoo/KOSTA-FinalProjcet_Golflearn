@@ -1,7 +1,5 @@
 package com.golflearn.domain.entity;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,10 +10,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -26,8 +26,8 @@ import lombok.Setter;
 					allocationSize = 1)
 
 @Getter @Setter
-//@DynamicInsert
-//@DynamicUpdate
+@DynamicInsert
+@DynamicUpdate
 public class RoundReviewLikeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
@@ -35,10 +35,11 @@ public class RoundReviewLikeEntity {
 	@Column(name="round_review_like_no")
 	public Long roundReviewLikeNo;
 	
-//	@NonNull
-//	@ManyToOne
-//	@JoinColumn(name="round_review_board_no")
-//	public RoundReviewBoardEntity roundReviewBoard;
+	//양방향 연관관계 
+	@JsonBackReference//연관관계의 주인 Entity 에 선언. 직렬화 되지 않도록 수행
+	@ManyToOne
+	@JoinColumn(name="round_review_board_no")
+	public RoundReviewBoardEntity roundReviewBoard;
 	
 //	@Column(name="round_review_board_no")
 //	public Long roundReviewBoardNo;

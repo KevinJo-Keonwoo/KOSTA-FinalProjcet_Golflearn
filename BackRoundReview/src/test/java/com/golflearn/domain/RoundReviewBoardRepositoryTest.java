@@ -73,7 +73,8 @@ class RoundReviewBoardRepositoryTest {
 	@Transactional
 	void testDeleteLike() throws RemoveException {
 		Long roundReviewBoardNo = 1L;
-		likeRepo.deleteLike(roundReviewBoardNo);
+		String userNickname = "dd";
+		likeRepo.deleteLike(roundReviewBoardNo, userNickname);
 	}
 	
 	@Test
