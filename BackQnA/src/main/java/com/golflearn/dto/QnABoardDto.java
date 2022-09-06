@@ -65,6 +65,10 @@ public class QnABoardDto {
 	public void setBoardNo(Long boardNo) {
 		this.boardNo = boardNo;
 	}
+
+	public void setComment(QnACommentEntity comment) {
+		this.comment = comment;
+	}
 }
 
 	
