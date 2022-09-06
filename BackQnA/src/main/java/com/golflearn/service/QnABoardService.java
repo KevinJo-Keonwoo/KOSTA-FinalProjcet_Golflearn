@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import com.golflearn.dto.QnACommentDto;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 import com.golflearn.exception.ModifyException;
+import com.golflearn.exception.RemoveException;
 
 import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
@@ -25,9 +28,9 @@ public class QnABoardService {
 	private static final int CNT_PER_PAGE = 5; //페이지별 보여줄 목록수
 	@Autowired
 	private QnABoardRepository boardRepo;
-	
-//	private Logger logger = LoggerFactory.getLogger(getClass());
-	
+
+	//	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	@Autowired
 	private QnACommentRepository commentRepo;
 	/**
@@ -165,7 +168,7 @@ public class QnABoardService {
 			throw new FindException("게시글이 없습니다");
 		}
 	}
-	
+
 	/**
 	 * 글을 작성한다
 	 * @param qnaBoard 
@@ -176,7 +179,7 @@ public class QnABoardService {
 		QnABoardEntity be = qnaBoard.toEntity();
 		boardRepo.save(be);
 	}
-	
+
 	/**
 	 * 답변을 작성한다.
 	 * @param qnaComment
@@ -186,7 +189,7 @@ public class QnABoardService {
 		QnACommentEntity ce  = qnaComment.toEntity();
 		Optional<QnABoardEntity> optB = boardRepo.findById(qnaComment.getCommentNo());
 		System.out.println(qnaComment.getCommentNo());
-//		logger.error("no"+qnaComment.getCommentNo());
+		//		logger.error("no"+qnaComment.getCommentNo());
 		if (optB.isPresent()) {
 			QnABoardEntity b = optB.get();			
 			ce.setBoard(b);
@@ -195,7 +198,7 @@ public class QnABoardService {
 			throw new AddException("잘못된 요청입니다.");
 		}
 	}
-	
+
 	/**
 	 * 게시글을 수정한다
 	 * @param boardNo
@@ -203,34 +206,70 @@ public class QnABoardService {
 	public void modifyBoard(QnABoardDto qnaBoard) throws ModifyException {
 		Optional<QnABoardEntity> optB = boardRepo.findById(qnaBoard.getBoardNo());
 		if (optB.isPresent()) {
-			QnABoardEntity be = optB.get();
-			
-			//findById로 찾아온 Entity를 
-			be.builder()
-							.boardTitle(qnaBoard.getBoardTitle())
-							.boardContent(qnaBoard.getBoardContent())
-							.qnaBoardSecret(qnaBoard.getQnaBoardSecret())
-							.build();
-			qnaBoard.toEntity();
-			boardRepo.save(be);
+			//db에서 받아온값(optB.get)을 QnABoardEntity 타입의 qe에 담아줌 
+			QnABoardEntity qe = optB.get();
+			if(qe.getComment() == null && qnaBoard.getUserNickname().equals(qe.getUserNickname())) {
+				qe = QnABoardEntity.builder()
+						.boardNo(qe.getBoardNo())
+						.boardContent(qnaBoard.getBoardContent())
+						.boardTitle(qnaBoard.getBoardTitle())
+						.userNickname(qe.getUserNickname())
+						.qnaBoardDt(qe.getQnaBoardDt())
+						.qnaBoardSecret(qnaBoard.getQnaBoardSecret())
+						.build();
+				boardRepo.save(qe);
+			}else {
+				throw new ModifyException("답변이 달린 글은 수정할 수 없습니다");
+			}
 		}
+		//			QnABoardDto board = QnABoardDto.builder()
+		//					.boardNo(qe.getBoardNo())
+		//					.boardTitle(qnaBoard.getBoardTitle())
+		//					.boardContent(qnaBoard.getBoardContent())
+		//					.userNickname(qe.getUserNickname())
+		//					.qnaBoardDt(qe.getQnaBoardDt())
+		//					.qnaBoardSecret(qnaBoard.getQnaBoardSecret())
+		//					.build();
+		//			board.toEntity();
 	}
-	
+
 	/**
 	 * 게시글을 삭제한다
 	 * @param boardNo
 	 */
-	public void deleteBoard(Long boardNo) {
-		
-		
+	//	@Transactional
+	public void deleteBoard(Long boardNo) throws RemoveException {
+		//DB에 findbyid로 boardNo가 있는지 찾아서 entity타입의 qd에 담는다
+		Optional<QnABoardEntity> optB = boardRepo.findById(boardNo);
+		if (optB.isPresent()) {
+//			QnABoardEntity qe = optB.get();
+			boardRepo.deleteById(boardNo);
+//			qe = QnABoardEntity .builder()
+//					.boardNo(qe.getBoardNo())
+//					.boardContent(qe.getBoardContent())
+//					.boardTitle(qe.getBoardContent())
+//					.qnaBoardDt(qe.getQnaBoardDt())
+//					.userNickname(qe.getUserNickname())
+//					.qnaBoardSecret(qe.getQnaBoardSecret())
+//					.comment(qe.getComment())
+//					.build();
+		}else {
+			throw new RemoveException("글이 없습니다");
+		}
 	}
 	
 	/**
-	 * 답변을 삭제한다
+	 * 답변을 삭제한다(관리자만 가능)
 	 * @param commentNo
+	 * @throws RemoveException 
 	 */
-	public void deleteComment(Long commentNo) {
-		
+	public void deleteComment(Long commentNo) throws RemoveException {
+		Optional<QnACommentEntity> optB = commentRepo.findById(commentNo);
+		if (optB.isPresent()) {
+			commentRepo.deleteById(commentNo);
+		}else {
+			throw new RemoveException("답변을 삭제할 수 없습니다");
+		}
 	}
 
 }
