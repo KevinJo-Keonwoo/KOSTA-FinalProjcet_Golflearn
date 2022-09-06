@@ -114,10 +114,9 @@ class QnABoardRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	//글 삭제하기
 	void testDeleteById() {
-		Long boardNo = 3L;
+		Long boardNo = 54L;
 		boardRepo.deleteById(boardNo);
 	}
 	

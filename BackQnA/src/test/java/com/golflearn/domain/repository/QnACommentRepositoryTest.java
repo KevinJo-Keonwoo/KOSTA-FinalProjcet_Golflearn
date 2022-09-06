@@ -65,10 +65,9 @@ public class QnACommentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	//댓글 삭제하기
 	void testDeleteById() {
-		Long commentNo = 1L;
+		Long commentNo = 71L;
 		commentRepo.deleteById(commentNo);
 	}
 }
