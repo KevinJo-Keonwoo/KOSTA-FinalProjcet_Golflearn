@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -330,25 +329,24 @@ public class ResaleBoardContoller {
 
 
 	/**
-	 * (대)댓글 등록(완성?!)
+	 * (대)댓글 등록(완성)
 	 * @param boardDto
 	 * @param commentDto
 	 * @param session
 	 * @return
 	 */
-	@PostMapping(value= "comment/write/{resaleBoardNo}")
-	public ResultBean<ResaleCommentDto> writeComment(@RequestBody ResaleBoardDto boardDto,
-													 @RequestParam String resaleCmtContent,
-													 ResaleCommentDto commentDto,
+	@PostMapping(value= "comment/write")
+	public ResultBean<ResaleCommentDto> writeComment(@RequestBody ResaleCommentDto commentDto,
 													 HttpSession session){
 		//String loginedNickname = (String) session.getAttribute("loginNickname");
-		String loginedNickname = "딜레이킴";
+		String loginedNickname = "땡초";
 		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
 		try {
 			commentDto.setUserNickname(loginedNickname);
-			commentDto.setResaleBoard(boardDto);
-			commentDto.setResaleCmtContent(resaleCmtContent);
+			logger.error("원글번호는 "+commentDto.getResaleBoard().getResaleBoardNo());
 			service.writeComment(commentDto);
+			logger.error("부모댓글"+commentDto.getResaleCmtParentNo());
+			
 			rb.setStatus(1);
 			rb.setMsg("댓글 등록 성공");
 		} catch (AddException e) {
@@ -360,34 +358,38 @@ public class ResaleBoardContoller {
 	}
 	
 	/**
-	 * 댓글 삭제(미완성)
+	 * 댓글, 대댓글 삭제(미완성)
 	 * @param commentDto
 	 * @param session
 	 * @return
 	 */
-	@DeleteMapping(value = "comment")
-	public ResultBean<ResaleCommentDto> deleteComment(@RequestBody ResaleCommentDto commentDto, HttpSession session){
-		
+	@DeleteMapping(value = "comment/{resaleCmtNo}")
+	public ResultBean<ResaleCommentDto> deleteComments(@PathVariable Long resaleCmtNo,
+													   @RequestBody ResaleCommentDto commentDto,
+													   HttpSession session){
+		// String loginedNickname = (String) session.getAttribute("loginNickname");
+		String loginedNickname = "개발자";
+
 		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
 		
-//		String loginedNickname = (String) session.getAttribute("loginNickname");
-		//테스트용 닉네임
-		String loginedNickname = "딜레이킴";
-
+		Long resaleCmtParentNo = commentDto.getResaleCmtParentNo();
+		logger.error("부모글번호"+resaleCmtParentNo); // OK
+		
 		try {
-			logger.error("글번호는" + commentDto.getResaleBoard().getResaleBoardNo());
-			Long resaleCmtNo = commentDto.getResaleCmtNo();
-			logger.error("댓글번호"+ resaleCmtNo);
-			
-			service.deleteComment(commentDto);
-			rb.setStatus(1);
-			rb.setMsg("등록 성공");
+			if(loginedNickname == null) {
+				rb.setMsg("로그인하세요");
+			}else if(loginedNickname.equals(commentDto.getUserNickname())) {
+				service.deleteComment(commentDto);
+				rb.setStatus(1);
+				rb.setMsg("댓글 삭제 성공");
+			} else {
+				rb.setMsg("로그인 닉네임과 작성자 닉네임이 일치하지 않습니다");
+			}
 		} catch (RemoveException e) {
 			e.printStackTrace();
 			rb.setStatus(0);
-			rb.setMsg("등록 실패");
+			rb.setMsg("댓글 삭제 실패");
 		}
-		
 		return rb;
 	}
 	
@@ -404,7 +406,7 @@ public class ResaleBoardContoller {
 													  @RequestBody ResaleCommentDto dto,
 													  HttpSession session){
 		//	String loginedNickname = (String)session.getAttribute("loginNickname");
-			String loginedNickname = "쩐승";
+			String loginedNickname = "개발자";
 		
 		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
 		try {
@@ -433,46 +435,7 @@ public class ResaleBoardContoller {
 	
 
 	/**
-	 * 대댓글 삭제(미완성)
-	 * 대댓글 작성자 닉네임 세션 닉네임 같은 경우 삭제
-	 * @param resaleCmtNo
-	 * @param dto
-	 * @param session
-	 * @return
-	 */
-	@DeleteMapping(value="comment/{resaleCmtNo}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResultBean<ResaleCommentDto> deleteRecomment(@PathVariable Long resaleCmtNo, 
-														@RequestBody ResaleCommentDto cmtDto, 
-														HttpSession session){		
-		//		String loginedNickname = (String)session.getAttribute("loginNickname");
-				String loginedNickname = "쩐승";
-
-		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
-		try {
-			if(loginedNickname == null) {
-				rb.setMsg("로그인하세요");
-				return rb;
-			}else if(loginedNickname.equals(cmtDto.getUserNickname())) {
-				cmtDto.setResaleCmtNo(resaleCmtNo);
-				
-				System.out.println("원글번호" + cmtDto.getResaleBoard().getResaleBoardNo());
-				
-				service.deleteRecomment(cmtDto);
-				rb.setStatus(1);
-				rb.setMsg("대댓글 삭제 성공");
-			}else {
-				rb.setMsg("로그인한 닉네임과 작성자 닉네임이 일치하지 않습니다");
-			}
-		} catch (RemoveException e) {
-			e.printStackTrace();
-			rb.setStatus(0);
-			rb.setMsg("대댓글 삭제 실패");
-		}
-		return rb;
-	}
-
-	/**
-	 * 좋아요 추가 (미완성)
+	 * 좋아요 추가
 	 * @param likeDto
 	 * @param boardDto
 	 * @param session
@@ -480,7 +443,7 @@ public class ResaleBoardContoller {
 	 */
 	@GetMapping(value = "like/add", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean<ResaleLikeDto> addLike(ResaleLikeDto likeDto,
-											@RequestBody Long resaleBoardNo,
+											@RequestBody ResaleBoardDto boardDto,
 											HttpSession session){
 
 //		String loginedNickname = (String) session.getAttribute("loginNickname");
@@ -488,8 +451,7 @@ public class ResaleBoardContoller {
 		ResultBean<ResaleLikeDto> rb = new ResultBean<>();
 		try {
 			likeDto.setUserNickname(loginedNickname);
-//			System.out.println(" 글번호 " + boardDto.getResaleBoardNo());
-			likeDto.setResaleBoard();
+			likeDto.setResaleBoard(boardDto);
 			service.addLike(likeDto);
 			rb.setStatus(1);
 			rb.setMsg("좋아요 추가 성공");
@@ -501,24 +463,32 @@ public class ResaleBoardContoller {
 		return rb;
 	}
 
+
+	
 	/**
-	 * 좋아요 삭제(미완성)
+	 * 좋아요 삭제
 	 * @param resaleLikeNo
 	 * @param dto
 	 * @param session
 	 * @return
 	 */
-	@DeleteMapping(value = "like", produces = MediaType.APPLICATION_JSON_VALUE) //Json 형태로 return?!
-	public ResultBean<ResaleLikeDto> removeLike(@RequestBody ResaleLikeDto likeDto,HttpSession session){
-		//		String loginedNickname = (String)session.getAttribute("loginNickname");
-		String loginedNickname = "갓카오";
+	@DeleteMapping(value = "like/{resaleLikeNo}", produces = MediaType.APPLICATION_JSON_VALUE) //Json 형태로 return?!
+	public ResultBean<ResaleLikeDto> removeLike(@PathVariable Long resaleLikeNo, 
+												 @RequestBody ResaleLikeDto likeDto, 
+												 HttpSession session){
+		
+		//String loginedNickname = (String)session.getAttribute("loginNickname");
+		String loginedNickname = "케빈";
 		ResultBean<ResaleLikeDto> rb = new ResultBean<>(); // 객체 생성
 
 		if(loginedNickname == null) {
 			rb.setMsg("로그인하세요");
 		}else if(loginedNickname.equals(likeDto.getUserNickname())) { // 로그인된 닉네임과 좋아요한 닉네임 같으면
 			try {
-				logger.error("글번호는" + likeDto.getResaleBoard().getResaleBoardNo());
+				likeDto.getResaleBoard().getResaleBoardNo(); // null에러
+				logger.error("원글 번호는"+likeDto.getResaleBoard().getResaleBoardNo()); // null
+				
+				likeDto.setResaleLikeNo(resaleLikeNo);
 				service.removeLike(likeDto);
 				rb.setStatus(1);
 				rb.setMsg("좋아요 삭제 성공");

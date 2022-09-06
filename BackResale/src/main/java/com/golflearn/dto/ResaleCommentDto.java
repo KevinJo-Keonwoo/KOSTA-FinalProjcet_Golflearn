@@ -18,8 +18,6 @@ import lombok.Setter;
 public class ResaleCommentDto {
 	private Long resaleCmtNo;
 
-	private ResaleBoardDto resaleBoard;
-	
 	@NotEmpty(message="내용은 필수 입력값입니다.")
 	private String resaleCmtContent;
 	
@@ -28,4 +26,5 @@ public class ResaleCommentDto {
 	private Long resaleCmtParentNo;
 	private String userNickname;
 	
+	private ResaleBoardDto resaleBoard;
 }

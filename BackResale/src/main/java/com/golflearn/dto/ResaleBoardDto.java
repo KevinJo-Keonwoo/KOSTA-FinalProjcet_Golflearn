@@ -42,4 +42,6 @@ public class ResaleBoardDto {
 	private List<ResaleCommentEntity> resaleComment;
 	
 	private List<ResaleLikeEntity> resaleLike;
+	
+
 }

@@ -16,6 +16,8 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -33,17 +35,16 @@ import lombok.Setter;
 @Table(name = "resale_comment")
 @SequenceGenerator(name="resale_cmt_generator",
 					sequenceName="resale_comment_no_seq",
-					initialValue=25,
+					initialValue=1,
 					allocationSize=1)
 @DynamicInsert
 @DynamicUpdate
 public class ResaleCommentEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,
-					generator = "resale_cmt_generator")
 	@Column(name="resale_cmt_no")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,
+	generator = "resale_cmt_generator")
 	private Long resaleCmtNo;
-//	Long resaleBoardNo;
 	
 	@Column(name="resale_cmt_content")
 	@NotBlank(message="내용은 필수 입력값입니다.")
@@ -62,8 +63,9 @@ public class ResaleCommentEntity {
 	private String userNickname;
 	
 	@JsonBackReference //연관관계의 주인 Entity 에 선언. 직렬화 되지 않도록 수행
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "resale_board_no")
+//    @NotFound(action = NotFoundAction.IGNORE)
+	@ManyToOne (optional = false)
+	@JoinColumn(name = "resale_board_no")//, nullable = false)
 	private ResaleBoardEntity resaleBoard;
 	// Board쪽에서 List로 가지고 있음
 //	@ManyToOne(fetch=FetchType.LAZY) 

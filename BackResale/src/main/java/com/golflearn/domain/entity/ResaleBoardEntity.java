@@ -18,8 +18,9 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -35,11 +36,10 @@ import lombok.Setter;
 @Table(name = "resale_board")
 @SequenceGenerator(name ="resale_board_generator",
 					sequenceName="resale_board_no_seq",
-					initialValue=28, // 28부터 시작(샘플데이터가 27까지 있음)
+					initialValue=1, // 28부터 시작(샘플데이터가 27까지 있음)
 					allocationSize=1) // 1씩 증가
 @DynamicInsert
 @DynamicUpdate
-
 public class ResaleBoardEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
@@ -75,18 +75,27 @@ public class ResaleBoardEntity {
 	@ColumnDefault(value="0")
 	private Integer resaleBoardCmtCnt;
 
-	@JsonBackReference
-	@OneToMany(mappedBy="resaleBoard",fetch=FetchType.EAGER, cascade=CascadeType.REMOVE) //EAGER
+	@JsonManagedReference
+    @NotFound(action = NotFoundAction.IGNORE)
+	@OneToMany(mappedBy="resaleBoard", fetch=FetchType.EAGER,cascade=CascadeType.REMOVE) //EAGER
 	// @JoinColumn(name = "resale_board_no") //referencedColumnName="resale_board_no")
 	// OneToMany , ManyToOne -> 유스케이스별로 만듦. 게시글을 조회할 때 댓글도 같이 불러 오는 경우가 훨씬 많음
-	private List<ResaleCommentEntity> resaleCommentEntity;
+	private List<ResaleCommentEntity> resaleComment;
 	
 	
-	@JsonManagedReference //연관관계의 주인이 아닌 쪽에 선언. 정상적으로 직렬화 수행
-	@OneToMany(mappedBy="resaleBoard",fetch=FetchType.LAZY, cascade=CascadeType.REMOVE) //LAZY
+	@JsonManagedReference//연관관계의 주인이 아닌 쪽에 선언. 정상적으로 직렬화 수행
+	@OneToMany(mappedBy="resaleBoard",fetch=FetchType.LAZY , cascade=CascadeType.REMOVE) //LAZY
 	//@JoinColumn(name = "resale_board_no")
-	private List<ResaleLikeEntity> resaleLikeEntity;
-}
+	private List<ResaleLikeEntity> resaleLike;
 
+
+//	public void addComment(ResaleCommentEntity commentEntity) {
+//		this.resaleCommentEntity.add(commentEntity);
+		
+//		commentEntity.setResaleBoard(this);
+//		resaleCommentEntity.add(commentEntity);
+//	}
+	
+}
 // @NonNull : 롬복 어노테이션. Setter, Getter와 관련 있기 때문에 DB와는 아무 관계가 없음
 // Set, Get 할 때 null이 들어가지 않도록 하는 것

@@ -245,7 +245,7 @@ public class UserInfoController {
 
 
 	// 로그인
-	@PostMapping(value="login")
+	@PostMapping("login")
 	private ResultBean<UserInfo> login(HttpSession session, @RequestParam String userId, @RequestParam String userPwd, String userNickname, String userType) {
 
 		ResultBean<UserInfo> rb = new ResultBean<>();
@@ -344,7 +344,7 @@ public class UserInfoController {
 		ResultBean<UserInfo> rb = new ResultBean<>();
 		UserInfo userInfo = new UserInfo();
 		try {
-			userInfo = service.selectByUserNameAndPhone(userName, userPhone);
+			userInfo = service.selectByUserIdAndPhone(userName, userPhone);
 			rb.setStatus(1);
 			rb.setT(userInfo);
 		}catch(FindException e) {
