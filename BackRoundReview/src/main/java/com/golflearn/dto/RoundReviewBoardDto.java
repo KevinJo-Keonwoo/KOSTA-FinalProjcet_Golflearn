@@ -20,7 +20,7 @@ import lombok.Setter;
 @Setter @Getter
 @EqualsAndHashCode(of = {"roundReviewBoardNo"})
 public class RoundReviewBoardDto {
-private Long roundReviewBoardNo;
+	private Long roundReviewBoardNo;
 	private String roundReviewBoardTitle; 
 	private String roundReviewBoardContent;
 	private String userNickname;

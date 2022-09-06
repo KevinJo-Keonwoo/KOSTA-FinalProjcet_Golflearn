@@ -74,35 +74,8 @@ public interface RoundReviewBoardRepository extends JpaRepository<RoundReviewBoa
 //			,nativeQuery = true)
 //	RoundReviewBoardEntity findDetail(Long roundReviewBoardNo);
 	
-	/**
-	 * 댓글 및 대댓글 한번에 삭제
-	 * @param roundReviewBoardNo
-	 */
-	@Modifying
-	@Query(value = "DELETE FROM round_review_comment "
-			+ "WHERE round_review_board_no= ?1"
-			,nativeQuery = true)
-	void deleteComments(Long roundReviewBoardNo);
-	
-	/**
-	 * 대댓글 삭제
-	 * @param roundReviewCmtNo
-	 */
-	@Modifying
-	@Query(value = "DELETE FROM round_review_comment "
-			+ "WHERE round_review_cmt_no= ?1"
-			,nativeQuery = true)
-	void deleteRecomment(Long roundReviewCmtNo);
-	
-	/**
-	 * 좋아요 삭제
-	 * @param roundReviewBoardNo
-	 */
-	@Modifying
-	@Query(value = "DELETE FROM round_review_like "
-			+ "WHERE round_review_board_no= ?1"
-			,nativeQuery = true)
-	void deleteLike(Long roundReviewBoardNo);
+
+
 	
 	/**
 	 * 게시글 검색하기
@@ -122,7 +95,7 @@ public interface RoundReviewBoardRepository extends JpaRepository<RoundReviewBoa
 			+ "      )\r\n"
 			+ "WHERE r BETWEEN ?2 AND ?3"
 			,nativeQuery = true)
-	List<RoundReviewBoardEntity> findWord(String word, Long startRow, Long endRow);
+	List<RoundReviewBoardEntity> findByWord(String word, int startRow, int endRow);
 	
 	
 	

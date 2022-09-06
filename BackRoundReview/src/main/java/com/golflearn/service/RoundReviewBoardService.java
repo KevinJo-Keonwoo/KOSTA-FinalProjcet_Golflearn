@@ -5,14 +5,22 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.golflearn.domain.entity.PageBean;
 import com.golflearn.domain.entity.RoundReviewBoardEntity;
+import com.golflearn.domain.entity.RoundReviewCommentEntity;
+import com.golflearn.domain.entity.RoundReviewLikeEntity;
 import com.golflearn.domain.repository.RoundReviewBoardRepository;
+import com.golflearn.domain.repository.RoundReviewCommentRepository;
+import com.golflearn.domain.repository.RoundReviewLikeRepository;
 import com.golflearn.dto.RoundReviewBoardDto;
+import com.golflearn.dto.RoundReviewCommentDto;
 import com.golflearn.dto.RoundReviewLikeDto;
+import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 import com.golflearn.exception.ModifyException;
 import com.golflearn.exception.RemoveException;
@@ -21,10 +29,12 @@ import com.golflearn.exception.RemoveException;
 public class RoundReviewBoardService {
 	private static final int CNT_PER_PAGE = 5;
 	@Autowired
-	private RoundReviewBoardRepository repo;
-//	private RoundReviewBoardRepository boardRepo;
-//	private RoundReviewCommentRepository commentRepo;
-//	private RoundReviewLikeRepository likeRepo;
+//	private RoundReviewBoardRepository repo;
+	private RoundReviewBoardRepository boardRepo;
+	private RoundReviewCommentRepository commentRepo;
+	private RoundReviewLikeRepository likeRepo;
+	
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	/**
 	 * 정렬 기준에 따라 게시글의 목록을 보여줌 
 	 * @param currentPage 현재 페이지 
@@ -35,16 +45,16 @@ public class RoundReviewBoardService {
 	public PageBean<RoundReviewBoardDto> boardList(int currentPage, int orderType) throws FindException{
 		int endRow = currentPage * CNT_PER_PAGE;
 		int startRow = endRow - CNT_PER_PAGE + 1;
-		long totalCnt = repo.count();
+		long totalCnt = boardRepo.count();
 		int cntPerPageGroup = 5;
 		List<RoundReviewBoardEntity> list = null;
 		//기본(최신순)이면 0 , 조회수순 1 , 좋아요순 2
 		if (orderType == 1) {
-			list = repo.findListByViewCnt(startRow, endRow);
+			list = boardRepo.findListByViewCnt(startRow, endRow);
 		}else if (orderType == 2) {
-			list = repo.findListByLike(startRow, endRow);
+			list = boardRepo.findListByLike(startRow, endRow);
 		}else {
-			list = repo.findListByRecent(startRow, endRow);
+			list = boardRepo.findListByRecent(startRow, endRow);
 		}
 		ModelMapper modelMapper = new ModelMapper();
 		List<RoundReviewBoardDto> dtoList = list.stream()
@@ -76,7 +86,7 @@ public class RoundReviewBoardService {
 	 */
 	
 	public RoundReviewBoardDto viewBoard(Long roundReviewBoardNo) throws FindException {
-		Optional<RoundReviewBoardEntity> optB = repo.findById(roundReviewBoardNo);
+		Optional<RoundReviewBoardEntity> optB = boardRepo.findById(roundReviewBoardNo);
 //		RoundReviewBoardEntity boardEntity = repo.findDetail(roundReviewBoardNo);
 //		Optional<RoundReviewBoardEntity> optB = Optional.of(boardEntity);
 //		Optional<RoundReviewBoardEntity> boardEntity = boardRepo.findById(roundReviewBoardNo);
@@ -85,7 +95,7 @@ public class RoundReviewBoardService {
 		if(optB.isPresent()) {
 			RoundReviewBoardEntity entity = optB.get();
 			entity.setRoundReviewBoardViewCnt(entity.getRoundReviewBoardViewCnt()+1);
-			repo.save(entity);
+			boardRepo.save(entity);
 		}else {
 			throw new FindException("게시글이 없습니다");
 		}
@@ -113,7 +123,7 @@ public class RoundReviewBoardService {
 	 */
 	public void modifyBoard(RoundReviewBoardDto dto) throws ModifyException {
 		Long boardNo = dto.getRoundReviewBoardNo();
-		Optional<RoundReviewBoardEntity> optB = repo.findById(boardNo);
+		Optional<RoundReviewBoardEntity> optB = boardRepo.findById(boardNo);
 		if(!optB.isPresent()) {
 			throw new ModifyException("글이 없습니다");
 		}else {
@@ -123,7 +133,7 @@ public class RoundReviewBoardService {
 			entity.setRoundReviewBoardContent(dto.getRoundReviewBoardContent());
 			entity.setRoundReviewBoardLatitude(dto.getRoundReviewBoardLatitude());
 			entity.setRoundReviewBoardLongitude(dto.getRoundReviewBoardLongitude());
-			repo.save(entity);
+			boardRepo.save(entity);
 		}
 	}
 	//원글 + (댓글 + 대댓글) + 좋아요 삭제
@@ -133,76 +143,139 @@ public class RoundReviewBoardService {
 	 * @throws RemoveException
 	 */
 	public void removeBoard (Long roundReviewBoardNo) throws RemoveException {
-		Optional<RoundReviewBoardEntity> optB = repo.findById(roundReviewBoardNo);
+		Optional<RoundReviewBoardEntity> optB = boardRepo.findById(roundReviewBoardNo);
 		if(!optB.isPresent()) {
 			throw new RemoveException("삭제할 글이 없습니다");
 		}else {
-			repo.deleteLike(roundReviewBoardNo);
-			repo.deleteComments(roundReviewBoardNo);
-			repo.deleteById(roundReviewBoardNo);
+//			likeRepo.deleteLike(roundReviewBoardNo);
+			likeRepo.deleteById(roundReviewBoardNo);
+			commentRepo.deleteById(roundReviewBoardNo);
+			boardRepo.deleteById(roundReviewBoardNo);
 		}
-		
 	}
-	//댓글 + 대댓글 삭제
-	public void removeComment (Long roundReviewBoardNo) throws RemoveException {
-		Optional<RoundReviewBoardEntity> optB = repo.findById(roundReviewBoardNo);
-		if(!optB.isPresent()) {
+	//댓글 + 대댓글 삭제 + 댓글 수 감소(대댓글 수 카운트해야함) ?? 
+	//deletebyid가 @id어노테이션 된것만 가능한지 아니면 findbyName으로 작성해줘야 하는지 
+	public void removeComment (Long roundReviewBoardNo, Long roundReviewCmtNo) throws RemoveException {
+		Optional<RoundReviewBoardEntity> optB = boardRepo.findById(roundReviewBoardNo);
+		RoundReviewBoardEntity boardEntity = optB.get();
+		boardEntity.setRoundReviewBoardCmtCnt(boardEntity.getRoundReviewBoardCmtCnt()-1);
+		boardRepo.save(boardEntity);
+		
+		//리스트로 받아오지 않나..? 
+		Optional<RoundReviewCommentEntity> optC = commentRepo.findById(roundReviewBoardNo);
+		if(!optC.isPresent()) {
 			throw new RemoveException("삭제할 댓글이 없습니다");
 		}else {
-			repo.deleteComments(roundReviewBoardNo);
+			commentRepo.deleteById(roundReviewBoardNo);
 		}
 	}
-	//대댓글 삭제
-	public void removeRecomment (Long roundReviewCmtNo) throws RemoveException {
-		Optional<RoundReviewBoardEntity> optB = repo.findById(roundReviewCmtNo);
-		if(!optB.isPresent()) {
+	//대댓글 삭제 (댓글 수 감소) 
+	public void removeRecomment (Long roundReviewBoardNo, Long roundReviewCmtNo) throws RemoveException {
+		Optional<RoundReviewBoardEntity> optB = boardRepo.findById(roundReviewBoardNo);
+		RoundReviewBoardEntity boardEntity = optB.get();
+		boardEntity.setRoundReviewBoardCmtCnt(boardEntity.getRoundReviewBoardCmtCnt()-1);
+		boardRepo.save(boardEntity);
+		
+		Optional<RoundReviewCommentEntity> optC = commentRepo.findById(roundReviewCmtNo);
+		if(!optC.isPresent()) {
 			throw new RemoveException("삭제할 대댓글이 없습니다");
 		}else {
-			repo.deleteRecomment(roundReviewCmtNo);
+			commentRepo.deleteById(roundReviewCmtNo);
 		}
 	}
 	//좋아요 추가 + 좋아요 수 증가 / 좋아요 취소 좋아요 수 감소 
 	//유저 아이디로 구분한 것이 존재하는지 컨트롤러에서 
-	public void addLike (Long roundReviewBoardNo, RoundReviewLikeDto roundReviewLike) throws RemoveException {
-		Optional<RoundReviewBoardEntity> optB = repo.findById(roundReviewBoardNo);
-		
+	public void addLike (Long roundReviewBoardNo, RoundReviewLikeDto dto) throws AddException {
+		Optional<RoundReviewBoardEntity> optB = boardRepo.findById(roundReviewBoardNo);
 		RoundReviewBoardEntity boardEntity = optB.get();
 		boardEntity.setRoundReviewBoardLikeCnt(boardEntity.getRoundReviewBoardLikeCnt()+1);
-		repo.save(boardEntity);
+		boardRepo.save(boardEntity);
 		
 		ModelMapper modelMapper = new ModelMapper();
-		RoundReviewBoardEntity likeEntity = modelMapper.map(roundReviewLike, RoundReviewBoardEntity.class);
-		repo.save(likeEntity);
+		RoundReviewLikeEntity likeEntity = modelMapper.map(dto, RoundReviewLikeEntity.class);
+		logger.error(likeEntity.getUserNickname());
+		logger.error(likeEntity.getRoundReviewLikeNo().toString());
+		likeRepo.save(likeEntity);
 	}
-	
-	public void removeLike (Long roundReviewBoardNo) {
-		Optional<RoundReviewBoardEntity> optB = repo.findById(roundReviewBoardNo);
-		
+	public void removeLike (Long roundReviewBoardNo) throws RemoveException{
+		Optional<RoundReviewBoardEntity> optB = boardRepo.findById(roundReviewBoardNo);
 		RoundReviewBoardEntity boardEntity = optB.get();
 		boardEntity.setRoundReviewBoardLikeCnt(boardEntity.getRoundReviewBoardLikeCnt()-1);
-		repo.save(boardEntity);
+		boardRepo.save(boardEntity);
 		
-		repo.deleteLike(roundReviewBoardNo); //좋아요 취소 
+		likeRepo.deleteLike(roundReviewBoardNo); //좋아요 취소 
 	}
-	//게시글 검색
-	
-	//댓글 등록 + 댓글 수 증가
-	
-	//댓글 수정
-	
-	//대댓글 수정
-	
-	//댓글 삭제 시 댓글 수 감소
-	//대댓글 삭제 시 댓글 수 감소
-	
-	//좋아요 추가
-	//좋아요 수 증가
-	
-	//좋아요 취소
-	//좋아요 수 감소 
-	
+	//검색하기    제목 or 내용 or 닉네임
+	public PageBean<RoundReviewBoardDto> searchBoard(String word, int currentPage) throws FindException{
+		int endRow = currentPage * CNT_PER_PAGE * 1;
+		int startRow = endRow - CNT_PER_PAGE + 1;
+		long totalCnt = boardRepo.count();
+		int cntPerPageGroup = 5;
+		
+		List<RoundReviewBoardEntity> entityList = boardRepo.findByWord(word, startRow, CNT_PER_PAGE);
+		ModelMapper modelMapper = new ModelMapper();
+		List<RoundReviewBoardDto> dtoList = entityList.stream()
+				.map(RoundReviewBoardEntity -> modelMapper
+						.map(RoundReviewBoardEntity, RoundReviewBoardDto.class))
+				.collect(Collectors.toList());
+		PageBean<RoundReviewBoardDto> pb = new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
+		return pb;
+	}
 	//게시글 작성
-	
-	
-	
+	/**
+	 * 게시글 작성하기 
+	 * @param dto
+	 * @throws AddException
+	 */
+	public void writeBoard(RoundReviewBoardDto dto) throws AddException {
+		ModelMapper modelMapper = new ModelMapper();
+		RoundReviewBoardEntity entity = modelMapper.map(dto, RoundReviewBoardEntity.class);
+		boardRepo.save(entity);
+	}
+	/**
+	 * 댓글 등록 + 댓글 수 증가 
+	 * @param dto
+	 * @throws AddException
+	 */
+	public void addComment(Long roundReviewBoardNo, RoundReviewCommentDto dto) throws AddException{
+		Optional<RoundReviewBoardEntity> optB = boardRepo.findById(roundReviewBoardNo);
+		RoundReviewBoardEntity boardEntity = optB.get();
+		boardEntity.setRoundReviewBoardCmtCnt(boardEntity.getRoundReviewBoardCmtCnt()+1);
+		boardRepo.save(boardEntity);
+		
+		ModelMapper modelMapper = new ModelMapper();
+		RoundReviewCommentEntity commentEntity = modelMapper.map(dto, RoundReviewCommentEntity.class);
+		commentRepo.save(commentEntity);
+	}
+	//댓글 수정
+	/**
+	 * 게시글에 달린 댓글 내용 수정하기
+	 * @param dto
+	 * @throws ModifyException
+	 */
+	public void modifyComment(RoundReviewCommentDto dto) throws ModifyException{
+		ModelMapper modelMapper = new ModelMapper();
+		RoundReviewCommentEntity entity = modelMapper.map(dto, RoundReviewCommentEntity.class);
+		Optional<RoundReviewCommentEntity> optC = commentRepo.findById(dto.getRoundReviewBoard().getRoundReviewBoardNo());
+		if(!optC.isPresent()) {
+			throw new ModifyException("댓글이 없습니다");
+		}else {
+			RoundReviewCommentEntity commentEntity = optC.get();
+			commentEntity.setRoundReviewCmtContent(entity.getRoundReviewCmtContent());
+			commentRepo.save(commentEntity);
+		}
+	}
+	//대댓글 수정
+	public void modifyRecomment(RoundReviewCommentDto dto) throws ModifyException{
+		ModelMapper modelMapper = new ModelMapper();
+		RoundReviewCommentEntity entity = modelMapper.map(dto, RoundReviewCommentEntity.class);
+		Optional<RoundReviewCommentEntity> optC = commentRepo.findById(dto.getRoundReviewCmtNo());
+		if(!optC.isPresent()) {
+			throw new ModifyException("대댓글이 없습니다");
+		}else {
+			RoundReviewCommentEntity commentEntity = optC.get();
+			commentEntity.setRoundReviewCmtContent(entity.getRoundReviewCmtContent());
+			commentRepo.save(commentEntity);
+		}
+	}	
 }

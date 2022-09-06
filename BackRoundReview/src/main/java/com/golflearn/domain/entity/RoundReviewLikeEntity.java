@@ -40,7 +40,10 @@ public class RoundReviewLikeEntity {
 //	@JoinColumn(name="round_review_board_no")
 //	public RoundReviewBoardEntity roundReviewBoard;
 	
-	@NonNull
+//	@Column(name="round_review_board_no")
+//	public Long roundReviewBoardNo;
+
+	
 	@Column(name="user_nickname")
 	public String userNickname;
 	

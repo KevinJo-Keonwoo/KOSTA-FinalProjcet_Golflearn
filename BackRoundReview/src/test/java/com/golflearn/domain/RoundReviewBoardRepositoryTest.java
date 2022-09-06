@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.golflearn.domain.entity.RoundReviewBoardEntity;
 import com.golflearn.domain.entity.RoundReviewCommentEntity;
 import com.golflearn.domain.repository.RoundReviewBoardRepository;
+import com.golflearn.domain.repository.RoundReviewCommentRepository;
+import com.golflearn.domain.repository.RoundReviewLikeRepository;
 import com.golflearn.exception.FindException;
 import com.golflearn.exception.RemoveException;
 
@@ -22,6 +24,9 @@ import com.golflearn.exception.RemoveException;
 class RoundReviewBoardRepositoryTest {
 	@Autowired
 	private RoundReviewBoardRepository repo;
+//	private RoundReviewBoardRepository boardRepo;
+	private RoundReviewCommentRepository commentRepo;
+	private RoundReviewLikeRepository likeRepo;
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
@@ -54,21 +59,21 @@ class RoundReviewBoardRepositoryTest {
 //	@Rollback(false)
 	void testDeleteComments() throws RemoveException {
 		Long roundReviewBoardNo = 5L;
-		repo.deleteComments(roundReviewBoardNo);
+		commentRepo.deleteComments(roundReviewBoardNo);
 	}
 	
 	@Test
 	@Transactional
 	void testDeleteRecomment() throws RemoveException {
 		Long roundReviewCmtNo = 9L;
-		repo.deleteRecomment(roundReviewCmtNo);
+		commentRepo.deleteRecomment(roundReviewCmtNo);
 	}
 	
 	@Test
 	@Transactional
 	void testDeleteLike() throws RemoveException {
 		Long roundReviewBoardNo = 1L;
-		repo.deleteLike(roundReviewBoardNo);
+		likeRepo.deleteLike(roundReviewBoardNo);
 	}
 	
 	@Test
@@ -78,11 +83,11 @@ class RoundReviewBoardRepositoryTest {
 		String nickname = "닉네임";
 		
 		int CNT_PER_PAGE = 5;
-		Long currentPage = 1L;
-		Long endRow = currentPage * CNT_PER_PAGE;
-		Long startRow = endRow - CNT_PER_PAGE + 1;
+		int currentPage = 1;
+		int endRow = currentPage * CNT_PER_PAGE;
+		int startRow = endRow - CNT_PER_PAGE + 1;
 		
-		List<RoundReviewBoardEntity> list = repo.findWord(word, startRow, endRow);
+		List<RoundReviewBoardEntity> list = repo.findByWord(word, startRow, endRow);
 		assertEquals(word, list.get(0).getRoundReviewBoardTitle());
 		
 //		list.forEach((RoundReviewBoard)->{

@@ -70,8 +70,10 @@ public class RoundReviewBoardEntity {
 	@JoinColumn(name="round_review_board_no")
 	private List<RoundReviewCommentEntity> roundReviewCommentList;
 	
+//	@OneToMany(fetch = FetchType.EAGER, mappedBy = "RoundReviewBoardEntity")
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name="round_review_board_no")
 	private List<RoundReviewLikeEntity> roundReviewLikeList;
+	
 	
 }

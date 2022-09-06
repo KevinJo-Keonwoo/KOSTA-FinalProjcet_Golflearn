@@ -1,7 +1,5 @@
 package com.golflearn.dto;
 
-import com.golflearn.domain.entity.RoundReviewBoardEntity;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,6 +12,6 @@ import lombok.Setter;
 @EqualsAndHashCode(of = {"roundReviewLikeNo"})
 public class RoundReviewLikeDto {
 	public Long roundReviewLikeNo;
-	public RoundReviewBoardEntity roundReviewBoard;
+	public RoundReviewBoardDto roundReviewBoard;
 	public String userNickname;
 }
