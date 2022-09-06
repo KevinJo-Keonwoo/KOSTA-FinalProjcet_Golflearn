@@ -132,12 +132,14 @@ public class MeetBoardController {
 		ResultBean<PageBean<MeetBoardDto>> rb = new ResultBean<>();
 		try {
 			PageBean<MeetBoardDto> pb;
-//			String loginedNickname = (String)session.getAttribute("loginedNickname");//js에서 로그인여부 확인
+			String loginedNickname = (String)session.getAttribute("loginedNickname");
 			//---로그인대신할 샘플데이터---
-			String loginedNickname = "케빈";
+//			String loginedNickname = "케빈";
 			int currentPage = 1;
-
-			if (optCp.isPresent()) {//선택한 페이지가 있는 경우
+			if(loginedNickname == null){//로그인하지 않은 경우
+			rb.setStatus(0);
+			throw new FindException("로그인이 필요합니다.");
+			} else if (optCp.isPresent()) {//선택한 페이지가 있는 경우
 				currentPage = optCp.get();
 				pb = service.viewMyMeetBoard(loginedNickname, currentPage);
 			} else {//선택한 페이지가 없는 경우
@@ -177,7 +179,6 @@ public class MeetBoardController {
 		String loginedNickname = (String)session.getAttribute("loginNickname");//로그인닉네임 받기
 		//---테스트용 닉네임-----------------
 		//String loginedNickname = "케빈";
-		//--------------------------------
 		if(loginedNickname == null) {//로그인하지 않은 경우
 			return new ResponseEntity<>("로그인이 필요합니다", HttpStatus.BAD_REQUEST);
 		}else {
@@ -186,8 +187,7 @@ public class MeetBoardController {
 			} catch (FindException e1) {
 				e1.printStackTrace();
 			}
-			
-			//내용입력 유효성검사
+			//입력내용 유효성검사
 			if (m.getMeetBoardTitle() == null || m.getMeetBoardTitle().equals("") || m.getMeetBoardContent() == null
 					|| m.getMeetBoardLocation() == null || m.getMeetBoardMaxCnt() == null || m.getMeetBoardMeetDt() == null
 					|| meetCtgNo == null) {
@@ -207,9 +207,9 @@ public class MeetBoardController {
 	//게시글 삭제하기
 	@DeleteMapping(value = "{meetBoardNo}")
 	public ResponseEntity<String> remove(@PathVariable Long meetBoardNo, HttpSession session) {
-//		String loginedNickname = (String)session.getAttribute("loginNickname");
+		String loginedNickname = (String)session.getAttribute("loginNickname");
 		//---테스트용 유저닉네임-----------------
-		String loginedNickname = "용오";
+//		String loginedNickname = "용오";
 		try {
 			service.removeMeetBoard(loginedNickname, meetBoardNo);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -222,9 +222,9 @@ public class MeetBoardController {
 	//게시글 수정하기
 	@PutMapping(value = "{meetBoardNo}")
 	public ResponseEntity<Object> modify(@PathVariable long meetBoardNo, @RequestBody MeetBoardDto m, HttpSession session) {
-//		String loginedNickname = (String)session.getAttribute("loginNickname");//js에서 헤당닉네임이 작성자인지 확인
+		String loginedNickname = (String)session.getAttribute("loginNickname");
 		//---테스트용 유저닉네임-----------------
-		String loginedNickname = "용오";
+//		String loginedNickname = "용오";
 		try {
 			if(loginedNickname.equals(m.getUserNickname())){//글작성자여부 확인
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -232,8 +232,8 @@ public class MeetBoardController {
 				|| m.getMeetBoardLocation() == null || m.getMeetBoardMaxCnt() == null) {//글내용 입력확인
 				return new ResponseEntity<>("항목을 모두 입력하세요", HttpStatus.BAD_REQUEST);
 			}else {
-				m.setMeetBoardNo(meetBoardNo);
-				service.modifyMeetBoard(m);
+				m.setMeetBoardNo(meetBoardNo);//수정하는 글의 글번호 save
+				service.modifyMeetBoard(m);//글 내용 저장
 				return new ResponseEntity<>(HttpStatus.OK);
 			}
 		} catch (ModifyException e) {
@@ -245,9 +245,9 @@ public class MeetBoardController {
 	// 글 작성자가 모임글의 상태를 수정한다
 	@PutMapping(value = "update/{meetBoardNo}/{meetBoardStatus}")	
 	public ResponseEntity<Object> modifySatus(@PathVariable Long meetBoardNo, @PathVariable Long meetBoardStatus, HttpSession session) {
-//		String loginedNickname = (String)session.getAttribute("loginNickname");
+		String loginedNickname = (String)session.getAttribute("loginNickname");
 		//---테스트용 유저닉네임-----------------
-		String loginedNickname = "용오";
+//		String loginedNickname = "용오";
 		try {
 			service.modifyStatus(loginedNickname, meetBoardNo, meetBoardStatus);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -257,16 +257,14 @@ public class MeetBoardController {
 		}
 	}
 	
-	//모임에 참여한다//유효성검사 서비스단에서 하는것이 맞나?
-	@PostMapping(value = "add")	
-	public ResponseEntity<Object> addMember(@RequestBody MeetMemberDto m, HttpSession session) {
-		
+	//모임에 참여한다
+	@PostMapping(value = "add/{meetBoardNo}")	
+	public ResponseEntity<Object> addMember(@PathVariable Long meetBoardNo, HttpSession session) {
 //		String loginedNickname = (String)session.getAttribute("loginedNickname");
 		//---로그인대신할 샘플데이터---
-		String loginedNickname = "용오";
-		m.setUserNickname(loginedNickname);
+		String loginedNickname = "미노";
 		try {
-			service.addMember(loginedNickname, m);
+			service.addMember(loginedNickname, meetBoardNo);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AddException e) {
 			e.printStackTrace();
@@ -277,10 +275,9 @@ public class MeetBoardController {
 	//모임에서 나간다
 	@DeleteMapping(value = "leave/{meetBoardNo}")
 	public ResponseEntity<Object>  deleteMember(@PathVariable Long meetBoardNo, HttpSession session) throws RemoveException{
-//		String loginedNickname = (String)session.getAttribute("loginedNickname");
+		String loginedNickname = (String)session.getAttribute("loginedNickname");
 		//---로그인대신할 샘플데이터---
-		String loginedNickname = "용오";
-		//front에서 해당 모임글의 멤버인지 검사 필요
+//		String loginedNickname = "용오";
 		try {
 			service.removeMeetMember(meetBoardNo, loginedNickname);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -289,6 +286,5 @@ public class MeetBoardController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
 	
 }
