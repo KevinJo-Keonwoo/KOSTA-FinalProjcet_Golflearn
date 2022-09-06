@@ -8,6 +8,11 @@ $(function(){
 			//가맹점 식별코드
 			IMP.init("imp84404721"); // IMP의 내 식별코드
 			
+			// 결제 고객 정보
+			let $userName = $().val;
+			let $userEmail = $().val;
+			let $userPhone = $().val;
+
 			// 결제 시스템을 실행시키는 함수
 			IMP.request_pay({
 				pg: "html5_inicis",
