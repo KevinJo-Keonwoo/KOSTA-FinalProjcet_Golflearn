@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../jq/roundreviewboardlist.js"></script>
+    <title>Golflearn</title>
+</head>
+<body>
+    <section>
+        <header>
+            <h2>라운딩 후기</h2>
+            <div class="search">
+                <input type="text" name="search-box" placeholder="검색어를 입력하세요">
+                <img src="" alt="">
+            </div>
+            <ul class="order">
+                <li class="order__recent">
+                    <a class="order_recent__a">최신순</a>
+                </li>
+                <li class="order__view-cnt">
+                    <a class="order__view-cnt__a">조회순</a>
+                </li>
+                <li class="order__cmt-cnt">
+                    <a class="order__cmt-cnt__a">댓글순</a>
+                </li>
+            </ul>
+            <span class="write">글쓰기</span>
+        </header>
+        <article>
+            <div class="board">
+                <header class="board-header">
+                    글번호, 사진, 제목, 작성자, 날짜 , 조회수 
+                </header>
+                <div class="board-list">
+                    <div class="boardlist__content">
+                        <div class="board-list__content__no">글번호</div>
+                        <div class="board-list__content__thumbnail"></div>
+                        <div class="board-list__content__title"></div>
+                        <div class="board-list__content__nickname"></div>
+                        <div class="board-list__content__dt"></div>
+                        <div class="board-list__content__view-cnt"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-group">
+                ◁ 1 2 3 4 5 ▷
+            </div>
+        </article>
+
+
+    </section>
+</body>
+</html>
