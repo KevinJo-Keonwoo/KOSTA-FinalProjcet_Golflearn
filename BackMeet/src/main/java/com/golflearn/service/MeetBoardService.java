@@ -255,14 +255,11 @@ public class MeetBoardService {
 	 */
 	public void modifyStatus(String userNickname, Long meetBoardNo, Long meetBoardStatus) throws ModifyException{
 		Optional <MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
-
-		if(!optM.isPresent()){//게시글 존재여부 확인
-			throw new ModifyException("존재하지 않는 게시글입니다.");
-		}
-		
 		MeetBoardEntity meetBoard = optM.get();
 		String writer = meetBoard.getUserNickname();//해당 게시글의 작성자 닉네임 반환
-		if(userNickname.equals(writer)){//작성자 여부 확인
+		if(!optM.isPresent()){//게시글 존재여부 확인
+			throw new ModifyException("존재하지 않는 게시글입니다.");
+		}else if(userNickname.equals(writer)){//작성자 여부 확인
 			throw new ModifyException("해당 글의 작성자만 수정할 수 있습니다.");
 		}else{
 			meetBoard.setMeetBoardStatus(meetBoardStatus);
@@ -279,13 +276,10 @@ public class MeetBoardService {
 	public void addMember(String userNickname, Long meetBoardNo) throws AddException{
 		Optional <MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
 		int memberCheck = meetMemberRepo.countByUserNicknameMeetBoard(userNickname, meetBoardNo);//참여중인 모임인지 확인
-		
+		MeetBoardEntity meetBoard = optM.get();//게시글 가져오기
 		if(!optM.isPresent()) {//글이 없는 경우
 			throw new AddException("글이 없습니다.");
-		}
-		MeetBoardEntity meetBoard = optM.get();//게시글 가져오기
-		
-		if(memberCheck  != 0){//이미 참여중인 경우
+		}else if(memberCheck  != 0){//이미 참여중인 경우
 			throw new AddException("이미 참여중인 모임입니다.");
 		}else if(meetBoard.getMeetBoardStatus() == 1 ){//해당 모임글이 모집마감인 경우
 			throw new AddException("모집중인 모임이 아닙니다");
