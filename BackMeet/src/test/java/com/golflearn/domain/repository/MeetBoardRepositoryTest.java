@@ -136,5 +136,13 @@ class MeetBoardRepositoryTest {
 		
 		meetBoardRepo.save(m);
 	}	
+	
+	//특정글에 특정유저가 참여중인지 확인한다
+	@Test
+	void testExistsMember() {
+		String userNickname= "미노";
+		Long meetBoardNo = 6L;
+		meetMemberRepo.countByUserNicknameMeetBoard(userNickname, meetBoardNo);
+	}
 
 }
