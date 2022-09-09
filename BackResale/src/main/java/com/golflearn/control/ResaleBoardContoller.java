@@ -406,12 +406,12 @@ public class ResaleBoardContoller {
 	 * @param session
 	 * @return
 	 */
-	@PostMapping(value = "comment/{resaleCmtNo}" ,produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "comment/{resaleCmtNo}" ,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean<ResaleCommentDto> modifyComment(@PathVariable Long resaleCmtNo,
 													  @RequestBody ResaleCommentDto dto,
 													  HttpSession session){
 		//	String loginedNickname = (String)session.getAttribute("loginNickname");
-			String loginedNickname = "개발자";
+			String loginedNickname = "쩐승";
 		
 		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
 		try {

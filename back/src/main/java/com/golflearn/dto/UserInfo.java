@@ -5,9 +5,12 @@ import java.util.Date;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,14 +25,15 @@ import lombok.Setter;
 @Getter @Setter
 @EqualsAndHashCode(of = {"userId"})
 @Data
+@JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserInfo {
 	//@NotBlank : null, "", " " 모두 허용하지 않음
 	//@NotEmpty : null과 "" 허용하지 않음
 	//@NotNull : null만 허용하지 않음
 	
 	@NotBlank(message="아이디는 필수 입력값입니다.")
-//	@Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", 
-//			 message = "이메일 형식에 맞지 않습니다.")
+	@Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", 
+			 message = "이메일 형식에 맞지 않습니다.")
 	@Email(message="이메일 형식에 맞지 않습니다.")
 	private String userId;
 	
@@ -44,8 +48,8 @@ public class UserInfo {
 	private String userNickname;
 	
 	@NotBlank(message = "비밀번호는 필수 입력값입니다.")
-//	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{4,10}$",
-//	    	 message = "비밀번호는 4~10자 영문 대소문자, 숫자, 특수문자를 사용하세요.")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{4,10}$",
+	    	 message = "비밀번호는 4~10자 영문 대소문자, 숫자, 특수문자를 사용하세요.")
 	private String userPwd;
 	
 	@NotBlank(message = "휴대폰 번호는 필수 입력값입니다.")

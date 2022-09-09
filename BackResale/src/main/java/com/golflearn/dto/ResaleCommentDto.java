@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -15,6 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = {"resaleCmtNo"})
+@JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ResaleCommentDto {
 	private Long resaleCmtNo;
 

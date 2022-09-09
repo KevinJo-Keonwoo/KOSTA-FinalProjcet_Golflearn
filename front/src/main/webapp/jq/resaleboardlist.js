@@ -10,25 +10,27 @@ $(function() {
                     let pageBeanObj = jsonObj.t;
                     //게시글 div를 원본으로 함
                     // 게시글 목록을 찾아 복붙 해 넣는 작업
-                    let $board = $("div.boardlist__content").first();
+                    let $board= $("div.boardlist__content").first();
                     // 원본 하나 선택 후 나머지 게시글의 div삭제하는 작업
                     $("div.boardlist__content").not($board).remove();
 
                     let $boardParent = $board.parent();
+                    
+                    let $boardCopy = $board.clone();
+                    
                     $(pageBeanObj.list).each(function (index, board) {
-                        let $boardCopy = $board.clone();
                         console.log(board.userNickname); // 출력됨
                         console.log(board.resaleBoardNo);
 
                         $boardCopy.find("div.board-list__content__no").html(board.resaleBoardNo);
-                        // $boardCopy.find("div.board-list__content__thumbnail").html(board.resaleBoardTitle); // 썸네일
                         $boardCopy.find("div.board-list__content__title").html(board.resaleBoardTitle);
                         $boardCopy.find("div.board-list__content__nickname").html(board.userNickname);
                         $boardCopy.find("div.board-list__content__dt").html(board.resaleBoardDt);
                         $boardCopy.find("div.board-list__content__view-cnt").html(board.resaleBoardViewCnt);
                         $boardCopy.find("div.board-list__content__cmt-cnt").html(board.resaleBoardCmtCnt);
                         $boardCopy.find("div.board-list__content__like-cnt").html(board.resaleBoardLikeCnt);
-
+                        // $boardCopy += 
+                        // '<img src = "../resale/' + board.resaleBoardNo +' s_" />'
                         $boardParent.append($boardCopy);
                     });
 
@@ -56,7 +58,7 @@ $(function() {
                     let pages = $("ul.page-group__pages")
                     pages.empty();
                     if(startPage > 5){
-                        
+                        pages.append('<li class="pagination--item"></li>')
                     }
                     // //내용 채워주는 것
                     // if(pageBeanObj.startPage > 5){
@@ -124,5 +126,4 @@ $(function() {
 
 
 
-}
-// });
+}); // 맨 위의 funcion
