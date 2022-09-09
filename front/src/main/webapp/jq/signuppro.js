@@ -27,37 +27,68 @@ $(function () {
 		});
 		return false;
 	});
-  // ----- 아이디 중복확인 버튼 클릭 END -----
+  	// ----- 아이디 중복확인 버튼 클릭 END -----
 
+	// 닉네임 입력 객체
+	let $inputNickname = $("input[name=user_nickname]").val();
+	// ----- 닉네임 중복확인 버튼 클릭 START -----
+	let $btNicknamedupchk = $("button[name=nicknamedupchk]");
+
+	$btNicknamedupchk.click(function () {
+		if($inputNickname.val()==''){
+			alert('닉네임을 입력하세요');
+			return;
+		}
+		$.ajax({
+			url: "http://localhost:1124/back/nicknamedupchk",
+			type:"get",
+			data:{ user_nickname : $inputNickname },
+			success: function(jsonObj){
+				if (jsonObj.status == 1) {
+					alert(jsonObj.msg);
+				} else {
+					alert(jsonObj.msg);
+				}
+			},
+			error:function (jqXHR) {
+				alert(jqXHR.status + ":" + jqXHR.statusText);
+			},
+		});
+		return false;
+	});	
+	
   // 데이터를 한번에 보낼 form 객체 생성
 
-	// 가입버튼 입력 객체 찾기
-	let $btSignup = $("button[name=signup]");
+	// 입력 객체 찾기
+	let $inputPwd = $("input[name=user_pwd]").val();
+	let $inputPwdChk = $("input[name=user_pwd_chk]").val();
+	let $inputName = $("input[name=user_name]").val();
+	let $inputPhone = $("input[name=user_phone]").val();
 
+
+  	// 가입버튼 입력 객체 찾기
+	let $btSignup = $("button[name=signup]");
+	
 	// 가입하기 버튼 클릭 이벤트 발생
 	$btSignup.click(function () {
-
 		if($inputPwd == ''){
 			alert('비밀번호를 입력하세요');
 			return;
 		}else if($inputPwdChk == ''){
 			alert('비밀번호 확인을 입력하세요')
 			return;
-		}else if ($inputName == "") {
+		}else if ($inputName == '') {
 			alert('이름을 입력하세요');
 			return;
-		}else if ($inputPhone == "") {
+		}else if ($inputNickname == '') {
+			alert('닉네임을 입력하세요');
+			return;
+		}else if ($inputPhone == '') {
 			alert('전화번호를 입력하세요');
-			return;
-		}else if ($inputEmail == "") {
-			alert('이메일을 입력하세요');
-			return;
-		}else if ($inputSsn == "") {
-			alert('생년월일을 입력하세요');
 			return;
 		}
 
-		// ----- 비밀번호 중복확인 START -----
+		// ----- 비밀번호 확인 START -----
 		let $inputPwd = $("input[name=user_pwd]");
 		let $inputPwdChk = $("input[name=user_pwd_chk]");
 		if ($inputPwd.val() != $inputPwdChk.val()) {
@@ -65,7 +96,27 @@ $(function () {
 			$inputPwd.focus();
 			return false;
 		}
-    	// ----- 비밀번호 중복확인 END -----
+    	// ----- 비밀번호 확인 END -----
+
+
+		$.ajax({
+			url: "http://localhost:1124/back/nicknamedupchk",
+			type: "get",
+			data: { user_nickname: $inputNickname.val() },
+			success: function (jsonObj) {
+				if (jsonObj.status == 1) {
+					alert(jsonObj.msg);
+				} else {
+					alert(jsonObj.msg);
+				}
+			},
+			error: function (jqXHR) {
+				alert(jqXHR.status + ":" + jqXHR.statusText);
+			},
+		});
+		return false;
+		});
+  		// ----- 닉네임 중복확인 버튼 클릭 END -----
 
 		// 데이터 전송을 위한 폼 객체 불러옴
 		let $formObj = $("form.signuppro");
@@ -92,7 +143,7 @@ $(function () {
 		});
 		return false;
 	});
-});
+
 // processData false로 항상 설정 해 주어야 함
 // 일반적으로 서버에 전달되는 데이터는 query string 형태
 // data 파라미터로 전달된 데이터를 jQuery 내부적으로 query string 형태로 만드는 데, 파일 전송의 경우 이를 하지 않아야하므로 processData를 false로 설정

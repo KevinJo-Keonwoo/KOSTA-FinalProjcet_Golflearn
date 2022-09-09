@@ -1,5 +1,5 @@
 $(function () {
-  let url = "http://localhost:1124/back/main";
+  let url = "http://localhost:1124/back/lesson/";
   $.ajax({
     url: url,
     success: function (jsonObj) {

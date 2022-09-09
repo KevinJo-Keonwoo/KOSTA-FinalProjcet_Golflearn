@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../jq/resaleboardwrite.js"></script>
+    <script src="../jq/summernote-lite.js"></script>
+    <script src="../jq/summernote-ko-KR.js"></script>
+    <link rel="stylesheet" href="../css/summernote-lite.css">
+    <title>중고거래 글쓰기</title>
+</head>
+<body>
+    <h2> 중고거래 글쓰기 페이지</h2>
+    <div>
+        <form class="write" action="http://localhost:1124/back/resale/board/write" method="post"
+		enctype="multipart/form-data">
+            <div>
+                <input type="text" name="write-title" placeholder="제목을 입력해주세요">
+            </div>
+            <textarea name="write-summernote" id="summernote">                
+            </textarea>
+    </form>
+</div>
+</body>
+</html>
