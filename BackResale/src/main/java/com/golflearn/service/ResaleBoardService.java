@@ -41,8 +41,8 @@ public class ResaleBoardService {
 	@Autowired
 	ResaleLikeRepository resaleLikeRepo;
 
-	private static final int CNT_PER_PAGE = 5; // 페이지별 보여줄 목록 수 
 
+	private static final int CNT_PER_PAGE = 5; // 페이지별 보여줄 목록 수 
 	/**
 	 * 페이지별 게시글 목록과 페이지 그룹정보를 반환
 	 * @param resaleBoardNo
@@ -194,7 +194,6 @@ public class ResaleBoardService {
 	}
 
 
-	
 	/**
 	 * 댓글 등록(완성)
 	 * 댓글 수도 같이 증가
@@ -219,7 +218,7 @@ public class ResaleBoardService {
 			commentEntity.setResaleCmtParentNo(resaleCmtParentNo);
 			
 			ResaleBoardEntity brdEntity = modelMapper.map(boardDto, ResaleBoardEntity.class);
-			commentEntity.setResaleBoard(brdEntity);
+			
 			resaleCommentRepo.save(commentEntity);
 			
 		} else { // 부모 글번호가 없으면 0 번

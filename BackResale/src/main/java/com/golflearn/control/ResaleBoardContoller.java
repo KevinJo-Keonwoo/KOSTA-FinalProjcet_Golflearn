@@ -43,7 +43,7 @@ import com.golflearn.service.ResaleBoardService;
 
 import net.coobird.thumbnailator.Thumbnailator;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("resale/*")
 public class ResaleBoardContoller {
@@ -74,7 +74,7 @@ public class ResaleBoardContoller {
 			if(optCp.isPresent()) { //currentPage 가 있으면(optional)
 				currentPage = optCp.get();
 			}else { // 없으면
-				currentPage = 1;
+				currentPage = 1;				
 			}
 			PageBean<ResaleBoardDto> pb = service.boardList(currentPage);
 			rb.setStatus(1);
@@ -161,16 +161,21 @@ public class ResaleBoardContoller {
 	 */
 	@PostMapping("board/write")
 	public ResponseEntity<?> writeBoard (@RequestPart(required = false)List<MultipartFile> imageFiles,
-			ResaleBoardDto dto, HttpSession session) throws AddException{
+										 ResaleBoardDto dto, HttpSession session) {
 //		String loginedNickname = (String) session.getAttribute("loginNickname");
 		// 입력 내용 게시글 저장
+		ResaleBoardDto boardDto = new ResaleBoardDto();
 		String loginedNickname = "데빌";
-		
-		dto.setUserNickname(loginedNickname);
-		ResaleBoardDto boardDto = service.writeBoard(dto);
+//		System.out.println(dto.getResaleBoardTitle());
+		try {
+			dto.setUserNickname(loginedNickname);
+			boardDto = service.writeBoard(dto);
+		} catch (AddException e1) {
+			e1.printStackTrace();
+		}
 		
 		Long resaleBoardNo = boardDto.getResaleBoardNo();
-		logger.error("글번호는"+boardDto.getResaleBoardNo());
+//		logger.error("글번호는"+boardDto.getResaleBoardNo());
 		
 		// 파일 저장 폴더
 		String saveDirectory = uploadDirectory + "resale\\"+ resaleBoardNo;
