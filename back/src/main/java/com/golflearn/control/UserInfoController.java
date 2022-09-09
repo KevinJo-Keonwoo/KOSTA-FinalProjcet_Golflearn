@@ -62,7 +62,7 @@ public class UserInfoController {
 	 */
 	@Value("${spring.servlet.multipart.location}") //@Value("${…}") application.properties파일에 설정 되어있는 것을 가지고 오는 것
 	String uploadDirectory;
-	@Transactional
+//	@Transactional
 	@PostMapping("signuppro")
 	public ResponseEntity<?> signuppro (
 			@RequestPart(required = false) List<MultipartFile> certifFiles, 
@@ -174,7 +174,7 @@ public class UserInfoController {
 	// 수강생 회원가입
 	//	@Value("${spring.servlet.multiple.location}")
 	//	String uploadDirectory;
-	@Transactional
+//	@Transactional
 	@PostMapping("signupstdt")
 	public ResponseEntity<?> signupstdt (
 			@RequestPart(required = false) MultipartFile profileImg,
@@ -258,12 +258,16 @@ public class UserInfoController {
 		session.removeAttribute("userType");
 		
 		try {
-			service.login(userId, userPwd);
+			UserInfo userInfo = service.login(userId, userPwd);
 			rb.setStatus(1);
 			rb.setMsg("로그인 성공");
+			rb.setT(userInfo); //로그인한 사람의 정보 저장
+//			logger.error("저장 정보" + userInfo);
+			
 			session.setAttribute("loginInfo", userId);
 			session.setAttribute("loginNickname", userNickname);
 			session.setAttribute("userType", userType);
+			
 		} catch (FindException e) {
 			e.printStackTrace();
 			rb.setMsg("로그인 실패. 아이디 비밀번호를 확인 해 주세요");
