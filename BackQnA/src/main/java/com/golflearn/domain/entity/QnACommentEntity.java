@@ -18,6 +18,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,8 +56,12 @@ public class QnACommentEntity {
 	
 //2. 자식쪽 1:1	
 	@JsonBackReference
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(
+			//cascade=CascadeType.PERSIST, 
+	cascade=CascadeType.MERGE, 
+	fetch=FetchType.LAZY)
 	@JoinColumn(name = "qna_cmt_no")//insertable = false, updatable = false, nullable = true)
 	@MapsId(value =  "boardNo")  //부모클래스를 참조한다.
 	private QnABoardEntity board;
+//	cascade = CascadeType.ALL,
 }

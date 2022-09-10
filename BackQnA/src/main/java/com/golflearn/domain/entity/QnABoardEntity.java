@@ -17,7 +17,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.golflearn.dto.QnACommentDto;
 
@@ -31,8 +33,8 @@ import lombok.Setter;
 @NoArgsConstructor 
 @AllArgsConstructor 
 @Getter @Setter
-@EqualsAndHashCode(of= {"boardNo"})
 @Builder
+@EqualsAndHashCode(of= {"boardNo"})
 @Entity
 @Table(name = "qna_board")
 @SequenceGenerator(name = "qna_board_no_seq_generator",
@@ -77,6 +79,37 @@ public class QnABoardEntity {
 
 	//2. 부모쪽 1:1
 	@JsonManagedReference
-	@OneToOne (mappedBy = "board", cascade = CascadeType.REMOVE, fetch=FetchType.EAGER)
+	@OneToOne (mappedBy = "board")
 	private QnACommentEntity comment;
 }
+//
+
+
+
+
+
+
+
+
+//	@Builder
+//	public QnABoardEntity (Long boardNo, String boardTitle, String userNickname, String boardContent, Date qnaBoardDt,
+//			int qnaBoardSecret, QnACommentEntity comment) {
+//		this.boardNo = boardNo;
+//		this.boardTitle = boardTitle;
+//		this.userNickname = userNickname;
+//		this.boardContent = boardContent;
+//		this.qnaBoardDt = qnaBoardDt;
+//		this.qnaBoardSecret = qnaBoardSecret;
+//		this.comment = comment;
+//	}
+//	
+//	@Builder
+//	public QnABoardEntity (Long boardNo, String boardTitle, String userNickname, String boardContent, Date qnaBoardDt,
+//			int qnaBoardSecret) {
+//		this.boardNo = boardNo;
+//		this.boardTitle = boardTitle;
+//		this.userNickname = userNickname;
+//		this.boardContent = boardContent;
+//		this.qnaBoardDt = qnaBoardDt;
+//		this.qnaBoardSecret = qnaBoardSecret;
+//	}
