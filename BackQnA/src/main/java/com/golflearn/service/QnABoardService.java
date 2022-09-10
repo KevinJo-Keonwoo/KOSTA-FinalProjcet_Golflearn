@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -153,7 +151,15 @@ public class QnABoardService {
 	public QnABoardDto viewBoard(Long boardNo) throws FindException {
 		Optional<QnABoardEntity> boardEntity = boardRepo.findById(boardNo);
 		if(boardEntity.isPresent()) {
-			QnABoardEntity board = boardEntity.get();
+			QnACommentEntity qc =  boardEntity.get().getComment();
+			QnACommentDto qd = QnACommentDto.builder()
+					.commentNo(qc.getCommentNo())
+					.qnaCmtContent(qc.getQnaCmtContent())
+					.qnaCmtDt(qc.getQnaCmtDt())
+					.userNickname(qc.getUserNickname())
+					.build();
+			
+			QnABoardEntity board = boardEntity.get(); 
 			QnABoardDto boardDto = QnABoardDto.builder()
 					.boardNo(board.getBoardNo())
 					.boardTitle(board.getBoardTitle())
@@ -161,7 +167,7 @@ public class QnABoardService {
 					.userNickname(board.getUserNickname())
 					.qnaBoardDt(board.getQnaBoardDt())
 					.qnaBoardSecret(board.getQnaBoardSecret())
-					.comment(board.getComment())
+					.comment(qd)
 					.build();
 			return boardDto;
 		}else {
@@ -188,11 +194,11 @@ public class QnABoardService {
 	public void writeComment(QnACommentDto qnaComment)throws AddException {		
 		QnACommentEntity ce  = qnaComment.toEntity();
 		Optional<QnABoardEntity> optB = boardRepo.findById(qnaComment.getCommentNo());
-		System.out.println(qnaComment.getCommentNo());
-		//		logger.error("no"+qnaComment.getCommentNo());
+		System.out.println("commentNo=" + qnaComment.getCommentNo());
 		if (optB.isPresent()) {
 			QnABoardEntity b = optB.get();			
 			ce.setBoard(b);
+			System.out.println("before saves");
 			commentRepo.save(ce);
 		}else {
 			throw new AddException("잘못된 요청입니다.");
@@ -242,7 +248,16 @@ public class QnABoardService {
 		//DB에 findbyid로 boardNo가 있는지 찾아서 entity타입의 qd에 담는다
 		Optional<QnABoardEntity> optB = boardRepo.findById(boardNo);
 		if (optB.isPresent()) {
-//			QnABoardEntity qe = optB.get();
+			QnABoardEntity qe = optB.get();
+			System.out.println(qe);
+			if(qe.getComment() != null) { //댓글이 있으면
+				QnACommentEntity ce = qe.getComment();
+				System.out.println(ce);
+				ce.setBoard(qe);
+				commentRepo.delete(ce);
+			}
+			
+//			optB.get();
 			boardRepo.deleteById(boardNo);
 //			qe = QnABoardEntity .builder()
 //					.boardNo(qe.getBoardNo())

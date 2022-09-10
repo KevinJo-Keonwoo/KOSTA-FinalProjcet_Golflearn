@@ -167,21 +167,22 @@ public class QnABoardController {
 	@PostMapping(value = "write")
 	public ResultBean<QnABoardDto> writeboard(HttpSession session, @RequestBody QnABoardDto qnaBoard ) {
 		ResultBean<QnABoardDto> rb = new ResultBean<>();
-		String loginNickname = (String)session.getAttribute("loginNickname");
-		//		String loginNickname = "데빌";
+//		String loginNickname = (String)session.getAttribute("loginNickname");
+		String loginNickname = "데빌";
 		try {
 			if(loginNickname == null) {
 				rb.setStatus(0);
 				rb.setMsg("로그인을 해주세요");
 			}
 			qnaBoard.setUserNickname(loginNickname);
-			//					QnABoardDto.builder()
-			//					.boardNo(qnaBoard.getBoardNo())
-			//					.boardTitle(qnaBoard.getBoardTitle())
-			//					.boardContent(qnaBoard.getBoardContent())
-			//					.qnaBoardSecret(qnaBoard.getQnaBoardSecret())
-			//					.userNickname(loginNickname)
-			//					.build();
+			
+//			QnABoardDto.builder()
+//				.boardNo(qnaBoard.getBoardNo())
+//				.boardTitle(qnaBoard.getBoardTitle())
+//				.boardContent(qnaBoard.getBoardContent())
+//				.qnaBoardSecret(qnaBoard.getQnaBoardSecret())
+//				.userNickname(loginNickname)
+//				.build();
 			qnaService.writeBoard(qnaBoard);
 			rb.setStatus(1);
 		} catch (AddException e) {
@@ -192,8 +193,8 @@ public class QnABoardController {
 
 
 	//댓글(답변) 달기(관리자만 가능)
-	@PostMapping(value= "comment", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResultBean<QnACommentDto> writeComment(HttpSession session, @RequestBody QnACommentDto qnaComment) {
+	@PostMapping(value= "comment/{boardNo}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResultBean<QnACommentDto> writeComment(@PathVariable  Long boardNo, HttpSession session, @RequestBody QnACommentDto qnaComment) {
 		ResultBean<QnACommentDto> rb = new ResultBean<>();
 		//			int userType = session.getAttribute("userType");
 		//			String loginNickname = (String)session.getAttribute("loginNickname");
@@ -279,7 +280,7 @@ public class QnABoardController {
 //		String userType = (String)session.getAttribute("userType");
 		//테스트용
 		String loginNickname = "kosta";
-		String userType = "1";
+		String userType = "2";
 		try {
 			qnaService.deleteComment(commentNo);
 			if (loginNickname.equals(qnaComment.getUserNickname()) && userType.equals("2") ) {
