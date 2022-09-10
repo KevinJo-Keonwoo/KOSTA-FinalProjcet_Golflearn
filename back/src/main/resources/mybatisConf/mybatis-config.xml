@@ -24,5 +24,6 @@
   	<mapper resource="mybatisConf/LessonReviewMapper.xml"/>
   	<mapper resource="mybatisConf/LessonHistoryMapper.xml"/>
   	<mapper resource="mybatisConf/LessonMapper.xml"/>
+  	<mapper resource="mybatisConf/AdminMapper.xml"/>
   </mappers>
 </configuration>
