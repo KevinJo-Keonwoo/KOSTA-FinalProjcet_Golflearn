@@ -262,7 +262,7 @@ public class UserInfoController {
 
 	// 로그인
 	@PostMapping(value="login")
-	private ResultBean<UserInfo> login(HttpSession session, @RequestParam String userId, @RequestParam String userPwd, String userNickname, String userType) {
+	public ResultBean<UserInfo> login(HttpSession session, @RequestParam String userId, @RequestParam String userPwd, String userNickname, String userType) {
 
 		ResultBean<UserInfo> rb = new ResultBean<>();
 
@@ -354,7 +354,7 @@ public class UserInfoController {
 	
 	//아이디 찾기
 	@PostMapping(value="find/id", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResultBean <UserInfo> selectByUserNameAndPhone(@RequestParam String userName, @RequestParam String userPhone) throws FindException {
+	public ResultBean <UserInfo> selectByUserNameAndPhone(@RequestParam("userName") String userName, @RequestParam("userPhone") String userPhone) throws FindException {
 		ResultBean<UserInfo> rb = new ResultBean<>();
 		UserInfo userInfo = new UserInfo();
 		try {
@@ -371,7 +371,7 @@ public class UserInfoController {
 	//비밀번호 변경 인증 문자 발송
 	@PostMapping(value="find/pwd", produces = MediaType.APPLICATION_JSON_VALUE)
 	//Requestparam으로 userId와 userPhone값을 받아옴
-	public ResultBean <UserInfo> selectByUserIdAndPhone(HttpSession session, @RequestParam String userId, @RequestParam String userPhone) throws FindException, JsonProcessingException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
+	public ResultBean <UserInfo> selectByUserIdAndPhone(HttpSession session, @RequestParam("userId") String userId, @RequestParam("userPhone") String userPhone) throws FindException, JsonProcessingException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
 		ResultBean<UserInfo> rb = new ResultBean<>();
 		UserInfo userInfo = new UserInfo();
 		try {
@@ -407,6 +407,9 @@ public class UserInfoController {
 			//세션에 userId와 randomKey 저장
 			session.setAttribute("userId", userId);
 			session.setAttribute("authenticationKey", randomKey);
+			System.out.println("-------------this findpwd---------------------------------");
+			System.out.println("세션값 아이디 저장:" + session.getAttribute("userId"));
+			System.out.println("세션값 인증번호 저장:" + session.getAttribute("authenticationKey"));
 		}catch(FindException e) {
 			rb.setStatus(0);
 			rb.setMsg(e.getMessage());
@@ -414,20 +417,22 @@ public class UserInfoController {
 		return rb;
 	}	
 	@PostMapping(value="change/pwd", produces = MediaType.APPLICATION_JSON_VALUE) 
-	public ResultBean <?> updateByUserPwd(HttpSession session, @RequestParam String authenticationUser, @RequestParam String newPwd, @RequestParam String chkNewPwd) throws FindException {
+	public ResultBean <?> updateByUserPwd(HttpSession session, @RequestParam("authenticationUser") String authenticationUser, @RequestParam("newPwd") String newPwd, @RequestParam("chkNewPwd") String chkNewPwd) throws FindException {
 		ResultBean<?> rb = new ResultBean<>();
 		Message message = new Message();
 		//세션에 저장되어있는 Id와 인증번호 가져옴
 		String userId = (String)session.getAttribute("userId");
 		String authenticationKey = (String)session.getAttribute("authenticationKey");
+		System.out.println("-------------------this change------------------");
+		System.out.println("세션저장 아이디:" + (String)session.getAttribute("userId"));
+		System.out.println("세션저장 인증코드:" + (String)session.getAttribute("authenticationKey"));
+		System.out.println("작성한 인증코드:" + authenticationUser);
 //		//userInfo의 userId에 가져온 세션값 저장
 //		UserInfo userInfo = new UserInfo();
 //		userInfo.setUserId((String)session.getAttribute("userId"));
 		if (!authenticationUser.equals(authenticationKey)) {
 			rb.setStatus(0);
 			rb.setMsg("인증번호가 일치하지 않습니다.");
-			System.out.println(authenticationKey);
-			System.out.println(authenticationUser);
 		}else {
 			if(newPwd.equals(chkNewPwd)) {
 				try {
