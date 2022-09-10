@@ -22,11 +22,11 @@ public class QnABoardDto {
 	@JsonFormat(pattern = "yy/MM/dd", timezone ="Asia/Seoul")
 	private Date qnaBoardDt;
 	private Integer qnaBoardSecret;
-	private QnACommentEntity comment;
+	private QnACommentDto comment;
 			
 	
 	public QnABoardDto(Long boardNo, String boardTitle, String userNickname, String boardContent, Date qnaBoardDt,
-			int qnaBoardSecret, QnACommentEntity comment) {
+			int qnaBoardSecret, QnACommentDto comment) {
 		this.boardNo = boardNo;
 		this.boardTitle = boardTitle;
 		this.userNickname = userNickname;
@@ -34,16 +34,6 @@ public class QnABoardDto {
 		this.qnaBoardDt = qnaBoardDt;
 		this.qnaBoardSecret = qnaBoardSecret;
 		this.comment = comment;
-	}
-	
-	public QnABoardDto(QnABoardEntity boardentity) {
-		this.boardNo = boardentity.getBoardNo();
-		this.boardTitle = boardentity.getBoardTitle();
-		this.userNickname = boardentity.getUserNickname();
-		this.boardContent = boardentity.getBoardContent();
-		this.qnaBoardDt = boardentity.getQnaBoardDt();
-		this.qnaBoardSecret = boardentity.getQnaBoardSecret();
-		this.comment = boardentity.getComment();
 	}
 	
 	public QnABoardEntity toEntity() {
@@ -54,21 +44,36 @@ public class QnABoardDto {
 				.boardContent(boardContent)
 				.qnaBoardDt(qnaBoardDt)
 				.qnaBoardSecret(qnaBoardSecret)
-				.comment(comment)
+//				.comment(QnACommentEntity.builder()
+//						.commentNo(comment.getCommentNo())
+//						.qnaCmtContent(comment.getQnaCmtContent())
+//						.qnaCmtDt(comment.getQnaCmtDt())
+//						.userNickname(comment.getUserNickname())
+//						.build())
 				.build();
 	}
-
+	
 	public void setUserNickname(String userNickname) {
 		this.userNickname = userNickname;
 	}
-
+	
 	public void setBoardNo(Long boardNo) {
 		this.boardNo = boardNo;
 	}
-
-	public void setComment(QnACommentEntity comment) {
+	
+	public void setComment(QnACommentDto comment) {
 		this.comment = comment;
 	}
+	
+//	public QnABoardEntity toBoardWriteEntity() {
+//		return QnABoardEntity.builder()
+//				.boardNo(boardNo)
+//				.boardTitle(boardTitle)
+//				.userNickname(userNickname)
+//				.boardContent(boardContent)
+//				.qnaBoardDt(qnaBoardDt)
+//				.qnaBoardSecret(qnaBoardSecret)
+//				.build();	
+//	}
 }
-
 	

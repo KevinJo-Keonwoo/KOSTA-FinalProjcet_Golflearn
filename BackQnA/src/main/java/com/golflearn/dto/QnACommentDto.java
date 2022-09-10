@@ -27,15 +27,8 @@ public class QnACommentDto {
 		this.qnaCmtDt = qnaCmtDt;
 		this.userNickname = userNickname;
 	}
-	public QnACommentDto(QnACommentEntity cmtentity) {
-		this.commentNo =cmtentity.getCommentNo();
-		this.qnaCmtContent = cmtentity.getQnaCmtContent();
-		this.qnaCmtDt = cmtentity.getQnaCmtDt();
-		this.userNickname = cmtentity.getUserNickname();
-	}
 	
 	public QnACommentEntity toEntity() { //QnACommentDto dto) {
-
 		return QnACommentEntity.builder()
 				.commentNo(commentNo)
 				.qnaCmtContent(qnaCmtContent)
