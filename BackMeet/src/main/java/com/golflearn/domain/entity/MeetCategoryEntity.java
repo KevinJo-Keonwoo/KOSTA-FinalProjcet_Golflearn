@@ -1,4 +1,4 @@
-package com.golflearn.domain;
+package com.golflearn.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,7 +7,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -15,7 +14,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Component
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
@@ -26,7 +24,7 @@ import lombok.Setter;
 
 @DynamicInsert
 @DynamicUpdate
-public class MeetCategory {
+public class MeetCategoryEntity {
 	
 	@Id
 	@Column(name="meet_ctg_no")

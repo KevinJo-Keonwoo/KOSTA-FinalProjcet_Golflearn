@@ -1,4 +1,4 @@
-package com.golflearn.domain;
+package com.golflearn.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -18,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 @Component
 @NoArgsConstructor
@@ -28,20 +30,20 @@ import lombok.Setter;
 @Entity
 @Table(name= "meet_member")
 @SequenceGenerator(name = "meet_member_seq_generator",
-					sequenceName= "meet_member_no_seq",
+					sequenceName= "meet_mb_no_seq",
 					initialValue = 1,
 					allocationSize = 1
 					)
 
 @DynamicInsert
 @DynamicUpdate
-public class MeetMember {
+public class MeetMemberEntity {
 
 	//단방향 - member는 board가 필요X, 그 반대임
 	//여러 meetMember - 하나 meetboard
 	@ManyToOne
 	@JoinColumn(name = "meet_board_no")
-	private MeetBoard meetBoard;
+	private MeetBoardEntity meetBoard;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,

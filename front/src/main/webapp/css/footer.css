@@ -21,8 +21,8 @@ footer {
     z-index: 9999;
     font-family: 'Godo';
     font-size: 12px;
-    /* left: 0; */
-    /* right: 0; */
+    left: 0;
+    right: 0;
 }
 
 footer > #container {

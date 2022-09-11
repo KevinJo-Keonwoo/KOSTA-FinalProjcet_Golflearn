@@ -1,5 +1,9 @@
 package com.golflearn.domain.entity;
 
+<<<<<<< HEAD
+public class RoundReviewBoard {
+
+=======
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -68,4 +72,5 @@ public class RoundReviewBoard {
 	@Column(name="round_review_board_longitude")
 	private String roundReviewBoardLongitude;
 	
+>>>>>>> 54e8b1d92c26712790204d2506f006857435581e
 }

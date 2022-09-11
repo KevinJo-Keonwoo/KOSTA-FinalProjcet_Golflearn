@@ -70,5 +70,5 @@ public class ResaleCommentEntity {
 	// Board쪽에서 List로 가지고 있음
 //	@ManyToOne(fetch=FetchType.LAZY) 
 //	@JoinColumn(name = "resale_board_no")
-	
+
 }

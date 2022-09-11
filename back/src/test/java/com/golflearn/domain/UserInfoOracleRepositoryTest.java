@@ -1,7 +1,7 @@
-package com.golflearn.domain;
+package com.golflearn.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +12,10 @@ import com.golflearn.dto.ProInfo;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
-import com.golflearn.exception.ModifyException;
 
 @SpringBootTest
-public class UserInfoRepositoryTest {
-
+public class UserInfoOracleRepositoryTest {
+	
 	@Autowired
 	private UserInfoRepository repository;
 	
@@ -33,6 +32,7 @@ public class UserInfoRepositoryTest {
 		user.setUserJoinDt(sqlDate);
 		repository.insertStdt(user);		
 	}
+	
 	
 	@Test
 	public void testInsertPro() throws AddException{
@@ -70,7 +70,7 @@ public class UserInfoRepositoryTest {
 		assertEquals(userNickname, ui.getUserNickname());
 	}
 	
-	//로그인
+	
 	@Test
 	public void testSelectByUserIdAndPwd() throws FindException {
 		String userNicakName = "프로한";
@@ -82,41 +82,5 @@ public class UserInfoRepositoryTest {
 		assertEquals(expectedUserPwd, ui.getUserPwd());
 	}
 	
-	@Test
-	void testSelectByUserNameAndPhone() throws FindException {
-		String userName = "전승현";
-		String userPhone = "010-4465-9015";
-		
-		String expectedUserId = "zzeonsh@gmail.com";
-		UserInfo userInfo = repository.selectByUserNameAndPhone(userName, userPhone);
-		assertNotNull(userInfo);
-		assertEquals(expectedUserId, userInfo.getUserId() );
-	}
 	
-	@Test
-	void testselectByUserIdAndPhone() throws FindException {
-		String userId = "zzeonsh@gmail.com";
-		String userPhone = "010-4465-9015";
-		
-		String expectedUserPhone = "010-4465-9015";
-		
-		UserInfo userInfo = repository.selectByUserIdAndPhone(userId, userPhone);
-		assertNotNull(userInfo);
-		assertEquals(expectedUserPhone, userInfo.getUserPhone());
-	}
-	
-	@Test
-	void testupdateByUserPwd() throws ModifyException {
-		UserInfo userInfo = new UserInfo();
-		String userId = "zzeonsh@gmail.com";
-		String userPwd = "1234";
-		
-		userInfo.setUserPwd(userPwd);
-		
-		repository.updateByUserPwd(userId, userPwd);
-		
-		String expectedUserPwd = "1234";
-
-		assertEquals(expectedUserPwd, userInfo.getUserPwd());
-	}
 }
