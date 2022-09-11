@@ -34,4 +34,10 @@
 	FROM user_info
 	WHERE user_id = #{userId}
   </select>
+  
+  <!-- 결제 완료 시 레슨내역 등록 -->
+ 	<insert id="insertLessonLine" parameterType= "LessonLine">
+  		INSERT INTO lesson_line(lsn_line_no, user_id, lsn_no, payment_no,lsn_exp_dt, stdt_lsn_status)
+  		VALUES(lsn_line_no_seq.NEXTVAL,#{userId},#{lsnNo},#{paymentNo},SYSDATE,0)
+ 	</insert>
 </mapper>

@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    hikari:
+      username: admin
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      jdbc-url: jdbc:log4jdbc:oracle:thin:@golflearn_medium?TNS_ADMIN=/Users/jasonmilian/Desktop/dalmo/Wallet_golflearn
+      password: Dalmo08230823
+      minimum-idle: '2'
+  jpa:
+    generate-ddl: 'true'
+    open-in-view: 'false'
+    database: oracle
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    properties:
+      hibernate:
+        format_sql: 'true'
+  main:
+    banner-mode: console
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 150MB
+      location: /Users/jasonmilian/Desktop/projects/golflearn/front/src/main/webapp/notice_images
+      
+  output:
+    ansi:
+      enabled: ALWAYS
+logging:
+  charset:
+    console: UTF-8
+  level:
+    org:
+      hibernate: info
+    root: 'info'
+server:
+  servlet:
+    context-path: /noticeboard
+  port: '1128'

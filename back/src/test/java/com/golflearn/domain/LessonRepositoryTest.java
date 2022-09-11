@@ -1,4 +1,4 @@
-package com.golflearn.domain.repository;
+package com.golflearn.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,11 +19,12 @@ import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 import com.golflearn.service.LessonService;
+
 @SpringBootTest
-class LessonOracleRepositoryTest {
+class LessonRepositoryTest {
 
 	@Autowired
-	private LessonOracleRepository repository;
+	private LessonRepository repository;
 	
 	@Autowired
 	private LessonService lessonService;

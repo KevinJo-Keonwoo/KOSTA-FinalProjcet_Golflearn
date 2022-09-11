@@ -1,9 +1,7 @@
 package com.golflearn.dto;
 
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -15,9 +13,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = {"resaleLikeNo"})
-public class ResaleLike {
+@JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
+public class ResaleLikeDto {
 	private Long resaleLikeNo;
-//	private Long resaleBoardNo;
-	private ResaleBoard resaleBoard;
 	private String userNickname;
+	private ResaleBoardDto resaleBoard;
 }

@@ -22,20 +22,19 @@ public interface UserInfoRepository {
 	 * 수강생 회원 정보를 추가한다	 * 
 	 * @throws AddException
 	 */
-	void insertStdt(UserInfo userInfo) throws AddException;
+	public void insertStdt(UserInfo userInfo) throws AddException;
 	
 	/**
 	 * 프로 회원 정보를 추가한다
 	 * @throws AddException
 	 */
-	void insertPro(UserInfo userInfo, ProInfo proInfo) throws AddException;
-	
-	
+	public void insertPro(UserInfo userInfo, ProInfo proInfo) throws AddException;
+
 	/**
 	 * 아이디 중복확인
 	 * @param userId
    */
-	UserInfo selectByUserId(String userId) throws FindException;
+	public UserInfo selectByUserId(String userId) throws FindException;
   
 	/**
 	 * 아이디찾기
@@ -71,7 +70,7 @@ public interface UserInfoRepository {
 	 * 닉네임 중복확인
 	 * @throws FindException
 	 */
-	UserInfo selectByUserNickName(String userNickname) throws FindException;
+	public UserInfo selectByUserNickName(String userNickname) throws FindException;
 	
 	/**
 	 * 로그인
@@ -79,6 +78,6 @@ public interface UserInfoRepository {
 	 * @param userPwd
 	 * @throws FindException
 	 */
-	UserInfo selectByUserIdAndPwd(String userId, String userPwd) throws FindException;
-	 
+	public UserInfo selectByUserIdAndPwd(String userId, String userPwd) throws FindException;
+
 }
