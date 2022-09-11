@@ -243,7 +243,7 @@ public class UserInfoController {
 
 	// 로그인
 	@PostMapping(value = "login")
-	public ResultBean<UserInfo> login(@RequestParam String userId, @RequestParam String userPwd, 
+	public ResultBean<UserInfo> login(@RequestParam("userId") String userId, @RequestParam("userPwd") String userPwd, 
 			String userNickname, String userType, HttpSession session) {
 
 		ResultBean<UserInfo> rb = new ResultBean<>();
