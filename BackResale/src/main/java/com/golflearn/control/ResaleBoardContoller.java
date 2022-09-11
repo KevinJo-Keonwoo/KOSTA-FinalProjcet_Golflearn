@@ -159,7 +159,7 @@ public class ResaleBoardContoller {
 	 * @return
 	 * @throws AddException 
 	 */
-	@PostMapping("board/write")
+	@PostMapping(value = "board/write", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> writeBoard (@RequestPart(required = false)List<MultipartFile> imageFiles,
 										 ResaleBoardDto dto, HttpSession session) {
 //		String loginedNickname = (String) session.getAttribute("loginNickname");
@@ -178,7 +178,7 @@ public class ResaleBoardContoller {
 //		logger.error("글번호는"+boardDto.getResaleBoardNo());
 		
 		// 파일 저장 폴더
-		String saveDirectory = uploadDirectory + "resale\\"+ resaleBoardNo;
+		String saveDirectory = uploadDirectory + "resale_board_images\\"+ resaleBoardNo;
 		//파일 경로 생성
 		if(!new File(saveDirectory).exists()) {
 			new File(saveDirectory).mkdirs(); //파일 경로에 폴더 없으면 저장
