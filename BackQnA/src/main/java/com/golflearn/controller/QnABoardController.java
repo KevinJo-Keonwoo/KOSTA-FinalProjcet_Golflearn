@@ -41,7 +41,7 @@ public class QnABoardController {
 
 	//전체 리스트 불러오기
 	@GetMapping(value= {"list", "list/{optCp}"})
-	public ResultBean<PageBean<QnABoardDto>> list(@PathVariable  Optional<Integer> optCp){
+	public ResultBean<PageBean<QnABoardDto>> list(@PathVariable Optional<Integer> optCp){
 		ResultBean<PageBean<QnABoardDto>> rb = new ResultBean<>();
 		try {
 			int currentPage;
