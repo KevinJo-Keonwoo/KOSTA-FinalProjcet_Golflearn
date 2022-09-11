@@ -1,10 +1,16 @@
 package com.golflearn.domain.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,13 +22,16 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.golflearn.dto.NoticeBoardDto;
+import com.golflearn.dto.NoticeCommentDto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.Singular;
 
 @Entity
 @NoArgsConstructor
@@ -30,39 +39,55 @@ import lombok.Setter;
 @EqualsAndHashCode(of = {"noticeCmtNo"})
 @Table(name= "notice_comment")
 @SequenceGenerator(name = "noticecomment_seq_generator",
-					sequenceName= "notice_comment_seq",
-					initialValue = 1,
-					allocationSize = 1
-					)
+sequenceName= "notice_comment_no_seq",
+initialValue = 1,
+allocationSize = 1
+		)
 @DynamicInsert
 @DynamicUpdate
-public class NoticeComment {
+@Getter
+@Builder
+public class NoticeCommentEntity {
 	@Id
-	@GeneratedValue 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,
+	generator = "noticecomment_seq_generator")
 	@ColumnDefault(value = "0")
+	@Column(name="notice_cmt_no")
 	private Long noticeCmtNo;
-	
-	@ManyToOne
+
+	@JsonManagedReference
+	@ManyToOne(optional = false)
 	@JoinColumn(name="notice_board_no")
-	@NonNull
-	private NoticeBoard noticeBoard;
-	
+	private NoticeBoardEntity noticeBoard;
+
 	@Column(name="user_nickname")
-	@NonNull
 	private String userNickname;
-	
-	@Column(name="user_cmt_content")
-	@NonNull
+
+	@Column(name="notice_cmt_content")
 	private String noticeCmtContent;
-	
-	@Column(name="notice_dt")
+
+	@Column(name="notice_cmt_dt")
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	@ColumnDefault(value = "SYSDATE")
-	@NonNull
 	private Date noticeCmtDt;
-	
+
 	@Column(name="notice_cmt_parent_no")
 	@ColumnDefault(value = "-1")
-	@NonNull
 	private Long noticeCmtParentNo;
+	
+	public NoticeCommentDto toDto() {
+//		noticeBoard = NoticeBoardEntity.builder()
+//								.noticeBoardNo(noticeBoard.getNoticeBoardNo())
+//								.build();
+//		System.out.println("--------" + noticeBoard.getNoticeBoardNo());
+//		NoticeBoardDto noticeBoardDto = noticeBoard.toDto();
+		return NoticeCommentDto.builder()
+				.noticeCmtNo(noticeCmtNo)
+				.noticeCmtDt(noticeCmtDt)
+				.noticeBoardNo(noticeBoard.getNoticeBoardNo())
+				.noticeCmtContent(noticeCmtContent)
+				.noticeCmtParentNo(noticeCmtParentNo)
+				.userNickname(userNickname)
+				.build();
+	}
 }
