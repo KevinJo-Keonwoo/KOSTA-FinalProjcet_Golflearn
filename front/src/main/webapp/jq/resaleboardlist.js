@@ -5,6 +5,7 @@ $(function() {
     function showList(url){
         $.ajax({
             url:url,
+            method: "get",
             success:function(jsonObj){
                 if(jsonObj.status ==1){
                     let pageBeanObj = jsonObj.t;
@@ -16,9 +17,8 @@ $(function() {
 
                     let $boardParent = $board.parent();
                     
-                    let $boardCopy = $board.clone();
-                    
                     $(pageBeanObj.list).each(function (index, board) {
+                        let $boardCopy = $board.clone();
                         console.log(board.userNickname); // 출력됨
                         console.log(board.resaleBoardNo);
 
