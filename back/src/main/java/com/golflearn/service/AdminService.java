@@ -6,18 +6,53 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.golflearn.domain.AdminRepository;
+import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonLine;
 import com.golflearn.dto.PageBean;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.FindException;
+import com.golflearn.exception.ModifyException;
 
 @Service(value = "adminService")
 public class AdminService {
-	private static final int CNT_PER_PAGE = 5;
-
 	@Autowired
-	private AdminRepository adminRepo;
+	private AdminRepository repository;
+	
+	private static final int CNT_PER_PAGE = 5; //페이지별 보여줄 목록수
 
+	/**
+	 * 승인상태별 레슨목록을 페이징처리하여 불러온다
+	 * @param lsnStatus 승인상태 
+	 * @param currentPage 검색할 페이지
+	 * @return
+	 * @throws FindException
+	 */
+	public PageBean<Lesson> searchLessonByStatus(int lsnStatus, int currentPage) throws FindException{
+		List<Lesson> list = repository.selectByLsnStatus(lsnStatus, currentPage, CNT_PER_PAGE);
+		int totalCnt = repository.selectCntByLsnStatus(lsnStatus);//해당하는 상태의 레슨 수 불러오기
+		int cntPerPageGroup = 5;
+		PageBean<Lesson> pb = new PageBean<>(list, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
+		return pb;
+	}
+	/**
+	 * 승인 또는 반려하기
+	 * @param lesson 레슨
+	 * @throws ModifyException
+	 */
+	public void modifyLsnStatus(Lesson lesson) throws ModifyException{
+		repository.modifyLsnStatus(lesson);
+	}
+	/**
+	 * 반려사유 보기
+	 * @param lsnNo 레슨번호
+	 * @return
+	 * @throws FindException
+	 */
+	public String selectLsnRjtReason(int lsnNo) throws FindException{
+		String lsnRjtReason = repository.selectLsnRjtReason(lsnNo);
+		return lsnRjtReason;
+	}	
+	
 	/**
 	 * 페이지별 유저 목록과 페이지 그룹 정보를 반환
 	 * @param currentPage 검색할 페이지
@@ -26,8 +61,8 @@ public class AdminService {
 	 */
 	public PageBean<UserInfo> userInfoList(int currentPage) throws FindException{
 
-		List<UserInfo> userList = adminRepo.selectByUserPage(currentPage, CNT_PER_PAGE);
-		int totalCnt = adminRepo.selectCountAllUser();
+		List<UserInfo> userList = repository.selectByUserPage(currentPage, CNT_PER_PAGE);
+		int totalCnt = repository.selectCountAllUser();
 
 		int cntPerPageGroup = 5;
 
@@ -44,9 +79,9 @@ public class AdminService {
 	 */
 	public PageBean<UserInfo> userInfoByType(int currentPage, int userType) throws FindException {
 
-		List<UserInfo> userTypeList = adminRepo.selectByUserType(currentPage, CNT_PER_PAGE, userType);
+		List<UserInfo> userTypeList = repository.selectByUserType(currentPage, CNT_PER_PAGE, userType);
 
-		int totalCnt = adminRepo.selectCountUserType(userType);
+		int totalCnt = repository.selectCountUserType(userType);
 		int cntPerPageGroup = 5;
 
 		PageBean<UserInfo> pu = new PageBean<>(userTypeList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
@@ -62,7 +97,7 @@ public class AdminService {
 	 * @throws FindException
 	 */
 	public UserInfo userInfoDetail(String userId) throws FindException {
-		UserInfo userDetail = adminRepo.selectUserDetail(userId);
+		UserInfo userDetail = repository.selectUserDetail(userId);
 		return userDetail;
 	}
 
@@ -80,11 +115,11 @@ public class AdminService {
 		int totalCnt = 0;
 				
 		if(userType == 0) {
-			totalCnt = adminRepo.selectCountStdtLesson(userId);
+			totalCnt = repository.selectCountStdtLesson(userId);
 		}else if(userType == 1) {
-			totalCnt = adminRepo.selectCountProLesson(userId); 
+			totalCnt = repository.selectCountProLesson(userId); 
 		}
-		List<LessonLine> userLessonList = adminRepo.selectUserLesson(currentPage, currentPage, userType, userId);
+		List<LessonLine> userLessonList = repository.selectUserLesson(currentPage, currentPage, userType, userId);
 		PageBean<LessonLine> pu = new PageBean<>(userLessonList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
 		
 		return pu;
@@ -99,9 +134,9 @@ public class AdminService {
 	 */
 	public PageBean<UserInfo> searchUser(String word, int currentPage) throws FindException {
 		System.out.println(word);
-		List<UserInfo> userList = adminRepo.selectByUserSearching(currentPage, currentPage, word);
+		List<UserInfo> userList = repository.selectByUserSearching(currentPage, currentPage, word);
 		
-		int totalCnt = adminRepo.selectCountSearchUser(word);
+		int totalCnt = repository.selectCountSearchUser(word);
 
 		int cntPerPageGroup = 5;
 		PageBean<UserInfo> pu = new PageBean<>(userList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);

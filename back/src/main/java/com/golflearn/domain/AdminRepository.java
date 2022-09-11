@@ -6,16 +6,42 @@ import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonLine;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.FindException;
+import com.golflearn.exception.ModifyException;
 
 public interface AdminRepository {
-	/*
-	 * 1)유저정보 전체 목록 불러오기
-	 * 2)유저정보 목록 usertype별 목록 불러오기  => 프로정보 낼 물어보기
-	 * 3)유저정보 상세보기
-	 * 4)레슨정보(수강생, 프로별로 나누기)
-	 * 5)회원 검색하기
+	/**
+	 * 레슨상태별 레슨 목록을 페이징처리하여 최신순으로 보여준다.
+	 * @param lsnStatus 레슨상태
+	 * @param startRow 시작행
+	 * @param endRow 끝행
+	 * @return 
+	 * @throws FindException
 	 */
+	List <Lesson> selectByLsnStatus(int lsnStatus, int currentPage, int cntPerPage) throws FindException;
 	
+	/**
+	 * 선택된 레슨을 승인 또는 반려한다 : 승인-1, 반려-3 lsnRjtReason 입력
+	 * @param lsnNo 레슨번호
+	 * @param lsnRjtReason 반려사유
+	 * @throws ModifyException
+	 */
+	void modifyLsnStatus(Lesson lesson) throws ModifyException;
+	
+	/**
+	 * 반려사유를 불러온다
+	 * @param lsnNo 레슨번호
+	 * @return 반려사유
+	 * @throws FindException
+	 */
+	public String selectLsnRjtReason(int lsnNo) throws FindException;
+	
+	/**
+	 * 특정 승인상태인 레슨 행 수를 불러온다
+	 * @param lsnStatus 승인상태
+	 * @return 
+	 * @throws FindException
+	 */
+	int selectCntByLsnStatus(int lsnStatus) throws FindException;
 	
 	/**
 	 * 모든 유저들의 정보를 검색해서 리스트로 반환한다
@@ -32,7 +58,6 @@ public interface AdminRepository {
 	 * @throws FindException
 	 */
 	int selectCountAllUser() throws FindException;
-	
 	
 	/**
 	 * 유저들의 타입을 검색해서 리스트로 반환한다
