@@ -1,5 +1,6 @@
 package com.golflearn.domain.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,26 +28,26 @@ import lombok.Setter;
 @EqualsAndHashCode(of = {"noticeLikeNo"})
 @Table(name= "notice_like")
 @SequenceGenerator(name = "noticelike_seq_generator",
-					sequenceName= "notice_like_seq",
+					sequenceName= "notice_like_no_seq",
 					initialValue = 1,
 					allocationSize = 1
 					)
 @DynamicInsert
 @DynamicUpdate
-public class NoticeLike {
+@Getter
+@Builder
+public class NoticeLikeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
 					generator = "noticelike_seq_generator")
 	@Column(name="notice_like_no")
 	private Long noticeLikeNo;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name="notice_board_no")
-	@NonNull
-	private NoticeBoard noticeBoard;
+	private NoticeBoardEntity noticeBoard;
 	
 	@Column(name="user_nickname")
-	@NonNull
 	private String userNickname;
 	
 }
