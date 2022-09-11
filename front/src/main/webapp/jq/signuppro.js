@@ -95,6 +95,13 @@ $(function () {
 			return false;
 		}
 
+		let idCheck = RegExp(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$/);
+		let pwdCheck = RegExp(/^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{4,20}$/);
+		let nameCheck = RegExp(/^[A-Za-z가-힣]{2,7}$/);
+		let nicknameCheck = RegExp(/^[A-Za-z가-힣0-9]{2,7}$/);
+		let phoneCheck = RegExp(/^[0-9]{3}+-[0-9]{4}+-[0-9]{4}$/);
+		
+
 		// ----- 비밀번호 확인 START -----
 		// let $inputPwd = $("input[name=user_pwd]");
 		// let $inputPwdChk = $("input[name=user_pwd_chk]");
@@ -104,7 +111,6 @@ $(function () {
 			return false;
 		}
     	// ----- 비밀번호 확인 END -----
-
 
 		// 데이터 전송을 위한 폼 객체 불러옴
 		let $formObj = $("form.signuppro");
