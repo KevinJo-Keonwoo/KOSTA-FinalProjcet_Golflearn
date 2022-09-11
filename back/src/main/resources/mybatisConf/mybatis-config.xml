@@ -12,8 +12,8 @@
 		<typeAlias type="com.golflearn.dto.LessonHistory" alias="LessonHistory"/>
 		<typeAlias type="com.golflearn.dto.LessonLine" alias="LessonLine"/>
 		<typeAlias type="com.golflearn.dto.UserInfo" alias="UserInfo"/>
-    <typeAlias type="com.golflearn.dto.ProInfo" alias="ProInfo"/>
-    <typeAlias type="com.golflearn.dto.Payment" alias="Payment"/> 
+	    <typeAlias type="com.golflearn.dto.ProInfo" alias="ProInfo"/>
+   	 	<typeAlias type="com.golflearn.dto.Payment" alias="Payment"/> 
 		<typeAlias type="com.golflearn.dto.SignupApproval" alias="SignupApproval"/>
 		<typeAlias type="com.golflearn.dto.LessonClassification" alias="LessonClassification"/>
 		<typeAlias type="com.golflearn.dto.LessonReview" alias="LessonReview"/>
@@ -24,5 +24,6 @@
   	<mapper resource="mybatisConf/LessonReviewMapper.xml"/>
   	<mapper resource="mybatisConf/LessonHistoryMapper.xml"/>
   	<mapper resource="mybatisConf/LessonMapper.xml"/>
+  	<mapper resource="mybatisConf/PaymentMapper.xml"/>
   </mappers>
 </configuration>
