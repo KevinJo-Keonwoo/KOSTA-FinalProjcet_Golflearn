@@ -3,6 +3,7 @@ package com.golflearn.domain;
 import java.util.List;
 
 import com.golflearn.dto.Lesson;
+import com.golflearn.dto.LessonClassification;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 

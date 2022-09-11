@@ -115,5 +115,4 @@ SELECT lsn_no, loc_no, lsn_title, lsn_star_sum, lsn_star_ppl_cnt, ui.user_name
 			</foreach>
 		</where>
 </select>
-
 </mapper>

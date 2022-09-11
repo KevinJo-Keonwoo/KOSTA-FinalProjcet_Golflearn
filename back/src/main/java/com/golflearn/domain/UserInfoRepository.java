@@ -23,13 +23,13 @@ public interface UserInfoRepository {
 	 * @throws AddException
 	 */
 	public void insertStdt(UserInfo userInfo) throws AddException;
+
 	
 	/**
 	 * 프로 회원 정보를 추가한다
 	 * @throws AddException
 	 */
 	public void insertPro(UserInfo userInfo, ProInfo proInfo) throws AddException;
-	
 	
 	/**
 	 * 아이디 중복확인
@@ -80,5 +80,5 @@ public interface UserInfoRepository {
 	 * @throws FindException
 	 */
 	public UserInfo selectByUserIdAndPwd(String userId, String userPwd) throws FindException;
-	 
+
 }

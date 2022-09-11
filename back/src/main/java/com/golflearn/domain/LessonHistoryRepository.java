@@ -13,6 +13,6 @@ public interface LessonHistoryRepository {
 	 * @return LessonLine
 	 * @throws FindException
 	 */
-	public List<LessonLine> selectLessonHistoryByLsnNo(int lsnNo) throws FindException;
+	List<LessonLine> selectLessonHistoryByLsnNo(int lsnNo) throws FindException;
 	
 }

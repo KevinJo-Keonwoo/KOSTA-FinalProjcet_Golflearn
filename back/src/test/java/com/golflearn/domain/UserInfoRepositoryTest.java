@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.golflearn.domain.UserInfoRepository;
 import com.golflearn.dto.ProInfo;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;
@@ -15,6 +16,7 @@ import com.golflearn.exception.ModifyException;
 
 @SpringBootTest
 public class UserInfoRepositoryTest {
+
 	
 	@Autowired
 	private UserInfoRepository repository;
@@ -32,7 +34,6 @@ public class UserInfoRepositoryTest {
 		user.setUserJoinDt(sqlDate);
 		repository.insertStdt(user);		
 	}
-	
 	
 	@Test
 	public void testInsertPro() throws AddException{
@@ -119,5 +120,4 @@ public class UserInfoRepositoryTest {
 
 		assertEquals(expectedUserPwd, userInfo.getUserPwd());
 	}
-	
 }
