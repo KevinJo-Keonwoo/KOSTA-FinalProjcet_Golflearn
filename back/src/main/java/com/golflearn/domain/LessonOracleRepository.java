@@ -1,5 +1,6 @@
 package com.golflearn.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.golflearn.dto.Lesson;
+import com.golflearn.dto.LessonClassification;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 
@@ -46,6 +48,7 @@ public class LessonOracleRepository implements LessonRepository {
 			session = sqlSessionFactory.openSession();
 			session.insert("com.golflearn.mapper.LessonMapper.insertLsnInfo", lesson);
 			session.insert("com.golflearn.mapper.LessonMapper.insertLsnClassification", lesson);
+
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new AddException(e.getMessage());
@@ -55,7 +58,7 @@ public class LessonOracleRepository implements LessonRepository {
 			}
 		}
 	}
-
+	
 	@Override
 	public List<Lesson> selectAll() throws FindException {
 		SqlSession session = null;

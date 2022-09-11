@@ -2,34 +2,31 @@ package com.golflearn.control;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.golflearn.dto.ProInfo;
 import com.golflearn.dto.ResultBean;
-import com.golflearn.dto.SmsResponse;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
@@ -43,37 +40,44 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/user/*") // 각 메서드 앞에 붙여도됨
 @RequiredArgsConstructor
 public class UserInfoController {
-	private Logger logger = Logger.getLogger(getClass());
-  private final SmsService smsService;
-  
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	private final SmsService smsService;
+
 	@Autowired // 빈 객체 주입받음
 	private UserInfoService service;
 
 	@Autowired 
 	private ServletContext sc;
 
-
-	// 프로 회원가입 (파일 업로드를 곁들인..)
 	// 파일 업로드 시 formData 필요 > PathVariable 사용 불가
 	// 파일 업로드 시 요청전달데이터 꼭 필요 > RestfulAPI 사용 불가
 	// 파일 업로드 가능 방법 
 	// 1. @RequestPart MultipartFile 타입 사용
 	// 2. ServletRequest or MultipartHttpServletRequest
-	@Value("${spring.servlet.multipart.location}")
+	/*
+	 * 프로 회원가입
+	 */
+	@Value("${spring.servlet.multipart.location}") //@Value("${…}") application.properties파일에 설정 되어있는 것을 가지고 오는 것
 	String uploadDirectory;
+	//	@Transactional
 	@PostMapping("signuppro")
 	public ResponseEntity<?> signuppro (
-			@RequestPart(required = false) List<MultipartFile> certifFiles, 
+			@RequestPart(required = false) MultipartFile certifFile, 
 			@RequestPart(required = false) MultipartFile profileImg,
-			@Valid UserInfo userInfo, @Valid ProInfo proInfo, Errors error,
-			HttpSession session) {
+			@Valid UserInfo userInfo, @Valid ProInfo proInfo, Errors error
+			){
 
 		logger.info("요청전달데이터 userNickname=" + userInfo.getUserNickname());
 		logger.info("요청전달데이터 userId=" + userInfo.getUserId());
 		logger.info("요청전달데이터 userName=" + userInfo.getUserName());
-		logger.info("letterFiles.size()" + certifFiles.size());
+//		logger.info("letterFiles.size()" + certifFiles.size());
 		logger.info("imageFile.getsize()" + profileImg.getSize());
 		logger.info("업로드한 프로필 사진명" + profileImg.getOriginalFilename());		
+
+		if(error.hasErrors()) {
+			return new ResponseEntity<> (error.getAllErrors().get(0).getDefaultMessage(), HttpStatus.CHECKPOINT);
+		}
 
 		//가입 입력 내용 DB에 저장
 		try {
@@ -97,38 +101,37 @@ public class UserInfoController {
 		}
 
 		// Certif파일 저장
-		int savedCertifFileCnt = 0;
-		if(certifFiles !=null) {
-			for(MultipartFile certifFile : certifFiles) {
-				long certifFileSize = certifFile.getSize();
-				if(certifFileSize > 0) { // 첨부 되었을 경우
-					String paramName = certifFile.getName(); //파라미터로 받아올 값 
-					// 파라미터 값이 user_profile이거나 user_certf인 경우
-					//					if(paramName.equals("user_profile") || paramName.equals("pro_certf")) {
-					// 파일 확장자 가져오기
-					String originFileName = certifFile.getOriginalFilename(); // 첨부된 오리지널 파일의 이름 가지고 옴
-					String fileExtension = originFileName.substring(originFileName.lastIndexOf(".")); // .으로 나누어 뒤의 확장자 가지고 옴
-					logger.info("파일 확장자는 " + fileExtension);					
+//		int savedCertifFileCnt = 0;
+		//		if(certifFiles !=null) {
+		//			for(MultipartFile certifFile : certifFiles) {
+		long certifFileSize = certifFile.getSize();
+		if(certifFileSize > 0) { // 첨부 되었을 경우
+			// String paramName = certifFile.getName(); //파라미터로 받아올 값 
+			// 파라미터 값이 user_profile이거나 user_certf인 경우
+			//					if(paramName.equals("user_profile") || paramName.equals("pro_certf")) {
+			// 파일 확장자 가져오기
+			String originFileName = certifFile.getOriginalFilename(); // 첨부된 오리지널 파일의 이름 가지고 옴
+			String fileExtension = originFileName.substring(originFileName.lastIndexOf(".")); // .으로 나누어 뒤의 확장자 가지고 옴
+			logger.info("파일 확장자는 " + fileExtension);					
 
-					//						if(paramName.equals("user_profile")) {
-					// 저장 파일 이름 설정
-					String CertifFileName = "Certification_" + savedCertifFileCnt +"_"+ fileExtension; //+ UUID.randomUUID() 
-					File savedCertifFile = new File(uploadPath, CertifFileName); // 경로, 저장될 파일 이름
-					// 부모 파일의 경로와, 그 하위의 파일명을 각각 매개변수로 지정하여 
-					// 해당 경로를 조합하여 그 위치에 대한 File 객체를 생성
+			// if(paramName.equals("user_profile")) {
+			// 저장 파일 이름 설정
+			String CertifFileName = "Certification" + fileExtension; //+ UUID.randomUUID() 
+			File savedCertifFile = new File(uploadPath, CertifFileName); // 경로, 저장될 파일 이름
+			// 부모 파일의 경로와, 그 하위의 파일명을 각각 매개변수로 지정하여 
+			// 해당 경로를 조합하여 그 위치에 대한 File 객체를 생성
 
-					//왜 이 과정이 필요한가?
-					try {
-						FileCopyUtils.copy(certifFile.getBytes(), savedCertifFile);
-						logger.info("자격증 파일 저장 경로" + savedCertifFile.getAbsolutePath());// 파일 저장 경로 확인
-					} catch (IOException e) {
-						e.printStackTrace();
-						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-					}
-					savedCertifFileCnt++;
-				}
-				logger.info("저장된 자격증 파일 개수" + savedCertifFileCnt);
+			//왜 이 과정이 필요한가?
+			try {
+				FileCopyUtils.copy(certifFile.getBytes(), savedCertifFile);
+				logger.info("자격증 파일 저장 경로" + savedCertifFile.getAbsolutePath());// 파일 저장 경로 확인
+			} catch (IOException e) {
+				e.printStackTrace();
+				//						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+			//				}
+//			logger.info("저장된 자격증 파일 개수" + savedCertifFileCnt);
+			//			}
 			//				}
 		}
 		// 프로필 파일 저장
@@ -161,9 +164,6 @@ public class UserInfoController {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		//				}
-		//			} 
-		//		}
 		logger.error("이미지 파일 저장 완료");
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -171,25 +171,21 @@ public class UserInfoController {
 	// 수강생 회원가입
 	//	@Value("${spring.servlet.multiple.location}")
 	//	String uploadDirectory;
-	@Transactional
+	//	@Transactional
 	@PostMapping("signupstdt")
-	public ResultBean<?> signupstdt (
-			@RequestPart(required = false) MultipartFile profileImg,
-			@Valid UserInfo userInfo, 
+	public ResponseEntity<?> signupstdt (
+			@RequestPart(required = false) MultipartFile profileImg, @Valid UserInfo userInfo,
+			//@Valid UserInfo userInfo, 
 			Errors error) {
-
-		ResultBean<?> rb = new ResultBean<>();
-
 		logger.info("요청전달데이터 userNickname=" + userInfo.getUserNickname());
 		logger.info("요청전달데이터 userId=" + userInfo.getUserId());
 		logger.info("요청전달데이터 userName=" + userInfo.getUserName());
-		logger.info("imageFile.getsize()" + profileImg.getSize());
-		logger.info("업로드한 프로필 사진명" + profileImg.getOriginalFilename());		
+		//		logger.info("요청전달데이터" + profileImg.toString());
+		//		logger.info("imageFile.getsize()" + profileImg.getSize());
+		//		logger.info("업로드한 프로필 사진명" + profileImg.getOriginalFilename());		
+
 		if(error.hasErrors()) {
-			//			return new ResponseEntity<String> (error.getAllErrors().get(0).getDefaultMessage(), HttpStatus.CHECKPOINT);			
-			rb.setStatus(0);
-			rb.setMsg("유효성 검사 실패");
-			return rb;			 
+			return new ResponseEntity<> (error.getAllErrors().get(0).getDefaultMessage(), HttpStatus.INTERNAL_SERVER_ERROR);			
 		}
 
 		//가입 입력 내용 DB에 저장
@@ -197,37 +193,34 @@ public class UserInfoController {
 			service.signupStdt(userInfo);
 		}catch (AddException e) {
 			e.printStackTrace();
-			//			return new ResponseEntity<> (HttpStatus.INTERNAL_SERVER_ERROR);
-			rb.setStatus(0);
-			return rb;
+			//return new ResponseEntity<> (HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		String userNickname = userInfo.getUserNickname(); // 저장될 폴더의 이름으로 사용
 
-		// 회원가입 파일 저장 폴더 ★★★
-		// 회원가입 파일 저장 폴더 ★★★
+		// 회원가입 파일 저장 폴더 
 		String uploadPath = uploadDirectory + "user_images\\" + userNickname;
 
 		// 파일 경로 생성 (닉네임으로 폴더 생성)
 		if(!new File(uploadPath).exists()) {
 			logger.info("업로드 실제 경로 생성");
-			new File(uploadPath + userNickname).mkdirs(); // 닉네임으로 폴더 생성
+			new File(uploadPath).mkdirs(); // 닉네임으로 폴더 생성
 			// mkdirs () : 해당 디렉토리에 상위 폴더가 없으면 폴더부터 생성 해 줌 
 		}
+
 		// 프로필 파일 저장
 		long profileImgSize = profileImg.getSize();
 		if(profileImgSize > 0) {
-			String paramName = profileImg.getName(); //파라미터로 받아올 값 
+			//			String paramName = profileImg.getName(); //파라미터로 받아올 값 
 			// 파라미터 값이 user_profile이거나 user_certf인 경우
-
-			//			if(paramName.equals("user_profile") || paramName.equals("pro_certf")) {
+			// if(paramName.equals("user_profile") || paramName.equals("pro_certf")) {
 
 			// 파일 확장자 가져오기
 			String originFileName = profileImg.getOriginalFilename(); // 첨부된 오리지널 파일의 이름 가지고 옴
 			String fileExtension = originFileName.substring(originFileName.lastIndexOf(".")); // .으로 나누어 뒤의 확장자 가지고 옴
 			logger.info("파일 확장자는 " + fileExtension);					
 
-			//				if(paramName.equals("user_profile")) {
+			//					if(paramName.equals("user_profile")) {
 
 			// 저장 파일 이름 설정
 			String profileImgName = "Profile" +fileExtension; //+ UUID.randomUUID() 
@@ -241,37 +234,38 @@ public class UserInfoController {
 				logger.info("프로필 저장 경로는" + savedCertifFile.getAbsolutePath());// 파일 저장 경로 확인
 			} catch (IOException e) {
 				e.printStackTrace();
-				//						rb.setStatus(0);
-				//						return rb;
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		//			}
-		//		} 
-		//		return new ResponseEntity<>(HttpStatus.OK);
-		rb.setStatus(1);
-		return rb;
+		logger.error("이미지 파일 저장 완료");
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-
 	// 로그인
-	@PostMapping(value="login")
-	private ResultBean<UserInfo> login(HttpSession session, @RequestParam String userId, @RequestParam String userPwd, String userNickname, String userType) {
+	@PostMapping(value = "login")
+	public ResultBean<UserInfo> login(@RequestParam("userId") String userId, @RequestParam("userPwd") String userPwd, 
+			String userNickname, String userType, HttpSession session) {
 
 		ResultBean<UserInfo> rb = new ResultBean<>();
 
 		rb.setStatus(0);
 		rb.setMsg("로그아웃 상태");
+
 		session.removeAttribute("loginInfo");
 		session.removeAttribute("loginNickname");
 		session.removeAttribute("userType");
 
 		try {
-			service.login(userId, userPwd);
+			UserInfo userInfo = service.login(userId, userPwd);
 			rb.setStatus(1);
 			rb.setMsg("로그인 성공");
+			rb.setT(userInfo); //로그인한 사람의 정보 저장
+			//			logger.error("저장 정보" + userInfo);
+
 			session.setAttribute("loginInfo", userId);
 			session.setAttribute("loginNickname", userNickname);
 			session.setAttribute("userType", userType);
+
 		} catch (FindException e) {
 			e.printStackTrace();
 			rb.setMsg("로그인 실패. 아이디 비밀번호를 확인 해 주세요");
@@ -279,8 +273,10 @@ public class UserInfoController {
 		return rb;
 	}
 
+
+
 	// 로그인상태
-	@GetMapping(value = "loginstatus")
+	@GetMapping(value = "loginstatus", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean<UserInfo> loginstatus (HttpSession session) {
 
 		String loginedId = (String)session.getAttribute("loginInfo");
@@ -304,7 +300,7 @@ public class UserInfoController {
 		session.removeAttribute("loginNickname");
 		session.removeAttribute("userType");
 		String result = ("로그아웃 되었습니다");
-		System.out.println(result);
+		//		System.out.println(result);
 
 		return null;
 	}
@@ -328,7 +324,7 @@ public class UserInfoController {
 	}
 
 	// 닉네임 중복확인
-	@GetMapping(value="nicknamedupchk")
+	@GetMapping(value="nicknamedupchk", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean<UserInfo> nicknamedupchk(@RequestParam String userNickname) {
 
 		ResultBean<UserInfo> rb = new ResultBean<>();
@@ -344,13 +340,17 @@ public class UserInfoController {
 		}
 		return rb;
 	}
-  
-  @PostMapping(value="find/id", produces = MediaType.APPLICATION_JSON_VALUE)
+
+
+	/*
+	 * 아이디 찾기
+	 */
+	@PostMapping(value="find/id", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean <UserInfo> selectByUserNameAndPhone(@RequestParam String userName, @RequestParam String userPhone) throws FindException {
 		ResultBean<UserInfo> rb = new ResultBean<>();
 		UserInfo userInfo = new UserInfo();
 		try {
-			userInfo = service.selectByUserNameAndPhone(userName, userPhone);
+			userInfo = service.selectByUserIdAndPhone(userName, userPhone);
 			rb.setStatus(1);
 			rb.setT(userInfo);
 		}catch(FindException e) {

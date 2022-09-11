@@ -27,6 +27,6 @@ public class LessonLine {
 	private LessonReview lsnReview;
 	private Payment payment;
 	private int lsnCnt;
-  private LessonHistory lsnHistory;
+	private LessonHistory lsnHistory;
 	private List<LessonHistory> lsnHistoryLines;
 }

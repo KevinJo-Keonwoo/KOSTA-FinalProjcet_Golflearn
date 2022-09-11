@@ -16,5 +16,3 @@ public interface LessonHistoryRepository {
 	List<LessonLine> selectLessonHistoryByLsnNo(int lsnNo) throws FindException;
 	
 }
-
-
