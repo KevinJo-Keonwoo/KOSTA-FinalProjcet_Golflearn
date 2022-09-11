@@ -3,6 +3,8 @@ package com.golflearn.domain;
 import java.util.List;
 
 import com.golflearn.dto.Lesson;
+
+import com.golflearn.dto.LessonClassification;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 
@@ -30,7 +32,5 @@ public interface LessonRepository {
 	List<Lesson> selectAll() throws FindException;
 	
 	List<Lesson> selectSidogu(int[] locNoArr) throws FindException;
-
-
 }
 

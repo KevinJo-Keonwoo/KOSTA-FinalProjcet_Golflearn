@@ -1,0 +1,210 @@
+
+li {
+    display: block;
+    list-style: none;
+    padding: 3px;
+}
+
+li:hover {
+    cursor: pointer;
+}
+
+#main {
+    width: 100%;
+    margin-top: 95px;
+    /* height: 100%; */
+    /* background-color:whitesmoke; */
+    margin-top: 95px;
+}
+
+#main>#wrapper {
+    width: 80%;
+    height: 100%;
+    /* height: 900px; */
+    margin: 0 auto;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+#main>#wrapper>#container {
+    width: 100%;
+    /* height: 100%; */
+    margin-top: 15px;
+    display: flex;
+    text-align: center;
+    /* justify-content: space-around; */
+}
+
+#main>#wrapper>aside {
+    width: 100%;
+    height: 400px;
+    box-sizing: border-box;
+}
+
+#main>#wrapper>#container>#content-left {
+    width: 20%;
+    min-width: 138px;
+    height: 500px;
+}
+
+#main>#wrapper>#container>#content-left>#sidebar {
+    height: auto;
+    margin-right: 10px;
+    /* background-color: #1883; */
+    margin-top: 40px;
+    min-width: 120px;
+    width: 100%;
+    border-radius: 15px;
+}
+
+#main>#wrapper>#container>#content-left>#sidebar>ul {
+    display: flex;
+    padding-left: 0;
+    margin: 0 auto;
+    min-height: 500px;
+    height: 650px;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: scroll;
+    
+}
+
+#main>#wrapper>#container>#content-left>#sidebar>ul::-webkit-scrollbar {
+    -ms-overflow-style: none;
+    display: none;
+    }
+
+#main>#wrapper>#container>#content-left>#sidebar>ul>li {
+    display: block;
+    list-style: none;
+    padding: 13px;
+    width: 80%;
+    text-align: center;
+    margin-bottom: 10px;
+    border: 2px solid rgb(183, 231, 199);
+    border-radius: 23px;
+    min-width: 135px;
+}
+
+#main>#wrapper>#container>#content-left>#sidebar>ul>li.choice {
+    background-color: rgb(183, 231, 199);
+}
+
+#main>#wrapper>#container>#content-right {
+    width: 80%;
+    overflow: scroll;
+    height: 1200px;
+    overflow-x: hidden;
+}
+#main>#wrapper>#container>#content-right::-webkit-scrollbar {
+    -ms-overflow-style: none;
+    display: none;
+}
+
+#lsnImg {
+    overflow: hidden;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#lsnImg img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+#main>#wrapper>#container>#content-right>#tag-container {
+    background-color: #FFF;
+    margin: 0 auto;
+    width: 90%;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: scroll;
+}
+
+#main>#wrapper>#container>#content-right>#tag-container::-webkit-scrollbar {
+    height: 4px;
+}
+
+#main>#wrapper>#container>#content-right>#tag-container::-webkit-scrollbar-thumb {
+    background:rgb(183, 231, 199);
+    border-radius: 10px;
+}
+
+#main>#wrapper>#container>#content-right>#tag-container::-webkit-scrollbar-track {
+    background: rgba(183, 231, 199, 0.363); 
+    opacity: 0.5;
+    border-radius: 10px;
+    display:none;
+}
+
+#main>#wrapper>#container>#content-right>#tag-container>li{
+    border-radius: 23px;
+    border: 2px solid rgb(183, 231, 199);
+    display: block;
+    list-style: none;
+    margin: 0 auto;
+    padding: 11px;
+    text-align: center;
+    width: 12%;
+    min-width: 125px;
+    margin-right: 5px;
+    margin-left: 0;
+}
+
+#main>#wrapper>#container>#content-right>#tag-container>li.choice {
+    background-color: rgb(183, 231, 199);
+}
+
+#main>#wrapper>#container>#content-right>#card-container {
+    display: flex;
+    min-width: 500px;
+    margin-top: 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#main>#wrapper>#container>#content-right .col {
+    margin-right: 15px;
+    width: 300px;
+    max-width: 150px;
+    height: 295px;
+    min-width: 30%;
+    cursor: pointer;
+}
+
+#main>#wrapper>#container>#content-right .col .lsn{
+    width: 100%;
+    height: 100%;
+}
+
+#main>#wrapper>#container>#content-right .col .lsn>#lsnImg{
+    display: flex;
+    width: 100%;
+    height: 60%;
+    object-fit: cover;
+    justify-content: center;
+    align-items: center;
+}
+
+#main>#wrapper>#container>#content-right .col .lsn>#lsnImg>img{
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
+#main>#wrapper>#container>#content-right .col:nth-child(1) {
+    margin-left: 10px;
+}
+
+#main>#wrapper>#container .col>.lsn {
+    border: none;
+}
