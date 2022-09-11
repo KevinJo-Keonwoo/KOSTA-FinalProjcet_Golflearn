@@ -13,7 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-@EqualsAndHashCode(of = {"lsnLineNo"})
 public class LessonReview {
 	private String review;
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")

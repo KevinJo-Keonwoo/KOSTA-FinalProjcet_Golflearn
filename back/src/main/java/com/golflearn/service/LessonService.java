@@ -39,7 +39,6 @@ public class LessonService {
 	public void addLesson(Lesson lesson) throws AddException{
 		//레슨정보를 추가한다
 		lsnRepository.insertLsnInfo(lesson);
-
 	}
 
   public List<LessonLine> viewLessonHistory(int lsnNo) throws FindException{

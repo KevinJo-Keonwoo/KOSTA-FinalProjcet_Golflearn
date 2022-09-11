@@ -48,9 +48,9 @@ import net.coobird.thumbnailator.Thumbnailator;
 @RestController
 @RequestMapping("lesson/*")
 public class LessonController {
-	
+
 	private Logger logger = LoggerFactory.getLogger(getClass());
-  
+
 	@Autowired
 	private LessonService service;
 
@@ -71,9 +71,9 @@ public class LessonController {
 		}
 		return rb;
 	}
-  
-  @GetMapping(value= {""})
-	public ResultBean<Lesson> list(@PathVariable Optional<Integer> optCp) { //로그인 유무와 상관없이 다 볼수 있기때문에 httpSession 필요없음
+
+	@GetMapping(value = { "" })
+	public ResultBean<Lesson> list(@PathVariable Optional<Integer> optCp) { // 로그인 유무와 상관없이 다 볼수 있기때문에 httpSession 필요없음
 		ResultBean<Lesson> rb = new ResultBean<>();
 		try {
 			List<Lesson> lessons = service.viewMain();
@@ -88,7 +88,7 @@ public class LessonController {
 		}
 	}
 
-	@GetMapping(value = {"history", "history/{optCp}"}) // 프로의 레슨내역에서 레슨번호에 대한 히스토리
+	@GetMapping(value = { "history", "history/{optCp}" }) // 프로의 레슨내역에서 레슨번호에 대한 히스토리
 	public ResultBean<LessonLine> viewHistory(@PathVariable int optCp, HttpSession session) {
 		ResultBean<LessonLine> rb = new ResultBean<>();
 		// 로그인 여부를 받아와야한다 HttpSession?
@@ -114,99 +114,103 @@ public class LessonController {
 
 	@Value("${spring.servlet.multipart.location}")
 	String saveDirectory;// 파일경로생성
+
 	@PostMapping("request") // list타입 필드가 있는 Lesson전달과 파일첨부를 동시에 하기 위해 String타입으로 Lesson얻기
 	public ResponseEntity<?> reuqestLesson(@RequestPart(required = false) MultipartFile file, String strLesson,
 			HttpSession session) throws JsonMappingException, JsonProcessingException {
 
 //		String loginedUserType = (String) session.getAttribute("userType");// 로그인한 유저의 유저타입가져오기
 //		String loginedId = (String) session.getAttribute("loginInfo");// 로그인한 유저의 아이디 가져오기
-		String loginedId = "ohpro@gmail.com";//테스트용
-		String loginedUserType = "1";//테스트용
-		
+		String loginedId = "ohpro@gmail.com";// 테스트용
+		String loginedUserType = "1";// 테스트용
+
 		if (loginedUserType == null) {// 로그인 여부 확인
 			return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		} else if (!loginedUserType.equals("1")) {// 프로여부 확인
 			return new ResponseEntity<>("프로만 접근가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		} else {
-			//-----Lesson DB에 저장-----
-			
+			// -----Lesson DB에 저장-----
+
 			ObjectMapper mapper = new ObjectMapper();
-			Lesson lesson = mapper.readValue(strLesson, Lesson.class);//String타입을 Lesson타입으로 변환
-			
+			Lesson lesson = mapper.readValue(strLesson, Lesson.class);// String타입을 Lesson타입으로 변환
+
 			UserInfo userInfo = new UserInfo();
 			userInfo.setUserId(loginedId);
-			lesson.setUserInfo(userInfo);//lesson객체 내 userInfo 저장
-			lesson.setLocNo("11002");//테스트
+			lesson.setUserInfo(userInfo);// lesson객체 내 userInfo 저장
+			lesson.setLocNo("11002");// 테스트
 
 			List<LessonClassification> classifications = lesson.getLsnClassifications();// 클럽분류 저장
 			try {
-			service.addLesson(lesson);
+				service.addLesson(lesson);//서비스 호출
+
+				// -----이미지 업로드-----
+				String lessonPath = saveDirectory + "lsn_images\\";// 파일경로
+				if (!new File(lessonPath).exists()) {
+					logger.info("업로드 실제경로생성");
+					new File(lessonPath).mkdirs();
+				}
+				File thumbnailFile = null;
+
+				long fSize = file.getSize();// getSize() => 0 if empty
+				if (fSize > 0) {
+					// 파일형식 확인
+					String contentType = file.getContentType();
+					if (!contentType.contains("image/")) { // 이미지파일형식이 아닌 경우
+						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+					}
+
+					// 이미지파일 저장하기
+					String imageOrignFileName = file.getOriginalFilename(); // 이미지파일원본이름얻기
+					logger.info("이미지 파일이름:" + imageOrignFileName + ", 파일크기: " + file.getSize());
+
+					long wroteLsnNo = lesson.getLsnNo();
+
+					// 저장할 파일이름을 지정한다 "레슨번호.jpg"
+					String fName = wroteLsnNo + ".jpg";
+					File savedImageFile = new File(lessonPath, fName);// 이미지파일생성
+
+					try {// copy메서드를 이용하여 파일 저장
+						FileCopyUtils.copy(file.getBytes(), savedImageFile);
+						logger.info("이미지 파일저장:" + savedImageFile.getAbsolutePath());
+
+						// 섬네일파일을 만들기
+						String thumbnailName = wroteLsnNo + "_LessonThumbnail.jpg";//섬네일 파일명은 "레슨번호_LessonThumbnail.jpg"
+								
+						thumbnailFile = new File(lessonPath, thumbnailName);
+						FileOutputStream thumbnailOS;
+						thumbnailOS = new FileOutputStream(thumbnailFile);
+						InputStream imageFileIS = file.getInputStream();
+						int width = 140;
+						int height = 140;
+						Thumbnailator.createThumbnail(imageFileIS, thumbnailOS, width, height);
+						logger.info(
+								"섬네일파일 저장:" + thumbnailFile.getAbsolutePath() + ", 섬네일파일 크기:" + thumbnailFile.length());
+
+						// 이미지 썸네일다운로드하기
+						HttpHeaders responseHeaders = new HttpHeaders();
+						responseHeaders.set(HttpHeaders.CONTENT_LENGTH, thumbnailFile.length() + "");
+						responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(thumbnailFile.toPath()));
+						responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION,
+								"inline; filename=" + URLEncoder.encode("a", "UTF-8"));
+						logger.info("섬네일파일 다운로드");
+
+						return new ResponseEntity<>(FileCopyUtils.copyToByteArray(thumbnailFile), responseHeaders,
+								HttpStatus.OK);
+					} catch (IOException e2) {
+						e2.printStackTrace();
+						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+					}
+				} // end if(imageFileSize > 0)
+				else {
+					logger.error("이미지파일이 없습니다");
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+				}
 			} catch (AddException e) {
 				e.printStackTrace();
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>("오류가 발생하였습니다. 다시 시도해주세요",HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			//-----이미지 업로드-----
-			String lessonPath = saveDirectory + "lsn_images\\";//파일경로
-			if (!new File(lessonPath).exists()) {
-				logger.info("업로드 실제경로생성");
-				new File(lessonPath).mkdirs();
-			}
-			File thumbnailFile = null;
 
-			long fSize = file.getSize();// getSize() => 0 if empty
-			if (fSize > 0) {
-				// 파일형식 확인
-				String contentType = file.getContentType();
-				if (!contentType.contains("image/")) { // 이미지파일형식이 아닌 경우
-					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-				}
-				
-				// 이미지파일 저장하기
-				String imageOrignFileName = file.getOriginalFilename(); // 이미지파일원본이름얻기
-				logger.info("이미지 파일이름:" + imageOrignFileName + ", 파일크기: " + file.getSize());
-
-				String wroteLsnTitle = lesson.getLsnTitle();
-				
-				// 저장할 파일이름을 지정한다 "레슨명"
-				String fName = wroteLsnTitle;
-				File savedImageFile = new File(lessonPath, fName);// 이미지파일생성
-
-				try {// copy메서드를 이용하여 파일 저장s
-					FileCopyUtils.copy(file.getBytes(), savedImageFile);
-					logger.info("이미지 파일저장:" + savedImageFile.getAbsolutePath());
-
-					// 이미지파일인 경우 섬네일파일을 만듦
-					String thumbnailName = fName+ "_LessonThumbnail"; // 섬네일 파일명은 s_레슨번호_image_원본이름
-					thumbnailFile = new File(lessonPath, thumbnailName);
-					FileOutputStream thumbnailOS;
-					thumbnailOS = new FileOutputStream(thumbnailFile);
-					InputStream imageFileIS = file.getInputStream();
-					int width = 100;
-					int height = 100;
-					Thumbnailator.createThumbnail(imageFileIS, thumbnailOS, width, height);
-					logger.info("섬네일파일 저장:" + thumbnailFile.getAbsolutePath() + ", 섬네일파일 크기:" + thumbnailFile.length());
-
-					// 이미지 썸네일다운로드하기
-					HttpHeaders responseHeaders = new HttpHeaders();
-					responseHeaders.set(HttpHeaders.CONTENT_LENGTH, thumbnailFile.length() + "");
-					responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(thumbnailFile.toPath()));
-					responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION,
-							"inline; filename=" + URLEncoder.encode("a", "UTF-8"));
-					logger.info("섬네일파일 다운로드");
-					
-					return new ResponseEntity<>(FileCopyUtils.copyToByteArray(thumbnailFile), responseHeaders,
-							HttpStatus.OK);
-				} catch (IOException e2) {
-					e2.printStackTrace();
-					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-				}
-			} // end if(imageFileSize > 0)
-			else {
-				logger.error("이미지파일이 없습니다");
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
 		}
 	}
 
 }
-

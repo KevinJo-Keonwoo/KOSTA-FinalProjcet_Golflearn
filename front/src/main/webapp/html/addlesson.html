@@ -32,13 +32,13 @@
 						</div>
 					</div>
 					<br>
-					<form method="post" action="http://localhost:1124/back/addlesson" class="lessonregister" enctype="multipart/form-data">
+					<form>
 						<div class="tr2">
 							<div class="td1">
 								<img id="preview">
 								<br>
 								<label>레슨 썸네일 첨부 : </label>
-								<input type="file" name="lsn_thumbnail" accept="image/*">
+								<input type="file" name="lsn_file" accept="image/*">
 							</div>
 							<br>
 							<br>
@@ -63,7 +63,6 @@
 										</select>
 										<select name="sgg">
 											<option value="none">=== 선택 ===</option>
-
 										</select>
 									</li>
 									<li>레슨레벨:&nbsp;
@@ -73,12 +72,10 @@
 											<option name="lv2" value=2>중급</option>
 											<option name="lv3" value=3>고급</option>
 										</select>
-										<!-- <input type="text" name="lsn_lv"> -->
 									</li>
 									<li>레슨횟수(회):&nbsp;<input type="text" name="lsn_cnt_sum" class="input" required>회</li>
 									<li>회당 레슨시간(분):&nbsp;<input type="text" name="lsn_per_time" class="input" required>분</li>
 									<li>레슨소개<br>
-										<!-- <input type="text" name="lsn_intro"> -->
 										<textarea name="lsn_intro" class="input" required></textarea>
 									</li>
 									<li>유효기간(일):&nbsp;<input type="text" name="lsn_days" class="input" required>일</li>
