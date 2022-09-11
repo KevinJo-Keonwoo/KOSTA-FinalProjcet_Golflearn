@@ -2541,7 +2541,8 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.fn.ex
         context.invoke('editor.focus');
       }
     }
-
+    
+    $(".note-table").remove(); // 표 속성 삭제
     return this;
   }
 });
@@ -9984,7 +9985,7 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
       'strikethrough': 'note-icon-strikethrough',
       'subscript': 'note-icon-subscript',
       'superscript': 'note-icon-superscript',
-      'table': 'note-icon-table',
+      // 'table': 'note-icon-table',
       'textHeight': 'note-icon-text-height',
       'trash': 'note-icon-trash',
       'underline': 'note-icon-underline',
