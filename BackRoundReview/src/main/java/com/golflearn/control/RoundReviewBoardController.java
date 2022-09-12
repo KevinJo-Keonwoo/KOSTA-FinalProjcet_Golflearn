@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -87,6 +89,17 @@ public class RoundReviewBoardController {
 			} else {
 				orderType = 0;
 			}
+			//프론트에서 orderType를 보내야됨 
+			String orderCriteria = "";
+			if(orderType == 0) {
+				orderCriteria = "roundReviewBoardNo";
+			} else if (orderType == 1) {
+				orderCriteria = "roundReviewBoardViewCnt";
+			} else {
+				orderCriteria = "roundReviewBoardLikeCnt";
+			}
+			pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, orderCriteria));
+			
 			Page<RoundReviewBoardDto> dto = service.boardList(currentPage, orderType, pageable);
 			rb.setStatus(1);
 			rb.setT(dto);

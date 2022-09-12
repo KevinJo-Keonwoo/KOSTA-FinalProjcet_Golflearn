@@ -6,21 +6,24 @@ $(function(){
             method: "get",
             success: function(jsonObj){
                 if(jsonObj.status == 1){ //rb의 status가 1일때
-                    let pageBeanObj = jsonObj.t.content;
+                    let pageableContentObj = jsonObj.t.content;
 
                     let $board = $("div.board-list").first();
                     $("div.board-list").not($board).remove();
 
                     let $boardParent = $board.parent();
                     //한줄씩 넣기 //나중에 span을 div로 바꾸고 테이블형식 넣기 
-                    $(pageBeanObj).each(function(index, board){
+                    $(pageableContentObj).each(function(index, board){
                         let $boardCopy = $board.clone();
-                        $boardCopy.find("div.board-list__content__no").html(board.roundReviewBoardNo)
+                        // 나중에 "" + 다 빼기
+                        $boardCopy.find("div.board-list__content__no").html("글번호 : " + board.roundReviewBoardNo)
                         $boardCopy.find("img.board-list__content__image").attr("src", "../roundreview_images/" + board.roundReviewBoardNo + "_RoundReviewThumbnail.jpg");
-                        $boardCopy.find("div.board-list__content__title").html(board.roundReviewBoardTitle)
-                        $boardCopy.find("div.board-list__content__nickname").html(board.roundReviewBoardNickname)
-                        $boardCopy.find("div.board-list__content__dt").html(board.roundReviewBoardDt)
-                        $boardCopy.find("div.board-list__content__view-cnt").html(board.roundReviewBoardViewCnt)
+                        $boardCopy.find("div.board-list__content__title").html("제목 : " + board.roundReviewBoardTitle)
+                        $boardCopy.find("div.board-list__content__cmt-cnt").html("댓글수 : " + board.roundReviewBoardCmtCnt)
+                        $boardCopy.find("div.board-list__content__nickname").html("닉네임 : " + board.userNickname)
+                        $boardCopy.find("div.board-list__content__dt").html("작성일자 : " + board.roundReviewBoardDt)
+                        $boardCopy.find("div.board-list__content__view-cnt").html("조회수 : " + board.roundReviewBoardViewCnt)
+                        $boardCopy.find("div.board-list__content__like-cnt").html("좋아요수 : " + board.roundReviewBoardLikeCnt)
 
                         $boardParent.append($boardCopy);
                     });
@@ -30,22 +33,28 @@ $(function(){
                     let $pageGroup = $("div.page-group");
                     let $pageGroupHtml = "";
 
-                    if (pageBeanObj.startPage > 1) {
+                    let pageableObj = jsonObj.t;
+                    let startPage = pageableObj.pageable.pageNumber + 1;
+                    let endPage = pageableObj.numberOfElements;
+                    let currentPage = pageableObj.number;
+                    let totalPage = pageableObj.totalPages
+
+                    if (startPage > 1) {
                         $pageGroupHtml += '<span class="prev">◁</span>';
                     }
 
                     //startPage부터 endPage까지 숫자 넣어주기 
                     //현재페이지면 disable클래스 줘서 css다르게 넣어주기 (링크안되게?)
-                    for (let i = pageBeanObj.startPage; i<= pageBeanObj.endPage; i++){
+                    for (let i = startPage; i<= endPage; i++){
                         $pageGroupHtml += "&nbsp;&nbsp;";
-                        if (pageBeanObj.currentPage == i){
+                        if (currentPage == i){
                             $pageGroupHtml += '<span class="disabled">' + i + "</span>";
                         } else {   
                             $pageGroupHtml += "<span>" + i + "</span>"; 
                         }
                     }
                     //back에서 보내준 endPage 값이 totalPage값보다 작으면 화살표나오게  
-                    if (pageBeanObj.endPage < pageBeanObj.totalPage) {
+                    if (endPage < totalPage) {
                         $pageGroupHtml += "&nbsp;&nbsp;";
                         $pageGroupHtml += '<span class="next">▷</span>';
                     }
@@ -115,8 +124,8 @@ $(function(){
         let data = "";
         showList(url,data);
     });
-    //5. 댓글순 정렬하기
-    $("ul.order>li.order__cmt-cnt>a").click(function(){ 
+    //5. 좋아요순 정렬하기
+    $("ul.order>li.order__like-cnt>a").click(function(){ 
         let orderType = 2;
         let url = "http://localhost:1125/backroundreview/board/list/" + orderType
         let data = "";
