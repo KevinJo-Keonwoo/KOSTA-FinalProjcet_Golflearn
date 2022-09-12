@@ -65,7 +65,7 @@ $(function(){
                     alert(jsonObj.msg); //rb에 set된 메시지 
                 }
             },
-            error: function(jqXhR){
+            error: function(jqXHR){
                 alert("에러:" + jqXHR.status);
             }
         });
@@ -73,9 +73,32 @@ $(function(){
     showList('http://localhost:1125/backroundreview/board/list');
     //1-2. 페이지그룹 페이지 클릭
     //span 태그들 중에서 disabled가 아닌 요소 찾기 
+    
+    // $("div.page-group").on("click", "span:not(.disabled)", function() {
+    //     $.ajax({
+    //         url : 'http://localhost:1125/backroundreview/board/list',
+    //         success : function(jsonObj){
+    //             let pageNo = jsonObj.t.number;
+    //             console.log(pageNo);
+    //             let orderType = 0;
+    //             if($(this).hasClass("prev")){
+    //                 pageNo = parseInt($(this).next().html()) - 1;
+    //             } else if ($(this).hasClass("next")){
+    //                 pageNo = parseInt($(this).prev().html()) + 1;
+    //             } else {
+    //                 pageNo = parseInt($(this).html());
+    //             }
+    //             let url = "";
+    //             let data = "";
+    //             url = "http://localhost:1125/backroundreview/board/list/" + orderType + pageNo;
+    //             showList(url, data);
+    //             return false;
+    //         }
+    //     })
     $("div.page-group").on("click", "span:not(.disabled)", function() {
         let orderType = 0;
-        let pageNo = 1;
+        let pageNo = 0;
+        
         //?? 이해안됨
         if($(this).hasClass("prev")){
             pageNo = parseInt($(this).next().html()) - 1;
@@ -88,11 +111,16 @@ $(function(){
         let word = $("div.search>input[name=search-box]").val().trim();
         let url = "";
         let data = "";
+
+        console.log(orderType);
+        console.log(pageNo);
+
         if(word == "") {
-            url = "http://localhost:1125/backroundreview/board/list/" + orderType + pageNo;
+            url = "http://localhost:1125/backroundreview/board/list/" + orderType + "/" + pageNo;
+            console.log(url);
         } else {
             //검색어가 있는 경우 검색어를 path에 넣어주고 back 에 보낼 data를 만들기 
-            url = "http://localhost:1125/backroundreview/board/search/" + word + pageNo;
+            url = "http://localhost:1125/backroundreview/board/search/" + word + "/" + pageNo;
             data = "currentPage=" + pageNo + "&word=" + word;
         } 
         showList(url, data);

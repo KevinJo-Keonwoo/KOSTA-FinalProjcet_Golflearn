@@ -81,7 +81,7 @@ public class RoundReviewBoardController {
 			if(optCp.isPresent()) {
 				currentPage = optCp.get();
 			} else {
-				currentPage = 1;
+				currentPage = 0;
 			}
 			int orderType;
 			if(optOrderType.isPresent()) {
@@ -98,8 +98,7 @@ public class RoundReviewBoardController {
 			} else {
 				orderCriteria = "roundReviewBoardLikeCnt";
 			}
-			pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, orderCriteria));
-			
+			pageable = PageRequest.of(currentPage, 5, Sort.by(Sort.Direction.DESC, orderCriteria));
 			Page<RoundReviewBoardDto> dto = service.boardList(currentPage, orderType, pageable);
 			rb.setStatus(1);
 			rb.setT(dto);

@@ -91,6 +91,8 @@ public class RoundReviewBoardService {
 //		Page<RoundReviewBoardEntity> list = null;
 		//기본(최신순)이면 0 , 조회수순 1 , 좋아요순 2
 		//---
+		Long test = 6L;
+		boardRepo.findById(test);
 		Page<RoundReviewBoardEntity> entity = boardRepo.findAll(pageable);
 		ModelMapper modelMapper = new ModelMapper();
 		Page<RoundReviewBoardDto> dto = modelMapper.map(entity, new TypeToken<Page<RoundReviewBoardDto>>(){}.getType());
