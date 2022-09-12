@@ -19,11 +19,21 @@
     <div>
         <form class="write" action="http://localhost:1126/backresale/resale/board/write" method="post"
 		enctype="multipart/form-data">
-            <div>
-                <input name ="write-title" type="text" placeholder="제목을 입력해주세요">
+            <div class="write">
+                <div>
+                    <input class="write-title" name ="resaleBoardTitle" type="text" placeholder="제목을 입력해주세요">
+                </div>
+                <div>
+                    <textarea class = "write-summernote"  name = "resaleBoardContent" id="summernote" name="content">                
+                    </textarea>
+                </div>
+                <div>
+                    
+                </div>
             </div>
-            <textarea name = "write-summernote"  id="summernote" name="content">                
-            </textarea>
+            <div>
+                <input id="user_profile" name="imageFiles" type="file" accept="image/*" multiple>
+            </div>
         </form>
     </div>
     <div class= "submit-board">
