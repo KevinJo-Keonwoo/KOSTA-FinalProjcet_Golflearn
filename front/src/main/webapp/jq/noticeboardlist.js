@@ -32,53 +32,53 @@ $(function() {
                     });
 
                     // 페이지 그룹  이 부분이 잘못되어있음
-                    // let $pagegroup = $("div.page-group");
-                    // let $pagegroupHtml = "";
+                    let $pagegroup = $("div.page-group");
+                    let $pagegroupHtml = "";
                     
-                    // let currentPage = pageBeanObj.currentPage;
-                    // let startPage = pageBeanObj.startPage;
-                    // let endPage = pageBeanObj.endPage;
-                    // let totalPage = pageBeanObj.totalPage;
-                    // let cntPerPageGroup = pageBeanObj.cntPerPageGroup;
-                    // let cntPerPage = 5;
+                    let currentPage = pageBeanObj.currentPage;
+                    let startPage = pageBeanObj.startPage;
+                    let endPage = pageBeanObj.endPage;
+                    let totalPage = pageBeanObj.totalPage;
+                    let cntPerPageGroup = pageBeanObj.cntPerPageGroup;
+                    let cntPerPage = 5;
 
-                    // if(endPage > totalPage){
-                    //     endPage = totalPage;
-                    // }
-                    // let next = endPage +1; // 화면에 보여질 마지막 페이지 번호
-                    // let prev = startPage -1 ; // 화면에 보여질 첫번째 페이지 번호
+                    if(endPage > totalPage){
+                        endPage = totalPage;
+                    }
+                    let next = endPage +1; // 화면에 보여질 마지막 페이지 번호
+                    let prev = startPage -1 ; // 화면에 보여질 첫번째 페이지 번호
 
 
-                    // if(totalPage<1){
-                    //     startPage = endPage;
-                    // }
-                    // let pages = $("ul.page-group__pages")
-                    // pages.empty();
-                    // if(startPage > 5){
-                    //     pages.append('<li class="pagination--item"></li>')
-                    // }
-                    // //내용 채워주는 것
-                    // if(pageBeanObj.startPage > 5){
-                    //     $pagegroupHtml += '<span class="prev"> ◁ </span>';
-                    // }
-                    // for(let i = pageBeanObj.startPage ; i<=pageBeanObj.endPage ; i ++){
-                    //     $pagegroupHtml += "&nbsp;&nbsp;";
-                    //     if(pageBeanObj.currentPage == i){ // 현재페이지인 경우
-                    //         $pagegroupHtml += '<span class="disabled">'+ i + '</span>'
-                    //     }else{
-                    //         $pagegroupHtml += '<span>' + i + '</span>';
-                    //     }
-                    // }
-                    // if(pageBeanObj.endPage < pageBeanObj.totalPage){
-                    //     $pagegroupHtml += "&nbsp;&nbsp;";
-                    //     $pagegroupHtml += '<span class="next"> ▷ </span>';
-                    // }
+                    if(totalPage<1){
+                        startPage = endPage;
+                    }
+                    let pages = $("ul.page-group__pages")
+                    pages.empty();
+                    if(startPage > 5){
+                        pages.append('<li class="pagination--item"></li>')
+                    }
+                    //내용 채워주는 것
+                    if(pageBeanObj.startPage > 5){
+                        $pagegroupHtml += '<span class="prev"> ◁ </span>';
+                    }
+                    for(let i = pageBeanObj.startPage ; i<=pageBeanObj.endPage ; i ++){
+                        $pagegroupHtml += "&nbsp;&nbsp;";
+                        if(pageBeanObj.currentPage == i){ // 현재페이지인 경우
+                            $pagegroupHtml += '<span class="disabled">'+ i + '</span>'
+                        }else{
+                            $pagegroupHtml += '<span>' + i + '</span>';
+                        }
+                    }
+                    if(pageBeanObj.endPage < pageBeanObj.totalPage){
+                        $pagegroupHtml += "&nbsp;&nbsp;";
+                        $pagegroupHtml += '<span class="next"> ▷ </span>';
+                    }
 
-                    //     $pagegroup.html($pagegroupHtml);
-                    // } else{
-                    //     alert(jsonObj.msg);
-                    // }
-                }
+                        $pagegroup.html($pagegroupHtml);
+                    } else{
+                        alert(jsonObj.msg);
+                    }
+                
                 },
             error: function(jqXHR){
                 alert("에러 : " + jqXHR.status);
@@ -96,19 +96,8 @@ $(function() {
     $("div.board-list").on("click", "div.boardlist__content", function(){
         $board = "div.board-list__content__no";
         $boardNo = $(this).children($board).text();
-        console.log($boardNo);
-        let url = "http://localhost:1128/noticeboard/notice/" + $boardNo
-        $.ajax({
-            url:url,
-            method: "GET",
-            success:function(jsonObj){
-                if(jsonObj.status ==1){
-                    console.log(jsonObj.t.noticeBoardNo);
-                    let noticeNo = jsonObj.t.noticeBoardNo;
-                    location.href = 'http://localhost:1128/front/html/noticetest.html';
-                }
-            }
-        })
+        // console.log($boardNo);
+        location.href = '../html/noticedetail.html?notice_board_no=' + $boardNo;
     });
 
     // ----- 페이지 그룹의 페이지를 클릭 START -----
@@ -124,18 +113,20 @@ $(function() {
             pageNo = parseInt($(this).html());
 		}
 		// alert("보려는 페이지번호: " + pageNo);
-		let word = $("div.search>div.search__box>div.search__input").val().trim(); // 문자열 공백 제거 -> trim
+		let word = $("div.search>div.search__box>input.search__input").val().trim(); // 문자열 공백 제거 -> trim
+        console.log(pageNo);
+        console.log(word);
 		let url = "";
 		let data = "";
 		if (word == "") {
-            url = "http://localhost:1128/backresale/notice/board/list/" + pageNo;
+            url = "http://localhost:1128/noticeboard/notice/list/" + pageNo;
 		// data = "currentPage=" + pageNo;
 		} else {
-            url = "http://localhost:1128/backresale/notice/board/search/"+word + pageNo;
+            url = "http://localhost:1128/noticeboard/notice/board/search/"+word + pageNo;
             data = "currentPage=" + pageNo + "&word=" + word;
 		}
 		showList(url, data);
-		return false;
+		// return false;
     });
     // --페이지 그룹의 페이지를 클릭 END
 
