@@ -11,8 +11,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,10 +43,12 @@ public class NoticeLikeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
 					generator = "noticelike_seq_generator")
+	@ColumnDefault(value = "0")
 	@Column(name="notice_like_no")
 	private Long noticeLikeNo;
 	
-	@ManyToOne(cascade = CascadeType.REMOVE)
+	@JsonManagedReference
+	@ManyToOne(optional=false)
 	@JoinColumn(name="notice_board_no")
 	private NoticeBoardEntity noticeBoard;
 	

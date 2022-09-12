@@ -15,11 +15,13 @@ import lombok.Setter;
 public class NoticeLikeDto {
 	private Long noticeLikeNo;
 	private NoticeBoardDto noticeBoardDto;
+//	private Long noticeBoardNo;
 	private String userNickname;
 	
 	private NoticeLikeDto (Long noticeLikeNo, NoticeBoardDto noticeBoardDto, String userNickname) {
 		this.noticeLikeNo = noticeLikeNo;
 		this.noticeBoardDto = noticeBoardDto;
+//		this.noticeBoardNo = noticeBoardNo;
 		this.userNickname = userNickname;
 	}
 	

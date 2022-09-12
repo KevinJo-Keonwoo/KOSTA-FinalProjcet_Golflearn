@@ -345,7 +345,7 @@ public class NoticeBoardController {
 		}
 	}
 
-	@GetMapping(value = "like/add", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "like/add", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean<NoticeLikeDto> addLike(NoticeLikeDto likeDto,
 			@RequestBody NoticeBoardDto boardDto,
 			HttpSession session){

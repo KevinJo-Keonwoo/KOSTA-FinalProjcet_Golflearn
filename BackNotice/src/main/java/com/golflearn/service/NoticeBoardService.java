@@ -46,7 +46,7 @@ public class NoticeBoardService {
 		int startRow = endRow - CNT_PER_PAGE + 1; 
 		List<NoticeBoardEntity> list = boardRepository.findByPage(startRow,endRow);
 		long totalCnt = boardRepository.count(); // 총 행수를 얻어오는 메서드
-		int cntPerPageGroup = 2;
+		int cntPerPageGroup = 5;
 
 		PageBean<NoticeBoardDto> pb = new PageBean(list, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
 		return pb;
@@ -67,6 +67,7 @@ public class NoticeBoardService {
 					.noticeCommentList(en.getNoticeCommentList())
 					.userNickname(en.getUserNickname())
 					.noticeBoardNo(en.getNoticeBoardNo())
+					.noticeBoardLikeCnt(en.getNoticeBoardLikeCnt())
 					.noticeBoardViewCnt(en.getNoticeBoardViewCnt()+1).build();
 
 			boardRepository.save(en);
@@ -269,7 +270,7 @@ public class NoticeBoardService {
 
 			// 좋아요 추가
 			NoticeLikeEntity likeEntity = likeDto.toEntity();	
-
+			System.out.println("-----"+likeEntity.getNoticeBoard().getNoticeBoardNo());
 			likeEntity = NoticeLikeEntity.builder()
 					.noticeBoard(entity)
 					.noticeLikeNo(likeEntity.getNoticeLikeNo())
@@ -277,7 +278,7 @@ public class NoticeBoardService {
 					.build();
 
 			likeRepository.save(likeEntity); // 좋아요 추가
-
+			System.out.println("-0-0-00-0-" + entity.getNoticeBoardLikeCnt());
 			entity = NoticeBoardEntity.builder()
 					.noticeBoardNo(entity.getNoticeBoardNo())
 					.noticeBoardContent(entity.getNoticeBoardContent())
