@@ -97,18 +97,18 @@ $(function() {
         $board = "div.board-list__content__no";
         $boardNo = $(this).children($board).text();
         console.log($boardNo);
-        let url = "http://localhost:1128/noticeboard/"
+        let url = "http://localhost:1128/noticeboard/notice/" + $boardNo
         $.ajax({
             url:url,
             method: "GET",
             success:function(jsonObj){
                 if(jsonObj.status ==1){
-                    console.log(jsonObj.noticeBoardNo);
+                    console.log(jsonObj.t.noticeBoardNo);
+                    let noticeNo = jsonObj.t.noticeBoardNo;
+                    location.href = 'http://localhost:1128/front/html/noticetest.html';
                 }
             }
         })
-        // location.href = "http://localhost:1128/front/html/noticeboard?" + $boardNo;
-		// return false;
     });
 
     // ----- 페이지 그룹의 페이지를 클릭 START -----
