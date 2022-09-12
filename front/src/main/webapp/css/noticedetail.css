@@ -1,28 +1,50 @@
-* {
-	margin: 0;
-	/* 브라우저 기본 마진 리셋 */
-	padding: 0;
-	/* 브라우저 기본 패딩 리셋 */
-	box-sizing: border-box;
-	/* 테두리까지 포함해서 박스 모델 너비로 계산 */
+main {
+	height: 1000px;
 }
 
-html, body{
-	height: 100%;
+article {
+	margin: 40px 0;
 }
 
-body {
-	padding-top: 95px;
-	/* header가 fixed이므로 header높이만큼 패딩 추가 */
+.board-like {
+	cursor: pointer;
+	display: inline;
+}
+
+.header_container {
+	display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.board-container {
+	margin: 0 auto;
+    width: 80%;
+    display: flex;
+}
+
+.board__content__thumbnail {
+	width:20%;
+	height: 20%;
+}
+
+.board__content__thumbnail>img {
 	width: 100%;
-	/* body전체의 너비*/
+    height: 100%;
+    object-fit: cover;
 }
 
-header, footer, nav {
-	width: 100%;
+.board__content {
+	width: 80%;
+    text-align: center;
+	background-color: #A8EDD8;
 }
 
-main{
-	height : 100%;
-	overflow : hidden;
+.comment-content {
+	width: 60%;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }

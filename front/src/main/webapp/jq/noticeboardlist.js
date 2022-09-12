@@ -31,7 +31,7 @@ $(function() {
                         $boardParent.append($boardCopy);
                     });
 
-                    // 페이지 그룹  이 부분이 잘못되어있음
+                    // 페이지 그룹  
                     let $pagegroup = $("div.page-group");
                     let $pagegroupHtml = "";
                     
@@ -47,7 +47,6 @@ $(function() {
                     }
                     let next = endPage +1; // 화면에 보여질 마지막 페이지 번호
                     let prev = startPage -1 ; // 화면에 보여질 첫번째 페이지 번호
-
 
                     if(totalPage<1){
                         startPage = endPage;
