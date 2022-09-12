@@ -2,16 +2,17 @@ package com.golflearn.domain.repository;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 
 import com.golflearn.domain.entity.ResaleBoardEntity;
 
-public interface ResaleBoardRepository extends CrudRepository<ResaleBoardEntity, Long> {
+public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, Long> {
 	// 첫번째 인자 : ResaleBoard
 	// 두번째 인자 : pk의 자료형
-//	List<ResaleBoard> findAll(Pageable paging); //Pageable -> 페이지 처리를 도와주는
+	Page<ResaleBoardEntity> findAll(Pageable pageable); //Pageable -> 페이지 처리를 도와주는
 	
 	/**
 	 * 페이지별 게시물 목록 조회 (최신순)
