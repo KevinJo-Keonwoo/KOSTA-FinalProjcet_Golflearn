@@ -2,12 +2,12 @@ package com.golflearn.domain.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.golflearn.domain.entity.RoundReviewBoardEntity;
-import com.golflearn.domain.entity.RoundReviewCommentEntity;
 
 public interface RoundReviewBoardRepository extends JpaRepository<RoundReviewBoardEntity, Long> {
 	
@@ -61,6 +61,20 @@ public interface RoundReviewBoardRepository extends JpaRepository<RoundReviewBoa
 			+ "		WHERE r BETWEEN ?1 AND ?2"
 			,nativeQuery = true)
 	List<RoundReviewBoardEntity> findListByLike(int startRow, int endRow);
+	
+	
+//	페이저블 테스트
+//	@Query(value = "SELECT *\r\n"
+//			+ "		FROM (SELECT rownum r, a.*\r\n"
+//			+ "			  FROM (SELECT *"
+//			+ "					FROM round_review_board\r\n"
+//			+ "					WHERE user_nickname = ?1\r\n"
+//			+ "					ORDER BY round_review_board_like_cnt DESC\r\n"
+//			+ "					) a\r\n"
+//			+ "			  )\r\n"
+//			+ "		WHERE r BETWEEN 1 AND 5"
+//			,nativeQuery = true)
+//	Page<RoundReviewBoardEntity> testLike(String userNickname, Pageable pageable);
 	
 //	/**
 //	 * 게시글 번호에 맞는 상세내용(게시글, 댓글 모두) 가져오기

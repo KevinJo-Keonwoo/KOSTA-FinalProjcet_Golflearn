@@ -8,6 +8,10 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,9 +44,36 @@ public class RoundReviewBoardController {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
-	@GetMapping(value = {"board/list", "board/list/{optCp}", "board/list/{optCp}/{optOrderType}"})
-	public ResultBean<PageBean<RoundReviewBoardDto>> list (HttpSession session, @PathVariable Optional<Integer> optCp, @PathVariable Optional<Integer> optOrderType) throws FindException{
-		ResultBean<PageBean<RoundReviewBoardDto>> rb = new ResultBean<PageBean<RoundReviewBoardDto>>();
+//	@GetMapping(value = {"board/list", "board/list/{optOrderType}", "board/list/{optOrderType}/{optCp}"})
+//	public ResultBean<PageBean<RoundReviewBoardDto>> list (HttpSession session, @PathVariable Optional<Integer> optOrderType, @PathVariable Optional<Integer> optCp) throws FindException{
+//		ResultBean<PageBean<RoundReviewBoardDto>> rb = new ResultBean<PageBean<RoundReviewBoardDto>>();
+//		try {
+//			int currentPage;
+//			if(optCp.isPresent()) {
+//				currentPage = optCp.get();
+//			} else {
+//				currentPage = 1;
+//			}
+//			int orderType;
+//			if(optOrderType.isPresent()) {
+//				orderType = optOrderType.get();
+//			} else {
+//				orderType = 0;
+//			}
+//			PageBean<RoundReviewBoardDto> pb = service.boardList(currentPage, orderType);
+//			rb.setStatus(1);
+//			rb.setT(pb);
+//		} catch (FindException e) {
+//			e.printStackTrace();
+//			rb.setStatus(0);
+//			rb.setMsg(e.getMessage());
+//		}
+//		return rb;
+//	}
+	@GetMapping(value = {"board/list", "board/list/{optOrderType}", "board/list/{optOrderType}/{optCp}"})
+	public ResultBean<Page<RoundReviewBoardDto>> list (HttpSession session, @PathVariable Optional<Integer> optOrderType, @PathVariable Optional<Integer> optCp, 
+					@PageableDefault(page = 0, size = 5, sort = "roundReviewBoardNo", direction = Direction.DESC) Pageable pageable) throws FindException{
+		ResultBean<Page<RoundReviewBoardDto>> rb = new ResultBean<Page<RoundReviewBoardDto>>();
 		try {
 			int currentPage;
 			if(optCp.isPresent()) {
@@ -56,9 +87,9 @@ public class RoundReviewBoardController {
 			} else {
 				orderType = 0;
 			}
-			PageBean<RoundReviewBoardDto> pb = service.boardList(currentPage, orderType);
+			Page<RoundReviewBoardDto> dto = service.boardList(currentPage, orderType, pageable);
 			rb.setStatus(1);
-			rb.setT(pb);
+			rb.setT(dto);
 		} catch (FindException e) {
 			e.printStackTrace();
 			rb.setStatus(0);
@@ -160,35 +191,35 @@ public class RoundReviewBoardController {
 		}
 	}
 	
-	//게시글 검색
-	@GetMapping(value = {"search", "search/{optWord}", "search/{optWord}/{optCp}"})
-	public ResultBean<PageBean<RoundReviewBoardDto>> search(Optional<Integer> optCp, Optional<String> optWord){
-		ResultBean<PageBean<RoundReviewBoardDto>> rb = new ResultBean<>();
-		PageBean<RoundReviewBoardDto> pb;
-		String word;
-		try {
-			if (optWord.isPresent()) {
-				word = optWord.get();
-			} else {
-				word = "";
-			}
-			int currentPage = 1;
-			if(optCp.isPresent()) {
-				currentPage = optCp.get();
-			}
-			if("".equals(word)) {
-					pb = service.boardList(currentPage, 0);
-			}
-			pb = service.searchBoard(word, currentPage);
-			rb.setStatus(1);
-			rb.setT(pb);
-		} catch (FindException e) {
-			e.printStackTrace();
-			rb.setStatus(0);
-			rb.setMsg(e.getMessage());
-		}
-		return rb;
-	}
+	//게시글 검색 임시 주석 
+//	@GetMapping(value = {"search", "search/{optWord}", "search/{optWord}/{optCp}"})
+//	public ResultBean<PageBean<RoundReviewBoardDto>> search(Optional<Integer> optCp, Optional<String> optWord){
+//		ResultBean<PageBean<RoundReviewBoardDto>> rb = new ResultBean<>();
+//		PageBean<RoundReviewBoardDto> pb;
+//		String word;
+//		try {
+//			if (optWord.isPresent()) {
+//				word = optWord.get();
+//			} else {
+//				word = "";
+//			}
+//			int currentPage = 1;
+//			if(optCp.isPresent()) {
+//				currentPage = optCp.get();
+//			}
+//			if("".equals(word)) {
+//					pb = service.boardList(currentPage, 0);
+//			}
+//			pb = service.searchBoard(word, currentPage);
+//			rb.setStatus(1);
+//			rb.setT(pb);
+//		} catch (FindException e) {
+//			e.printStackTrace();
+//			rb.setStatus(0);
+//			rb.setMsg(e.getMessage());
+//		}
+//		return rb;
+//	}
 	@PostMapping(value = "board")
 	public ResponseEntity<?> writeBoard(@RequestBody RoundReviewBoardDto dto){
 		try {

@@ -10,10 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.golflearn.domain.entity.RoundReviewBoardEntity;
-import com.golflearn.domain.entity.RoundReviewCommentEntity;
 import com.golflearn.domain.repository.RoundReviewBoardRepository;
 import com.golflearn.domain.repository.RoundReviewCommentRepository;
 import com.golflearn.domain.repository.RoundReviewLikeRepository;
@@ -30,6 +32,14 @@ class RoundReviewBoardRepositoryTest {
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
+//	@Test
+//	void testLikeddd() {
+//		//of(페이지 번호 0부터시작, 몇개의 게시글?, ㅈ어렬
+//		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "round_review_board_like_cnt"));
+//		Page<RoundReviewBoardEntity> page = repo.testLike("쩐승", pageRequest);
+//		List<RoundReviewBoardEntity> entity = page.getContent();
+////		long totalElements = page.getTotalElements();
+//	}
 	
 	@Test
 	void testFindByOption() throws FindException {
@@ -37,9 +47,12 @@ class RoundReviewBoardRepositoryTest {
 		int currentPage = 1;
 		int endRow = currentPage * CNT_PER_PAGE;
 		int startRow = endRow - CNT_PER_PAGE + 1;
+//		int startRow = 1;
+//		int endRow = 5;
+		
 //		List<RoundReviewBoardEntity> list = repo.findListByRecent(startRow, endRow);
 //		List<RoundReviewBoardEntity> list = repo.findListByViewCnt(startRow, endRow);
-		List<RoundReviewBoardEntity> list = repo.findListByLike(startRow, endRow);
+//		List<RoundReviewBoardEntity> list = repo.findListByLike(startRow, endRow);
 	}
 	
 	@Test

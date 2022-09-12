@@ -5,9 +5,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.golflearn.domain.entity.PageBean;
@@ -39,46 +42,75 @@ public class RoundReviewBoardService {
 	private RoundReviewLikeRepository likeRepo;
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	/**
-	 * 정렬 기준에 따라 게시글의 목록을 보여줌 
-	 * @param currentPage 현재 페이지 
-	 * @param orderType 프론트에서 받아옴
-	 * @return
-	 * @throws FindException
-	 */
-	public PageBean<RoundReviewBoardDto> boardList(int currentPage, int orderType) throws FindException{
-		int endRow = currentPage * CNT_PER_PAGE;
-		int startRow = endRow - CNT_PER_PAGE + 1;
-		long totalCnt = boardRepo.count();
-		int cntPerPageGroup = 5;
-		List<RoundReviewBoardEntity> list = null;
-		//기본(최신순)이면 0 , 조회수순 1 , 좋아요순 2
-		if (orderType == 1) {
-			list = boardRepo.findListByViewCnt(startRow, endRow);
-		}else if (orderType == 2) {
-			list = boardRepo.findListByLike(startRow, endRow);
-		}else {
-			list = boardRepo.findListByRecent(startRow, endRow);
-		}
-		ModelMapper modelMapper = new ModelMapper();
-		List<RoundReviewBoardDto> dtoList = list.stream()
-				.map(RoundReviewBoardEntity -> modelMapper
-						.map(RoundReviewBoardEntity, RoundReviewBoardDto.class))
-				.collect(Collectors.toList());
-//		모델매퍼 안썼을 때 
-//		com.golflearn.dto.RoundReviewBoardDto dto = new com.golflearn.dto.RoundReviewBoardDto();
-//		List<RoundReviewBoardDto> dtoList = new ArrayList<>();
-//		for(RoundReviewBoardEntity b: list) {
-//			RoundReviewBoardDto dto = new RoundReviewBoardDto(
-//					b.getRoundReviewBoardNo(),b.getRoundReviewBoardTitle(),
-//					b.getRoundReviewBoardContent(), b.getUserNickname(), 
-//					b.getRoundReviewBoardDt(), b.getRoundReviewBoardViewCnt(), 
-//					b.getRoundReviewBoardLikeCnt(), b.getRoundReviewBoardCmtCnt(), 
-//					b.getRoundReviewBoardLatitude(), b.getRoundReviewBoardLongitude());
-//			dtoList.add(dto);
+//	/**
+//	 * 정렬 기준에 따라 게시글의 목록을 보여줌 
+//	 * @param currentPage 현재 페이지 
+//	 * @param orderType 프론트에서 받아옴
+//	 * @return
+//	 * @throws FindException
+//	 */
+//	public PageBean<RoundReviewBoardDto> boardList(int currentPage, int orderType) throws FindException{
+//		int endRow = currentPage * CNT_PER_PAGE;
+//		int startRow = endRow - CNT_PER_PAGE + 1;
+//		long totalCnt = boardRepo.count();
+//		int cntPerPageGroup = 5;
+//		List<RoundReviewBoardEntity> list = null;
+//		//기본(최신순)이면 0 , 조회수순 1 , 좋아요순 2
+//		if (orderType == 1) {
+//			list = boardRepo.findListByViewCnt(startRow, endRow);
+//		}else if (orderType == 2) {
+//			list = boardRepo.findListByLike(startRow, endRow);
+//		}else {
+//			list = boardRepo.findListByRecent(startRow, endRow);
 //		}
-		PageBean<RoundReviewBoardDto> pb = new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
-		return pb;
+//		ModelMapper modelMapper = new ModelMapper();
+//		List<RoundReviewBoardDto> dtoList = list.stream()
+//				.map(RoundReviewBoardEntity -> modelMapper
+//						.map(RoundReviewBoardEntity, RoundReviewBoardDto.class))
+//				.collect(Collectors.toList());
+////		모델매퍼 안썼을 때 
+////		com.golflearn.dto.RoundReviewBoardDto dto = new com.golflearn.dto.RoundReviewBoardDto();
+////		List<RoundReviewBoardDto> dtoList = new ArrayList<>();
+////		for(RoundReviewBoardEntity b: list) {
+////			RoundReviewBoardDto dto = new RoundReviewBoardDto(
+////					b.getRoundReviewBoardNo(),b.getRoundReviewBoardTitle(),
+////					b.getRoundReviewBoardContent(), b.getUserNickname(), 
+////					b.getRoundReviewBoardDt(), b.getRoundReviewBoardViewCnt(), 
+////					b.getRoundReviewBoardLikeCnt(), b.getRoundReviewBoardCmtCnt(), 
+////					b.getRoundReviewBoardLatitude(), b.getRoundReviewBoardLongitude());
+////			dtoList.add(dto);
+////		}
+//		PageBean<RoundReviewBoardDto> pb = new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
+//		return pb;
+//	}
+	public Page<RoundReviewBoardDto> boardList(int currentPage, int orderType, Pageable pageable) throws FindException{
+//		int endRow = currentPage * CNT_PER_PAGE;
+//		int startRow = endRow - CNT_PER_PAGE + 1;
+//		long totalCnt = boardRepo.count();
+//		int cntPerPageGroup = 5;
+//		Page<RoundReviewBoardEntity> list = null;
+		//기본(최신순)이면 0 , 조회수순 1 , 좋아요순 2
+		//---
+		Page<RoundReviewBoardEntity> entity = boardRepo.findAll(pageable);
+		ModelMapper modelMapper = new ModelMapper();
+		Page<RoundReviewBoardDto> dto = modelMapper.map(entity, new TypeToken<Page<RoundReviewBoardDto>>(){}.getType());
+		
+		//---
+//		if (orderType == 1) {
+//			list = boardRepo.findListByViewCnt(startRow, endRow, pageable);
+//		}
+//		}else if (orderType == 2) {
+//			list = boardRepo.findListByLike(startRow, endRow pageable);
+//		}else {
+//			list = boardRepo.findListByRecent(startRow, endRow pageable);
+//		}
+//		ModelMapper modelMapper = new ModelMapper();
+//		List<RoundReviewBoardDto> dtoList = list.stream()
+//				.map(RoundReviewBoardEntity -> modelMapper
+//						.map(RoundReviewBoardEntity, RoundReviewBoardDto.class))
+//				.collect(Collectors.toList());
+//		PageBean<RoundReviewBoardDto> pb = new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
+		return dto;
 	}
 	/**
 	 * 라운딩리뷰 게시글의 상세내용을 보여줌 
