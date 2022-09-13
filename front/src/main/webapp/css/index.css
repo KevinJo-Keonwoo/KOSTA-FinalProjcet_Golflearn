@@ -11,19 +11,21 @@ html,
 body {
 	height: 100%;
 }
-​
+
 body {
 	padding-top: 95px;
 	/* header가 fixed이므로 header높이만큼 패딩 추가 */
 	width: 100%;
 	/* body전체의 너비*/
 }
-​
-header, footer, nav {
+
+header,
+footer,
+nav {
 	width: 100%;
 }
-​
-main{
-	height : 100%;
-	overflow : hidden;
+
+main {
+	height: 100%;
+	overflow: hidden;
 }
