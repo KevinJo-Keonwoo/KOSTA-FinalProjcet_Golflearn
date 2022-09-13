@@ -76,6 +76,7 @@ public class RoundReviewBoardController {
 	public ResultBean<Page<RoundReviewBoardDto>> list (HttpSession session, @PathVariable Optional<Integer> optOrderType, @PathVariable Optional<Integer> optCp, 
 					@PageableDefault(page = 0, size = 5, sort = "roundReviewBoardNo", direction = Direction.DESC) Pageable pageable) throws FindException{
 		ResultBean<Page<RoundReviewBoardDto>> rb = new ResultBean<Page<RoundReviewBoardDto>>();
+		logger.error("RoundReviewBoardController method=list");
 		try {
 			int currentPage;
 			if(optCp.isPresent()) {
@@ -83,6 +84,8 @@ public class RoundReviewBoardController {
 			} else {
 				currentPage = 0;
 			}
+
+			logger.error("currentPage=" + currentPage);
 			int orderType;
 			if(optOrderType.isPresent()) {
 				orderType = optOrderType.get();
@@ -98,6 +101,7 @@ public class RoundReviewBoardController {
 			} else {
 				orderCriteria = "roundReviewBoardLikeCnt";
 			}
+			logger.error("orderTyper=" + orderType);
 			pageable = PageRequest.of(currentPage, 5, Sort.by(Sort.Direction.DESC, orderCriteria));
 			Page<RoundReviewBoardDto> dto = service.boardList(currentPage, orderType, pageable);
 			rb.setStatus(1);
@@ -113,6 +117,7 @@ public class RoundReviewBoardController {
 	@GetMapping(value = {"search", "search/{optWord}", "search/{optWord}/{optCp}"})
 	public ResultBean<Page<RoundReviewBoardDto>> search(@PathVariable Optional<String> optWord, @PathVariable Optional<Integer> optCp, 
 			Pageable pageable){
+		logger.error("RoundReviewBoardController method=Search");
 		ResultBean<Page<RoundReviewBoardDto>> rb = new ResultBean<>();
 		Page<RoundReviewBoardDto> pb;
 		String word = "";
@@ -146,6 +151,8 @@ public class RoundReviewBoardController {
 	}
 	@GetMapping(value = "board/{roundReviewBoardNo}")
 	public ResultBean<RoundReviewBoardDto> viewBoard(@PathVariable Long roundReviewBoardNo){
+		logger.error("RoundReviewBoardController method=View");
+		
 		ResultBean<RoundReviewBoardDto> rb = new ResultBean<>();
 		try {
 			RoundReviewBoardDto dto = service.viewBoard(roundReviewBoardNo);

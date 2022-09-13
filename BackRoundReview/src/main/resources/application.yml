@@ -28,8 +28,8 @@ logging:
     console: UTF-8
   level:
     org:
-      hibernate: info
-    root: 'info'
+      hibernate: error
+    root: error
 server:
   servlet:
     context-path: /backroundreview

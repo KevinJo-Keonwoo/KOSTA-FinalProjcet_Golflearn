@@ -1,6 +1,11 @@
 $(function(){
+    /*
+    해결못한 문제 리스트 
+    1. 정렬된 상태로 페이지가 넘어가지 않음. 조회순 누르고 2페이지 누르면 2페이지는 최신순으로 됨 
+    2. 다시 1페이지로 돌아오면 이미지가 불러와지지 않음 
+    */
     //1. 리스트 불러와서 보여주기
-    function showList(url){
+    function showList(url, data){
         $.ajax({
             url: url,
             method: "get",
@@ -9,12 +14,15 @@ $(function(){
                     let pageableContentObj = jsonObj.t.content;
 
                     let $board = $("div.board-list").first();
+                    $board.show();
+                     
                     $("div.board-list").not($board).remove();
-
+                    console.log("origin img src=" , $board.find("img.board-list__content__image").attr("src"));
                     let $boardParent = $board.parent();
                     //한줄씩 넣기 //나중에 span을 div로 바꾸고 테이블형식 넣기 
                     $(pageableContentObj).each(function(index, board){
                         let $boardCopy = $board.clone();
+                        console.log("copy img src=", $boardCopy.find("img.board-list__content__image").attr("src"), "board.roundReviewBoardNo=" , board.roundReviewBoardNo);
                         // 나중에 "" + 다 빼기
                         $boardCopy.find("div.board-list__content__no").html("글번호 : " + board.roundReviewBoardNo)
                         $boardCopy.find("img.board-list__content__image").attr("src", "../roundreview_images/" + board.roundReviewBoardNo + "_RoundReviewThumbnail.jpg");
@@ -28,16 +36,17 @@ $(function(){
                         $boardParent.append($boardCopy);
                     });
                     //맨앞에 뜨던 그지같은 이미지 삭제 
-                    $("img.board-list__content__image").first().remove();
+                    // $("img.board-list__content__image").first().hide();
+                    $("div.board-list").first().hide();
 
                     let $pageGroup = $("div.page-group");
                     let $pageGroupHtml = "";
 
                     let pageableObj = jsonObj.t;
-                    let currentPage = pageableObj.number + 1;  // 0 + 1
+                    let currentPage = pageableObj.number + 1;  
                     let totalPage = pageableObj.totalPages
-                    let size = pageableObj.size  //5
-                    let endPageNo = Math.ceil(currentPage/size)*size; // 5
+                    let size = pageableObj.size  
+                    let endPageNo = Math.ceil(currentPage/size)*size; 
                     let startPageNo = endPageNo - size + 1;
                     if (totalPage < endPageNo) {
                         endPageNo = totalPage;
@@ -79,10 +88,35 @@ $(function(){
     //span 태그들 중에서 disabled가 아닌 요소 찾기 
     
     $("div.page-group").on("click", "span:not(.disabled)", function() {
+        // log.console(data);
+        // let orderType = data.split("=");
         let orderType = 0;
+        $("ul.order>li").each(function(index, element){
+            let $aObj = $(element).find('a');
+            if($aObj.css("background-color") == 'rgb(255, 0, 0)'){
+                // switch($(element).html()){
+                //     case '최신순':break;
+                //     case '조회순':break;
+                //     case '좋아요순':break
+                // }
+                // switch(index){
+                    //     case 0:break;
+                    //     case 1:break;
+                    //     case 2:break
+                    // }
+                console.log(index, "color", $aObj.css("background-color"));
+                orderType = index;
+                return false;
+            }
+        });
+        
+        //$("ul.order>li").is("background-color", "yellow"); //기본
+        
         let pageNo = 0;
         
+        //pageNo = $(this).html();
         //?? 이해안됨
+        console.log(orderType);
         if($(this).hasClass("prev")){
             pageNo = parseInt($(this).next().html()) - 2;
         } else if ($(this).hasClass("next")){
@@ -94,13 +128,8 @@ $(function(){
         let word = $("div.search>input[name=search-box]").val().trim();
         let url = "";
         let data = "";
-
-        console.log(orderType);
-        console.log(pageNo);
-
         if(word == "") {
             url = "http://localhost:1125/backroundreview/board/list/" + orderType + "/" + pageNo;
-            console.log(url);
         } else {
             //검색어가 있는 경우 검색어를 path에 넣어주고 back 에 보낼 data를 만들기 
             url = "http://localhost:1125/backroundreview/search/" + word + "/" + pageNo;
@@ -128,13 +157,21 @@ $(function(){
         let orderType = 0;
         let url = "http://localhost:1125/backroundreview/board/list/" + orderType
         let data = "";
+        
+        $("ul.order>li>a").css("background-color", "yellow"); //기본
+        $(this).css("background-color", "red"); //클릭된경우
+        
         showList(url,data);
     });
     //4. 조회순 정렬하기
     $("ul.order>li.order__view-cnt>a").click(function(){ 
         let orderType = 1;
         let url = "http://localhost:1125/backroundreview/board/list/" + orderType
+        // let data = "orderType=" + orderType;;
         let data = "";
+
+        $("ul.order>li>a").css("background-color", "yellow"); //기본
+        $(this).css("background-color", "red"); //클릭된경우
         showList(url,data);
     });
     //5. 좋아요순 정렬하기
@@ -142,10 +179,14 @@ $(function(){
         let orderType = 2;
         let url = "http://localhost:1125/backroundreview/board/list/" + orderType
         let data = "";
+        
+        $("ul.order>li>a").css("background-color", "yellow"); //기본
+        
+        $(this).css("background-color", "red"); //클릭된경우
         showList(url,data);
     });
     //6. 글쓰기로 이동하기 -> 보내줄 데이터 없음 (닉네임? )
-    $("header>span.write").click(function(){
+    $("nav>span.write").click(function(){
         $(location).attr('href', '../html/roundreviewwrite.html');
     })
 
