@@ -61,35 +61,81 @@ $(function(){
     
     // let $btSubmitBoard = $("div.submit-board>button.submit-board__button");
     
-//--이미지첨부파일 변경될때  미리보기 START--
-	// $("input[name=imageFiles]").change(function () {
-	$("input.imageFiles1").change(function () {
-        let file = this.files[0];
-		$("div.image>img.preview1").attr("src", URL.createObjectURL(file));
-	});
-	$("input.imageFiles2").change(function () {
-        let file = this.files[0];
-		$("div.image>img.preview2").attr("src", URL.createObjectURL(file));
-	});
-	$("input.imageFiles3").change(function () {
-        let file = this.files[0];
-		$("div.image>img.preview3").attr("src", URL.createObjectURL(file));
-	});
-	//--이미지첨부파일 변경될때  미리보기 END--
+// //--이미지첨부파일 변경될때  미리보기 START--
+// 	// $("input[name=imageFiles]").change(function () {
+// 	$("input.imageFiles1").change(function () {
+//         let file = this.files[0];
+// 		$("div.image>img.preview1").attr("src", URL.createObjectURL(file));
+// 	});
+// 	$("input.imageFiles2").change(function () {
+//         let file = this.files[0];
+// 		$("div.image>img.preview2").attr("src", URL.createObjectURL(file));
+// 	});
+// 	$("input.imageFiles3").change(function () {
+//         let file = this.files[0];
+// 		$("div.image>img.preview3").attr("src", URL.createObjectURL(file));
+// 	});
+// 	//--이미지첨부파일 변경될때  미리보기 END--
 
-    // function readURL(obj){
-    //     let reader = new FileReader();
-    //     if(!obj.files.length){
-    //         return;
-    //     }
-    //     reader.readAsDataURL(obj.files[0]);
-    //     reader.onload = function(e){
-    //         let img = $('<img / >');
-    //         $(img).attr("src", e.target.result);
-    //         $("div.image").append(img);
-    //     }
-    // }
+//     // function readURL(obj){
+//     //     let reader = new FileReader();
+//     //     if(!obj.files.length){
+//     //         return;
+//     //     }
+//     //     reader.readAsDataURL(obj.files[0]);
+//     //     reader.onload = function(e){
+//     //         let img = $('<img / >');
+//     //         $(img).attr("src", e.target.result);
+//     //         $("div.image").append(img);
+//     //     }
+//     // }
 
+    // 드래그 드롭
+    // $(".sortable").sortable();
+    
+  //이미지 등록
+    $("#imgFiles").change(function(e){
+      //div 내용 비워주기
+        $('#preview').empty();
+
+        let files = e.target.files;
+        let arr = Array.prototype.slice.call(files);
+
+        preview(arr);
+
+        function preview(arr){
+            arr.forEach(function(f){
+                //div에 이미지 추가
+                let img = '<li class="ui-state-default">';
+                //str += '<span>'+fileName+'</span><br>';
+
+                //이미지 파일 미리보기
+                if(f.type.match('image.*')){
+                    //파일을 읽기 위한 FileReader객체 생성
+                    let reader = new FileReader(); 
+                    reader.onload = function (e) { 
+                        //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
+                        img += '<img src="'+e.target.result+'" title="'+f.name+'" width=300 height=300>';
+                        img += '<span class="delBtn" onclick="delImg(this)"> X </span>';
+                        img += "</li>";
+                        $(img).appendTo("#preview");
+                    } 
+                    reader.readAsDataURL(f);
+                }else{
+                    //이미지 파일 아닐 경우 대체 이미지
+                    /*
+                    str += '<img src="/resources/img/fileImg.png" title="'+f.name+'" width=60 height=60 />';
+                    $(str).appendTo('#Preview');
+                    */
+                }
+            })
+        }
+    })
+
+    //이미지 삭제
+    function delImg(_this){
+        $(_this).parent('li').remove()
+    }
 
     // // ----- 글 등록 START -----
     // //등록 버튼 객체 찾기
@@ -114,16 +160,10 @@ $(function(){
 		contentType: false, //파일업로드용 설정
 		data: formData, //파일업로드용 설정
 		cache: false, //이미지 다운로드용 설정
-		xhrFields: {
-			//이미지 다운로드용 설정
-			responseType: "blob",
+		success: function(responseData) {
+            alert("글 등록 성공");
 		},
-		success: function (responseData) {
-			let $img = $("div.image>img.downloadview");
-			let url = URL.createObjectURL(responseData);
-			$img.attr("src", url);
-		},
-		error: function (jqXHR, textStatus) {
+		error: function (jqXHR) {
 			//응답실패
 			alert("에러:" + jqXHR.status);
 		},
