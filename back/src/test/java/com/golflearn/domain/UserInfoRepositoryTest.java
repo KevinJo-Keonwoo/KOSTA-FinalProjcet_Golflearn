@@ -15,8 +15,8 @@ import com.golflearn.exception.FindException;
 import com.golflearn.exception.ModifyException;
 
 @SpringBootTest
-class UserInfoRepositoryTest {
-	
+public class UserInfoRepositoryTest {
+
 	@Autowired
 	private UserInfoRepository repository;
 	
@@ -33,7 +33,6 @@ class UserInfoRepositoryTest {
 		user.setUserJoinDt(sqlDate);
 		repository.insertStdt(user);		
 	}
-	
 	
 	@Test
 	public void testInsertPro() throws AddException{
@@ -71,7 +70,7 @@ class UserInfoRepositoryTest {
 		assertEquals(userNickname, ui.getUserNickname());
 	}
 	
-	
+	//로그인
 	@Test
 	public void testSelectByUserIdAndPwd() throws FindException {
 		String userNicakName = "프로한";
@@ -82,6 +81,7 @@ class UserInfoRepositoryTest {
 		assertEquals(expectedUserId, ui.getUserId());
 		assertEquals(expectedUserPwd, ui.getUserPwd());
 	}
+	
 	@Test
 	void testSelectByUserNameAndPhone() throws FindException {
 		String userName = "전승현";

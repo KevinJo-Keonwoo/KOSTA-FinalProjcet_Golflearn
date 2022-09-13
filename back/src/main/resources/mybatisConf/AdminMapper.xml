@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace = "com.golflearn.mapper.AdminMapper">
+   	<resultMap type="Lesson" id="lessonMap" autoMapping="true">
+  		<id property="lsnNo" column="lsn_no"/>
+  		<association property="userInfo" javaType="UserInfo" autoMapping="true">
+  			<id property="userId" column="user_id"/>
+     		<result property="userName" column="user_name"/>
+     	</association>
+ 	</resultMap>	
+   	 <resultMap type="UserInfo" id="userMap" autoMapping="true">
+   	 	<!-- <id property="userId" column="user_id"/> -->
+   	 	<collection property="proInfo" javaType="ProInfo" autoMapping="true">
+   	 		<id property="proCareer" column="pro_career"/>
+   	 	</collection>
+   	 </resultMap>
+   	 <resultMap type="LessonLine" id="userLessonInfoMap" autoMapping="true">
+   	 	<id property="lsnLineNo" column="lsn_line_no"/>
+   	 	<collection property = "lsn" javaType="Lesson" autoMapping="true">
+   	 		<id property="lsnNo" column="lsn_no"/>
+   	 	</collection>
+   	 </resultMap>
+   	 
+   	 
+    <!-- 레슨승인 목록보기: 승인상태별 레슨 목록을 페이징처리하여 최신순 반환-->
+	<select id="selectByLsnStatus" parameterType="map" resultMap="lessonMap">
+	SELECT *
+	FROM (SELECT rownum r, a.*
+		  FROM (SELECT l.lsn_no, l.user_id, l.lsn_title, l.lsn_req_dt, u.user_name
+				FROM lesson l JOIN user_info u ON (l.user_id = u.user_id)
+				WHERE lsn_status = #{lsnStatus} 
+				ORDER BY lsn_no DESC
+			   	) a
+			)
+	WHERE r BETWEEN #{startRow} AND #{endRow}
+	
+	<!-- 레슨승인 목록보기: 승인상태별 레슨 수 -->
+	</select>
+		<select id="selectCntByLsnStatus" resultType="int" parameterType="int">
+		SELECT COUNT(*)
+		FROM lesson
+		WHERE lsn_status = #{lsnStatus}
+	</select>	
+	
+	<!-- 레슨 승인/반려하기 : 승인상태값(1), 반려상태값(3)-->
+	<update id="updateLsnStatus" parameterType="Lesson">
+		UPDATE lesson
+		<set>
+			<choose>
+				<when test="lsnStatus == 1">
+ 					lsn_status = 1
+				</when>
+				<when test="lsnStatus == 3">
+ 					lsn_status = 3, lsn_rjt_reason = #{lsnRjtReason}
+				</when>
+			</choose>
+		</set>
+		WHERE lsn_no = #{lsnNo}
+	</update>
+	
+	<!-- 반려사유 보기 -->
+	<select id="selectLsnRjtReason" resultType="string" parameterType="int" >
+	SELECT lsn_rjt_reason
+	FROM lesson
+	WHERE lsn_no = #{lsnNo}
+	</select>
+   	 
+   <!-- 전체 유저 목록 조회하기  -->
+    <select id="selectByUserPage" parameterType="map" resultType="UserInfo">
+	    SELECT * 
+	    FROM (SELECT rownum r, a.*
+			 FROM (SELECT user_id, user_nickname, user_type, user_quit_status
+					FROM user_info 
+				   ORDER BY user_join_dt DESC)a
+			       )
+	 	WHERE r BETWEEN #{startRow} AND #{endRow}
+    </select>
+     <select id="selectCountAllUser" resultType="int">
+        SELECT COUNT(*) FROM user_info
+    </select>
+    
+    <!--유저 타입별로 회원목록 조회하기  -->
+    <select id="selectByUserType" parameterType="map" resultType="UserInfo" >
+	    SELECT *
+		FROM (SELECT rownum r, a.*
+		     	FROM (SELECT user_id, user_nickname, user_type, user_quit_status
+		 				FROM user_info
+	             		WHERE user_type = #{userType}
+						ORDER BY user_type DESC) a
+			)			
+		WHERE r BETWEEN #{startRow} AND #{endRow}
+    </select>
+    <select id="selectCountUserType" parameterType= "int" resultType="int">
+        SELECT COUNT(*) FROM user_info
+        WHERE user_type = #{userType}
+    </select>
+     
+    <!--유저정보 상세보기-->
+    <select id="selectUserDetail" parameterType="String" resultMap="userMap">
+    	SELECT u.*, pro_career 
+    	FROM user_info u 
+		LEFT JOIN pro_info p ON (u.user_id = p.user_id)
+		WHERE u.user_id = #{userId}
+    </select>
+    
+    <!--수강생 레슨정보  -->
+	<select id="selectByStdtLesson" parameterType="String" resultType="LessonLine">
+		SELECT * 
+		FROM( SELECT rownum r, a.*
+      			FROM (SELECT ll.lsn_line_no, ll.lsn_exp_dt, ll.stdt_lsn_status, l.lsn_title, ll.lsn_no, l.lsn_status
+						FROM lesson_line ll JOIN lesson l ON (ll.lsn_no = l.lsn_no) 
+						WHERE ll.user_id = #{userId}
+						ORDER BY lsn_line_no DESC;
+      					)a
+		WHERE r BETWEEN #{startRow} AND #{endRow}
+	</select>
+	<select id="selectCountStdtLesson" parameterType= "String" resultType="int">
+        SELECT COUNT(*) FROM lesson_line
+        WHERE user_id = #{userId}
+    </select>
+     
+	<!-- 프로 레슨정보  -->
+	<select id="selectByProLesson" parameterType="map" resultMap= "lessonMap">
+		SELECT * 
+		FROM( SELECT rownum r, a.*
+      			FROM (SELECT l.lsn_no, l.user_id, l.lsn_title, l.lsn_status, l.lsn_apv_dt, u.user_name
+            			FROM lesson l 
+            			JOIN user_info u ON (l.user_id = u.user_id)
+            			WHERE u.user_id = {userId}
+            			ORDER BY user_name DESC)a
+      			)
+		ORDER BY lsn_apv_dt DESC;
+		WHERE r BETWEEN #{startRow} AND #{endRow}
+	</select>
+	<select id="selectCountProLesson" parameterType= "String" resultType="int">
+        SELECT COUNT(*) FROM lesson
+        WHERE user_id = #{userId}
+    </select>
+    
+<!--     동적쿼리 유저 레슨목록 불러오기
+   	<select id="selectUserLesson" parameterType="hashMap" resultMap="userLessonInfoMap">
+	   	SELECT * 
+	   	FROM(SELECT rownum r, a.* 
+	   		FROM (SELECT ll.lsn_line_no,ll.lsn_exp_dt, ll.stdt_lsn_status, l.lsn_title, ll.lsn_no, l.lsn_status, l.lsn_apv_dt 
+					FROM lesson_line ll FULL OUTER JOIN lesson l ON (ll.lsn_no = l.lsn_no)
+					<choose>
+						<when test = "userType == 0">
+							WHERE ll.user_id = #{userId}
+						</when>
+						<when test="userType == 1">
+							WHERE l.user_id = #{userId} 
+						</when>
+					</choose>
+					ORDER BY lsn_exp_dt DESC
+					)a
+				)
+		WHERE r BETWEEN #{startRow} AND #{endRow}				
+	</select> -->
+	
+	<!--검색어로 회원찾기  -->
+	<select id="selectByWord" parameterType="map" resultType= "UserInfo">
+	    SELECT *
+		FROM (SELECT rownum r, a.*
+			  FROM (SELECT user_name, user_nickname, user_id, user_type, user_quit_status 
+					FROM user_info
+					WHERE (user_name ||user_nickname || user_id) LIKE '%${word}%'
+					ORDER BY user_id DESC) a
+					)
+		WHERE r BETWEEN #{startRow} AND #{endRow}
+   	</select>
+        <select id="selectCountSearchUser" resultType="int"
+        parameterType="string">
+        SELECT COUNT(*) FROM user_info WHERE (user_name ||user_nickname || user_id) LIKE '%${value}%'
+    </select>
+    
+  </mapper>

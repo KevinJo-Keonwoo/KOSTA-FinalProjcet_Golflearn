@@ -1,0 +1,33 @@
+.board-list {
+    /* margin: 0 auto; */
+}
+
+.boardlist__content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    text-align: center;
+    height: 170px;
+    width: 80%;
+    margin: 0 auto;
+    border-bottom: 1px solid #64DB99;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.boardlist__content:nth-last-child(1) {
+    border: none;
+}
+
+.boardlist__content > div {
+    width: 10%;
+    height:100%;
+}
+
+.boardlist__content > div > img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}

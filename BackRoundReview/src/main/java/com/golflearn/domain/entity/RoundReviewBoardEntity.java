@@ -79,5 +79,6 @@ public class RoundReviewBoardEntity {
 //	@JoinColumn(name="round_review_board_no")
 	private List<RoundReviewLikeEntity> roundReviewLikeList;
 	
-	
+
+
 }
