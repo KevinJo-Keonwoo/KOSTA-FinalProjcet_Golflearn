@@ -7,9 +7,13 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.golflearn.domain.entity.ResaleBoardEntity;
@@ -49,23 +53,40 @@ public class ResaleBoardService {
 	 * @return
 	 * @throws FindException
 	 */
-	public PageBean<ResaleBoardDto> boardList(int currentPage) throws FindException{ // 반환은 dto로, 주입은 entity
-		int endRow = currentPage * CNT_PER_PAGE;
-		int startRow = endRow - CNT_PER_PAGE + 1; 
-
-		List<ResaleBoardEntity> rbList = resaleBoardRepo.findByPage(startRow,endRow);
-		long totalCnt = resaleBoardRepo.count(); // 총 행수를 얻어오는 메서드
-		int cntPerPageGroup = 5;
-
-		ModelMapper modelMapper = new ModelMapper();
-		List<ResaleBoardDto> dtoList = 
-				rbList.stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
-				.collect(Collectors.toList());
+	public Page<ResaleBoardDto> boardList(int currentPage) throws FindException{ // 반환은 dto로, 주입은 entity
+		Page<ResaleBoardEntity> boardEntity = resaleBoardRepo.findAll(PageRequest.of(currentPage, 5, Sort.by("ResaleBoardNo").descending()));
 		
-		PageBean<ResaleBoardDto> pbDto = new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
-
-		return pbDto;
+		ModelMapper modelMapper = new ModelMapper();
+//		List<ResaleBoardDto> boarDto = boardEntity.getContent().stream().map(boardEntity ->
+//		sourceToDestination(boardEntity, new ResaleBoardDto()))
+//		.collect(Collectors.toList());
+		Page<ResaleBoardDto> boardDto = modelMapper.map(boardEntity, new TypeToken<Page<ResaleBoardDto>>(){}.getType());
+		
+//		Page<ResaleBoardDto> boardDto = 
+//				boardEntity.getContent().stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
+//				.collect(Collectors.toList());
+//		
+		return boardDto;
 	}
+
+	//	public PageBean<ResaleBoardDto> boardList(int currentPage) throws FindException{ // 반환은 dto로, 주입은 entity
+//		int endRow = currentPage * CNT_PER_PAGE;
+//		int startRow = endRow - CNT_PER_PAGE + 1; 
+//
+//		List<ResaleBoardEntity> rbList = resaleBoardRepo.findByPage(startRow,endRow);
+//		long totalCnt = resaleBoardRepo.count(); // 총 행수를 얻어오는 메서드
+//		int cntPerPageGroup = 5;
+//
+//		ModelMapper modelMapper = new ModelMapper();
+//		List<ResaleBoardDto> dtoList = 
+//				rbList.stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
+//				.collect(Collectors.toList());
+//		
+//		PageBean<ResaleBoardDto> pbDto = new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
+//
+//		return pbDto;
+//	}
+	
 
 
 	/**
@@ -109,24 +130,36 @@ public class ResaleBoardService {
 	 * @return
 	 * @throws FindException
 	 */
-	public PageBean<ResaleBoardDto> searchBoard(String word, int currentPage) throws FindException{
+	
+	public Page<ResaleBoardDto> searchBoard(String word, int currentPage) throws FindException{
 		
-		int endRow = currentPage * CNT_PER_PAGE;
-		int startRow = endRow - CNT_PER_PAGE + 1;
-		List<ResaleBoardEntity> entityList = resaleBoardRepo.findByWord(word, startRow, endRow);
+		Page<ResaleBoardEntity> boardEntity 
+				= resaleBoardRepo.findByWord(word,PageRequest.of(currentPage, 5));
 		
-		int totalCnt = resaleBoardRepo.findCountByWord(word);
-		int cntPerPageGroup = 5;
 		
 		ModelMapper modelMapper = new ModelMapper();
-		List<ResaleBoardDto> dtoList = 
-				entityList.stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
-				.collect(Collectors.toList());
-		
-		PageBean<ResaleBoardDto> pb = 
-				new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
-		return pb;
+		Page<ResaleBoardDto> boardDto = modelMapper.map(boardEntity, new TypeToken<Page<ResaleBoardDto>>(){}.getType());
+
+		return boardDto;
 	}
+//	public PageBean<ResaleBoardDto> searchBoard(String word, int currentPage) throws FindException{
+//		
+//		int endRow = currentPage * CNT_PER_PAGE;
+//		int startRow = endRow - CNT_PER_PAGE + 1;
+//		List<ResaleBoardEntity> entityList = resaleBoardRepo.findByWord(word, startRow, endRow);
+//		
+//		int totalCnt = resaleBoardRepo.findCountByWord(word);
+//		int cntPerPageGroup = 5;
+//		
+//		ModelMapper modelMapper = new ModelMapper();
+//		List<ResaleBoardDto> dtoList = 
+//				entityList.stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
+//				.collect(Collectors.toList());
+//		
+//		PageBean<ResaleBoardDto> pb = 
+//				new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
+//		return pb;
+//	}
 	
 	/**
 	 * 게시글 작성

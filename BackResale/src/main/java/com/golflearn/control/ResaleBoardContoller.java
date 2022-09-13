@@ -14,6 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -65,21 +69,45 @@ public class ResaleBoardContoller {
 	 * @param optCp
 	 * @return
 	 */
+//	@GetMapping(value={"board/list","board/list/{optCp}"})
+//	public ResultBean<PageBean<ResaleBoardDto>> BoardList(@PathVariable Optional<Integer> optCp){
+//		// 요청전달데이터 전달 되지 않을 때를 대비하여 사용하는 RESTful의  @PathVariable은 Optional로 설정해줘야함 
+//
+//		ResultBean<PageBean<ResaleBoardDto>> rb = new ResultBean<>();
+//		try {
+//			int currentPage;
+//			if(optCp.isPresent()) { //currentPage 가 있으면(optional)
+//				currentPage = optCp.get();
+//			}else { // 없으면
+//				currentPage = 1;				
+//			}
+//			PageBean<ResaleBoardDto> pb = service.boardList(currentPage);
+//			rb.setStatus(1);
+//			rb.setT(pb);
+//		} catch (FindException e) {
+//			e.printStackTrace();
+//			rb.setStatus(0);
+//			rb.setMsg(e.getMessage());
+//		}
+//		return rb;
+//	}
+	
 	@GetMapping(value={"board/list","board/list/{optCp}"})
-	public ResultBean<PageBean<ResaleBoardDto>> BoardList(@PathVariable Optional<Integer> optCp){
+	public ResultBean<Page<ResaleBoardDto>> boardList(@PathVariable Optional<Integer> optCp,
+							@PageableDefault(page = 0, size = 5, sort = "resaleBoardNo", direction = Direction.DESC) Pageable pageable){
 		// 요청전달데이터 전달 되지 않을 때를 대비하여 사용하는 RESTful의  @PathVariable은 Optional로 설정해줘야함 
-
-		ResultBean<PageBean<ResaleBoardDto>> rb = new ResultBean<>();
+		
+		ResultBean<Page<ResaleBoardDto>> rb = new ResultBean<>();
 		try {
 			int currentPage;
 			if(optCp.isPresent()) { //currentPage 가 있으면(optional)
-				currentPage = optCp.get();
+				currentPage = optCp.get() -1 ; // 0페이지가 시작
 			}else { // 없으면
-				currentPage = 1;				
+				currentPage = 0;				
 			}
-			PageBean<ResaleBoardDto> pb = service.boardList(currentPage);
+			Page<ResaleBoardDto> pb = service.boardList(currentPage);
 			rb.setStatus(1);
-			rb.setT(pb);
+			rb.setT(pb);			
 		} catch (FindException e) {
 			e.printStackTrace();
 			rb.setStatus(0);
@@ -93,7 +121,7 @@ public class ResaleBoardContoller {
 	 * @param resaleBoardNo
 	 * @return
 	 */
-	@GetMapping("board/{resaleBoardNo}")
+	@GetMapping(value = "board/{resaleBoardNo}")
 	public ResultBean<ResaleBoardDto> viewBoardDetail(@PathVariable Long resaleBoardNo){
 		ResultBean<ResaleBoardDto> rb = new ResultBean<>();
 		try {
@@ -115,27 +143,29 @@ public class ResaleBoardContoller {
 	 * @param optCp
 	 * @return
 	 */
-	@GetMapping(value = "board/search/{optWord}")
-	public ResultBean<PageBean<ResaleBoardDto>> serch(
+	@GetMapping(value = {"board/search/{optWord}/{optCp}", "board/search/{optWord}", "board/search"})
+	public ResultBean<Page<ResaleBoardDto>> search(
 			@PathVariable Optional<String> optWord,
-			@PathVariable Optional<Integer> optCp){
-		ResultBean<PageBean<ResaleBoardDto>> rb = new ResultBean<>();
+			@PathVariable Optional<Integer> optCp,
+			@PageableDefault(page = 0, size = 5, sort = "resaleBoardNo", direction = Direction.DESC) Pageable pageable){
+		ResultBean<Page<ResaleBoardDto>> rb = new ResultBean<>();
 
 		try {
-			PageBean<ResaleBoardDto> pb ; 
+			Page<ResaleBoardDto> pb ; 
 			String word = ""; 
 			if(optWord.isPresent()) {
 				word = optWord.get();
 			} else { 
 				word = "";
 			}
-
-			int currentPage = 1;
+			
+			int currentPage;
 			if(optCp.isPresent()) {
-				currentPage = optCp.get();
-			}else {
-
+				currentPage = optCp.get()-1; // 0페이지가 시작
+			} else {
+				currentPage = 0;
 			}
+			
 			if("".equals(word)) {
 				pb = service.boardList(currentPage);
 			} else {
@@ -152,6 +182,43 @@ public class ResaleBoardContoller {
 	}
 	
 	
+//	@GetMapping(value = {"board/search/{optWord}/{optCp}", "search/{optWord}", "search"})
+//	public ResultBean<PageBean<ResaleBoardDto>> serch(
+//			@PathVariable Optional<String> optWord,
+//			@PathVariable Optional<Integer> optCp){
+//		ResultBean<PageBean<ResaleBoardDto>> rb = new ResultBean<>();
+//
+//		try {
+//			PageBean<ResaleBoardDto> pb ; 
+//			String word = ""; 
+//			if(optWord.isPresent()) {
+//				word = optWord.get();
+//			} else { 
+//				word = "";
+//			}
+//
+//			int currentPage = 1;
+//			if(optCp.isPresent()) {
+//				currentPage = optCp.get();
+//			}else {
+//
+//			}
+//			if("".equals(word)) {
+//				pb = (PageBean<ResaleBoardDto>) service.boardList(currentPage);
+//			} else {
+//				pb = service.searchBoard(word, currentPage);
+//			} 
+//			rb.setStatus(1);
+//			rb.setT(pb);
+//		} catch (FindException e) {
+//			e.printStackTrace();
+//			rb.setStatus(0);
+//			rb.setMsg(e.getMessage());
+//		}
+//		return rb;
+//	}
+	
+	
 	/**
 	 * 게시글 등록
 	 * @param imageFiles
@@ -163,6 +230,7 @@ public class ResaleBoardContoller {
 	@PostMapping(value = "board/write", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> writeBoard (@RequestPart(required = false)List<MultipartFile> imageFiles,
 										 ResaleBoardDto dto, HttpSession session) {
+		
 //		String loginedNickname = (String) session.getAttribute("loginNickname");
 		// 입력 내용 게시글 저장
 		ResaleBoardDto boardDto = new ResaleBoardDto();
@@ -179,7 +247,7 @@ public class ResaleBoardContoller {
 //		logger.error("글번호는"+boardDto.getResaleBoardNo());
 		
 		// 파일 저장 폴더
-		String saveDirectory = uploadDirectory + "resale_board_images\\"+ resaleBoardNo;
+		String saveDirectory = uploadDirectory + "resale_images\\"+ resaleBoardNo;
 		//파일 경로 생성
 		if(!new File(saveDirectory).exists()) {
 			new File(saveDirectory).mkdirs(); //파일 경로에 폴더 없으면 저장
@@ -195,6 +263,7 @@ public class ResaleBoardContoller {
 					
 					// 파일 확장자 가지고 오기
 					String originFileName = imageFile.getOriginalFilename();
+					logger.error("파일이름은 " + originFileName);
 					String fileExtension = originFileName.substring(originFileName.lastIndexOf("."));
 					logger.error("파일 확장자는" + fileExtension);
 					

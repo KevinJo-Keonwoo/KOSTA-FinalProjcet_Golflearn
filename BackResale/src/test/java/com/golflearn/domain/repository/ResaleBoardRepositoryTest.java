@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import com.golflearn.domain.entity.ResaleBoardEntity;
 
@@ -27,6 +29,19 @@ class ResaleBoardRepositoryTest {
 	private ResaleCommentRepository resaleCmtRepo;
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
+	
+	@Test
+	void testFindAll() {
+		resaleBoardRepo.findAll();
+	}
+	
+	@Test
+	void testFindWord() {
+		String word = "골프";
+		int currentPage = 1;
+		resaleBoardRepo.findByWord(word,PageRequest.of(currentPage, 5));
+	}
+	
 	
 	// 페이지별 목록 불러오기
 	@Test
@@ -113,18 +128,18 @@ class ResaleBoardRepositoryTest {
 	}
 	
 	// 게시글 검색
-	@Test
-	void testFindByWord() {
-		String word = "골프";
-		int currentPage = 1;
-		int cntPerPage = 10;
-		int endRow = currentPage * cntPerPage ;
-		int startRow = endRow - cntPerPage +1 ;
-		List<ResaleBoardEntity> list = resaleBoardRepo.findByWord(word, startRow, endRow);
-		list.forEach((rb)->{
-			logger.error(rb.toString());
-		});	
-	}
+//	@Test
+//	void testFindByWord() {
+//		String word = "골프";
+//		int currentPage = 1;
+//		int cntPerPage = 10;
+//		int endRow = currentPage * cntPerPage ;
+//		int startRow = endRow - cntPerPage +1 ;
+//		List<ResaleBoardEntity> list = resaleBoardRepo.findByWord(word, startRow, endRow);
+//		list.forEach((rb)->{
+//			logger.error(rb.toString());
+//		});	
+//	}
 	
 	
 }

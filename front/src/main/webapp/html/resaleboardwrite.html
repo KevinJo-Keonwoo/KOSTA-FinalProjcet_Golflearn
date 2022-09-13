@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="http: //netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="http: //netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+
+    <script src="../jq/resaleboardwrite.js"></script>
+    <script src="../jq/summernote-lite.js"></script>
+    <script src="../jq/summernote-ko-KR.js"></script>
+    <link rel="stylesheet" href="../css/summernote-lite.css">
+    <link rel="stylesheet" href="../css/resaleboardwrite.css">
+    <title>중고거래 글쓰기</title>
+</head>
+<body>
+    <h2> 중고거래 글쓰기 페이지</h2>
+    <div>
+        <form class="write" action="http://localhost:1126/backresale/resale/board/write" method="post"
+		enctype="multipart/form-data">
+            <div class="write">
+                <div>
+                    <input class="write-title" name ="resaleBoardTitle" type="text" placeholder="제목을 입력해주세요">
+                </div>
+                <div>
+                    <textarea class = "write-summernote"  name = "resaleBoardContent" id="summernote" name="content">                
+                    </textarea>
+                </div>
+            </div>
+            <div>
+                <input class="imageFiles1" name="imageFiles" type="file" accept="image/*"  multiple>
+                <input class="imageFiles2" name="imageFiles" type="file" accept="image/*"  multiple>
+                <input class="imageFiles3" name="imageFiles" type="file" accept="image/*"  multiple>
+            </div>
+            <div class="image">
+                <img class="preview1" style="width:300px; height:300px;">
+                <img class="preview2" style="width:300px; height:300px;">
+                <img class="preview3" style="width:300px; height:300px;">
+            </div>
+        </form>
+    </div>
+    <div class= "submit-board">
+        <button class = "submit-board__button" type="submit"> 등록하기 </button>
+    </div>
+</body>
+</html>

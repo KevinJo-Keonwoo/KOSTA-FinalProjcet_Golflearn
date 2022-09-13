@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../css/roundreviewboardlist.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../jq/roundreviewboardlist.js"></script>
+    <title>Golflearn</title>
+</head>
+<body>
+    <main>
+        <section>
+            <header>
+                <h2>라운딩 후기</h2>
+                <div class="search">
+                    <input type="text" name="search-box" placeholder="검색어를 입력하세요">
+                    <button class="searchBtn">검색1</a>
+                    <img src="" alt="">
+                </div>
+                <ul class="order">
+                    <li class="order__recent">
+                        <a class="order_recent__a">최신순</a>
+                    </li>
+                    <li class="order__view-cnt">
+                        <a class="order__view-cnt__a">조회순</a>
+                    </li>
+                    <li class="order__like-cnt">
+                        <a class="order__like-cnt__a">좋아요순</a>
+                    </li>
+                </ul>
+                <span class="write">글쓰기</span>
+            </header>
+            <article>
+                <div class="board">
+                    <header class="board-header">
+                        글번호, 사진, 제목, 작성자, 날짜 , 조회수 
+                    </header>
+                    <div class="board-list"> <!--게시글들-->
+                        <div class="board-list__content"> <!--게시글-->
+                            <div class="board-list__content__no"></div>
+                            <!-- <img src="../roundreview_images/25_RoundReviewThumbnail.jpg" alt=""> -->
+                            <!-- <img  class="board-list__content__image" src="${'../roundreview_images/' + board.roundReviewBoardNo + '_RoundReviewThumbnail.jpg'}" alt=""> -->
+                            <img class="board-list__content__image" src="" alt="">
+                            <div class="board-list__content__title"></div>
+                            <div class="board-list__content__cmt-cnt"></div>
+                            <div class="board-list__content__nickname"></div>
+                            <div class="board-list__content__dt"></div>
+                            <div class="board-list__content__view-cnt"></div>
+                            <div class="board-list__content__like-cnt"></div>
+                            <div>------------------------------</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-group">
+                    ◁ 1 2 3 4 5 ▷
+                </div>
+            </article>
+        </section>
+    </main>
+</body>
+</html>
