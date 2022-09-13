@@ -1,5 +1,4 @@
-$(function(){
-    
+$(function(){  
     $(document).ready(function() {  // 페이지 로딩이 끝나면
         let url = "http://localhost:1124/board/write";
 
@@ -54,16 +53,43 @@ $(function(){
     //         }
     //     });
     // }
-    
+
     // $(".note-group-image-url").remove();    //이미지 추가할 때 Image URL 등록 input 삭제 
     
     // // ----- 글 등록 START -----
     // //등록 버튼 객체 찾기
+    
     // let $btSubmitBoard = $("div.submit-board>button.submit-board__button");
-    $("input[name=imageFiles]").change(function() {
+    
+//--이미지첨부파일 변경될때  미리보기 START--
+	// $("input[name=imageFiles]").change(function () {
+	$("input.imageFiles1").change(function () {
         let file = this.files[0];
-        $("div.image>img.preview").attr("src", URL.createObjectURL(file)); // createObjectUrL : 상대경로 반환받음
-    });
+		$("div.image>img.preview1").attr("src", URL.createObjectURL(file));
+	});
+	$("input.imageFiles2").change(function () {
+        let file = this.files[0];
+		$("div.image>img.preview2").attr("src", URL.createObjectURL(file));
+	});
+	$("input.imageFiles3").change(function () {
+        let file = this.files[0];
+		$("div.image>img.preview3").attr("src", URL.createObjectURL(file));
+	});
+	//--이미지첨부파일 변경될때  미리보기 END--
+
+    // function readURL(obj){
+    //     let reader = new FileReader();
+    //     if(!obj.files.length){
+    //         return;
+    //     }
+    //     reader.readAsDataURL(obj.files[0]);
+    //     reader.onload = function(e){
+    //         let img = $('<img / >');
+    //         $(img).attr("src", e.target.result);
+    //         $("div.image").append(img);
+    //     }
+    // }
+
 
     // // ----- 글 등록 START -----
     // //등록 버튼 객체 찾기

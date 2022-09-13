@@ -66,6 +66,9 @@ $(function() {
                         // } else if(startPage < 0){
                             //     startPage = 1; 
                         }
+                        if (totalPage < endPage) {
+                            endPage = totalPage;
+                        }
 
                         // 시작페이지가 끝 페이지보다 작거나 같을 때 
                         for(let i = startPage ; i <= endPage ; i++){
@@ -118,7 +121,7 @@ $(function() {
                 url = "http://localhost:1126/backresale/resale/board/list/" + pageNo;
             // data = "currentPage=" + pageNo;
             } else {
-                url = "http://localhost:1126/backresale/resale/board/search/"+word;
+                url = "http://localhost:1126/backresale/resale/board/search/"+word +"/"+pageNo;
                 data = "currentPage=" + pageNo + "&word=" + word;
             }
             showList(url, data);
@@ -131,8 +134,8 @@ $(function() {
     $btSearch.click(function(){
         let word = $("div.search>div.search__box>input.search__input").val().trim();
         let url = "http://localhost:1126/backresale/resale/board/search";
-        // let data = "word=" + word + "currentPage" + pageNo;
-        let data = "currentPage=1&word=" + word;
+        let data = "currentPage=1 & word=" + word;
+        // let data = "currentPage=" + pageNo + "&word=" + word;
         showList(url, data);
         return false;
     });
@@ -148,8 +151,9 @@ $(function() {
         //클릭한 해당 게시물로 이동
     $("div.board-list").on("click", "div.boardlist__content", function(){
         $board = $("div.board-list__content__no");
-        $boardNo = $(this).children($board).val();
-        
+        $boardNo = $(this).children($board).text();
+        console.log("게시글번호는"+$boardNo);
+
         alert($boardNo);
         location.href = '../html/resaledetail.html?resale_board_no=' + $boardNo;
     });
