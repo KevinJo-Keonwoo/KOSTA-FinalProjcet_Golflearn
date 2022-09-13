@@ -34,19 +34,24 @@ $(function(){
                     let $pageGroupHtml = "";
 
                     let pageableObj = jsonObj.t;
-                    let startPage = pageableObj.pageable.pageNumber + 1;
-                    let endPage = pageableObj.numberOfElements;
-                    let currentPage = pageableObj.number;
+                    let currentPage = pageableObj.number + 1;  // 0 + 1
                     let totalPage = pageableObj.totalPages
+                    let size = pageableObj.size  //5
+                    let endPageNo = Math.ceil(currentPage/size)*size; // 5
+                    let startPageNo = endPageNo - size + 1;
+                    if (totalPage < endPageNo) {
+                        endPageNo = totalPage;
+                    }
 
-                    if (startPage > 1) {
+                    if (startPageNo > 1) {
                         $pageGroupHtml += '<span class="prev">◁</span>';
                     }
 
                     //startPage부터 endPage까지 숫자 넣어주기 
                     //현재페이지면 disable클래스 줘서 css다르게 넣어주기 (링크안되게?)
-                    for (let i = startPage; i<= endPage; i++){
+                    for (let i = startPageNo; i<= endPageNo; i++){
                         $pageGroupHtml += "&nbsp;&nbsp;";
+                        // $pageGroupHtml += "<span>" + i + "</span>"; 
                         if (currentPage == i){
                             $pageGroupHtml += '<span class="disabled">' + i + "</span>";
                         } else {   
@@ -54,11 +59,10 @@ $(function(){
                         }
                     }
                     //back에서 보내준 endPage 값이 totalPage값보다 작으면 화살표나오게  
-                    if (endPage < totalPage) {
+                    if (endPageNo < totalPage) {
                         $pageGroupHtml += "&nbsp;&nbsp;";
                         $pageGroupHtml += '<span class="next">▷</span>';
                     }
-
                     //pageGroupHtml에 받아놨던 정보를 pageGroup selector에 넣어주기 
                     $pageGroup.html($pageGroupHtml);
                 }else {
@@ -74,38 +78,17 @@ $(function(){
     //1-2. 페이지그룹 페이지 클릭
     //span 태그들 중에서 disabled가 아닌 요소 찾기 
     
-    // $("div.page-group").on("click", "span:not(.disabled)", function() {
-    //     $.ajax({
-    //         url : 'http://localhost:1125/backroundreview/board/list',
-    //         success : function(jsonObj){
-    //             let pageNo = jsonObj.t.number;
-    //             console.log(pageNo);
-    //             let orderType = 0;
-    //             if($(this).hasClass("prev")){
-    //                 pageNo = parseInt($(this).next().html()) - 1;
-    //             } else if ($(this).hasClass("next")){
-    //                 pageNo = parseInt($(this).prev().html()) + 1;
-    //             } else {
-    //                 pageNo = parseInt($(this).html());
-    //             }
-    //             let url = "";
-    //             let data = "";
-    //             url = "http://localhost:1125/backroundreview/board/list/" + orderType + pageNo;
-    //             showList(url, data);
-    //             return false;
-    //         }
-    //     })
     $("div.page-group").on("click", "span:not(.disabled)", function() {
         let orderType = 0;
         let pageNo = 0;
         
         //?? 이해안됨
         if($(this).hasClass("prev")){
-            pageNo = parseInt($(this).next().html()) - 1;
+            pageNo = parseInt($(this).next().html()) - 2;
         } else if ($(this).hasClass("next")){
-            pageNo = parseInt($(this).prev().html()) + 1;
+            pageNo = parseInt($(this).prev().html()) ;
         } else {
-            pageNo = parseInt($(this).html());
+            pageNo = parseInt($(this).html()) -1;
         }
         //trim() 양끝의 공백을 제거 
         let word = $("div.search>input[name=search-box]").val().trim();
@@ -120,7 +103,7 @@ $(function(){
             console.log(url);
         } else {
             //검색어가 있는 경우 검색어를 path에 넣어주고 back 에 보낼 data를 만들기 
-            url = "http://localhost:1125/backroundreview/board/search/" + word + "/" + pageNo;
+            url = "http://localhost:1125/backroundreview/search/" + word + "/" + pageNo;
             data = "currentPage=" + pageNo + "&word=" + word;
         } 
         showList(url, data);
@@ -129,11 +112,13 @@ $(function(){
 
     //2. 검색하기
     //이미지 클릭으로 바꾸기 
-    $("div.search>a").click(function(){
+    $("div.search>button.searchBtn").click(function(){
         let word = $("div.search>input[name=search-box]").val().trim();
-        let url = "http://localhost:1125/backroundreview/board/search";
+        console.log(word);
+        let url = "http://localhost:1125/backroundreview/search/";
         let data = "currentPage=1&word=" + word;
-        showList(url,data);
+        // let data = "";
+        showList(url, data);
         return false;
     });
 
@@ -161,7 +146,7 @@ $(function(){
     });
     //6. 글쓰기로 이동하기 -> 보내줄 데이터 없음 (닉네임? )
     $("header>span.write").click(function(){
-        $(location).attr('href', '/front/html/backroundreviewwrite.html');
+        $(location).attr('href', '../html/roundreviewwrite.html');
     })
 
     //7. 제목이나 사진 눌렀을때 해당 게시글로 이동하기
@@ -170,10 +155,4 @@ $(function(){
         let round_review_board_no = $roundReviewBoardNoObj.html();
         location.href = "/front/html/roundreview/board/" + round_review_board_no;
     })
-
-    //8. ◁ 이나 ▷ 버튼 눌렀을때 페이지 이동하기 
-    
-
-    //9. 1,2,3,4,5 해당 페이지 이동하기 
-
 })

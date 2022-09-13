@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -91,8 +92,6 @@ public class RoundReviewBoardService {
 //		Page<RoundReviewBoardEntity> list = null;
 		//기본(최신순)이면 0 , 조회수순 1 , 좋아요순 2
 		//---
-		Long test = 6L;
-		boardRepo.findById(test);
 		Page<RoundReviewBoardEntity> entity = boardRepo.findAll(pageable);
 		ModelMapper modelMapper = new ModelMapper();
 		Page<RoundReviewBoardDto> dto = modelMapper.map(entity, new TypeToken<Page<RoundReviewBoardDto>>(){}.getType());
@@ -114,6 +113,27 @@ public class RoundReviewBoardService {
 //		PageBean<RoundReviewBoardDto> pb = new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
 		return dto;
 	}
+	//검색하기    제목 or 내용 or 닉네임
+		public Page<RoundReviewBoardDto> searchBoard(String word, int currentPage) throws FindException{
+			int endRow = currentPage * CNT_PER_PAGE * 1;
+			int startRow = endRow - CNT_PER_PAGE + 1;
+			long totalCnt = boardRepo.count();
+			int cntPerPageGroup = 5;
+			
+			Pageable pageable = PageRequest.of(currentPage, cntPerPageGroup);
+//			Page<RoundReviewBoardEntity> entity = boardRepo.findByWord(word, startRow, CNT_PER_PAGE, pageable);
+			Page<RoundReviewBoardEntity> entity = boardRepo.findByWord2(word, pageable);
+			logger.error(entity.toString());
+			ModelMapper modelMapper = new ModelMapper();
+			Page<RoundReviewBoardDto> dto = modelMapper.map(entity, new TypeToken<Page<RoundReviewBoardDto>>(){}.getType());
+//			ModelMapper modelMapper = new ModelMapper();
+//			List<RoundReviewBoardDto> dtoList = entityList.stream()
+//					.map(RoundReviewBoardEntity -> modelMapper
+//							.map(RoundReviewBoardEntity, RoundReviewBoardDto.class))
+//					.collect(Collectors.toList());
+//			Page<RoundReviewBoardDto> pb = new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
+			return dto;
+		}
 	/**
 	 * 라운딩리뷰 게시글의 상세내용을 보여줌 
 	 * 기존 게시글 목록을 보던 중 게시자가 게시글을 삭제한 경우
@@ -266,22 +286,7 @@ public class RoundReviewBoardService {
 		
 		likeRepo.deleteLike(roundReviewBoardNo, userNickname); //좋아요 취소 
 	}
-	//검색하기    제목 or 내용 or 닉네임
-	public PageBean<RoundReviewBoardDto> searchBoard(String word, int currentPage) throws FindException{
-		int endRow = currentPage * CNT_PER_PAGE * 1;
-		int startRow = endRow - CNT_PER_PAGE + 1;
-		long totalCnt = boardRepo.count();
-		int cntPerPageGroup = 5;
-		
-		List<RoundReviewBoardEntity> entityList = boardRepo.findByWord(word, startRow, CNT_PER_PAGE);
-		ModelMapper modelMapper = new ModelMapper();
-		List<RoundReviewBoardDto> dtoList = entityList.stream()
-				.map(RoundReviewBoardEntity -> modelMapper
-						.map(RoundReviewBoardEntity, RoundReviewBoardDto.class))
-				.collect(Collectors.toList());
-		PageBean<RoundReviewBoardDto> pb = new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
-		return pb;
-	}
+	
 	//게시글 작성
 	/**
 	 * 게시글 작성하기 

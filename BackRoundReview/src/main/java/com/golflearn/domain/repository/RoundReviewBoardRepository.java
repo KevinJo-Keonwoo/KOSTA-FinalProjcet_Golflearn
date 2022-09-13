@@ -109,9 +109,13 @@ public interface RoundReviewBoardRepository extends JpaRepository<RoundReviewBoa
 			+ "      )\r\n"
 			+ "WHERE r BETWEEN ?2 AND ?3"
 			,nativeQuery = true)
-	List<RoundReviewBoardEntity> findByWord(String word, int startRow, int endRow);
-	
-	
-	
+	Page<RoundReviewBoardEntity> findByWord(String word, int startRow, int endRow, Pageable pageable);
+
+	@Query(value = "SELECT * \r\n"
+			+ "            FROM round_review_board\r\n"
+			+ "            WHERE round_review_board_title LIKE %?1% OR round_review_board_content LIKE %?1% OR user_nickname LIKE %?1% \r\n"
+			+ "            ORDER BY round_review_board_no DESC\r\n"
+			,nativeQuery = true)
+	Page<RoundReviewBoardEntity> findByWord2(String word, Pageable pageable);
 	
 }

@@ -109,6 +109,41 @@ public class RoundReviewBoardController {
 		}
 		return rb;
 	}
+	//게시글 검색 임시 주석 
+	@GetMapping(value = {"search", "search/{optWord}", "search/{optWord}/{optCp}"})
+	public ResultBean<Page<RoundReviewBoardDto>> search(@PathVariable Optional<String> optWord, @PathVariable Optional<Integer> optCp, 
+			Pageable pageable){
+		ResultBean<Page<RoundReviewBoardDto>> rb = new ResultBean<>();
+		Page<RoundReviewBoardDto> pb;
+		String word = "";
+		logger.error(optWord.toString());
+		try {
+			if (optWord.isPresent()) {
+				word = optWord.get();
+			} else {
+				word = "";
+			}
+			int currentPage = 1;
+			if(optCp.isPresent()) {
+				currentPage = optCp.get();
+			}
+			if("".equals(word)) {
+				int orderType = 0; //나중에 아마 빼도 될듯?
+				String orderCriteria = "roundReviewBoardNo";
+				pageable = PageRequest.of(currentPage, 5, Sort.by(Sort.Direction.DESC, orderCriteria));
+				pb = service.boardList(currentPage, orderType, pageable);
+			}else {
+				pb = service.searchBoard(word, currentPage);
+			}
+			rb.setStatus(1);
+			rb.setT(pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			rb.setStatus(0);
+			rb.setMsg(e.getMessage());
+		}
+		return rb;
+	}
 	@GetMapping(value = "board/{roundReviewBoardNo}")
 	public ResultBean<RoundReviewBoardDto> viewBoard(@PathVariable Long roundReviewBoardNo){
 		ResultBean<RoundReviewBoardDto> rb = new ResultBean<>();
@@ -203,35 +238,7 @@ public class RoundReviewBoardController {
 		}
 	}
 	
-	//게시글 검색 임시 주석 
-//	@GetMapping(value = {"search", "search/{optWord}", "search/{optWord}/{optCp}"})
-//	public ResultBean<PageBean<RoundReviewBoardDto>> search(Optional<Integer> optCp, Optional<String> optWord){
-//		ResultBean<PageBean<RoundReviewBoardDto>> rb = new ResultBean<>();
-//		PageBean<RoundReviewBoardDto> pb;
-//		String word;
-//		try {
-//			if (optWord.isPresent()) {
-//				word = optWord.get();
-//			} else {
-//				word = "";
-//			}
-//			int currentPage = 1;
-//			if(optCp.isPresent()) {
-//				currentPage = optCp.get();
-//			}
-//			if("".equals(word)) {
-//					pb = service.boardList(currentPage, 0);
-//			}
-//			pb = service.searchBoard(word, currentPage);
-//			rb.setStatus(1);
-//			rb.setT(pb);
-//		} catch (FindException e) {
-//			e.printStackTrace();
-//			rb.setStatus(0);
-//			rb.setMsg(e.getMessage());
-//		}
-//		return rb;
-//	}
+
 	@PostMapping(value = "board")
 	public ResponseEntity<?> writeBoard(@RequestBody RoundReviewBoardDto dto){
 		try {
