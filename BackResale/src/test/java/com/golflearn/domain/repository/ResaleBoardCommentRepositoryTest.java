@@ -33,14 +33,14 @@ class ResaleBoardCommentRepositoryTest {
 		resaleBoard.setResaleBoardNo(27L);
 		
 		ResaleCommentEntity resaleComment = new ResaleCommentEntity();
-		resaleComment.setResaleBoardEntity(resaleBoard);
+		resaleComment.setResaleBoard(resaleBoard);
 		resaleComment.setResaleCmtContent("댓글 등록 테스트"); //27번 글에 대한
 		resaleComment.setUserNickname("땡초"); 
 
 
 		resaleCommentRepo.save(resaleComment);
 		
-		logger.error("글번호" + resaleComment.getResaleBoardEntity().getResaleBoardNo());
+		logger.error("글번호" + resaleComment.getResaleBoard().getResaleBoardNo());
 		logger.error("부모댓글번호" + resaleComment.getResaleCmtNo());
 		logger.error("작성자" + resaleComment.getUserNickname());
 	}

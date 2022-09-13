@@ -28,12 +28,12 @@ class ResaleBoardLikeRepositoryTest {
 		ResaleLikeEntity resaleLike = new ResaleLikeEntity();
 		ResaleBoardEntity resaleBoard = new ResaleBoardEntity();
 		resaleBoard.setResaleBoardNo(27L);
-		resaleLike.setResaleBoardEntity(resaleBoard);
+		resaleLike.setResaleBoard(resaleBoard);
 		resaleLike.setUserNickname("데빌");
 		
 		logger.error("닉네임은 " + resaleLike.getUserNickname());
 		logger.error("좋아요는 " + resaleLike.getResaleLikeNo());
-		logger.error("글번호는 " + resaleLike.getResaleBoardEntity().getResaleBoardNo());
+		logger.error("글번호는 " + resaleLike.getResaleBoard().getResaleBoardNo());
 		
 		resaleLikeRepo.save(resaleLike);
 	}
