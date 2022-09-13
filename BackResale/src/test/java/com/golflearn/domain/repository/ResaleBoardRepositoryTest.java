@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import com.golflearn.domain.entity.ResaleBoardEntity;
 
@@ -27,6 +29,19 @@ class ResaleBoardRepositoryTest {
 	private ResaleCommentRepository resaleCmtRepo;
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
+	
+	@Test
+	void testFindAll() {
+		resaleBoardRepo.findAll();
+	}
+	
+	@Test
+	void testFindWord() {
+		String word = "골프";
+		int currentPage = 1;
+		resaleBoardRepo.findByWord2(word,PageRequest.of(currentPage, 5));
+	}
+	
 	
 	// 페이지별 목록 불러오기
 	@Test
