@@ -1,12 +1,32 @@
 @import url(footer.css);
 @import url(header.css);
 @import url(index.css);
-@import url(base.css);
-
-#main {
-    padding-top: 100px;
-    height:100%;
+/*@import url(base.css);*/
+* {
+	box-sizing: border-box;
 }
+/*
+div.boardlist{
+	display: table;
+	width:80%;
+	border: 1px solid;
+}
+div.boardlist>div.board{
+	display: table-row;
+	width:100%;
+}
+
+div.boardlist>div.board>*{
+	display: table-cell;
+	width: 15%;
+	border: 1px solid;
+}
+div.boardlist>div.board:nth-child(1)>*{
+	vertical-align: middle;
+	text-align: center;
+	font-weight: bold;
+} */
+
 div.boardlist_outline {
 	width: 100%;
 	height: 500px;
@@ -18,11 +38,11 @@ div.boardlist {
 	border: 1px solid;
 }
 /*행*/
-div.board {
+div.qnaboard {
 	display: table-row;
 }
 /*행의 열1개*/
-div.board > div.cell {
+div.qnaboard > div.cell {
 	display: table-cell;
 	width: 100%;
 	border-bottom: 1px solid #eceae5;
@@ -37,7 +57,7 @@ div.cell > div.summary {
 }
 
 /*모든행의 열의 summary영역의 글번호, 부모글번호, 제목, 작성일자, 작성자ID,조회수 */
-div.board > div.cell > div.summary > div {
+div.qnaboard > div.cell > div.summary > div {
 	display: table-cell;
 	padding: 17px 0;
 	cursor: pointer;
@@ -47,11 +67,12 @@ div.board > div.cell > div.summary > div {
 	text-align: center;
 }
 /*1행의 열의 summary영역의 글번호, 부모글번호, 제목, 작성일자, 작성자ID,조회수 수평중앙정렬 */
-div.board:first-child > div.cell > div.summary > div {
+div.qnaboard:first-child > div.cell > div.summary > div {
 	vertical-align: middle;
 	text-align: center;
 	font-weight: bold;
 }
+
 /*글번호*/
 div.summary > div.board_no {
 	width: 10%;
@@ -66,6 +87,87 @@ div.summary > div.board_dt {
 	width: 15%;
 }
 /*작성자*/
-div.summary > div.board_id {
+div.summary > div.board_nickname {
 	width: 15%;
 }
+/*1행의 열의 화살표 */
+div.summary > div.arrow {
+	width: 10%;
+}
+
+div.summary > div.board_secret {
+	display:none;
+}
+
+div.write-comment {
+	display:none;
+}
+/*1행외의 행들 열의 summary에 화살표 배경이미지 */
+/* div.arrow.down -> 여러 클래스에 속성값을 줄 수 있다. */
+/* div.board:not(:first-child)  첫번째 자식값이 아닌것*/
+div.qnaboard:not(:first-child) > div.cell > div.summary > div.arrow.down {
+	width: 10%;
+	background-image: url(../img/btn_arrow_down.png);
+	background-size: 25%;
+	background-position: right center;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+div.qnaboard:not(:first-child) > div.cell > div.summary > div.arrow.up {
+	width: 10%;
+	background-image: url(../img/btn_arrow_up.png);
+	background-size: 25%;
+	background-position: right center;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+/*--열의 summary영역 END--*/
+/*--열의 detail영역 START--*/
+div.qnaboard > div.cell > div.detail {
+	display: none;
+}
+div.detail > div.modifyNremove {
+	display: inline-block;
+}
+div.detail > div.modifyNremove > * {
+	display: inline-block;
+}
+/*--열의 detail영역 END--*/
+
+/*    */
+div.pagegroup {
+	width: 80%;
+	margin: 10px;
+	text-align: center;
+}
+div.pagegroup > span:not(.disabled) {
+	border: 1px solid;
+	padding: 3px;
+}
+div.pagegroup > span:not(.disabled):hover {
+	background-color: beige;
+	cursor: pointer;
+}
+
+div.detail {
+    text-align: center;
+}
+div.detail > input.board_content {
+	border: none;
+}
+/*댓글 영역 START*/
+div.comment_detail > input.comment_content {
+	width: 50%;
+	word-break:break-all;
+}
+div.detail>div.div.comment-detail{
+	width: 100%;
+}
+
+div.comment input[type=text],div.reply textarea, div.comment-detail button{
+	margin: 5px;
+}
+div.comment-detail textarea{
+	resize: none;
+}   
+/*답글 영역 END*/

@@ -43,7 +43,7 @@ public class QnABoardController {
 
 	//전체 리스트 불러오기
 	@GetMapping(value= {"list", "list/{optCp}"})
-	public ResultBean<PageBean<QnABoardDto>> list(@PathVariable("pageNo") Optional<Integer> optCp){
+	public ResultBean<PageBean<QnABoardDto>> list(@PathVariable Optional<Integer> optCp){
 		ResultBean<PageBean<QnABoardDto>> rb = new ResultBean<>();
 		try {
 			int currentPage;
@@ -86,8 +86,8 @@ public class QnABoardController {
 	}
 
 	//userNickname으로 검색하기(for관리자)
-	@GetMapping(value= {"searchlist/{optWord}/{optCp}", "searchlist/{optWord}"})
-	public ResultBean<PageBean<QnABoardDto>> searchList(@PathVariable  Optional<Integer> optCp
+	@GetMapping(value= {"search/{optWord}/{optCp}", "search/{optWord}"})
+	public ResultBean<PageBean<QnABoardDto>> searchList(@PathVariable Optional<Integer> optCp
 			,											@PathVariable Optional<String> optWord){
 		ResultBean<PageBean<QnABoardDto>> rb = new ResultBean<>();
 		try {
@@ -120,8 +120,9 @@ public class QnABoardController {
 
 	//답변대기중인 글들만 조회하기
 	@GetMapping(value= {"answerlist", "answerlist/{optCp}"})
-	public ResultBean<PageBean<QnABoardDto>> answerlist(@PathVariable Optional<Integer> optCp){
+	public ResultBean<PageBean<QnABoardDto>> answerlist(HttpSession session, @PathVariable Optional<Integer> optCp){
 		ResultBean<PageBean<QnABoardDto>> rb = new ResultBean<>();
+		String loginedUserType = (String)session.getAttribute("userType");
 		try {
 			int currentPage;
 			if(optCp.isPresent()) { 
@@ -146,7 +147,9 @@ public class QnABoardController {
 		ResultBean<QnABoardDto> rb = new ResultBean<>();
 		QnABoardDto qd = new QnABoardDto();
 		String loginedNickname = (String)session.getAttribute("loginNickname");
-		String userType = (String)session.getAttribute("userType");
+//		String logineduserType = (String)session.getAttribute("userType");
+//		String loginedNickname = "데빌";
+		String logineduserType="1";
 		try {
 			qd = qnaService.viewBoard(boardNo);
 			if(!(qd.getQnaBoardSecret() == 1)) {
@@ -154,7 +157,8 @@ public class QnABoardController {
 				rb.setT(qd);				
 				return rb;
 			}else {
-				if(!qd.getUserNickname().equals(loginedNickname) || !userType.equals(2)) {
+				if(!qd.getUserNickname().equals(loginedNickname) || !logineduserType.equals(2)) {
+					System.out.println(loginedNickname);
 					rb.setStatus(0);
 					rb.setMsg("비밀글은 작성자만 열람할 수 있습니다.");
 				}

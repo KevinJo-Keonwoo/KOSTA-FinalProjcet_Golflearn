@@ -36,6 +36,17 @@ public class QnABoardDto {
 		this.comment = comment;
 	}
 	
+	public QnABoardDto(Long boardNo, String boardTitle, String userNickname, String boardContent, Date qnaBoardDt,
+			int qnaBoardSecret) {
+		this.boardNo = boardNo;
+		this.boardTitle = boardTitle;
+		this.userNickname = userNickname;
+		this.boardContent = boardContent;
+		this.qnaBoardDt = qnaBoardDt;
+		this.qnaBoardSecret = qnaBoardSecret;
+	}
+	
+	
 	public QnABoardEntity toEntity() {
 		return QnABoardEntity.builder()
 				.boardNo(boardNo)

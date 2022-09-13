@@ -35,7 +35,12 @@ public interface QnABoardRepository extends JpaRepository <QnABoardEntity, Long>
 			+ "		WHERE r BETWEEN ?1 AND ?2"
 			, nativeQuery=true)
 	List<QnABoardEntity> findByOpenPost(int startRow, int endRow);
-
+	@Query(value ="SELECT COUNT(*)\r\n"
+			+ "FROM qna_board\r\n"
+			+ "WHERE qna_board_secret ='0' \r\n"
+			, nativeQuery=true)	
+	int countByOpenPost();
+	
 
 	//상세보기
 	@Query(value = "SELECT qb.*, qc.*\r\n"
@@ -57,6 +62,13 @@ public interface QnABoardRepository extends JpaRepository <QnABoardEntity, Long>
 			+ "     WHERE r BETWEEN ?2 AND ?3"
 			, nativeQuery=true)
 	List<QnABoardEntity>findByNickname(String nicknameWord, int startRow, int endRow);
+	
+	@Query(value ="SELECT COUNT(*)\r\n"
+			+ "FROM qna_board\r\n"
+			+ "WHERE user_nickname LIKE %?1% \r\n"
+			, nativeQuery=true)	
+	int countByWord(String nicknameword);
+	
 
 	//답변 대기중인 게시글만 리스트로 보기
 	@Query(value = "SELECT * \r\n"

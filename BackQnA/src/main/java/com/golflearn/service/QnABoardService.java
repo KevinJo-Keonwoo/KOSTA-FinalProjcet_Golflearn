@@ -45,7 +45,7 @@ public class QnABoardService {
 
 		List<QnABoardEntity> list = boardRepo.findByPage(startRow, endRow);
 
-		//가져온 Entity ->Dto로 바꿔야함(db에 있는걸 가져옴) 
+		//가져온 Entity ->Dto로 바꿔야함(db에 있는걸 가져옴)
 		List <QnABoardDto> dtolist = list.stream()
 				.map(t -> QnABoardDto.builder()
 						.boardNo(t.getBoardNo())
@@ -55,6 +55,7 @@ public class QnABoardService {
 						.qnaBoardSecret(t.getQnaBoardSecret())
 						.build())
 				.collect(Collectors.toList());
+
 		PageBean<QnABoardDto> pb = new PageBean<>(dtolist, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
 		return pb;
 	}
@@ -69,7 +70,7 @@ public class QnABoardService {
 		int cntPerPageGroup = 5;
 		int endRow = currentPage * CNT_PER_PAGE;
 		int startRow = endRow - CNT_PER_PAGE + 1;
-		Long totalCnt = boardRepo.count();
+		long totalCnt = boardRepo.countByOpenPost();
 
 		List<QnABoardEntity> list = boardRepo.findByOpenPost(startRow, endRow);
 
@@ -98,7 +99,7 @@ public class QnABoardService {
 		int cntPerPageGroup = 5;
 		int endRow = currentPage * CNT_PER_PAGE;
 		int startRow = endRow - CNT_PER_PAGE + 1;
-		Long totalCnt = boardRepo.count();
+		long totalCnt = boardRepo.countByWord(userNickname);
 		List<QnABoardEntity> list = boardRepo.findByNickname(userNickname, startRow, endRow);
 		//가져온 Entity ->Dto로 바꿔야함(db에 있는걸 가져옴) 
 		List <QnABoardDto> dtolist = list.stream()
@@ -152,24 +153,37 @@ public class QnABoardService {
 		Optional<QnABoardEntity> boardEntity = boardRepo.findById(boardNo);
 		if(boardEntity.isPresent()) {
 			QnACommentEntity qc =  boardEntity.get().getComment();
-			QnACommentDto qd = QnACommentDto.builder()
-					.commentNo(qc.getCommentNo())
-					.qnaCmtContent(qc.getQnaCmtContent())
-					.qnaCmtDt(qc.getQnaCmtDt())
-					.userNickname(qc.getUserNickname())
-					.build();
-			
-			QnABoardEntity board = boardEntity.get(); 
-			QnABoardDto boardDto = QnABoardDto.builder()
-					.boardNo(board.getBoardNo())
-					.boardTitle(board.getBoardTitle())
-					.boardContent(board.getBoardContent())
-					.userNickname(board.getUserNickname())
-					.qnaBoardDt(board.getQnaBoardDt())
-					.qnaBoardSecret(board.getQnaBoardSecret())
-					.comment(qd)
-					.build();
-			return boardDto;
+			if (qc == null) {
+				QnABoardEntity board = boardEntity.get(); 
+				QnABoardDto boardDto = QnABoardDto.builder()
+						.boardNo(board.getBoardNo())
+						.boardTitle(board.getBoardTitle())
+						.boardContent(board.getBoardContent())
+						.userNickname(board.getUserNickname())
+						.qnaBoardDt(board.getQnaBoardDt())
+						.qnaBoardSecret(board.getQnaBoardSecret())
+						.build();
+				return boardDto;
+			}else {
+				QnACommentDto qd = QnACommentDto.builder()
+						.commentNo(qc.getCommentNo())
+						.qnaCmtContent(qc.getQnaCmtContent())
+						.qnaCmtDt(qc.getQnaCmtDt())
+						.userNickname(qc.getUserNickname())
+						.build();
+				
+				QnABoardEntity board = boardEntity.get(); 
+				QnABoardDto boardDto = QnABoardDto.builder()
+						.boardNo(board.getBoardNo())
+						.boardTitle(board.getBoardTitle())
+						.boardContent(board.getBoardContent())
+						.userNickname(board.getUserNickname())
+						.qnaBoardDt(board.getQnaBoardDt())
+						.qnaBoardSecret(board.getQnaBoardSecret())
+						.comment(qd)
+						.build();
+				return boardDto;
+			}
 		}else {
 			throw new FindException("게시글이 없습니다");
 		}
@@ -256,23 +270,23 @@ public class QnABoardService {
 				ce.setBoard(qe);
 				commentRepo.delete(ce);
 			}
-			
-//			optB.get();
+
+			//			optB.get();
 			boardRepo.deleteById(boardNo);
-//			qe = QnABoardEntity .builder()
-//					.boardNo(qe.getBoardNo())
-//					.boardContent(qe.getBoardContent())
-//					.boardTitle(qe.getBoardContent())
-//					.qnaBoardDt(qe.getQnaBoardDt())
-//					.userNickname(qe.getUserNickname())
-//					.qnaBoardSecret(qe.getQnaBoardSecret())
-//					.comment(qe.getComment())
-//					.build();
+			//			qe = QnABoardEntity .builder()
+			//					.boardNo(qe.getBoardNo())
+			//					.boardContent(qe.getBoardContent())
+			//					.boardTitle(qe.getBoardContent())
+			//					.qnaBoardDt(qe.getQnaBoardDt())
+			//					.userNickname(qe.getUserNickname())
+			//					.qnaBoardSecret(qe.getQnaBoardSecret())
+			//					.comment(qe.getComment())
+			//					.build();
 		}else {
 			throw new RemoveException("글이 없습니다");
 		}
 	}
-	
+
 	/**
 	 * 답변을 삭제한다(관리자만 가능)
 	 * @param commentNo
