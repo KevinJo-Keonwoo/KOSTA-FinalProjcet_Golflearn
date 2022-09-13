@@ -209,5 +209,3 @@ public class Payment {
 		return receipt_url;
 	}
 }
-
-}

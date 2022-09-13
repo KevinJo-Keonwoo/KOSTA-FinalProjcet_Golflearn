@@ -93,10 +93,10 @@
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
 		    </dependency>  
-		 <dependency>
+		<dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-		 </dependency>
+		</dependency>
  		<dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -151,7 +151,6 @@
 	    <url>https://jitpack.io</url>
 	</repository>
 </repositories>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -168,5 +167,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

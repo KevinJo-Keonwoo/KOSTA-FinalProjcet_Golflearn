@@ -39,5 +39,4 @@ public class LessonHistoryOracleRepository implements LessonHistoryRepository {
 		}
 		
 	}
-	
 }
