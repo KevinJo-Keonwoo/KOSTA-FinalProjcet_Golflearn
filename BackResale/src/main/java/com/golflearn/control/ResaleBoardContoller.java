@@ -157,7 +157,6 @@ public class ResaleBoardContoller {
 			} else { 
 				word = "";
 			}
-
 			
 			int currentPage;
 			if(optCp.isPresent()) {

@@ -134,7 +134,7 @@ public class ResaleBoardService {
 	public Page<ResaleBoardDto> searchBoard(String word, int currentPage) throws FindException{
 		
 		Page<ResaleBoardEntity> boardEntity 
-				= resaleBoardRepo.findByWord2(word,PageRequest.of(currentPage, 5));
+				= resaleBoardRepo.findByWord(word,PageRequest.of(currentPage, 5));
 		
 		
 		ModelMapper modelMapper = new ModelMapper();

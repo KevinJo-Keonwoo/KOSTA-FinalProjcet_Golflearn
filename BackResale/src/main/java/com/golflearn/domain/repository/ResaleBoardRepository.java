@@ -64,15 +64,15 @@ public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, 
 	 * @param endRow
 	 * @return
 	 */
-	@Query(value = "SELECT * FROM (SELECT rownum r, a.* "
-			+ "FROM (SELECT * FROM resale_board "
-					+ "WHERE resale_board_title LIKE %?1% "
-					+ "OR resale_board_content LIKE %?1% "
-					+ "OR user_nickname LIKE %?1% "
-					+ "ORDER BY resale_board_no DESC) a ) WHERE r BETWEEN ?2 AND ?3"
-			, 
-			nativeQuery=true)
-	public List<ResaleBoardEntity> findByWord(String word, int startRow, int endRow);
+//	@Query(value = "SELECT * FROM (SELECT rownum r, a.* "
+//			+ "FROM (SELECT * FROM resale_board "
+//					+ "WHERE resale_board_title LIKE %?1% "
+//					+ "OR resale_board_content LIKE %?1% "
+//					+ "OR user_nickname LIKE %?1% "
+//					+ "ORDER BY resale_board_no DESC) a ) WHERE r BETWEEN ?2 AND ?3"
+//			, 
+//			nativeQuery=true)
+//	public List<ResaleBoardEntity> findByWord(String word, int startRow, int endRow);
 	
 	
 	@Query(value = "SELECT * FROM resale_board "
@@ -80,7 +80,7 @@ public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, 
 			+ "OR resale_board_content LIKE %?1% "
 			+ "OR user_nickname LIKE %?1% "
 			+ "ORDER BY resale_board_no DESC", nativeQuery = true)
-	public Page<ResaleBoardEntity> findByWord2(String word, Pageable pageable);
+	public Page<ResaleBoardEntity> findByWord(String word, Pageable pageable);
 	
 	/**
 	 * 대댓글 수를 조회한다
