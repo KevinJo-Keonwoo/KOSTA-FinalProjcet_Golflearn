@@ -2,18 +2,15 @@ $(function(){
     
     $(document).ready(function() {  // 페이지 로딩이 끝나면
         let url = "http://localhost:1124/board/write";
-        //초기화
-        $("#summernote").summernote("code");
-        
+
         $('#summernote').summernote({ // summernote 실행
-            lineHeight : 300,
-            height: 300, // 에디터 높이
+            placeholder: '게시글을 입력해 주세요(최대 1000자까지 쓸 수 있습니다)',
+            height: 500, // 에디터 높이
             minHeight: null, // 최소 높이
             maxHeight: null, // 최대 높이
             focus: true, // 에디터 로딩후 포커스를 맞출지 여부
             lang: "ko-KR", // 한글 설정
             disableResizeEditor: true, // 크기 조절 기능 삭제
-            placeholder: '게시글을 입력해 주세요(최대 1000자까지 쓸 수 있습니다)',
             fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica neue', 'Helvetica', 'Impact', 'Lucida Grande', 'Tahoma', 'Times New Roman', 'Verdana', 'Tahoma', 'Courier New', '맑은 고딕', '굴림', '돋움'],
 			fontNamesIgnoreCheck: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica neue', 'Helvetica', 'Impact', 'Lucida Grande', 'Tahoma', 'Times New Roman', 'Verdana', 'Tahoma', 'Courier New',  '맑은 고딕', '굴림', '돋움'],
             toolbar: [
@@ -58,10 +55,16 @@ $(function(){
     //     });
     // }
     
-    // $(".note-group-image-url").remove();    //이미지 추가할 때 Image URL 등록 input 삭제 ( 나는 필요없음 )
+    // $(".note-group-image-url").remove();    //이미지 추가할 때 Image URL 등록 input 삭제 
+    
     // // ----- 글 등록 START -----
     // //등록 버튼 객체 찾기
     // let $btSubmitBoard = $("div.submit-board>button.submit-board__button");
+    $("input[name=imageFiles]").change(function() {
+        let file = this.files[0];
+        $("div.image>img.preview").attr("src", URL.createObjectURL(file)); // createObjectUrL : 상대경로 반환받음
+    });
+
     // // ----- 글 등록 START -----
     // //등록 버튼 객체 찾기
     let $btSubmitBoard = $("div.submit-board>button.submit-board__button");
@@ -85,10 +88,10 @@ $(function(){
 		contentType: false, //파일업로드용 설정
 		data: formData, //파일업로드용 설정
 		cache: false, //이미지 다운로드용 설정
-		// xhrFields: {
-		// 	//이미지 다운로드용 설정
-		// 	responseType: "blob",
-		// },
+		xhrFields: {
+			//이미지 다운로드용 설정
+			responseType: "blob",
+		},
 		success: function (responseData) {
 			let $img = $("div.image>img.downloadview");
 			let url = URL.createObjectURL(responseData);
