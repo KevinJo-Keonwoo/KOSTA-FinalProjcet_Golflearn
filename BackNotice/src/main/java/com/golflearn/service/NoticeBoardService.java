@@ -281,6 +281,7 @@ public class NoticeBoardService {
 			System.out.println("-0-0-00-0-" + entity.getNoticeBoardLikeCnt());
 			entity = NoticeBoardEntity.builder()
 					.noticeBoardNo(entity.getNoticeBoardNo())
+					.userNickname(entity.getUserNickname())
 					.noticeBoardContent(entity.getNoticeBoardContent())
 					.noticeBoardCmtCnt(entity.getNoticeBoardCmtCnt())
 					.noticeBoardDt(entity.getNoticeBoardDt())
