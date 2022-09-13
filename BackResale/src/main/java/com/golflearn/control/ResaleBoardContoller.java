@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.golflearn.dto.PageBean;
 import com.golflearn.dto.ResaleBoardDto;
 import com.golflearn.dto.ResaleCommentDto;
 import com.golflearn.dto.ResaleLikeDto;
@@ -105,7 +106,7 @@ public class ResaleBoardContoller {
 			}
 			Page<ResaleBoardDto> pb = service.boardList(currentPage);
 			rb.setStatus(1);
-			rb.setT(pb);
+			rb.setT(pb);			
 		} catch (FindException e) {
 			e.printStackTrace();
 			rb.setStatus(0);
@@ -119,7 +120,7 @@ public class ResaleBoardContoller {
 	 * @param resaleBoardNo
 	 * @return
 	 */
-	@GetMapping("board/{resaleBoardNo}")
+	@GetMapping(value = "board/{resaleBoardNo}")
 	public ResultBean<ResaleBoardDto> viewBoardDetail(@PathVariable Long resaleBoardNo){
 		ResultBean<ResaleBoardDto> rb = new ResultBean<>();
 		try {
@@ -141,7 +142,47 @@ public class ResaleBoardContoller {
 	 * @param optCp
 	 * @return
 	 */
-//	@GetMapping(value = "board/search/{optWord}")
+	@GetMapping(value = {"board/search/{optWord}/{optCp}", "board/search/{optWord}", "board/search"})
+	public ResultBean<Page<ResaleBoardDto>> search(
+			@PathVariable Optional<String> optWord,
+			@PathVariable Optional<Integer> optCp,
+			@PageableDefault(page = 0, size = 5, sort = "resaleBoardNo", direction = Direction.DESC) Pageable pageable){
+		ResultBean<Page<ResaleBoardDto>> rb = new ResultBean<>();
+
+		try {
+			Page<ResaleBoardDto> pb ; 
+			String word = ""; 
+			if(optWord.isPresent()) {
+				word = optWord.get();
+			} else { 
+				word = "";
+			}
+
+			
+			int currentPage;
+			if(optCp.isPresent()) {
+				currentPage = optCp.get()-1; // 0페이지가 시작
+			} else {
+				currentPage = 0;
+			}
+			
+			if("".equals(word)) {
+				pb = service.boardList(currentPage);
+			} else {
+				pb = service.searchBoard(word, currentPage);
+			} 
+			rb.setStatus(1);
+			rb.setT(pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			rb.setStatus(0);
+			rb.setMsg(e.getMessage());
+		}
+		return rb;
+	}
+	
+	
+//	@GetMapping(value = {"board/search/{optWord}/{optCp}", "search/{optWord}", "search"})
 //	public ResultBean<PageBean<ResaleBoardDto>> serch(
 //			@PathVariable Optional<String> optWord,
 //			@PathVariable Optional<Integer> optCp){
@@ -163,7 +204,7 @@ public class ResaleBoardContoller {
 //
 //			}
 //			if("".equals(word)) {
-//				pb = service.boardList(currentPage);
+//				pb = (PageBean<ResaleBoardDto>) service.boardList(currentPage);
 //			} else {
 //				pb = service.searchBoard(word, currentPage);
 //			} 

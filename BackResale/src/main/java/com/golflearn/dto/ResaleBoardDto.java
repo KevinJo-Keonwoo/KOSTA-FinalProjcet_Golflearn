@@ -21,7 +21,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = {"resaleBoardNo"})
-@JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class) // 스네이크 케이스 -> 카멜케이스로 바꾸어주는 것
 public class ResaleBoardDto {
 	private Long resaleBoardNo;
 	

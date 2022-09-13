@@ -74,6 +74,14 @@ public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, 
 			nativeQuery=true)
 	public List<ResaleBoardEntity> findByWord(String word, int startRow, int endRow);
 	
+	
+	@Query(value = "SELECT * FROM resale_board "
+			+ "WHERE resale_board_title LIKE %?1% "
+			+ "OR resale_board_content LIKE %?1% "
+			+ "OR user_nickname LIKE %?1% "
+			+ "ORDER BY resale_board_no DESC", nativeQuery = true)
+	public Page<ResaleBoardEntity> findByWord2(String word, Pageable pageable);
+	
 	/**
 	 * 대댓글 수를 조회한다
 	 * @param resaleCmtParentNo
