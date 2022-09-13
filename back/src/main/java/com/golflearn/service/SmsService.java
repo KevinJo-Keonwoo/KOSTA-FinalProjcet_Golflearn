@@ -34,77 +34,77 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class SmsService {
 
-	@Value("${sms.accessKey}")
-	private String accessKey;
-	@Value("${sms.secretKey}")
-	private String secretKey;
-	@Value("${sms.serviceId}")
-	private String serviceId;
-	@Value("${sms.senderPhone}")
-	private String senderPhone;
-
-	public SmsResponse sendSms(Message msg) throws JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, URISyntaxException {
-		Long time = System.currentTimeMillis();
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("x-ncp-apigw-timestamp", time.toString());
-		headers.set("x-ncp-iam-access-key", this.accessKey);
-		headers.set("x-ncp-apigw-signature-v2", makeSignature(time));
-//		String sig = makeSignature(time); //암호화
-		
-		List<Message> messages = new ArrayList<>();
-		messages.add(msg);
-
-		SmsRequest smsRequest = SmsRequest.builder()
-				.type("SMS")
-				.contentType("COMM")
-				.countryCode("82")
-				.from(senderPhone)
-				.content(msg.getContent())
-				.messages(messages)
-				.build();
-		ObjectMapper objectMapper = new ObjectMapper();
-		String jsonBody = objectMapper.writeValueAsString(smsRequest);
-
-
-		HttpEntity<String> body = new HttpEntity<>(jsonBody,headers);
-
-		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-		SmsResponse smsResponse = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/"+this.serviceId+"/messages"), body, SmsResponse.class);
-
-		return smsResponse;
-
-	}
-	public String makeSignature(Long time) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
-		String space = " ";             
-		String newLine = "\n";
-		String method = "POST";
-		String url = "/sms/v2/services/"+ this.serviceId+"/messages";
-		String timestamp = time.toString();
-		String accessKey = this.accessKey;
-		String secretKey = this.secretKey;
-
-		String message = new StringBuilder()
-				.append(method)
-				.append(space)
-				.append(url)
-				.append(newLine)
-				.append(timestamp)
-				.append(newLine)
-				.append(accessKey)
-				.toString();
-
-		SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
-		Mac mac = Mac.getInstance("HmacSHA256");
-		mac.init(signingKey);
-
-		byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
-		String encodeBase64String = Base64.encodeBase64String(rawHmac);
-
-		return encodeBase64String;
-	}
+//	@Value("${sms.accessKey}")
+//	private String accessKey;
+//	@Value("${sms.secretKey}")
+//	private String secretKey;
+//	@Value("${sms.serviceId}")
+//	private String serviceId;
+//	@Value("${sms.senderPhone}")
+//	private String senderPhone;
+//
+//	public SmsResponse sendSms(Message msg) throws JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, URISyntaxException {
+//		Long time = System.currentTimeMillis();
+//		
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.setContentType(MediaType.APPLICATION_JSON);
+//		headers.set("x-ncp-apigw-timestamp", time.toString());
+//		headers.set("x-ncp-iam-access-key", this.accessKey);
+//		headers.set("x-ncp-apigw-signature-v2", makeSignature(time));
+////		String sig = makeSignature(time); //암호화
+//		
+//		List<Message> messages = new ArrayList<>();
+//		messages.add(msg);
+//
+//		SmsRequest smsRequest = SmsRequest.builder()
+//				.type("SMS")
+//				.contentType("COMM")
+//				.countryCode("82")
+//				.from(senderPhone)
+//				.content(msg.getContent())
+//				.messages(messages)
+//				.build();
+//		ObjectMapper objectMapper = new ObjectMapper();
+//		String jsonBody = objectMapper.writeValueAsString(smsRequest);
+//
+//
+//		HttpEntity<String> body = new HttpEntity<>(jsonBody,headers);
+//
+//		RestTemplate restTemplate = new RestTemplate();
+//		restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+//		SmsResponse smsResponse = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/"+this.serviceId+"/messages"), body, SmsResponse.class);
+//
+//		return smsResponse;
+//
+//	}
+//	public String makeSignature(Long time) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+//		String space = " ";             
+//		String newLine = "\n";
+//		String method = "POST";
+//		String url = "/sms/v2/services/"+ this.serviceId+"/messages";
+//		String timestamp = time.toString();
+//		String accessKey = this.accessKey;
+//		String secretKey = this.secretKey;
+//
+//		String message = new StringBuilder()
+//				.append(method)
+//				.append(space)
+//				.append(url)
+//				.append(newLine)
+//				.append(timestamp)
+//				.append(newLine)
+//				.append(accessKey)
+//				.toString();
+//
+//		SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
+//		Mac mac = Mac.getInstance("HmacSHA256");
+//		mac.init(signingKey);
+//
+//		byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
+//		String encodeBase64String = Base64.encodeBase64String(rawHmac);
+//
+//		return encodeBase64String;
+//	}
 
 
 }
