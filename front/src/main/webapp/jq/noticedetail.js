@@ -59,8 +59,8 @@ $(function () {
             contentType: "application/json",
             data: JSON.stringify({"noticeBoardNo": boardNo}), // userNickname 받아와야함
             success: function (jsonObj) {
-                console.log("hihi");
-                // location.reload();
+                console.log("좋아요 성공");
+                location.reload();
             },
         });
     });
