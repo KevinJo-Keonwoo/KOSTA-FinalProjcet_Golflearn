@@ -101,8 +101,8 @@ class RoundReviewBoardRepositoryTest {
 		int endRow = currentPage * CNT_PER_PAGE;
 		int startRow = endRow - CNT_PER_PAGE + 1;
 		
-		List<RoundReviewBoardEntity> list = repo.findByWord(word, startRow, endRow);
-		assertEquals(word, list.get(0).getRoundReviewBoardTitle());
+//		List<RoundReviewBoardEntity> list = repo.findByWord(word, startRow, endRow);
+//		assertEquals(word, list.get(0).getRoundReviewBoardTitle());
 		
 //		list.forEach((RoundReviewBoard)->{
 //			logger.error(RoundReviewBoard.toString());
