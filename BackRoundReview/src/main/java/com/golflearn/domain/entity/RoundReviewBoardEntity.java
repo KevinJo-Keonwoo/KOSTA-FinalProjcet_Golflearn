@@ -1,5 +1,6 @@
 package com.golflearn.domain.entity;
 
+
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 

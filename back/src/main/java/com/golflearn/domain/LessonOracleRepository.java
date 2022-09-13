@@ -12,7 +12,6 @@ import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonClassification;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
-
 @Repository(value = "lessonOracleRepository")
 public class LessonOracleRepository implements LessonRepository {
 	@Autowired 
@@ -47,8 +46,21 @@ public class LessonOracleRepository implements LessonRepository {
 		try {
 			session = sqlSessionFactory.openSession();
 			session.insert("com.golflearn.mapper.LessonMapper.insertLsnInfo", lesson);
-			session.insert("com.golflearn.mapper.LessonMapper.insertLsnClassification", lesson);
-
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new AddException(e.getMessage());
+		}finally {
+			if(session != null) {
+				session.close();
+			}
+		}
+	}
+@Override
+	public void insertLsnClassification(Lesson lesson) throws AddException {
+		SqlSession session = null;
+		try {//다중insert
+				session = sqlSessionFactory.openSession();
+				session.insert("com.golflearn.mapper.LessonMapper.insertLsnClassification", lesson);
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new AddException(e.getMessage());

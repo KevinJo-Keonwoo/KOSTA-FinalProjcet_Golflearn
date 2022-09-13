@@ -15,10 +15,9 @@ import lombok.Setter;
 @Getter @Setter
 @EqualsAndHashCode(of = {"paymentNo"})
 public class Payment {
-	private String paymentNo;
+	private int paymentNo;
 	private String paymentMethod;
 	
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	private Date paymentDt;
-	
 }

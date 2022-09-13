@@ -47,6 +47,7 @@ import com.golflearn.service.ResaleBoardService;
 
 import net.coobird.thumbnailator.Thumbnailator;
 
+
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("resale/*")

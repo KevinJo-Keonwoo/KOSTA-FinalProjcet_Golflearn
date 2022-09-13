@@ -186,7 +186,7 @@ public class MeetBoardService {
 	 * @param meetBoard 글내용
 	 * @throws AddException
 	 */
-	//드롭다운에서 모집유형을 선택하는 것이 한 트랜잭션에서 이루어지는 것이 맞는건가?
+	@Transactional
 	public void writeMeetBoard(MeetBoardDto meetBoardDto, Long meetCtgNo) throws AddException{
 		ModelMapper modelMapper = new ModelMapper();
 		//------모집유형을 선택한다-------
@@ -255,11 +255,12 @@ public class MeetBoardService {
 	 */
 	public void modifyStatus(String userNickname, Long meetBoardNo, Long meetBoardStatus) throws ModifyException{
 		Optional <MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
-		MeetBoardEntity meetBoard = optM.get();
-		String writer = meetBoard.getUserNickname();//해당 게시글의 작성자 닉네임 반환
 		if(!optM.isPresent()){//게시글 존재여부 확인
 			throw new ModifyException("존재하지 않는 게시글입니다.");
-		}else if(userNickname.equals(writer)){//작성자 여부 확인
+		}
+		MeetBoardEntity meetBoard = optM.get();
+		String writer = meetBoard.getUserNickname();//해당 게시글의 작성자 닉네임 반환
+		if(userNickname.equals(writer)){//작성자 여부 확인
 			throw new ModifyException("해당 글의 작성자만 수정할 수 있습니다.");
 		}else{
 			meetBoard.setMeetBoardStatus(meetBoardStatus);
@@ -275,11 +276,12 @@ public class MeetBoardService {
 	 */
 	public void addMember(String userNickname, Long meetBoardNo) throws AddException{
 		Optional <MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
-		int memberCheck = meetMemberRepo.countByUserNicknameMeetBoard(userNickname, meetBoardNo);//참여중인 모임인지 확인
-		MeetBoardEntity meetBoard = optM.get();//게시글 가져오기
 		if(!optM.isPresent()) {//글이 없는 경우
 			throw new AddException("글이 없습니다.");
-		}else if(memberCheck  != 0){//이미 참여중인 경우
+		}
+		MeetBoardEntity meetBoard = optM.get();//게시글 가져오기
+		int memberCheck = meetMemberRepo.countByUserNicknameMeetBoard(userNickname, meetBoardNo);//참여중인 모임인지 확인
+		if(memberCheck  != 0){//이미 참여중인 경우
 			throw new AddException("이미 참여중인 모임입니다.");
 		}else if(meetBoard.getMeetBoardStatus() == 1 ){//해당 모임글이 모집마감인 경우
 			throw new AddException("모집중인 모임이 아닙니다");

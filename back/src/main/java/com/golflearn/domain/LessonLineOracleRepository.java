@@ -9,8 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonLine;
-import com.golflearn.dto.Payment;
-import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 
 @Repository(value = "lessonLineRepository")
@@ -50,26 +48,6 @@ public class LessonLineOracleRepository implements LessonLineRepository {
 			if(session != null) {
 				session.close();
 			}
-		}
-	}
-	
-
-	
-	// 레슨내역 추가(lesson line)
-	@Override
-	public void insertLsnLine(LessonLine lessonLine) throws AddException {
-		SqlSession session = null;
-		try {
-			session = sqlSessionFactory.openSession();
-			session.insert("com.golflearn.mapper.LessonLineMapper.insertLessonLine",lessonLine);
-		}catch(Exception e){
-			e.printStackTrace();
-			throw new AddException(e.getMessage());
-		}finally {
-			if(session !=null) {
-				session.close();
-			}
-			
 		}
 	}
 

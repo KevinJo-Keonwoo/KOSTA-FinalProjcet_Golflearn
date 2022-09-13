@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.golflearn.dto.MeetBoardDto;
-import com.golflearn.dto.MeetMemberDto;
 import com.golflearn.dto.PageBean;
 import com.golflearn.dto.ResultBean;
 import com.golflearn.exception.AddException;
@@ -68,14 +67,13 @@ public class MeetBoardController {
 		try {
 			PageBean<MeetBoardDto> pb;
 			Long meetBoardStatus ;
-			
-			if (optStatus.isPresent()) {
+			if (optStatus.isPresent()) {//선택한 모집상태가 있으면
 				meetBoardStatus = optStatus.get();
 			} else {
 				meetBoardStatus = null;
 			}
 			int currentPage = 1;
-			if (optCp.isPresent()) {
+			if (optCp.isPresent()) {//선택한 페이지가 있으면
 				currentPage = optCp.get();
 			}
 			if (meetBoardStatus == null) {//모집상태필터를 선택하지 않은 경우
@@ -232,7 +230,7 @@ public class MeetBoardController {
 				|| m.getMeetBoardLocation() == null || m.getMeetBoardMaxCnt() == null) {//글내용 입력확인
 				return new ResponseEntity<>("항목을 모두 입력하세요", HttpStatus.BAD_REQUEST);
 			}else {
-				m.setMeetBoardNo(meetBoardNo);//수정하는 글의 글번호 save
+				m.setMeetBoardNo(meetBoardNo);//수정하는 글의 글번호
 				service.modifyMeetBoard(m);//글 내용 저장
 				return new ResponseEntity<>(HttpStatus.OK);
 			}

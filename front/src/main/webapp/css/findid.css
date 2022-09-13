@@ -30,7 +30,7 @@
 	padding-bottom: 40px;
 }
 
-#main > #wrapper > #input-email {
+#main > #wrapper > #input-phone {
 	margin-top:10px;
 }
 
@@ -78,7 +78,7 @@ input[type=text] {
 	box-sizing: border-box;
 	font-size:18px;
 }
-input[type=email] {
+input[type=phone] {
 	width: 400px;
 	height: 50px;
 	border: 0;

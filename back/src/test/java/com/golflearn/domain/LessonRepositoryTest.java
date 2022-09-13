@@ -19,7 +19,6 @@ import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 import com.golflearn.service.LessonService;
-
 @SpringBootTest
 class LessonRepositoryTest {
 
