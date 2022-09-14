@@ -73,11 +73,11 @@ class UserInfoRepositoryTest {
 	
 	@Test
 	public void testSelectByUserIdAndPwd() throws FindException {
-		String userNicakName = "프로한";
+//		String userNicakName = "프로한";
 		String expectedUserId = "pro.han@naver.com";
 		String expectedUserPwd = "12345";
 		UserInfo ui = repository.selectByUserIdAndPwd(expectedUserId, expectedUserPwd);
-		
+//		System.out.println("저장된 정보는 " + ui);
 		assertEquals(expectedUserId, ui.getUserId());
 		assertEquals(expectedUserPwd, ui.getUserPwd());
 	}
