@@ -263,7 +263,6 @@ public class UserInfoController {
 	// 로그인
 	@PostMapping(value="login")
 	public ResultBean<UserInfo> login(HttpSession session, @RequestParam String userId, @RequestParam String userPwd, String userNickname, String userType) {
-
 		ResultBean<UserInfo> rb = new ResultBean<>();
 
 		rb.setStatus(0);
@@ -273,12 +272,20 @@ public class UserInfoController {
 		session.removeAttribute("userType");
 
 		try {
-			service.login(userId, userPwd);
+			UserInfo userInfo = service.login(userId, userPwd);
 			rb.setStatus(1);
 			rb.setMsg("로그인 성공");
+			rb.setT(userInfo);
+			
+			
 			session.setAttribute("loginInfo", userId);
-			session.setAttribute("loginNickname", userNickname);
-			session.setAttribute("userType", userType);
+			session.setAttribute("loginNickname", userInfo.getUserNickname());
+			session.setAttribute("userType", userInfo.getUserType());
+			
+			logger.error("세션에 저장된 아이디는" + session.getAttribute("loginInfo"));
+			logger.error("세션에 저장된 닉네임은" + session.getAttribute("loginNickname"));
+			logger.error("세션에 저장된 유저타입은" + session.getAttribute("userType"));
+			
 		} catch (FindException e) {
 			e.printStackTrace();
 			rb.setMsg("로그인 실패. 아이디 비밀번호를 확인 해 주세요");
@@ -291,14 +298,17 @@ public class UserInfoController {
 	public ResultBean<UserInfo> loginstatus (HttpSession session) {
 
 		String loginedId = (String)session.getAttribute("loginInfo");
+		String loginedNickname = (String)session.getAttribute("loginNickname");
 		ResultBean<UserInfo> rb = new ResultBean<>();
-
+		
 		if(loginedId == null) {
 			rb.setStatus(0);
 			rb.setMsg("로그아웃 상태");
 		}else {
 			rb.setStatus(1);
 			rb.setMsg("로그인 상태");
+//			rb.getT().setUserNickname(loginedNickname);
+			System.out.println(rb.getT().getUserNickname());
 		}
 		return rb;
 
