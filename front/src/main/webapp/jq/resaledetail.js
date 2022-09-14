@@ -44,9 +44,9 @@ $(function() {
         }
 
             } // if문    
-        }// success
+        // success
 
-        });
+       });
     
 
 

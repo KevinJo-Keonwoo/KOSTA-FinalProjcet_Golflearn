@@ -17,11 +17,11 @@
     <header w3-include-html="header.html"></header>
     <main>
         <section>
-            <nav>
+            <header>
                 <h2>라운딩 후기</h2>
                 <div class="search">
                     <input type="text" name="search-box" placeholder="검색어를 입력하세요">
-                    <button class="searchBtn">검색1</a>
+                    <button class="searchBtn">검색</a>
                     <img src="" alt="">
                 </div>
                 <ul class="order">
@@ -35,13 +35,22 @@
                         <a class="order__like-cnt__a">좋아요순</a>
                     </li>
                 </ul>
-                <span class="write">글쓰기</span>
-            </nav>
+                <button class="write">글쓰기</span>
+            </header>
             <article>
                 <div class="board">
-                    <div class="board-header">
-                        글번호, 사진, 제목, 작성자, 날짜 , 조회수 
-                    </div>
+                    <header class="board-header">
+                        <div class="board-header__bar">
+                            <p>글번호</p>
+                            <p>사진</p>
+                            <p>제목</p>
+                            <p>댓글수</p>
+                            <p>작성자</p>
+                            <p>작성일자</p>
+                            <p>조회수</p>
+                            <p>좋아요수</p>
+                        </div>
+                    </header>
                     <div class="board-list"> <!--게시글들-->
                         <div class="board-list__content"> <!--게시글-->
                             <div class="board-list__content__no"></div>
@@ -54,7 +63,6 @@
                             <div class="board-list__content__dt"></div>
                             <div class="board-list__content__view-cnt"></div>
                             <div class="board-list__content__like-cnt"></div>
-                            <div>------------------------------</div>
                         </div>
                     </div>
                 </div>

@@ -16,39 +16,40 @@
     <!-- Header-->
     <header w3-include-html="header.html"></header>
     <!-- Nav : 메뉴목록-->
-    <nav w3-include-html="nav.html"></nav>
-
+    <!-- <nav w3-include-html="nav.html"></nav> -->
     <!-- Main-->
     <main>
         <section>
-            <div class="board-like">🧡️️</div>
-            <div class="header_container">
-                <div class="board__content__title"></div>
-                <div class="board__content__date"></div>
-                <div class="board__content__view_cnt"></div>
-                <div class="board__content__like_cnt"></div>
+            <header>
+                <div class="first-bar">
+                    <div class="board__no">글번호</div>
+                    <div class="board__title">제목</div>
+                    <img src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-medium/1f9e1.png" alt="좋아요하트">
+                </div>
+                <div class="second-bar">
+                    <div class="user__nickname">작성자</div>
+                    <div class="board__dt">작성일자</div>
+                    <div class="board__view-cnt">조회수</div>
+                </div>
+            </header>
+            <article>
+                <div class="board__images"></div>
+                <div class="board__content">내용</div>
+                <div class="board__map">카카오맵</div>
+                <div class="comment"> 
+                    <div class="comment-list"> 댓글
+                        <!-- 여기 테이블 -->
+                        <div class="comment-list__nickname"></div>
+                        <div class="comment-list__content"></div>
+                        <div class="comment-list__date"></div>
+                    </div>
+                </div>
+            </article>
+            <div class="footer">
+                <button class="comment__write">작성하기</button>
+                <button class="previous">이전</button>
             </div>
-            
         </section>
-        <article>
-            <div class="board-container">
-                <div class="board__content__thumbnail">
-                    <img src="" alt="">
-                </div>
-                <div class="board__content"></div>
-            </div>
-            <div class="comment-write">
-                <input type="text">
-                <button>작성</button>
-            </div>
-            <div class="comment-list">
-                <div class="comment-content">
-                    <div class="comment-list__nickname"></div>
-                    <div class="comment-list__content"></div>
-                    <div class="comment-list__date"></div>
-                </div>
-            </div>
-        </article>
     </main>
 
     <!-- Footer-->

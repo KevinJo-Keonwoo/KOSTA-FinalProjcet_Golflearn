@@ -1,5 +1,10 @@
 package com.golflearn.control;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -8,6 +13,7 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +23,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +31,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.golflearn.domain.entity.PageBean;
 import com.golflearn.dto.ResultBean;
 import com.golflearn.dto.RoundReviewBoardDto;
 import com.golflearn.dto.RoundReviewCommentDto;
@@ -37,6 +45,8 @@ import com.golflearn.exception.ModifyException;
 import com.golflearn.exception.RemoveException;
 import com.golflearn.service.RoundReviewBoardService;
 
+import net.coobird.thumbnailator.Thumbnailator;
+
 @CrossOrigin(origins = "*")
 @RestController
 //@RequestMapping("roundreview/*")
@@ -45,6 +55,10 @@ public class RoundReviewBoardController {
 	private RoundReviewBoardService service;
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	//파일 저장 경로
+	@Value("${spring.servlet.multipart.location}")
+	String uploadDirectory;
 	
 //	@GetMapping(value = {"board/list", "board/list/{optOrderType}", "board/list/{optOrderType}/{optCp}"})
 //	public ResultBean<PageBean<RoundReviewBoardDto>> list (HttpSession session, @PathVariable Optional<Integer> optOrderType, @PathVariable Optional<Integer> optCp) throws FindException{
@@ -76,7 +90,6 @@ public class RoundReviewBoardController {
 	public ResultBean<Page<RoundReviewBoardDto>> list (HttpSession session, @PathVariable Optional<Integer> optOrderType, @PathVariable Optional<Integer> optCp, 
 					@PageableDefault(page = 0, size = 5, sort = "roundReviewBoardNo", direction = Direction.DESC) Pageable pageable) throws FindException{
 		ResultBean<Page<RoundReviewBoardDto>> rb = new ResultBean<Page<RoundReviewBoardDto>>();
-		logger.error("RoundReviewBoardController method=list");
 		try {
 			int currentPage;
 			if(optCp.isPresent()) {
@@ -85,7 +98,6 @@ public class RoundReviewBoardController {
 				currentPage = 0;
 			}
 
-			logger.error("currentPage=" + currentPage);
 			int orderType;
 			if(optOrderType.isPresent()) {
 				orderType = optOrderType.get();
@@ -101,7 +113,6 @@ public class RoundReviewBoardController {
 			} else {
 				orderCriteria = "roundReviewBoardLikeCnt";
 			}
-			logger.error("orderTyper=" + orderType);
 			pageable = PageRequest.of(currentPage, 5, Sort.by(Sort.Direction.DESC, orderCriteria));
 			Page<RoundReviewBoardDto> dto = service.boardList(currentPage, orderType, pageable);
 			rb.setStatus(1);
@@ -117,18 +128,16 @@ public class RoundReviewBoardController {
 	@GetMapping(value = {"search", "search/{optWord}", "search/{optWord}/{optCp}"})
 	public ResultBean<Page<RoundReviewBoardDto>> search(@PathVariable Optional<String> optWord, @PathVariable Optional<Integer> optCp, 
 			Pageable pageable){
-		logger.error("RoundReviewBoardController method=Search");
 		ResultBean<Page<RoundReviewBoardDto>> rb = new ResultBean<>();
 		Page<RoundReviewBoardDto> pb;
 		String word = "";
-		logger.error(optWord.toString());
 		try {
 			if (optWord.isPresent()) {
 				word = optWord.get();
 			} else {
 				word = "";
 			}
-			int currentPage = 1;
+			int currentPage = 0;
 			if(optCp.isPresent()) {
 				currentPage = optCp.get();
 			}
@@ -151,8 +160,6 @@ public class RoundReviewBoardController {
 	}
 	@GetMapping(value = "board/{roundReviewBoardNo}")
 	public ResultBean<RoundReviewBoardDto> viewBoard(@PathVariable Long roundReviewBoardNo){
-		logger.error("RoundReviewBoardController method=View");
-		
 		ResultBean<RoundReviewBoardDto> rb = new ResultBean<>();
 		try {
 			RoundReviewBoardDto dto = service.viewBoard(roundReviewBoardNo);
@@ -245,20 +252,83 @@ public class RoundReviewBoardController {
 		}
 	}
 	
-
-	@PostMapping(value = "board")
-	public ResponseEntity<?> writeBoard(@RequestBody RoundReviewBoardDto dto){
+	@PostMapping(value = "board", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> writeBoard(@RequestPart(required = false)List<MultipartFile> imageFiles, RoundReviewBoardDto dto, HttpSession session){
+		RoundReviewBoardDto boardDto = new RoundReviewBoardDto();
 		try {
 			//테스트 dt
-//			java.util.Date utilDate = new java.util.Date();
-//			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-//			dto.setRoundReviewBoardDt(sqlDate);
-			service.writeBoard(dto);
-			return new ResponseEntity<>(HttpStatus.OK);
+			java.util.Date utilDate = new java.util.Date();
+			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+			dto.setRoundReviewBoardDt(sqlDate);
+			boardDto = service.writeBoard(dto);
+//			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AddException e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
+		Long roundReviewBoardNo = boardDto.getRoundReviewBoardNo();
+		
+		//파일 저장 폴더
+		//spirng.servlet.multipart.location resale_images\\roundReviewBoardNo
+		String saveDirectory = uploadDirectory + "roundReview_images\\" + roundReviewBoardNo;
+		//파일 경로 생성
+		//파일 경로 에 폴더 없으면 폴더 생성 
+		if(!new File(saveDirectory).exists()) {
+				new File(saveDirectory).mkdir();
+		}
+		
+		//이미지 저장
+		int savedImgFileCnt = 0; //서버에 저장된 파일 수
+		File thumbnailFile = null;
+		if(!imageFiles.isEmpty()) {
+			for(MultipartFile imageFile : imageFiles) {
+				Long imageFileSize = imageFile.getSize();
+				if(imageFileSize > 0) { //파일이 첨부되었을 경우 
+					String originFileName = imageFile.getOriginalFilename(); //파일 확장자 가져오기
+					logger.error("파일이름: " + originFileName);
+					//.뒤의 파일확장자만 자르기
+					String fileExtension = originFileName.substring(originFileName.lastIndexOf("."));
+					logger.error("파일확장자: " + fileExtension);
+					
+					//저장파일생성
+					String savedImageFileName = "image_" + (savedImgFileCnt+1) + fileExtension;
+					//이미지 파일 생성
+					File savedImageFile = new File(saveDirectory, savedImageFileName);
+					
+					try {
+						//파일 저장
+						FileCopyUtils.copy(imageFile.getBytes(), savedImageFile);
+						
+						//파일 타입 확인
+						String contentType = imageFile.getContentType();
+						if(contentType.contains("image/*")) {
+							System.out.println("파일타입" + imageFile.getContentType());
+							return new ResponseEntity<> ("이미지 파일이 아닙니다", HttpStatus.INTERNAL_SERVER_ERROR);
+						}
+						savedImgFileCnt++;
+						
+						//썸네일 만들기
+						String thumbnailName = "s_" + savedImageFileName;
+						thumbnailFile = new File(saveDirectory, thumbnailName);
+						FileOutputStream thumbnailOS = new FileOutputStream(thumbnailFile);
+						InputStream imageFileIS = imageFile.getInputStream();
+						int width = 100;
+						int height = 100;
+						Thumbnailator.createThumbnail(imageFileIS, thumbnailOS, width, height);
+						
+					} catch(IOException e ) {
+						e.printStackTrace();
+						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+					}
+				}else {
+					logger.error("이미지 파일이 없습니다");
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+				
+			}
+		}
+		return new ResponseEntity<>("저장 완료", HttpStatus.OK);
 	}
 	@PostMapping(value = "comment/{roundReviewBoardNo}")
 	public ResponseEntity<?> addComment(@PathVariable Long roundReviewBoardNo,@RequestBody RoundReviewCommentDto dto){

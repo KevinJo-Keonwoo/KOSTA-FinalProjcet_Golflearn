@@ -12,26 +12,25 @@ $(function(){
             success: function(jsonObj){
                 if(jsonObj.status == 1){ //rb의 status가 1일때
                     let pageableContentObj = jsonObj.t.content;
-
+                    //board-list                comment
+                    //board-list__content       comment-list
                     let $board = $("div.board-list").first();
                     $board.show();
-                     
+                    
                     $("div.board-list").not($board).remove();
-                    console.log("origin img src=" , $board.find("img.board-list__content__image").attr("src"));
                     let $boardParent = $board.parent();
                     //한줄씩 넣기 //나중에 span을 div로 바꾸고 테이블형식 넣기 
                     $(pageableContentObj).each(function(index, board){
                         let $boardCopy = $board.clone();
-                        console.log("copy img src=", $boardCopy.find("img.board-list__content__image").attr("src"), "board.roundReviewBoardNo=" , board.roundReviewBoardNo);
                         // 나중에 "" + 다 빼기
-                        $boardCopy.find("div.board-list__content__no").html("글번호 : " + board.roundReviewBoardNo)
-                        $boardCopy.find("img.board-list__content__image").attr("src", "../roundreview_images/" + board.roundReviewBoardNo + "_RoundReviewThumbnail.jpg");
-                        $boardCopy.find("div.board-list__content__title").html("제목 : " + board.roundReviewBoardTitle)
-                        $boardCopy.find("div.board-list__content__cmt-cnt").html("댓글수 : " + board.roundReviewBoardCmtCnt)
-                        $boardCopy.find("div.board-list__content__nickname").html("닉네임 : " + board.userNickname)
-                        $boardCopy.find("div.board-list__content__dt").html("작성일자 : " + board.roundReviewBoardDt)
-                        $boardCopy.find("div.board-list__content__view-cnt").html("조회수 : " + board.roundReviewBoardViewCnt)
-                        $boardCopy.find("div.board-list__content__like-cnt").html("좋아요수 : " + board.roundReviewBoardLikeCnt)
+                        $boardCopy.find("div.board-list__content__no").html(board.roundReviewBoardNo)
+                        $boardCopy.find("img.board-list__content__image").attr("src", "../roundreview_images/" + board.roundReviewBoardNo + "_RoundReviewThumbnail.png");
+                        $boardCopy.find("div.board-list__content__title").html(board.roundReviewBoardTitle)
+                        $boardCopy.find("div.board-list__content__cmt-cnt").html(board.roundReviewBoardCmtCnt)
+                        $boardCopy.find("div.board-list__content__nickname").html(board.userNickname)
+                        $boardCopy.find("div.board-list__content__dt").html(board.roundReviewBoardDt)
+                        $boardCopy.find("div.board-list__content__view-cnt").html(board.roundReviewBoardViewCnt)
+                        $boardCopy.find("div.board-list__content__like-cnt").html(board.roundReviewBoardLikeCnt)
 
                         $boardParent.append($boardCopy);
                     });
@@ -104,7 +103,6 @@ $(function(){
                     //     case 1:break;
                     //     case 2:break
                     // }
-                console.log(index, "color", $aObj.css("background-color"));
                 orderType = index;
                 return false;
             }
@@ -116,7 +114,6 @@ $(function(){
         
         //pageNo = $(this).html();
         //?? 이해안됨
-        console.log(orderType);
         if($(this).hasClass("prev")){
             pageNo = parseInt($(this).next().html()) - 2;
         } else if ($(this).hasClass("next")){
@@ -144,9 +141,9 @@ $(function(){
     $("div.search>button.searchBtn").click(function(){
         let word = $("div.search>input[name=search-box]").val().trim();
         console.log(word);
-        let url = "http://localhost:1125/backroundreview/search/";
-        let data = "currentPage=1&word=" + word;
-        // let data = "";
+        let url = "http://localhost:1125/backroundreview/search/" + word;
+        // let data = "currentPage=1&word=" + word;
+        let data = "";
         showList(url, data);
         return false;
     });
@@ -186,14 +183,31 @@ $(function(){
         showList(url,data);
     });
     //6. 글쓰기로 이동하기 -> 보내줄 데이터 없음 (닉네임? )
-    $("nav>span.write").click(function(){
+    $("header>button.write").click(function(){
         $(location).attr('href', '../html/roundreviewwrite.html');
     })
 
     //7. 제목이나 사진 눌렀을때 해당 게시글로 이동하기
-    $("div.board-list__content__thumbnail, div.board-list__content__title").on('click', function(){
-        let $roundReviewBoardNoObj = $(this).prev().find('roundReviewBoardNo');
+    //undefined나오는것 해결하기 + 여기서 누른 번호 보내주기 roundreviewboardno
+    $("div.board").on('click', "img.board-list__content__image, div.board-list__content__title", function(){
+        let $roundReviewBoardNoObj = $(this).parent().find('div.board-list__content__no');
         let round_review_board_no = $roundReviewBoardNoObj.html();
-        location.href = "/front/html/roundreview/board/" + round_review_board_no;
+        console.log(round_review_board_no);
+        location.href = '../html/roundreviewdetail.html?round_review_board_no=' + round_review_board_no;
+        // location.href = '../html/roundreviewdetail.html?round_review_board_no=' + 1;
+        // location.href = '../html/roundreviewdetail.html?round_review_board_no=1';
+        // location.href = "http://localhost:1125/front/board/" + round_review_board_no;
+        // $(location).attr('href', '../html/roundreview/board/' + round_review_board_no + '.html');
+        
+        // let url = "http://localhost:1128/noticeboard/"
+        // $.ajax({
+        //     url:url,
+        //     method: "GET",
+        //     success:function(jsonObj){
+        //         if(jsonObj.status ==1){
+        //             console.log(jsonObj.noticeBoardNo);
+        //         }
+        //     }
+        // })
     })
 })

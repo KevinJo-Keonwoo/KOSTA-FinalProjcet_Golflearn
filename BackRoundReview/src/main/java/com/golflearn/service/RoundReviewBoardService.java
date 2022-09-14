@@ -293,10 +293,15 @@ public class RoundReviewBoardService {
 	 * @param dto
 	 * @throws AddException
 	 */
-	public void writeBoard(RoundReviewBoardDto dto) throws AddException {
+	public RoundReviewBoardDto writeBoard(RoundReviewBoardDto dto) throws AddException {
 		ModelMapper modelMapper = new ModelMapper();
 		RoundReviewBoardEntity entity = modelMapper.map(dto, RoundReviewBoardEntity.class);
 		boardRepo.save(entity);
+		
+		Optional<RoundReviewBoardEntity> optRb = boardRepo.findById(entity.getRoundReviewBoardNo());
+		RoundReviewBoardEntity boardEntity = optRb.get();
+		RoundReviewBoardDto boardDto = modelMapper.map(boardEntity, RoundReviewBoardDto.class);
+		return boardDto;
 	}
 	/**
 	 * 댓글 등록 + 댓글 수 증가 
