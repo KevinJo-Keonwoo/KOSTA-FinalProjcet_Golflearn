@@ -1,8 +1,6 @@
 package com.golflearn.service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -22,7 +20,6 @@ import com.golflearn.domain.entity.ResaleLikeEntity;
 import com.golflearn.domain.repository.ResaleBoardRepository;
 import com.golflearn.domain.repository.ResaleCommentRepository;
 import com.golflearn.domain.repository.ResaleLikeRepository;
-import com.golflearn.dto.PageBean;
 import com.golflearn.dto.ResaleBoardDto;
 import com.golflearn.dto.ResaleCommentDto;
 import com.golflearn.dto.ResaleLikeDto;

@@ -36,7 +36,7 @@ import lombok.Setter;
 @Table(name = "resale_board")
 @SequenceGenerator(name ="resale_board_generator",
 					sequenceName="resale_board_no_seq",
-					initialValue=1, // 28부터 시작(샘플데이터가 27까지 있음)
+					initialValue=28, // 28부터 시작(샘플데이터가 27까지 있음)
 					allocationSize=1) // 1씩 증가
 @DynamicInsert
 @DynamicUpdate

@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -34,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.golflearn.dto.PageBean;
 import com.golflearn.dto.ResaleBoardDto;
 import com.golflearn.dto.ResaleCommentDto;
 import com.golflearn.dto.ResaleLikeDto;
@@ -61,8 +59,8 @@ public class ResaleBoardContoller {
 	private ServletContext sc;
 
 	// 파일 저장 경로
-	@Value("${spring.servlet.multipart.location}")
-	String uploadDirectory;
+//	@Value("${spring.servlet.multipart.location}")
+	String uploadDirectory = "C:\\Project\\GolfLearn\\front\\src\\main\\webapp\\";
 
 	/**
 	 * 게시글 목록보기
@@ -332,12 +330,13 @@ public class ResaleBoardContoller {
 	 * @param dto
 	 * @return
 	 */
-	@PutMapping(value="board/{resaleBoardNo}",produces = MediaType.APPLICATION_JSON_VALUE) 
+	@PutMapping(value="board/write/{resaleBoardNo}",produces = MediaType.APPLICATION_JSON_VALUE) 
 	public ResponseEntity<?> modifyBoard(@PathVariable Long resaleBoardNo,
 										 @RequestBody ResaleBoardDto dto,
 										 HttpSession session){
 		String loginedNickname = (String)session.getAttribute("loginNickname");
 //		 String loginedNickname = "데빌";
+		
 		logger.error(loginedNickname);
 		logger.error("작성자 이름은 : " + dto.getUserNickname());
 		logger.error(dto.getResaleBoardTitle());
@@ -379,7 +378,7 @@ public class ResaleBoardContoller {
 //		String loginedNickname = (String) session.getAttribute("loginNickname");
 		//테스트용 닉네임
 		String loginedNickname = "땡초";
-
+		logger.error("닉네임"+dto.getUserNickname());
 		ResultBean<ResaleBoardDto> rb = new ResultBean<>();
 		if(loginedNickname == null) { // 로그인된 아이디가 없으면
 			rb.setMsg("로그인 하세요");			
@@ -397,6 +396,7 @@ public class ResaleBoardContoller {
 			}
 			return rb; 
 		}else {
+//			rb.status(0)
 			rb.setMsg("작성자 아이디와 로그인된 아이디가 일치하지 않습니다");
 			return rb;
 		}
@@ -481,7 +481,7 @@ public class ResaleBoardContoller {
 													  @RequestBody ResaleCommentDto dto,
 													  HttpSession session){
 		//	String loginedNickname = (String)session.getAttribute("loginNickname");
-			String loginedNickname = "쩐승";
+		String loginedNickname = "쩐승";
 		
 		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
 		try {
@@ -516,7 +516,7 @@ public class ResaleBoardContoller {
 	 * @param session
 	 * @return
 	 */
-	@GetMapping(value = "like/add", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "like/add", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean<ResaleLikeDto> addLike(ResaleLikeDto likeDto,
 											@RequestBody ResaleBoardDto boardDto,
 											HttpSession session){
@@ -537,8 +537,6 @@ public class ResaleBoardContoller {
 		}
 		return rb;
 	}
-
-
 	
 	/**
 	 * 좋아요 삭제
@@ -547,23 +545,25 @@ public class ResaleBoardContoller {
 	 * @param session
 	 * @return
 	 */
-	@DeleteMapping(value = "like/{resaleLikeNo}", produces = MediaType.APPLICATION_JSON_VALUE) //Json 형태로 return?!
-	public ResultBean<ResaleLikeDto> removeLike(@PathVariable Long resaleLikeNo, 
-												 @RequestBody ResaleLikeDto likeDto, 
-												 HttpSession session){
+	@DeleteMapping(value = "like/{resaleLikeNo}",produces = MediaType.APPLICATION_JSON_VALUE) //Json 형태로 return?!
+	public ResultBean<ResaleLikeDto> removeLike(@PathVariable Long resaleLikeNo,//Long resaleLikeNo, 
+												@RequestBody ResaleLikeDto likeDto){
 		
 		//String loginedNickname = (String)session.getAttribute("loginNickname");
-		String loginedNickname = "케빈";
+//		userNickname = "케빈";
+//		logger.error("닉네임은" + userNickname);
+		logger.error("이름은 " + likeDto.getUserNickname());
+//		logger.error("번호는" + likeDto.getResaleLikeNo());
+		logger.error("원글번호" + likeDto.getResaleBoard().getResaleBoardNo()); // null에러
 		ResultBean<ResaleLikeDto> rb = new ResultBean<>(); // 객체 생성
-
-		if(loginedNickname == null) {
-			rb.setMsg("로그인하세요");
-		}else if(loginedNickname.equals(likeDto.getUserNickname())) { // 로그인된 닉네임과 좋아요한 닉네임 같으면
+//		if(likeDto.getUserNickname() == null) {
+//			rb.setMsg("로그인하세요");
+//		}else if(userNickname.equals(likeDto.getUserNickname())) { // 로그인된 닉네임과 좋아요한 닉네임 같으면
 			try {
 				likeDto.getResaleBoard().getResaleBoardNo(); // null에러
 				logger.error("원글 번호는"+likeDto.getResaleBoard().getResaleBoardNo()); // null
 				
-				likeDto.setResaleLikeNo(resaleLikeNo);
+				likeDto.setUserNickname(likeDto.getUserNickname());
 				service.removeLike(likeDto);
 				rb.setStatus(1);
 				rb.setMsg("좋아요 삭제 성공");
@@ -572,9 +572,9 @@ public class ResaleBoardContoller {
 				rb.setStatus(0);
 				rb.setMsg("좋아요 삭제 실패");
 			}
-		}else {
-			rb.setMsg("로그인된 아이디와 좋아요한 아이디가 일치하지 않습니다");
-		}
+//		}else {
+//			rb.setMsg("로그인된 아이디와 좋아요한 아이디가 일치하지 않습니다");
+//		}
 		return rb;
 	}
 
