@@ -2,6 +2,23 @@
     box-sizing: border-box;
 }
 
+.board-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 80%;
+    margin: 0 auto;
+    /* padding: 0 10px; */
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #64DB99
+}
+
+.board-header>div {
+    width: 10%;
+}
+
 .boardlist__content {
     display: flex;
     flex-direction: row;
