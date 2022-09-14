@@ -92,12 +92,12 @@ $(function(){
 
     // 드래그 드롭
     // $(".sortable").sortable();
-    
   //이미지 등록
     $("#imgFiles").change(function(e){
+
       //div 내용 비워주기
         $('#preview').empty();
-
+        
         let files = e.target.files;
         let arr = Array.prototype.slice.call(files);
 
@@ -121,12 +121,6 @@ $(function(){
                         $(img).appendTo("#preview");
                     } 
                     reader.readAsDataURL(f);
-                }else{
-                    //이미지 파일 아닐 경우 대체 이미지
-                    /*
-                    str += '<img src="/resources/img/fileImg.png" title="'+f.name+'" width=60 height=60 />';
-                    $(str).appendTo('#Preview');
-                    */
                 }
             })
         }
@@ -160,9 +154,9 @@ $(function(){
 		contentType: false, //파일업로드용 설정
 		data: formData, //파일업로드용 설정
 		cache: false, //이미지 다운로드용 설정
-		success: function(responseData) {
-            alert("글 등록 성공");
-		},
+		success:
+            alert("글 등록 성공"),
+            
 		error: function (jqXHR) {
 			//응답실패
 			alert("에러:" + jqXHR.status);
@@ -172,7 +166,6 @@ $(function(){
         });
     
     });
-
 
     // var summernoteContent = $("#summernote").summernote("code"); //썸머노트(설명)
     // console.log("summernoteContent : " + summernoteContent);
@@ -184,7 +177,7 @@ $(function(){
     //     $('.note-current-fontname').css('font-family','Apple SD Gothic Neo').text('Apple SD Gothic Neo');
     //     $('.note-editable').css('font-family','Apple SD Gothic Neo');
 
-     $(".note-group-image-url").remove();    //이미지 추가할 때 Image URL 등록 input 삭제 ( 나는 필요없음 )
+    //  $(".note-group-image-url").remove();    //이미지 추가할 때 Image URL 등록 input 삭제 ( 나는 필요없음 )
         /*
         - 이미지 추가 func
         - ajax && formData realtime img multi upload
@@ -227,3 +220,32 @@ $(function(){
 
 
 // }); // 맨 위 function
+
+
+    // 게시글 수정    
+    let $titleObj = $("div.write-title");
+    let $contentObj = $("#summernote").summernote("code");
+    let $imgObj = $('ul.sortable');
+    
+    let queryString = location.search.split('=')[1].split('%')[0];
+    console.log(queryString); // boardNo가 됨
+    // let boardContent = location.search.split('%')[1]
+    
+    let obj = {resaleBoardTitle : boardTitle, resaleBoardContent : boardContent}
+    
+    $.ajax({
+        url:"http://localhost:1126/backresale/resale/board/write" + queryString,
+        method: "put",
+        data:JSON.stringify(obj),
+        success: function(){
+
+        },
+        error: function(jqXHR){
+            alert("error : " + jqXHR + " 수정 실패")
+        }
+    })
+
+    	let boardContent = $(this)
+          .parents("div.cell")
+          .find("input.board_content")
+          .val();

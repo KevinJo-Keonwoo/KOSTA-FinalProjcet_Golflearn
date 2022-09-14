@@ -13,7 +13,7 @@
     <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script src="../jq/resaleboardwrite.js"></script>
-    <script src="../jq/write2.js"></script>
+    <!-- <script src="../jq/write2.js"></script> -->
     <script src="../jq/summernote-lite.js"></script>
     <script src="../jq/summernote-ko-KR.js"></script>
     <link rel="stylesheet" href="../css/summernote-lite.css">
@@ -44,9 +44,10 @@
             </div> -->
             <div class="filebox clearfix">
                 <div class="inputFile">
+                    <div> 다중 선택 가능 </div>
                     <label for="AddImgs" class="addImgBtn"></label>
-                    <input type="file" id="imgFiles" class="image" name = "imageFiles" accept="image.*" multiple>
-            </div>
+                    <input type="file" id="imgFiles" class="image" name = "imageFiles" accept="image/*" multiple>
+                </div>
                 <ul id="preview" class="sortable"></ul>
             </div>       
         </form>
