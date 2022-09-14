@@ -48,7 +48,11 @@ function logout() {
 		url: "http://localhost:1124/back/logout",
 		success: function () {
 			alert("로그아웃 되었습니다.");
-			location.href = "/front/html/main.html";
+			localStorage.removeItem("loginedNickname");
+			localStorage.removeItem("loginedUserType");
+			localStorage.removeItem("loginedId");
+
+			location.href = "../front/html/main.html";
 		},
 		error: function (jqXHR) {
 		alert("error: " + jqXHR.status);

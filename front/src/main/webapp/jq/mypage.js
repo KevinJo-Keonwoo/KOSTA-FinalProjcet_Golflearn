@@ -25,7 +25,7 @@ $(function(){
     // $lsncancelObj.click(function(){
 
     // });
-
+    
     $.ajax({
 		url: "http://localhost:1124/back/login",
 		success: function (jsonObj) {
