@@ -122,35 +122,36 @@ public class ResaleBoardContoller {
 	 * @param resaleBoardNo
 	 * @return
 	 */
-//	@GetMapping(value = "board/{resaleBoardNo}")
-//	public ResultBean<ResaleBoardDto> viewBoardDetail(@PathVariable Long resaleBoardNo){
-//		ResultBean<ResaleBoardDto> rb = new ResultBean<>();
-//		try {
-//			ResaleBoardDto rbd = service.boardDetail(resaleBoardNo);
-//			rb.setStatus(1);
-//			rb.setMsg("상세 목록 불러오기 성공");
-//			rb.setT(rbd);
-//		} catch (FindException e) {
-//			e.printStackTrace();
-//			rb.setStatus(0);
-//			rb.setMsg(e.getMessage());
-//		}	
-//		return rb;
-//	}
+	//	@GetMapping(value = "board/{resaleBoardNo}")
+	//	public ResultBean<ResaleBoardDto> viewBoardDetail(@PathVariable Long resaleBoardNo){
+	//		ResultBean<ResaleBoardDto> rb = new ResultBean<>();
+	//		try {
+	//			ResaleBoardDto rbd = service.boardDetail(resaleBoardNo);
+	//			rb.setStatus(1);
+	//			rb.setMsg("상세 목록 불러오기 성공");
+	//			rb.setT(rbd);
+	//		} catch (FindException e) {
+	//			e.printStackTrace();
+	//			rb.setStatus(0);
+	//			rb.setMsg(e.getMessage());
+	//		}	
+	//		return rb;
+	//	}
 
 	@GetMapping(value = "board/{resaleBoardNo}")
-	public ResultBean<Map<String,Object>> viewBoardDetail (@PathVariable Long resaleBoardNo){
+	public ResultBean<Map<String,Object>> viewBoardDetail(@PathVariable Long resaleBoardNo){
+
 		Map<String, Object> map = new HashMap<>();
 
 		try {
 			ResaleBoardDto resaleBoard = service.boardDetail(resaleBoardNo);
 			map.put("resaleBoard", resaleBoard);
-			map.put("status", 1);
+			//			map.put("status", 1);
 		} catch (FindException e) {
 			e.printStackTrace();
 			map.put("status", 0);
 		}
-		
+
 		String saveDirectory = uploadDirectory +"\\"+ "resale_images" + "\\" +resaleBoardNo + "\\";
 		System.out.println("경로는" + saveDirectory);
 		File dir = new File(saveDirectory);
@@ -160,11 +161,12 @@ public class ResaleBoardContoller {
 				return name.contains("image_");
 			}
 		});
-		
 		map.put("imageFileNames", imageFiles);
-		ResultBean<Map<String,Object>> resultBean = new ResultBean<>();
-		resultBean.setT(map);	
-		return resultBean;
+		ResultBean<Map<String,Object>> rb = new ResultBean<>();
+		rb.setStatus(1);
+		rb.setT(map);	
+
+		return rb;
 	}
 
 	/**
@@ -259,15 +261,15 @@ public class ResaleBoardContoller {
 	 */
 	@PostMapping(value = "board/write", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> writeBoard (@RequestPart(required = false)List<MultipartFile> imageFiles,
-			ResaleBoardDto dto, HttpSession session) {
+			ResaleBoardDto dto) {
 
 		//		String loginedNickname = (String) session.getAttribute("loginNickname");
 		// 입력 내용 게시글 저장
 		ResaleBoardDto boardDto = new ResaleBoardDto();
-		String loginedNickname = "땡초";
+		//		String loginedNickname = "땡초";
 		//		System.out.println(dto.getResaleBoardTitle());
 		try {
-			dto.setUserNickname(loginedNickname);
+			dto.setUserNickname(dto.getUserNickname());
 			boardDto = service.writeBoard(dto);
 		} catch (AddException e1) {
 			e1.printStackTrace();
@@ -364,35 +366,28 @@ public class ResaleBoardContoller {
 	 */
 	@PutMapping(value="board/write/{resaleBoardNo}",produces = MediaType.APPLICATION_JSON_VALUE) 
 	public ResponseEntity<?> modifyBoard(@PathVariable Long resaleBoardNo,
-			@RequestBody ResaleBoardDto dto,
-			HttpSession session){
-		String loginedNickname = (String)session.getAttribute("loginNickname");
+			@RequestBody ResaleBoardDto dto){
 		//		 String loginedNickname = "데빌";
 
-		logger.error(loginedNickname);
-		logger.error("작성자 이름은 : " + dto.getUserNickname());
-		logger.error(dto.getResaleBoardTitle());
-		logger.error(dto.getResaleBoardContent());
+		//		logger.error(loginedNickname);
+		//		logger.error("작성자 이름은 : " + dto.getUserNickname());
+		//		logger.error(dto.getResaleBoardTitle());
+		//		logger.error(dto.getResaleBoardContent());
 
-		if(loginedNickname == null) { // 로그인된 아이디가 없으면
-			return new ResponseEntity<>("로그인하세요", HttpStatus.INTERNAL_SERVER_ERROR);
-		}else if(loginedNickname.equals(dto.getUserNickname())) { // 로그인된 아이디와 작성자가 같은 경우 - 제목, 내용 없는 경우				
-			if(dto.getResaleBoardTitle() == null || dto.getResaleBoardTitle().equals("")|| 
-					dto.getResaleBoardContent() == null || dto.getResaleBoardContent().equals("")) {
-				return new ResponseEntity<>("글 내용이나 제목은 반드시 입력하세요",HttpStatus.INTERNAL_SERVER_ERROR);
 
-			}else { // 제목, 내용 있고 로그인된 아이디와 작성자가 같은 경우
-				try {
-					dto.setResaleBoardNo(resaleBoardNo);
-					service.modifyBoard(dto);
-					return new ResponseEntity<>(HttpStatus.OK);
-				} catch (ModifyException e) {
-					e.printStackTrace();
-					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-				}
+		if(dto.getResaleBoardTitle() == null || dto.getResaleBoardTitle().equals("")|| 
+				dto.getResaleBoardContent() == null || dto.getResaleBoardContent().equals("")) {
+			return new ResponseEntity<>("글 내용이나 제목은 반드시 입력하세요",HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}else { // 제목, 내용 있고 로그인된 아이디와 작성자가 같은 경우
+			try {
+				dto.setResaleBoardNo(resaleBoardNo);
+				service.modifyBoard(dto);
+				return new ResponseEntity<>(HttpStatus.OK);
+			} catch (ModifyException e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-		}else {
-			return new ResponseEntity<>("로그인된 아이디와 글 작성자가 다릅니다.",HttpStatus.INTERNAL_SERVER_ERROR); 
 		}
 
 	}
@@ -405,33 +400,23 @@ public class ResaleBoardContoller {
 	 * @return
 	 */
 	@DeleteMapping(value="board/{resaleBoardNo}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResultBean<ResaleBoardDto> removeBoard (@PathVariable Long resaleBoardNo, HttpSession session, 
+	public ResultBean<ResaleBoardDto> removeBoard (@PathVariable Long resaleBoardNo,
 			@RequestBody ResaleBoardDto dto) { 
 		//		String loginedNickname = (String) session.getAttribute("loginNickname");
 		//테스트용 닉네임
-		String loginedNickname = "땡초";
 		logger.error("닉네임"+dto.getUserNickname());
 		ResultBean<ResaleBoardDto> rb = new ResultBean<>();
-		if(loginedNickname == null) { // 로그인된 아이디가 없으면
-			rb.setMsg("로그인 하세요");			
-			return rb;
-		} else if(loginedNickname.equals(dto.getUserNickname())) { // 로그인 아이디와 글 작성자가 일치하면
-			try {
-				dto.setResaleBoardNo(resaleBoardNo);
-				service.removeBoard(resaleBoardNo);
-				rb.setStatus(1);
-				rb.setMsg("삭제 성공");
-			} catch (RemoveException e) {
-				e.printStackTrace();
-				rb.setStatus(0);
-				rb.setMsg(e.getMessage());
-			}
-			return rb; 
-		}else {
-			//			rb.status(0)
-			rb.setMsg("작성자 아이디와 로그인된 아이디가 일치하지 않습니다");
-			return rb;
+		try {
+			dto.setResaleBoardNo(resaleBoardNo);
+			service.removeBoard(resaleBoardNo);
+			rb.setStatus(1);
+			rb.setMsg("삭제 성공");
+		} catch (RemoveException e) {
+			e.printStackTrace();
+			rb.setStatus(0);
+			rb.setMsg(e.getMessage());
 		}
+		return rb; 
 	}
 
 
@@ -443,13 +428,12 @@ public class ResaleBoardContoller {
 	 * @return
 	 */
 	@PostMapping(value= "comment/write")
-	public ResultBean<ResaleCommentDto> writeComment(@RequestBody ResaleCommentDto commentDto,
-			HttpSession session){
+	public ResultBean<ResaleCommentDto> writeComment(@RequestBody ResaleCommentDto commentDto){
 		//String loginedNickname = (String) session.getAttribute("loginNickname");
-		String loginedNickname = "땡초";
+		//		String loginedNickname = "땡초";
 		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
 		try {
-			commentDto.setUserNickname(loginedNickname);
+			//			commentDto.setUserNickname(loginedNickname);
 			logger.error("원글번호는 "+commentDto.getResaleBoard().getResaleBoardNo());
 			service.writeComment(commentDto);
 			logger.error("부모댓글"+commentDto.getResaleCmtParentNo());
@@ -472,10 +456,9 @@ public class ResaleBoardContoller {
 	 */
 	@DeleteMapping(value = "comment/{resaleCmtNo}")
 	public ResultBean<ResaleCommentDto> deleteComments(@PathVariable Long resaleCmtNo,
-			@RequestBody ResaleCommentDto commentDto,
-			HttpSession session){
+			@RequestBody ResaleCommentDto commentDto){
 		// String loginedNickname = (String) session.getAttribute("loginNickname");
-		String loginedNickname = "개발자";
+		//		String loginedNickname = "개발자";
 
 		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
 
@@ -483,15 +466,9 @@ public class ResaleBoardContoller {
 		logger.error("부모글번호"+resaleCmtParentNo); // OK
 
 		try {
-			if(loginedNickname == null) {
-				rb.setMsg("로그인하세요");
-			}else if(loginedNickname.equals(commentDto.getUserNickname())) {
-				service.deleteComment(commentDto);
-				rb.setStatus(1);
-				rb.setMsg("댓글 삭제 성공");
-			} else {
-				rb.setMsg("로그인 닉네임과 작성자 닉네임이 일치하지 않습니다");
-			}
+			service.deleteComment(commentDto);
+			rb.setStatus(1);
+			rb.setMsg("댓글 삭제 성공");
 		} catch (RemoveException e) {
 			e.printStackTrace();
 			rb.setStatus(0);
@@ -510,27 +487,19 @@ public class ResaleBoardContoller {
 	 */
 	@PutMapping(value = "comment/{resaleCmtNo}" ,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResultBean<ResaleCommentDto> modifyComment(@PathVariable Long resaleCmtNo,
-			@RequestBody ResaleCommentDto dto,
-			HttpSession session){
+			@RequestBody ResaleCommentDto dto){
 		//	String loginedNickname = (String)session.getAttribute("loginNickname");
-		String loginedNickname = "쩐승";
+		//		String loginedNickname = "쩐승";
 
 		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
 		try {
-			if(loginedNickname == null) {
-				rb.setMsg("로그인 해 주세요");
-				return rb;
-			}else if(loginedNickname.equals(dto.getUserNickname())) {
-				if(dto.getResaleCmtContent() == null || dto.getResaleCmtContent().equals("")) {
-					rb.setMsg("내용을 반드시 입력해주세요");
-				}else {
-					dto.setResaleCmtNo(resaleCmtNo);
-					service.modifyComment(dto);
-					rb.setStatus(1);
-					rb.setMsg("수정 성공");
-				}
+			if(dto.getResaleCmtContent() == null || dto.getResaleCmtContent().equals("")) {
+				rb.setMsg("내용을 반드시 입력해주세요");
 			}else {
-				rb.setMsg("로그인한 닉네임과 작성자 닉네임이 일치하지 않습니다");
+				dto.setResaleCmtNo(resaleCmtNo);
+				service.modifyComment(dto);
+				rb.setStatus(1);
+				rb.setMsg("수정 성공");
 			}
 		}catch(ModifyException e){
 			e.printStackTrace();
