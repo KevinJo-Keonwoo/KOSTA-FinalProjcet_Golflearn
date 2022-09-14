@@ -27,7 +27,7 @@ $(function() {
                         // console.log(board.resaleBoardNo);
 
                         $boardCopy.find("div.board-list__board__no").html(board.resaleBoardNo);
-                        $boardCopy.find("div>img.board-list__content__thumbnail").attr("src", src+ board.resaleBoardNo +"/s_image_1" +".jpg");
+                        $boardCopy.find("div>img.board-list__content__thumbnail").attr("src", src+ board.resaleBoardNo +"/s_1" +".jpg");
                         $boardCopy.find("div.board-list__content__title").html(board.resaleBoardTitle);
                         $boardCopy.find("div.board-list__content__nickname").html(board.userNickname);
                         $boardCopy.find("div.board-list__content__dt").html(board.resaleBoardDt);
