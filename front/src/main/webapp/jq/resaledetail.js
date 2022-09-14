@@ -13,23 +13,19 @@ $(function () {
         url: "http://localhost:1126/backresale/resale/board/" + queryString,
         method: "get",
         success: function (jsonObj) {
-            console.log("좋아요 수 : " + jsonObj.t.resaleBoardLikeCnt);
-            console.log("게시판 번호 : " + jsonObj.t.resaleBoardNo);
-            let detailObj = jsonObj.t;
-            resaleBoardNo = jsonObj.t.resaleBoardNo;
-            userNickname = jsonObj.t.userNickname;
-            
             if (jsonObj.status == 1) {
-            // function zeroFill(number, lenght){ //number : 숫자 lenght:자릿수
-            //     let output = number.toString(); //숫자를 문자로 변환합니다.
-            //     while(output.length < lenght ){ //숫자의 길이가 전체 자리수보다 작으면
-            //         output = '0'+output; //숫자앞에 '0'을 붙여줍니다.
-            //     return output;
-            //     }
-            // }
-            // for(var i=1; i<=5; i++){
-            // $('div.board__content__images').append('<img src="image/IMG_' + zeroFill(i, 2) + '.JPG">');
-            // }
+
+                console.log("좋아요 수 : " + jsonObj.t.resaleBoardLikeCnt);
+                console.log("게시판 번호 : " + jsonObj.t.resaleBoardNo);
+                let detailObj = jsonObj.t;
+                resaleBoardNo = jsonObj.t.resaleBoardNo;
+                userNickname = jsonObj.t.userNickname;
+            
+                let fileNameArr = detailObj.imageFileNames;
+                let dto = detailObj.resaleboard;
+                console.log(fileNameArr);
+                console.log("----");
+                console.log(dto);
 
                 $("div.board__content__images>img").attr(
                 "src",
@@ -110,7 +106,7 @@ $(function () {
         }, // error
     }); // ajax
 
-    // 좋아요 클릭
+    // 좋아요 추가, 삭제 (완성)
     $("div.board-like").on("click", function () {
         console.log("보드 넘버는" + resaleBoardNo);
         // 좋아요 여부
@@ -158,6 +154,7 @@ $(function () {
         } //else 끝
     }); //클릭 끝
 
+
     // 댓글 작성
     // 댓글 삭제
 
@@ -197,3 +194,13 @@ $(function () {
         // });
     });
 }); // 첫 function
+
+// 파일 첨부
+    // $.ajax({
+    //     url: "localhost: detail",
+    //     success : function(jsonObj){
+    //         let map = jsonObj.t;
+    //         let fileNameArr = map.imageFileNames");
+    //         let dto = map.get("resaleBoardDto");
+    //     }
+    // });

@@ -155,7 +155,7 @@ $(function() {
     // ----- 글쓰기 버튼 클릭 END -----
 
         //클릭한 해당 게시물로 이동
-    $("div.board").on("click", "div.boardlist__content", function(){
+    $("div.board").on("click", "div.boardlist__content", function(){ //"div.boardlist__content"
         $board = $("div.board-list__board__no");
         $boardNo = $(this).children($board).text(); // this-> 클릭한 것(div.boardlist__content)
         console.log("게시글번호는"+$boardNo);
