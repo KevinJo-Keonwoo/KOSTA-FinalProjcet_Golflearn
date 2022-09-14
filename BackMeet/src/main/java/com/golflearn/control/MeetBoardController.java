@@ -1,5 +1,6 @@
 package com.golflearn.control;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -17,10 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.golflearn.dto.MeetBoardDto;
+import com.golflearn.dto.MeetCategoryDto;
 import com.golflearn.dto.PageBean;
 import com.golflearn.dto.ResultBean;
 import com.golflearn.exception.AddException;
@@ -62,7 +63,7 @@ public class MeetBoardController {
 	
 	//모집상태에 따른 게시글 목록보기
 	@GetMapping(value = { "filter", "filter/{optStatus}", "filter/{optStatus}/{optCp}" })
-	public ResultBean<PageBean<MeetBoardDto>> filter(@PathVariable Optional<Integer> optCp, @PathVariable Optional<Long> optStatus) {
+	public ResultBean<PageBean<MeetBoardDto>> filter(@PathVariable Optional<Long> optStatus, @PathVariable Optional<Integer> optCp) {
 		ResultBean<PageBean<MeetBoardDto>> rb = new ResultBean<>();
 		try {
 			PageBean<MeetBoardDto> pb;
@@ -169,30 +170,33 @@ public class MeetBoardController {
 		return rb;
 	}
 	
+	//게시글 작성시 모임유형 드롭다운으로 받아오기
+	@GetMapping("selectctg")
+	public  List<MeetCategoryDto> getoption() throws FindException{
+			 List<MeetCategoryDto> optionList = service.meetCategoryList();
+			 return optionList;
+	}
+	
 	//게시글 작성하기
 	@PostMapping("write")
-	public ResponseEntity<Object> write(@RequestParam Long meetCtgNo, @RequestBody MeetBoardDto m, HttpSession session){
+	public ResponseEntity<Object> write(@RequestBody MeetBoardDto m, HttpSession session){
 //		logger.error("title: " + m.getMeetBoardTitle() );
 		
-		String loginedNickname = (String)session.getAttribute("loginNickname");//로그인닉네임 받기
+//		String loginedNickname = (String)session.getAttribute("loginNickname");//로그인닉네임 받기
 		//---테스트용 닉네임-----------------
-		//String loginedNickname = "케빈";
+		String loginedNickname = "케빈";
 		if(loginedNickname == null) {//로그인하지 않은 경우
 			return new ResponseEntity<>("로그인이 필요합니다", HttpStatus.BAD_REQUEST);
 		}else {
-			try {//모집유형리스트 드롭다운에 불러오기
-				service.meetCategoryList();
-			} catch (FindException e1) {
-				e1.printStackTrace();
-			}
 			//입력내용 유효성검사
+
 			if (m.getMeetBoardTitle() == null || m.getMeetBoardTitle().equals("") || m.getMeetBoardContent() == null
-					|| m.getMeetBoardLocation() == null || m.getMeetBoardMaxCnt() == null || m.getMeetBoardMeetDt() == null
-					|| meetCtgNo == null) {
+					|| m.getMeetBoardLocation() == null || m.getMeetBoardMaxCnt() == null || m.getMeetBoardMeetDt() == null) {
 				return new ResponseEntity<>("항목을 모두 입력하세요", HttpStatus.BAD_REQUEST);
 			}
 			m.setUserNickname(loginedNickname);
 			try {
+				long meetCtgNo = m.getMeetCategory().getMeetCtgNo();//모임유형번호
 				service.writeMeetBoard(m, meetCtgNo);
 				return new ResponseEntity<>(HttpStatus.OK);
 			} catch (AddException e) {
