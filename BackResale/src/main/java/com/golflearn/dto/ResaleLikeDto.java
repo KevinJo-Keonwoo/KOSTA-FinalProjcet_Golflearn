@@ -10,7 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = {"resaleLikeNo"})
-//@JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ResaleLikeDto {
 	private Long resaleLikeNo;
 	private String userNickname;
