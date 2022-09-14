@@ -26,7 +26,7 @@
 
 function mypage() {
 	$.ajax({
-		url: "http://localhost:1124/back/login",
+		url: "http://localhost:1124/back/user/login",
 		//   dataType: "json",
 		success: function (jsonObj) {
 		console.log("usertype =" + jsonObj.type);
@@ -45,7 +45,7 @@ function mypage() {
 
 function logout() {
 	$.ajax({
-		url: "http://localhost:1124/back/logout",
+		url: "http://localhost:1124/back/user/logout",
 		success: function () {
 			alert("로그아웃 되었습니다.");
 			localStorage.removeItem("loginedNickname");
