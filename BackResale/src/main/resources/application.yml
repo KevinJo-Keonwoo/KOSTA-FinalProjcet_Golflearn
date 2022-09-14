@@ -21,9 +21,9 @@ spring:
     properties:
       hibernate:
         format_sql: 'true'
-  servlet:
-    multipart:
-      location: C:\Project\GolfLearn\front\src\main\webapp\
+#  servlet:
+#    multipart:
+#      location: C:\Project\GolfLearn\front\src\main\webapp\
 server:
   servlet:
     context-path: /backresale
