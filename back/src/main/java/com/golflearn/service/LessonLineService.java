@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.golflearn.domain.LessonLineRepository;
-import com.golflearn.domain.PaymentRepository;
 import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonLine;
-import com.golflearn.dto.Payment;
-import com.golflearn.exception.AddException;
+import com.golflearn.dto.PageBean;
 import com.golflearn.exception.FindException;
 
 @Service(value = "lessonLineService")
@@ -24,6 +22,7 @@ public class LessonLineService {
 //			return lsnLineList;
 //		}else {
 //		}
+		
 		List<LessonLine> list = repository.selectById(userId);
 		return list;
 	}

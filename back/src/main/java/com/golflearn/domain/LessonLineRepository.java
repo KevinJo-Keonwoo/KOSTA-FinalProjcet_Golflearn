@@ -40,6 +40,7 @@ public interface LessonLineRepository {
 	 */
 	public void insertLsnLine(LessonLine lessonLine) throws AddException;
 
+
 	
 	
 	

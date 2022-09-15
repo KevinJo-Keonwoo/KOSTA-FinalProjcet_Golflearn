@@ -26,6 +26,7 @@ $(function(){
 
     // });
 
+    /* 임시주석
     $.ajax({
 		url: "http://localhost:1124/back/login",
 		success: function (jsonObj) {
@@ -54,86 +55,104 @@ $(function(){
 		alert(jqXHR.status);
 		},
 	});
+    */
 
     //$(this).val 해서 val값 설정해줄 수 있음 
     //3)레슨내역 주르르르르륵나오게 
     
     $.ajax({
-        url : "/back/viewmypage",
+        url : "http://localhost:1124/back/mypage/student",
         method : 'get',
         success : function(jsonObj){
-            // let lsn_line_no = jsonObj.ll.lsnLineNo;
-            // let lsn_no = jsonObj.ll.lsnNo;
-            // let lsn_title = jsonObj.ll.lsn.lsnTitle;
-            // let lsn_exp_dt = jsonObj.ll.lsnExpDt;
-            // let stdt_lsn_status = jsonObj.ll.stdtLsnStatus;
-            // let my_star_score = jsonObj.ll.lsnReview.myStarScore;
-            // let crnt_lsn_cnt = jsonObj.ll.crntLsnCnt;
-            // let lsn_cnt_sum = jsonObj.ll.lsnCntSum;
+            if (jsonObj.status ==1){
 
-            // // $('div.lsnlist1>img').attr('src', '../images/' + prod_no + '.jpg').attr('alt', prod_no );
-            // $('div.lsnlist2 span.my_lsn_no').html(lsn_no);
-            // $('div.lsnlist2 span.title').html(lsn_title);
-            // $('div.lsnlist2 span.exp_date').html(lsn_exp_dt);
-            // $('div.lsnlist2 span.crnt_lsn_cnt').html(crnt_lsn_cnt);
-            // $('div.lsnlist2 span.lsn_cnt_sum').html(lsn_cnt_sum);
-            // $('div.lsnlist2 span.lsn_status').html(stdt_lsn_status);
-            let jsonarr = jsonObj.ll;
-            let $lsnObj = $('div.tr');
-            $(jsonarr).each(function(i,element){
-                $copyObj = $lsnObj.clone();
-                // $lsnObj.parent.hide();
-                let lsn_line_no = element.lsnLineNo;
-                let lsn_no = element.lsnNo;
-                let lsn_title = element.lsn.lsnTitle;
-                let lsn_exp_dt = element.strLsnExpDt;
-                let stdt_lsn_status = element.stdtLsnStatus;
-                let my_star_score = element.lsnReview.myStarScore;
-                let crnt_lsn_cnt = element.crntLsnCnt;
-                let lsn_cnt_sum = element.lsn.lsnCntSum;
+                let mypageObj = jsonObj.lt;
+                let lsn_no = "";
+                let lsn_title = "";
                 
-                if (stdt_lsn_status == 0){
-                    stdt_lsn_status = '수강예정';
-                }else if (stdt_lsn_status == 1){
-                    stdt_lsn_status = '수강중';
-                }else{
-                    stdt_lsn_status = '수강완료';
-                };
+                $(mypageObj).each(function(index, lsnLine){
+                    $(mypageObj.lsns).each(function(index,lsns){
+                        let lsn_no = lsns.lsnNo;
+                        console.log(lsn_no);
+                        let lsn_title = lsns.lsnTitle;
+                        console.log(lsn_no);
+                    })
+                    console.log(lsnLine.lsns.lsn_no);
+                });
+                
+                
+                let $lsnLine = $("div.content").first();
+                $lsnLine.show();
 
-                // let lessonLine = '<div>레슨번호: <span class = "this_lsn_no">' + lsn_line_no + '</span></div>'
-                // lessonLine += '<img src = "../lsn_images/' + lsn_line_no +'.jpg" alt="' + lsn_line_no + '번째레슨" width = "200" height = "200">';
-                // lessonLine += '<div>레슨명: <span class = "title">' + lsn_title + '</span></div>'
-                // lessonLine += '<div>종료일자: <span class = "exp_date">' + lsn_exp_dt + '</span></div>'
-                // lessonLine += '<div>현재레슨횟수: <span class = "crnt_lsn_cnt">' + crnt_lsn_cnt + '회</span></div>'
-                // lessonLine += '<div>총레슨횟수: <span class = "lsn_cnt_sum">' + lsn_cnt_sum + '회</span></div>'
-                // lessonLine += '<div>진행횟수 / 총횟수: <span class = "lsn_cnt_sum">' +crnt_lsn_cnt + "/" + lsn_cnt_sum + '회</span></div>'
-                // lessonLine += '<input type="button" value="' + stdt_lsn_status + '"><span class = "lsn_status">' + stdt_lsn_status + '</span></div>'
-                // lessonLine += '<input type="button" class = "add_review" value="레슨후기작성">'
-                // lessonLine += '<input type="button" class = "modify_review" value="레슨후기수정">'
-                // lessonLine += '<input type="button" class = "cancel_lsn" value="수강취소버튼">'
+                $("div.content").not($lsnLine).remove();
+                let $lsnLineParent = $lsnLine.parent();
                 
-                let lessonLine = '<div class = "no">' + lsn_line_no + '</div>';
-                lessonLine += '<img src = "../lsn_images/' + lsn_no + '_LessonThumbnail.jpg"> '
-                lessonLine += '<div class = "title">' + lsn_title + '</div>'
-                lessonLine += '<div class = "exp_date">레슨유효기간: ' + lsn_exp_dt + '</div>'
-                lessonLine += '<div class = "current_cnt">' + crnt_lsn_cnt + "/" + lsn_cnt_sum + '회</div>'
-                lessonLine += '<input type="button" class = "add_review" value="레슨후기작성">'
-                lessonLine += '<input type="button" class = "modify_review" value="레슨후기수정">'
-                lessonLine += '<input type="button" class = "cancel_lsn" value="수강취소">'
+                $(mypageObj).each(function(index, lsnLine){
+                    let $lsnLineCopy = $lsnLine.clone();
+                    
+                    let lsn_line_no = lsnLine.lsnLineNo;
+                    
+                    $lsnLineCopy.find("div.no").html(lsn_no);
+                    $lsnLineCopy.find("div.title").html(lsn_title);
+                    // $lsnLineCopy.find("div.current__cnt").html(lsn_cnt_sum);
+                    // let lsn_exp_dt = lsnLine.strLsnExpDt;
+                    // let stdt_lsn_status = lsnLine.stdtLsnStatus;
+                    // let my_star_score = lsnLine.lsns.lsnReview.myStarScore;
+                    // let crnt_lsn_cnt = lsnLine.crntLsnCnt;
 
-                $copyObj.find('div.td').html(lessonLine);
-                
-                $('div.table').append($copyObj);
+                    // $lsnLineCopy.find("div.no").html(lsn_line_no);
+                    // $lsnLineCopy.find("div.no").html(lsn_line_no);
 
-                let $writeReviewObj = $('input[value=레슨후기작성]');
-                let $modifyReviewObj = $('input[value=레슨후기수정]');
-                if (my_star_score = 0) { //작성한 후기가 없으면 수정 버튼숨기기
-                    $modifyReviewObj.hide();
-                }else {
-                    $writeReviewObj.hide();
-                }
+                    $lsnLineParent.append($lsnLineCopy);
+                });
+                $("div.content").first().hide();
                 
-            });
+                /*
+                let jsonarr = jsonObj.ll;
+                let $lsnObj = $('div.tr');
+                $(jsonarr).each(function(i,element){
+                    $copyObj = $lsnObj.clone();
+                    // $lsnObj.parent.hide();
+                    let lsn_line_no = element.lsnLineNo;
+                    let lsn_no = element.lsnNo;
+                    let lsn_title = element.lsn.lsnTitle;
+                    let lsn_exp_dt = element.strLsnExpDt;
+                    let stdt_lsn_status = element.stdtLsnStatus;
+                    let my_star_score = element.lsnReview.myStarScore;
+                    let crnt_lsn_cnt = element.crntLsnCnt;
+                    let lsn_cnt_sum = element.lsn.lsnCntSum;
+                    
+                    if (stdt_lsn_status == 0){
+                        stdt_lsn_status = '수강예정';
+                    }else if (stdt_lsn_status == 1){
+                        stdt_lsn_status = '수강중';
+                    }else{
+                        stdt_lsn_status = '수강완료';
+                    };
+                    let lessonLine = '<div class = "no">' + lsn_line_no + '</div>';
+                    lessonLine += '<img src = "../lsn_images/' + lsn_no + '_LessonThumbnail.jpg"> '
+                    lessonLine += '<div class = "title">' + lsn_title + '</div>'
+                    lessonLine += '<div class = "exp_date">레슨유효기간: ' + lsn_exp_dt + '</div>'
+                    lessonLine += '<div class = "current_cnt">' + crnt_lsn_cnt + "/" + lsn_cnt_sum + '회</div>'
+                    lessonLine += '<input type="button" class = "add_review" value="레슨후기작성">'
+                    lessonLine += '<input type="button" class = "modify_review" value="레슨후기수정">'
+                    lessonLine += '<input type="button" class = "cancel_lsn" value="수강취소">'
+
+                    $copyObj.find('div.td').html(lessonLine);
+                    
+                    $('div.table').append($copyObj);
+
+                    let $writeReviewObj = $('input[value=레슨후기작성]');
+                    let $modifyReviewObj = $('input[value=레슨후기수정]');
+                    if (my_star_score = 0) { //작성한 후기가 없으면 수정 버튼숨기기
+                        $modifyReviewObj.hide();
+                    }else {
+                        $writeReviewObj.hide();
+                    }
+                    
+                });
+                */
+            }
         },
         error : function(jqXHR){
             alert('오류 : ' + jqXHR.status);
