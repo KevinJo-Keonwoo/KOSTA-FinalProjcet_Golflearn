@@ -2,6 +2,21 @@
     /* margin: 0 auto; */
 }
 
+.board-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 80%;
+    margin: 0 auto;
+    /* padding: 0 10px; */
+    text-align: center;
+}
+
+.board-header > div {
+    width: 10%;
+}
+
 .boardlist__content {
     display: flex;
     flex-direction: row;
