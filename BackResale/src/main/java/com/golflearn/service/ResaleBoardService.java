@@ -344,11 +344,11 @@ public class ResaleBoardService {
 					resaleCommentRepo.deleteById(resaleCmtNo); // 대댓글 삭제
 					ResaleBoardEntity entity = optRb.get();
 					int oldCmtCnt = entity.getResaleBoardCmtCnt();
-					if(entity.getResaleBoardCmtCnt()>0) {
-						entity.setResaleBoardCmtCnt(oldCmtCnt-1);
-					}else {
-						entity.setResaleBoardCmtCnt(0);
-					}
+						if(entity.getResaleBoardCmtCnt() > 0) {
+							entity.setResaleBoardCmtCnt(oldCmtCnt-1);
+						}else {
+							entity.setResaleBoardCmtCnt(0);
+						}
 					resaleBoardRepo.save(entity);
 				}			
 			}else {
