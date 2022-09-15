@@ -92,15 +92,16 @@ $(function(){
 
     // 드래그 드롭
     // $(".sortable").sortable();
-  //이미지 등록
+    //이미지 등록
+    let files;
     $("#imgFiles").change(function(e){
-
       //div 내용 비워주기
         $('#preview').empty();
         
-        let files = e.target.files;
+        files = e.target.files;
         let arr = Array.prototype.slice.call(files);
-
+        // console.log(files);
+        // console.log(arr);
         preview(arr);
 
         function preview(arr){
@@ -108,15 +109,15 @@ $(function(){
                 //div에 이미지 추가
                 let img = '<li class="ui-state-default">';
                 //str += '<span>'+fileName+'</span><br>';
-
+                
                 //이미지 파일 미리보기
                 if(f.type.match('image.*')){
                     //파일을 읽기 위한 FileReader객체 생성
                     let reader = new FileReader(); 
                     reader.onload = function (e) { 
                         //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
-                        img += '<img src="'+e.target.result+'" title="'+f.name+'" width=300 height=300>';
-                        img += '<span class="delBtn" onclick="delImg(this)"> X </span>';
+                        img += '<img src="'+ e.target.result+'" title="'+ f.name +'" width=300 height=300>';
+                        // img += '<span class="delBtn" onclick="delImg(this)"> X </span>';
                         img += "</li>";
                         $(img).appendTo("#preview");
                     } 
@@ -124,13 +125,38 @@ $(function(){
                 }
             })
         }
-    })
-
+    });
+    
     //이미지 삭제
-    function delImg(_this){
-        $(_this).parent('li').remove()
-    }
+    // function delImg(_this){
+    //     $(_this).parent('li').remove()
+    // }
 
+    // 세션의 닉네임
+    let loginedNickname = localStorage.getItem("loginedNickname");
+    // 게시글 번호
+    let queryString = location.search.split("=")[1];
+    let resaleBoardNo = queryString;
+    console.log(queryString);
+
+    // 수정 시 내용 가져오도록
+    $titleObj = $("input.write-title");
+    $contentObj = $("div.note-editing-area");
+    let obj = {
+        userNickname: loginedNickname,
+        resaleBoardTitle : 
+        resaleBoardContent:
+    };
+    
+    $.ajax({
+        url:"http://localhost:1126/backresale/resale/board/write"+resaleBoardNo,
+        method:"put",
+        data:,
+
+
+    });
+    
+    // console.log(loginedNickname);
     // // ----- 글 등록 START -----
     // //등록 버튼 객체 찾기
     let $btSubmitBoard = $("div.submit-board>button.submit-board__button");
@@ -140,69 +166,82 @@ $(function(){
         let text = $('#summernote').summernote('code');
         let $formObj =$("form.write");
         let formData = new FormData($formObj[0]);
-        
+        console.log("content: " + text);
+        let title = $("input.write-title").val();
+        console.log("title: " + title);
+
         let obj = {};
+        obj = formData.set("userNickname", loginedNickname);
+        // console.log(obj);
         formData.forEach(function(value,key){
         });
-        let obj2 = formData.get("img");
-        console.log(obj2);
+        
+        let obj2 = formData.get("imageFiles");
 
-        $.ajax({
-        url: "http://localhost:1126/backresale/resale/board/write",
-		method: "post",
-		processData: false, //파일업로드용 설정
-		contentType: false, //파일업로드용 설정
-		data: formData, //파일업로드용 설정
-		cache: false, //이미지 다운로드용 설정
-		success:
-            alert("글 등록 성공"),
-            
-		error: function (jqXHR) {
-			//응답실패
-			alert("에러:" + jqXHR.status);
-		},
-		});
-		return false;
-        });
-    
-    });
+        if(obj2.size <= 0){
+            alert("이미지 첨부는 필수입니다");
+        }else if(text == "" || text == " " || text == "  "){
+            alert("내용은 필수입력값 입니다.");
+        }else if(title == "" || title == " " || title == "  "){
+            alert("제목은 필수입력값 입니다.");
+        }else{
+            $.ajax({
+                url: "http://localhost:1126/backresale/resale/board/write",
+                method: "post",
+                processData: false, //파일업로드용 설정
+                contentType: false, //파일업로드용 설정
+                data: formData, //파일업로드용 설정
+                cache: false, //이미지 다운로드용 설정
+                success:
+                alert("글 등록 성공"),
+                
+                error: function (jqXHR) {
+                    //응답실패
+                    alert("에러:" + jqXHR.status);
+                }
+            });
+        }
+        return false;
+    }); // 글 저장 버튼 클릭
 
-    // var summernoteContent = $("#summernote").summernote("code"); //썸머노트(설명)
-    // console.log("summernoteContent : " + summernoteContent);
+}); // 첫 function
 
-    
+// var summernoteContent = $("#summernote").summernote("code"); //썸머노트(설명)
+// console.log("summernoteContent : " + summernoteContent);
 
-    // /* 초기 셋팅 ( etc -> 게시글 수정 or Default font family ) */
-    //     $('#summernote').summernote('code', "<?php echo $positing_text ?>");
-    //     $('.note-current-fontname').css('font-family','Apple SD Gothic Neo').text('Apple SD Gothic Neo');
-    //     $('.note-editable').css('font-family','Apple SD Gothic Neo');
 
-    //  $(".note-group-image-url").remove();    //이미지 추가할 때 Image URL 등록 input 삭제 ( 나는 필요없음 )
-        /*
-        - 이미지 추가 func
-        - ajax && formData realtime img multi upload
-        */
-    //     function RealTimeImageUpdate(files, editor) {
+
+// /* 초기 셋팅 ( etc -> 게시글 수정 or Default font family ) */
+//     $('#summernote').summernote('code', "<?php echo $positing_text ?>");
+//     $('.note-current-fontname').css('font-family','Apple SD Gothic Neo').text('Apple SD Gothic Neo');
+//     $('.note-editable').css('font-family','Apple SD Gothic Neo');
+
+//  $(".note-group-image-url").remove();    //이미지 추가할 때 Image URL 등록 input 삭제 ( 나는 필요없음 )
+/*
+- 이미지 추가 func
+- ajax && formData realtime img multi upload
+*/
+//     function RealTimeImageUpdate(files, editor) {
     //         var formData = new FormData();
     //         var fileArr = Array.prototype.slice.call(files);
     //         fileArr.forEach(function(f){
-    //             if(f.type.match("image/jpg") || f.type.match("image/jpeg" || f.type.match("image/jpeg"))){
-    //                 alert("JPG, JPEG, PNG 확장자만 업로드 가능합니다.");
-    //                 return;
-    //             }
-    //             for(var xx=0;xx<files.length;xx++){
-    //                 formData.append("file[]", files[xx]);
-    //             }
-        
-    //             $.ajax({
-    //             url : "http://localhost:1126/backresale/resale/board/write",
-    //             data: formData,
-    //             cache: false,
-    //             contentType: false,
-    //             processData: false,
-    //             enctype	: 'multipart/form-data',
-    //             type: 'POST',
-    //             success : function(result) {    
+        //             if(f.type.match("image/jpg") || f.type.match("image/jpeg" || f.type.match("image/jpeg"))){
+            //                 alert("JPG, JPEG, PNG 확장자만 업로드 가능합니다.");
+            //                 return;
+            //             }
+            //             for(var xx=0;xx<files.length;xx++){
+                //                 formData.append("file[]", files[xx]);
+                //             }
+                
+                //             $.ajax({
+                    //             url : "http://localhost:1126/backresale/resale/board/write",
+                    //             data: formData,
+                    //             cache: false,
+                    //             contentType: false,
+                    //             processData: false,
+                    //             enctype	: 'multipart/form-data',
+                    //             type: 'POST',
+                    //             success : function(result) {    
     //                 //항상 업로드된 파일의 url이 있어야 한다.
     //                 if(result === -1){
     //                     alert('이미지 파일이 아닙니다.');
@@ -213,39 +252,38 @@ $(function(){
     //             });
     //         }
     // }
-// });
-
+    // });
+    
     // });
     // });
-
-
-// }); // 맨 위 function
-
+    
+    
+    // }); // 맨 위 function
 
     // 게시글 수정    
-    let $titleObj = $("div.write-title");
-    let $contentObj = $("#summernote").summernote("code");
-    let $imgObj = $('ul.sortable');
-    
-    let queryString = location.search.split('=')[1].split('%')[0];
-    console.log(queryString); // boardNo가 됨
-    // let boardContent = location.search.split('%')[1]
-    
-    let obj = {resaleBoardTitle : boardTitle, resaleBoardContent : boardContent}
-    
-    $.ajax({
-        url:"http://localhost:1126/backresale/resale/board/write" + queryString,
-        method: "put",
-        data:JSON.stringify(obj),
-        success: function(){
+    // let $titleObj = $("div.write-title");
+    // let $contentObj = $("#summernote").summernote("code");
+    // let $imgObj = $('ul.sortable');
 
-        },
-        error: function(jqXHR){
-            alert("error : " + jqXHR + " 수정 실패")
-        }
-    })
 
-    	let boardContent = $(this)
-          .parents("div.cell")
-          .find("input.board_content")
-          .val();
+    // console.log(queryString); // boardNo가 됨
+    // // let boardContent = location.search.split('%')[1]
+    
+    // let obj = {resaleBoardTitle : boardTitle, resaleBoardContent : boardContent}
+    
+    // $.ajax({
+    //     url:"http://localhost:1126/backresale/resale/board/write" + queryString,
+    //     method: "put",
+    //     data:JSON.stringify(obj),
+    //     success: function(){
+
+    //     },
+    //     error: function(jqXHR){
+    //         alert("error : " + jqXHR + " 수정 실패")
+    //     }
+    // })
+
+    // 	let boardContent = $(this)
+    //       .parents("div.cell")
+    //       .find("input.board_content")
+    //       .val();
