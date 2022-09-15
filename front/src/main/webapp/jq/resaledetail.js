@@ -1,4 +1,4 @@
-$(function () {
+    $(function () {
     // 로딩되자마자 글 불러오기
     let queryString = location.search.split("=")[1].split("%")[0];
     // console.log("쿼리스트링값 " + queryString);
@@ -8,134 +8,332 @@ $(function () {
     let userNickname = "";
     // let likeNickname = "";
     let likeNo = "";
-    let likedNickname="";
-    let commentNickname="";
+    let likedNickname = "";
+    let commentNickname = "";
     let commentNo = 0;
     let commentParentNo = 0;
+    let cmtParentNo = 0;
+    let loginedNickname = localStorage.getItem("loginedNickname");
     $.ajax({
         url: "http://localhost:1126/backresale/resale/board/" + queryString,
         method: "get",
         async: false,
         success: function (jsonObj) {
-            if (jsonObj.status == 1) {
-                // 여기까지 OK
-                let detailObj = jsonObj.t.resaleBoard;
-                console.log("좋아요 수 : " + jsonObj.t.resaleBoard.resaleBoardLikeCnt);
-                console.log("게시판 번호 : " + jsonObj.t.resaleBoard.resaleBoardNo);
+        if (jsonObj.status == 1) {
+            // 여기까지 OK
+            let detailObj = jsonObj.t.resaleBoard;
+            console.log("좋아요 수 : " + jsonObj.t.resaleBoard.resaleBoardLikeCnt);
+            console.log("게시판 번호 : " + jsonObj.t.resaleBoard.resaleBoardNo);
 
-                resaleBoardNo = detailObj.resaleBoardNo;
-                userNickname = detailObj.userNickname;
+            resaleBoardNo = detailObj.resaleBoardNo;
+            userNickname = detailObj.userNickname;
 
-                let fileNameArr = jsonObj.t.imageFileNames;
-                // let dto = jsonObj.t.resaleBoard;
-                console.log("파일명 : " + fileNameArr);
-                console.log("----");
-                // console.log(dto);
-                console.log("저장된 파일 개수는 : " + fileNameArr.length);
+            let fileNameArr = jsonObj.t.imageFileNames;
+            // let dto = jsonObj.t.resaleBoard;
+            console.log("파일명 : " + fileNameArr);
+            console.log("----");
+            // console.log(dto);
+            console.log("저장된 파일 개수는 : " + fileNameArr.length);
 
-                let insertHtml = "";
-                let $parent = $("div.board__content__images");
-                for (let i = 0; i < fileNameArr.length; i++) {
-                    insertHtml += "<img src='";
-                    insertHtml += src + detailObj.resaleBoardNo + "/" + fileNameArr[i];
-                    insertHtml += "' alt='' width='30%;' height=' 30%;'/>";
-                    insertHtml += "&nbsp;&nbsp";
+            let insertHtml = "";
+            let $parent = $("div.board__content__images");
+            for (let i = 0; i < fileNameArr.length; i++) {
+                insertHtml += "<img src='";
+                insertHtml += src + detailObj.resaleBoardNo + "/" + fileNameArr[i];
+                insertHtml += "' alt='' width='30%;' height=' 30%;'/>";
+                insertHtml += "&nbsp;&nbsp";
+            }
+            $parent.append(insertHtml);
+
+            $("div.board__content__title").html(
+            "제목 : " + detailObj.resaleBoardTitle
+            );
+            $("div.board__content__nickname").html(
+            "작성자 : " + detailObj.userNickname
+            );
+            $("div.board__content__date").html(
+            "작성일 : " + detailObj.resaleBoardDt
+            );
+            $("div.board__content__view_cnt").html(
+            "조회수 : " + detailObj.resaleBoardViewCnt
+            );
+            $("div.board__content__view_cnt").html(
+            "댓글수 : " + detailObj.resaleBoardCmtCnt
+            );
+            $("div.board__content__like_cnt").html(
+            "좋아요수 : " + detailObj.resaleBoardLikeCnt
+            );
+            $("div.board__content").html(detailObj.resaleBoardContent);
+            //-------------------------------------
+                // 댓글 보여주기
+            let commentObj = jsonObj.t.resaleBoard.resaleComment;
+            // let
+            console.log("--댓글보여주기 commentObj ----");
+            console.log(commentObj);
+            console.log("-------------------------------");
+            let $commnetParent = $("div.comment-list");
+            // 원본 하나 선택 후 나머지 댓글의 div 삭제
+            let $comment = $("div.comment-content").first();
+            $("div.comment-content").not($comment).remove();
+
+            $(commentObj).each(function (i, comment) {
+                let $commentCopy = $comment.clone();
+                console.log(comment);
+                $commentCopy
+                    .find("div.comment-list__nickname")
+                    .html("닉네임 - " + comment.userNickname);
+                $commentCopy
+                    .find("div.comment-list__content")
+                    .html("댓글 - " + comment.resaleCmtContent);
+                $commentCopy
+                    .find("div.comment-list__date")
+                    .html("작성일 - " + comment.resaleCmtDt);
+                $commentCopy
+                    .find("div.comment-list__no")
+                    .html("댓글번호 - " +comment.resaleCmtNo);
+                $commentCopy
+                    .find("div.comment-list__parentno")
+                    .html("부모댓글번호 - " + comment.resaleCmtParentNo);
+
+                $commnetParent.append($commentCopy);
+
+                let commentNickname = comment.userNickname;
+                let cmtParentNo = comment.resaleCmtParentNo;
+
+                if(cmtParentNo == 0 ){
+                    $commentCopy.find("div.recomment-write").show();
+                }else{
+                    $commentCopy.find("div.recomment-write").hide();
                 }
-                $parent.append(insertHtml);
-
-                $("div.board__content__title").html(
-                "제목 : " + detailObj.resaleBoardTitle
-                );
-                $("div.board__content__nickname").html(
-                "작성자 : " + detailObj.userNickname
-                );
-                $("div.board__content__date").html(
-                "작성일 : " + detailObj.resaleBoardDt
-                );
-                $("div.board__content__view_cnt").html(
-                "조회수 : " + detailObj.resaleBoardViewCnt
-                );
-                $("div.board__content__view_cnt").html(
-                "댓글수 : " + detailObj.resaleBoardCmtCnt
-                );
-                $("div.board__content__like_cnt").html(
-                "좋아요수 : " + detailObj.resaleBoardLikeCnt
-                );
-                $("div.board__content").html(detailObj.resaleBoardContent);
-                //-------------------------------------
-
-                let commentObj = jsonObj.t.resaleBoard.resaleComment;
-                // let
-                console.log(commentObj);
-                let $commnetParent = $("div.comment-list");
-                // 원본 하나 선택 후 나머지 댓글의 div 삭제
-                let $comment = $("div.comment-content").first();
-                $("div.comment-content").not($comment).remove();
-
-                $(commentObj).each(function (i, comment) {
-                    let $commentCopy = $comment.clone();
-                    // console.log(comment);
-                    $commentCopy
-                        .find("div.comment-list__nickname")
-                        .html("닉네임 - " + comment.userNickname);
-                    $commentCopy
-                        .find("div.comment-list__content")
-                        .html("댓글 - " + comment.resaleCmtContent);
-                    $commentCopy
-                        .find("div.comment-list__date")
-                        .html("작성일 - " + comment.resaleCmtDt);
-                    $commentCopy
-                        .find("div.comment-list__no")
-                        .html("댓글번호 - " + comment.resaleCmtNo);
-                    $commentCopy
-                        .find("div.comment-list__parentno")
-                        .html("부모댓글번호 - " + comment.resaleCmtParentNo);
-
-                    $commnetParent.append($commentCopy);
-
-                    commentNickname = comment.userNickname;
-                    console.log("댓글 작성한 사람들 : " + commentNickname);
-                    if(commentNickname == localStorage.getItem("loginedNickname")){
-                        commentNo = comment.resaleCmtNo;
-                        commentParentNo = comment.resaleCmtParentNo;
-                        // console.log("댓글 번호 : " + commentNo);
-                        // console.log(commentParentNo);
-                    }
-                }); // each
-                $comment.remove();
                 
-                // 댓글 작성 한 사람들 목록
-                // $.each(commentObj, function (index,comment) {
-                // commentNickname = comment.userNickname;
-                // console.log(commentNickname);
+                // console.log("댓글 작성한 사람들 : " + commentNickname);
+                // console.log("부모글번호는 ? " + cmtParentNo);
+                if (commentNickname == loginedNickname) {
+                    commentNo = comment.resaleCmtNo;
+                    commentParentNo = comment.resaleCmtParentNo;
+                    // console.log("댓글 번호 : " + commentNo);
+                    $commentCopy.find("div.comment-content-function").show();
+                    // console.log(commentParentNo);
+                    // if (commentNickname == loginedNickname) {
+                        // }
+                    }else{
+                    $commentCopy.find("div.comment-content-function").hide();
+                }
+                
+            }); // each
+            $comment.remove();
 
-                // });
+            // 좋아요 누른 사람들 목록
+            let likeObj = jsonObj.t.resaleBoard.resaleLike;
+            // console.log(likeObj);
 
-                // 좋아요 누른 사람들 목록
-                let likeObj = jsonObj.t.resaleBoard.resaleLike;
-                // console.log(likeObj);
-
-                $.each(likeObj, function (i, like) {
-                // console.log(like);
+            $.each(likeObj, function (i, like) {
                 likedNickname = like.userNickname;
-                console.log("좋아요 한 사람들 : " + likedNickname);
+                // console.log("좋아요 한 사람들 : " + likedNickname);
                 if (likedNickname == localStorage.getItem("loginedNickname")) {
                     //localStorage.getItem("loginedNickname")
                     // 세션 아이디와 좋아요 한 닉네임이 같으면
                     likeNo = like.resaleLikeNo;
                     // likedNickname = likeNickname;
-                    console.log("좋아요 한 사람 & 로그인 된 사람" + likedNickname);
-                    console.log("좋아요 번호 : " + likeNo);
+                    // console.log("좋아요 한 사람 & 로그인 된 사람" + likedNickname);
+                    // console.log("좋아요 번호 : " + likeNo);
                 } // each 의 if문
-                // userNickname = detailObj.userNickname;
-                });
-
-            } // if문
+            // userNickname = detailObj.userNickname;
+            });
+        } // if문
         }, // success
         error: function (jsonObj) {
             alert(jsonObj.msg);
         }, // error
     }); // ajax
+
+
+
+    // 댓글 작성(완성)
+    if(loginedNickname == null){
+        $("div.comment-write").hide();
+    }else{
+        $("div.comment-write").show();
+    }
+
+    $("div.comment-write>button").on("click", function () {
+            let cmtContent = $("div.comment-write>input").val();
+            let cmtNickname = localStorage.getItem("loginedNickname");
+            // alert(cmtNickname);
+        
+            let obj = {
+                resaleCmtContent: cmtContent,
+            userNickname: cmtNickname,
+            resaleBoard: { resaleBoardNo: resaleBoardNo },
+            };
+            $.ajax({
+                url: "http://localhost:1126/backresale/resale/comment/write",
+                method: "post",
+                contentType: "application/json",
+                data: JSON.stringify(obj), // userNickname 받아와야함
+                success: function (jsonObj) {
+                    if (jsonObj.status == 1) {
+                    // console.log(obj);
+                    alert(jsonObj.msg);
+                    location.reload();
+                    }
+                },
+                error: function (jsonObj) {
+                    alert(jsonObj.msg);
+                },
+            });
+        
+        return false;
+    });
+
+    // 대댓글 작성
+    console.log("부모댓글번호 : "+ cmtParentNo);
+    $("div.recomment-write>button").on("click", function () {
+        let recmtContent = $("div.recomment-write>input").val();
+        let recmtNickname = loginedNickname;
+        // alert(cmtNickname);
+        let obj = {
+            resaleCmtContent: recmtContent,
+            userNickname: recmtNickname,
+            resaleCmtParentNo : commentParentNo,
+            resaleBoard: { resaleBoardNo: resaleBoardNo },
+        };
+        $.ajax({
+            url: "http://localhost:1126/backresale/resale/comment/write",
+            method: "post",
+            contentType: "application/json",
+            data: JSON.stringify(obj), // userNickname 받아와야함
+            success: function (jsonObj) {
+                if (jsonObj.status == 1) {
+                console.log(obj);
+                alert(jsonObj.msg);
+                location.reload();
+                }
+            },
+            error: function (jsonObj) {
+                alert(jsonObj.msg);
+            },
+        });
+        return false;
+    });
+
+
+
+     //댓글 수정(완성)
+    $("div.comment-list").on("click", "button.bt__cmt-modify", function(){
+        if(loginedNickname == commentNIckname){
+            console.log("수정댓글번호:" + commentNo);    
+            let url = "http://localhost:1126/backresale/resale/comment/"+commentNo;
+            console.log(url);
+            let cmtContent = $(this).parent().find("input").val();
+            console.log(cmtContent);
+            let obj = {
+            "resaleCmtNo": commentNo,
+            "resaleCmtContent": cmtContent,
+            "userNickname":loginedNickname,
+            "resaleBoard" : {"resaleBoardNo" : resaleBoardNo}
+            };     
+            $.ajax({
+                url: url,
+                method: "put",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(obj),
+                success: function (jsonObj) {
+                    alert(jsonObj.msg);
+                    location.reload();
+                },
+                error: function (jsonObj) {
+                    alert(jsonObj.msg);
+                }
+            });
+        }else{ // if문
+            alert("댓글 작성자가 아닙니다.");
+        } 
+        return false;
+    });
+
+    
+    // 댓글 삭제 (완성)
+    console.log(commentNickname);
+    // if (commentNickname == loginedNickname) {
+    //     $("button.bt__cmt-delete").show();
+    // } else {
+    //     $("button.bt__cmt-delete").hide();
+    // }
+    //버튼 클릭 시 댓글 삭제
+    $("button.bt__cmt-delete").click(function () {
+        console.log("삭제 할 댓글번호 : " + commentNo);
+        console.log("삭제 할 부모댓글번호 : " + commentParentNo);
+        console.log("삭제 할 닉네임 : " + commentNickname);
+        console.log("원글번호" + resaleBoardNo);
+        let obj = {
+        resaleCmtNo: commentNo,
+        resaleCmtParentNo: commentParentNo,
+        userNickname: commentNickname,
+        resaleBoard: { resaleBoardNo: resaleBoardNo },
+        };
+    $.ajax({
+        url: "http://localhost:1126/backresale/resale/comment/" + commentNo,
+        method: "delete",
+        contentType: "application/json",
+        data: JSON.stringify(obj),
+        success: function () {
+            alert("댓글 삭제 성공");
+        },
+        error: function (jqXHR) {
+                alert("error : " + jqXHR.status + " : " + "댓글 삭제 실패");
+            }
+        }); //ajax
+        
+    });
+    
+    
+    // 게시글 삭제(완성)
+    if (userNickname == loginedNickname) {
+        $("button.bt__board-delete").show();
+    } else {
+        $("button.bt__board-delete").hide();
+    }
+
+    //삭제 버튼 클릭 시
+    $("button.bt__board-delete").on("click", function () {
+        console.log("삭제할 글번호 : " + resaleBoardNo);
+        console.log("닉네임은 : " + userNickname);
+        
+        let obj = { resaleBoardNo: resaleBoardNo, userNickname: userNickname };
+        $.ajax({
+            url: "http://localhost:1126/backresale/resale/board/" + resaleBoardNo,
+            method: "delete",
+            contentType: "application/json",
+            data: JSON.stringify(obj),
+            success: function () {
+                alert("게시글 삭제 성공");
+                location.href("../html/resaleboardlist.html");
+            },
+            error: function (jqXHR) {
+                alert("error : " + jqXHR.status + " : " + "게시글 삭제 실패");
+            },
+        });
+    });
+    
+    // 게시글 수정(미완)
+        if (userNickname == loginedNickname) {
+            $("button.bt__board-modify").show();
+        } else {
+            $("button.bt__board-modify").hide();
+        }
+
+    $("button.bt__board-modify").on("click", function () {
+        // alert("수정");
+        // console.log("게시글번호는" + boardNo);
+        let nickName = userNickname;
+        // console.log("작성자 닉네임은" + nickName);
+        alert("작성자 닉네임은" + nickName);
+
+        alert("게시글번호는" + resaleBoardNo);
+        location.href = "../html/resaleboardwrite.html?resaleBoardNo=" + resaleBoardNo;
+    });
+
 
     // 좋아요 추가, 삭제 (완성)
     $("div.board-like").on("click", function () {
@@ -160,14 +358,15 @@ $(function () {
             success: function (jsonObj) {
             if (jsonObj.status == 1) {
                 alert(jsonObj.msg);
+                location.reload();
             }
             },
             error: function (jqXHR) {
             alert(jqXHR.status + ":" + "좋아요 삭제 실패");
+            location.reload();
             },
         });
-        } else {
-        // 세션 아이디와 좋아요한 닉네임이 같지 않으면
+        } else { // 세션 아이디와 좋아요한 닉네임이 같지 않으면
         let obj = { resaleBoardNo: resaleBoardNo };
         //좋아요 클릭
         $.ajax({
@@ -178,89 +377,15 @@ $(function () {
             success: function (jsonObj) {
             if ((jsonObj.status = 1)) {
                 alert("좋아요 추가 성공");
+                location.reload();
             }
             },
             error: function (jqXHR) {
             alert(jqXHR.status + ":" + "좋아요 추가 실패");
+            location.reload();
             }, //error
         }); // ajax
         } //else 끝
     }); //클릭 끝
-    // console.log("닉넴" + userNickname);
 
-    // 댓글 작성
-    // 댓글 수정
-
-    // 댓글 삭제 (완성)
-    console.log("댓글 작성자 : "+commentNickname);
-    if (commentNickname == localStorage.getItem("loginedNickname")){
-        $("button.bt__cmt-delete").show();
-    }else{
-        $("button.bt__cmt-delete").hide();
-    }
-
-    $("button.bt__cmt-delete").click(function(){
-        console.log("삭제 할 댓글번호 : " + commentNo);
-        console.log("삭제 할 부모댓글번호 : " + commentParentNo);
-        console.log("삭제 할 닉네임 : " + commentNickname);
-        console.log("원글번호" + resaleBoardNo);
-        let obj = {
-            resaleCmtNo : commentNo, 
-            resaleCmtParentNo : commentParentNo, 
-            userNickname : commentNickname, 
-            resaleBoard: { resaleBoardNo: resaleBoardNo }
-        };
-            $.ajax({
-            url: "http://localhost:1126/backresale/resale/comment/" + commentNo,
-            method: "delete",
-            contentType: "application/json",
-            data: JSON.stringify(obj),
-            success: function () {
-                alert("댓글 삭제 성공");
-            },
-            error: function (jqXHR) {
-                alert("error : " + jqXHR.status + " : " + "댓글 삭제 실패");
-            }
-        });//ajax
-    });
-
-
-    // 게시글 삭제(완성)
-    if (userNickname == localStorage.getItem("loginedNickname")) {
-        $("div.comment-content-delete").show();
-    } else {
-        $("div.comment-content-delete").hide();
-    }
-    //삭제 버튼 클릭 시
-    $("button.bt__board-delete").on("click", function () {
-        console.log("삭제할 글번호 : " + resaleBoardNo);
-        console.log("닉네임은 : " + userNickname);
-        
-        let obj = { resaleBoardNo: resaleBoardNo, userNickname: userNickname };
-        $.ajax({
-        url: "http://localhost:1126/backresale/resale/board/" + resaleBoardNo,
-        method: "delete",
-        contentType: "application/json",
-        data: JSON.stringify(obj),
-        success: function () {
-            alert("게시글 삭제 성공");
-            location.href("../html/resaleboardlist.html");
-        },
-        error: function (jqXHR) {
-            alert("error : " + jqXHR.status + " : " + "게시글 삭제 실패");
-        },
-        });
-    });
-
-    // 게시글 수정(미완)
-    $("button.bt__modify").on("click", function () {
-        // alert("수정");
-        let boardNo = resaleBoardNo;
-        // console.log("게시글번호는" + boardNo);
-        alert("게시글번호는" + boardNo);
-        let nickName = userNickname;
-        // console.log("작성자 닉네임은" + nickName);
-        alert("작성자 닉네임은" + nickName);
-        location.href = "../html/resaleboardwrite.html?resaleBoardNo=" + boardNo;
-    });
 }); // 첫 function
