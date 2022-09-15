@@ -27,6 +27,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -93,7 +94,7 @@ public class ResaleBoardContoller {
 		}
 		return rb;
 	}
-	
+
 	//	@GetMapping(value={"board/list","board/list/{optCp}"})
 	//	public ResultBean<PageBean<ResaleBoardDto>> BoardList(@PathVariable Optional<Integer> optCp){
 	//		// 요청전달데이터 전달 되지 않을 때를 대비하여 사용하는 RESTful의  @PathVariable은 Optional로 설정해줘야함 
@@ -124,9 +125,9 @@ public class ResaleBoardContoller {
 	 */
 	@GetMapping(value = "board/{resaleBoardNo}")
 	public ResultBean<Map<String, Object>> viewBoardDetail(@PathVariable Long resaleBoardNo){
-		
+
 		Map<String, Object> map = new HashMap<>();
-		
+
 		try {
 			ResaleBoardDto resaleBoard = service.boardDetail(resaleBoardNo);
 			map.put("resaleBoard", resaleBoard);
@@ -135,25 +136,25 @@ public class ResaleBoardContoller {
 			e.printStackTrace();
 			map.put("status", 0);
 		}
-		
+
 		// 저장된 이미지 파일의 이름을 가지고 오는 것 -> 사진 불러올 때 저장된 개수만큼 불러와야함
 		String saveDirectory = uploadDirectory +"\\"+ "resale_images" + "\\" +resaleBoardNo + "\\";
 		System.out.println("경로는" + saveDirectory);
 		File dir = new File(saveDirectory);
-		
+
 		String[] imageFiles = dir.list(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
 				return name.contains("image_");
 			} //image라는 이름을 포함한 이미지명들 반환
 		});
-		
+
 		map.put("imageFileNames", imageFiles);
-		
+
 		ResultBean<Map<String,Object>> rb = new ResultBean<>();
 		rb.setStatus(1);
 		rb.setT(map);	
-		
+
 		return rb;
 	}
 	//	@GetMapping(value = "board/{resaleBoardNo}")
@@ -289,8 +290,8 @@ public class ResaleBoardContoller {
 
 		//이미지 저장
 		int savedImgFileCnt = 0; // 서버에 저장된 파일 수
-		File thumbnailFile = null;
 		if(!imageFiles.isEmpty()) {
+		File thumbnailFile = null;
 			for(MultipartFile imageFile : imageFiles) {
 				Long imageFileSize = imageFile.getSize(); // 파일 크기
 				if(imageFileSize > 0) { // 파일이 첨부되었을 경우
@@ -326,8 +327,6 @@ public class ResaleBoardContoller {
 						int width = 100;
 						int height = 100;
 						Thumbnailator.createThumbnail(imageFileIS, thumbnailOS , width, height);
-
-						
 					} catch (IOException e) {
 						e.printStackTrace();
 						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -338,7 +337,7 @@ public class ResaleBoardContoller {
 					return new ResponseEntity<>("이미지 파일이 없습니다", HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 			}
-		}
+		} 
 		return new ResponseEntity<>("저장 완료", HttpStatus.OK);
 
 	}
@@ -351,15 +350,15 @@ public class ResaleBoardContoller {
 	 * @param dto
 	 * @return
 	 */
-	@PutMapping(value="board/write/{resaleBoardNo}",produces = MediaType.APPLICATION_JSON_VALUE) 
-	public ResponseEntity<?> modifyBoard(@PathVariable Long resaleBoardNo,
+	@PutMapping(value="board/{resaleBoardNo}",produces = MediaType.APPLICATION_JSON_VALUE) 
+	public ResponseEntity<?> modifyBoard(@PathVariable Long resaleBoardNo, 
+			//@RequestPart(required = false) List<MultipartFile> imageFiles,
 			@RequestBody ResaleBoardDto dto){
 
 		if(dto.getResaleBoardTitle() == null || dto.getResaleBoardTitle().equals("")|| 
 				dto.getResaleBoardContent() == null || dto.getResaleBoardContent().equals("")) {
-			return new ResponseEntity<>("글 내용이나 제목은 반드시 입력하세요",HttpStatus.INTERNAL_SERVER_ERROR);
-
-		}else { // 제목, 내용 있고 로그인된 아이디와 작성자가 같은 경우
+			return new ResponseEntity<>("글 내용이나 제목은 반드시 입력하세요", HttpStatus.INTERNAL_SERVER_ERROR);
+		}else { // 제목, 내용 있으면
 			try {
 				dto.setResaleBoardNo(resaleBoardNo);
 				service.modifyBoard(dto);
@@ -369,8 +368,70 @@ public class ResaleBoardContoller {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
+	} // 맨 아래
+	
+	//		}
+	//		// 파일 저장 폴더
+	//		String saveDirectory = uploadDirectory + "resale_images\\"+ resaleBoardNo; 
+	//		//파일 경로 생성
+	//		if(!new File(saveDirectory).exists()) {
+	//			new File(saveDirectory).mkdirs(); //파일 경로에 폴더 없으면 저장
+	//		}
+	//		//이미지 저장
+	//		Integer savedImgFileCnt = 0; // 서버에 저장된 파일 수
+	//		File thumbnailFile = null;
+	//		if(!imageFiles.isEmpty()) {
+	//			for(MultipartFile imageFile : imageFiles) {
+	//				Long imageFileSize = imageFile.getSize(); // 파일 크기
+	//				if(imageFileSize > 0) { // 파일이 첨부되었을 경우
+	//
+	//					// 파일 확장자 가지고 오기
+	//					String originFileName = imageFile.getOriginalFilename();
+	//					logger.error("파일이름은 " + originFileName);
+	//					String fileExtension = originFileName.substring(originFileName.lastIndexOf("."));
+	//					logger.error("파일 확장자는" + fileExtension);
+	//
+	//					//저장파일 이름 생성
+	//					String savedImageFileName = "image_"+ (savedImgFileCnt+1) + fileExtension;
+	//					//이미지 파일 생성
+	//					File savedImageFile = new File(saveDirectory, savedImageFileName);
+	//
+	//					try {
+	//						// 파일 저장
+	//						FileCopyUtils.copy(imageFile.getBytes(), savedImageFile);
+	//
+	//						// 파일 타입 확인
+	//						String contentType = imageFile.getContentType();
+	//						if(contentType.contains("image/*")) {
+	//							System.out.println("파일타입" + imageFile.getContentType());
+	//							return new ResponseEntity<> ("이미지 파일이 아닙니다", HttpStatus.INTERNAL_SERVER_ERROR) ;
+	//						}
+	//						savedImgFileCnt++;
+	//
+	//						//썸네일 만들기
+	//						String thumbnailName = "s_" + (savedImgFileCnt) + fileExtension;
+	//						thumbnailFile = new File(saveDirectory, thumbnailName);
+	//						FileOutputStream thumbnailOS = new FileOutputStream(thumbnailFile);
+	//						InputStream imageFileIS = imageFile.getInputStream();
+	//						int width = 100;
+	//						int height = 100;
+	//						Thumbnailator.createThumbnail(imageFileIS, thumbnailOS , width, height);
+	//
+	//
+	//					} catch (IOException e) {
+	//						e.printStackTrace();
+	//						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	//					}
+	//					//						
+	//				}else {
+	//					logger.error("이미지 파일이 없습니다");
+	//					return new ResponseEntity<>("이미지 파일이 없습니다", HttpStatus.INTERNAL_SERVER_ERROR);
+	//				}
+	//			}
+	//		}
+	//		return null;
 
-	}
+
 
 	/**
 	 * 게시글 삭제
@@ -410,10 +471,10 @@ public class ResaleBoardContoller {
 	@PostMapping(value= "comment/write")
 	public ResultBean<ResaleCommentDto> writeComment(@RequestBody ResaleCommentDto commentDto){
 		//String loginedNickname = (String) session.getAttribute("loginNickname");
-		//		String loginedNickname = "땡초";
+		//String loginedNickname = "땡초";
 		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
 		try {
-			//			commentDto.setUserNickname(loginedNickname);
+			//commentDto.setUserNickname(loginedNickname); commentDto에 localStorage에 저장된 userNickname을 넣어서 보내줌
 			logger.error("원글번호는 "+commentDto.getResaleBoard().getResaleBoardNo());
 			service.writeComment(commentDto);
 			logger.error("부모댓글"+commentDto.getResaleCmtParentNo());
