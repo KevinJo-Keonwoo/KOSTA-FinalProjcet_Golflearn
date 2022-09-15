@@ -31,7 +31,7 @@ $(function () {
 				localStorage.setItem("loginedId", userObj.userId);
 
 				// location.replace("http://localhost:1123/front/html/main.html");
-				location.replace("../front/html/main.html");
+				location.replace("../html/main.html");
 				
 			
 			} else {
