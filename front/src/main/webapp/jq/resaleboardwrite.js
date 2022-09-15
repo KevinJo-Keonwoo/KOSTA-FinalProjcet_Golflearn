@@ -142,18 +142,18 @@ $(function(){
     // 수정 시 내용 가져오도록
     $titleObj = $("input.write-title");
     $contentObj = $("div.note-editing-area");
-    let obj = {
-        userNickname: loginedNickname,
-        resaleBoardTitle : 
-        resaleBoardContent:
-    };
     
     $.ajax({
-        url:"http://localhost:1126/backresale/resale/board/write"+resaleBoardNo,
-        method:"put",
-        data:,
-
-
+        url: "http://localhost:1126/backresale/resale/board/" + resaleBoardNo,
+        method:"get",
+        success: function(jsonObj){
+            let detailObj = jsonObj.t.resaleBoard ; 
+            let content = detailObj.resaleBoardContent ;
+            let title = detailObj.resaleBoardTitle ;
+            console.log("title" + title);
+            $("input.write-title").val(title);
+            $("#summernote").summernote("code", content); // 기존 내용 불러넣기
+        }
     });
     
     // console.log(loginedNickname);
