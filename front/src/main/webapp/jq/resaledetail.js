@@ -97,8 +97,8 @@
 
                 $commnetParent.append($commentCopy);
 
-                let commentNickname = comment.userNickname;
-                let cmtParentNo = comment.resaleCmtParentNo;
+                commentNickname = comment.userNickname;
+                cmtParentNo = comment.resaleCmtParentNo;
 
                 if(cmtParentNo == 0 ){
                     $commentCopy.find("div.recomment-write").show();
@@ -113,10 +113,7 @@
                     commentParentNo = comment.resaleCmtParentNo;
                     // console.log("댓글 번호 : " + commentNo);
                     $commentCopy.find("div.comment-content-function").show();
-                    // console.log(commentParentNo);
-                    // if (commentNickname == loginedNickname) {
-                        // }
-                    }else{
+                }else{
                     $commentCopy.find("div.comment-content-function").hide();
                 }
                 
@@ -180,6 +177,7 @@
                 },
                 error: function (jsonObj) {
                     alert(jsonObj.msg);
+                    location.reload();
                 },
             });
         
@@ -212,6 +210,7 @@
             },
             error: function (jsonObj) {
                 alert(jsonObj.msg);
+                location.reload();
             },
         });
         return false;
@@ -221,8 +220,9 @@
 
      //댓글 수정(완성)
     $("div.comment-list").on("click", "button.bt__cmt-modify", function(){
-        if(loginedNickname == commentNIckname){
+        if(loginedNickname == commentNickname){
             console.log("수정댓글번호:" + commentNo);    
+            console.log("댓글작성자" + commentNickname);
             let url = "http://localhost:1126/backresale/resale/comment/"+commentNo;
             console.log(url);
             let cmtContent = $(this).parent().find("input").val();
@@ -231,8 +231,7 @@
             "resaleCmtNo": commentNo,
             "resaleCmtContent": cmtContent,
             "userNickname":loginedNickname,
-            "resaleBoard" : {"resaleBoardNo" : resaleBoardNo}
-            };     
+            "resaleBoard" : {"resaleBoardNo" : resaleBoardNo}};     
             $.ajax({
                 url: url,
                 method: "put",
@@ -279,9 +278,11 @@
         data: JSON.stringify(obj),
         success: function () {
             alert("댓글 삭제 성공");
+            location.reload();
         },
         error: function (jqXHR) {
                 alert("error : " + jqXHR.status + " : " + "댓글 삭제 실패");
+                location.reload();
             }
         }); //ajax
         
@@ -308,7 +309,7 @@
             data: JSON.stringify(obj),
             success: function () {
                 alert("게시글 삭제 성공");
-                location.href("../html/resaleboardlist.html");
+                location.href("..//html/resaleboardlist.html");
             },
             error: function (jqXHR) {
                 alert("error : " + jqXHR.status + " : " + "게시글 삭제 실패");
@@ -317,30 +318,29 @@
     });
     
     // 게시글 수정(미완)
-        if (userNickname == loginedNickname) {
-            $("button.bt__board-modify").show();
-        } else {
-            $("button.bt__board-modify").hide();
-        }
-
+    if (userNickname == loginedNickname) {
+        $("button.bt__board-modify").show();
+    } else {
+        $("button.bt__board-modify").hide();
+    }
     $("button.bt__board-modify").on("click", function () {
         // alert("수정");
         // console.log("게시글번호는" + boardNo);
         let nickName = userNickname;
         // console.log("작성자 닉네임은" + nickName);
-        alert("작성자 닉네임은" + nickName);
+        // alert("작성자 닉네임은" + nickName);
 
-        alert("게시글번호는" + resaleBoardNo);
+        // alert("게시글번호는" + resaleBoardNo);
         location.href = "../html/resaleboardwrite.html?resaleBoardNo=" + resaleBoardNo;
     });
 
 
     // 좋아요 추가, 삭제 (완성)
     $("div.board-like").on("click", function () {
-        console.log("보드 넘버는" + resaleBoardNo);
+        // console.log("보드 넘버는" + resaleBoardNo);
         // 좋아요 여부
-        console.log("좋아요한 닉넴" + likedNickname);
-        console.log("좋아요 번호 " + likeNo);
+        // console.log("좋아요한 닉넴" + likedNickname);
+        // console.log("좋아요 번호 " + likeNo);
         if (likedNickname == localStorage.getItem("loginedNickname")) {
         // localStorage.getItem("loginedNickname")
         // 세션 아이디와 좋아요 한 닉네임이 같으면
@@ -362,8 +362,8 @@
             }
             },
             error: function (jqXHR) {
-            alert(jqXHR.status + ":" + "좋아요 삭제 실패");
-            location.reload();
+                alert(jqXHR.status + ":" + "좋아요 삭제 실패");
+                location.reload();
             },
         });
         } else { // 세션 아이디와 좋아요한 닉네임이 같지 않으면
@@ -381,8 +381,8 @@
             }
             },
             error: function (jqXHR) {
-            alert(jqXHR.status + ":" + "좋아요 추가 실패");
-            location.reload();
+                alert(jqXHR.status + ":" + "좋아요 추가 실패");
+                location.reload();
             }, //error
         }); // ajax
         } //else 끝
