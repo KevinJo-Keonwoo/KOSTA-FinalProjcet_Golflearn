@@ -21,3 +21,20 @@ button.submit-board__button{
 button.submit-board__button:hover {
     background-color: rgb(183, 231, 199);
 }
+
+.title{
+    font-size: 20px;
+}
+.write-title{
+    width:50%;
+    height:40px;
+    margin : 2%;
+    font-size : 20px;
+    /* font-style :italic; */
+    border: 0.1px solid black;
+}
+
+div.label{
+    font-size : 13px;
+    margin : 1%
+}
