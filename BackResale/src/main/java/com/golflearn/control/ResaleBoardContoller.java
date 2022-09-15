@@ -62,7 +62,7 @@ public class ResaleBoardContoller {
 	private ServletContext sc;
 
 	// 파일 저장 경로
-	//	@Value("${spring.servlet.multipart.location}")
+	//	@Value("${spring.servlet.multipart.location}") // 이 경로 사용 시 임시 파일이 만들어짐
 	String uploadDirectory = "C:\\Project\\GolfLearn\\front\\src\\main\\webapp\\";
 
 	/**
@@ -70,29 +70,6 @@ public class ResaleBoardContoller {
 	 * @param optCp
 	 * @return
 	 */
-	//	@GetMapping(value={"board/list","board/list/{optCp}"})
-	//	public ResultBean<PageBean<ResaleBoardDto>> BoardList(@PathVariable Optional<Integer> optCp){
-	//		// 요청전달데이터 전달 되지 않을 때를 대비하여 사용하는 RESTful의  @PathVariable은 Optional로 설정해줘야함 
-	//
-	//		ResultBean<PageBean<ResaleBoardDto>> rb = new ResultBean<>();
-	//		try {
-	//			int currentPage;
-	//			if(optCp.isPresent()) { //currentPage 가 있으면(optional)
-	//				currentPage = optCp.get();
-	//			}else { // 없으면
-	//				currentPage = 1;				
-	//			}
-	//			PageBean<ResaleBoardDto> pb = service.boardList(currentPage);
-	//			rb.setStatus(1);
-	//			rb.setT(pb);
-	//		} catch (FindException e) {
-	//			e.printStackTrace();
-	//			rb.setStatus(0);
-	//			rb.setMsg(e.getMessage());
-	//		}
-	//		return rb;
-	//	}
-
 	@GetMapping(value={"board/list","board/list/{optCp}"})
 	public ResultBean<Page<ResaleBoardDto>> boardList(@PathVariable Optional<Integer> optCp,
 			@PageableDefault(page = 0, size = 5, sort = "resaleBoardNo", direction = Direction.DESC) Pageable pageable){
@@ -116,12 +93,69 @@ public class ResaleBoardContoller {
 		}
 		return rb;
 	}
+	
+	//	@GetMapping(value={"board/list","board/list/{optCp}"})
+	//	public ResultBean<PageBean<ResaleBoardDto>> BoardList(@PathVariable Optional<Integer> optCp){
+	//		// 요청전달데이터 전달 되지 않을 때를 대비하여 사용하는 RESTful의  @PathVariable은 Optional로 설정해줘야함 
+	//
+	//		ResultBean<PageBean<ResaleBoardDto>> rb = new ResultBean<>();
+	//		try {
+	//			int currentPage;
+	//			if(optCp.isPresent()) { //currentPage 가 있으면(optional)
+	//				currentPage = optCp.get();
+	//			}else { // 없으면
+	//				currentPage = 1;				
+	//			}
+	//			PageBean<ResaleBoardDto> pb = service.boardList(currentPage);
+	//			rb.setStatus(1);
+	//			rb.setT(pb);
+	//		} catch (FindException e) {
+	//			e.printStackTrace();
+	//			rb.setStatus(0);
+	//			rb.setMsg(e.getMessage());
+	//		}
+	//		return rb;
+	//	}
 
 	/**
 	 * 게시글 상세보기
 	 * @param resaleBoardNo
 	 * @return
 	 */
+	@GetMapping(value = "board/{resaleBoardNo}")
+	public ResultBean<Map<String, Object>> viewBoardDetail(@PathVariable Long resaleBoardNo){
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		try {
+			ResaleBoardDto resaleBoard = service.boardDetail(resaleBoardNo);
+			map.put("resaleBoard", resaleBoard);
+			//map.put("status", 1);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+		
+		// 저장된 이미지 파일의 이름을 가지고 오는 것 -> 사진 불러올 때 저장된 개수만큼 불러와야함
+		String saveDirectory = uploadDirectory +"\\"+ "resale_images" + "\\" +resaleBoardNo + "\\";
+		System.out.println("경로는" + saveDirectory);
+		File dir = new File(saveDirectory);
+		
+		String[] imageFiles = dir.list(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.contains("image_");
+			} //image라는 이름을 포함한 이미지명들 반환
+		});
+		
+		map.put("imageFileNames", imageFiles);
+		
+		ResultBean<Map<String,Object>> rb = new ResultBean<>();
+		rb.setStatus(1);
+		rb.setT(map);	
+		
+		return rb;
+	}
 	//	@GetMapping(value = "board/{resaleBoardNo}")
 	//	public ResultBean<ResaleBoardDto> viewBoardDetail(@PathVariable Long resaleBoardNo){
 	//		ResultBean<ResaleBoardDto> rb = new ResultBean<>();
@@ -138,36 +172,6 @@ public class ResaleBoardContoller {
 	//		return rb;
 	//	}
 
-	@GetMapping(value = "board/{resaleBoardNo}")
-	public ResultBean<Map<String,Object>> viewBoardDetail(@PathVariable Long resaleBoardNo){
-
-		Map<String, Object> map = new HashMap<>();
-
-		try {
-			ResaleBoardDto resaleBoard = service.boardDetail(resaleBoardNo);
-			map.put("resaleBoard", resaleBoard);
-			//			map.put("status", 1);
-		} catch (FindException e) {
-			e.printStackTrace();
-			map.put("status", 0);
-		}
-
-		String saveDirectory = uploadDirectory +"\\"+ "resale_images" + "\\" +resaleBoardNo + "\\";
-		System.out.println("경로는" + saveDirectory);
-		File dir = new File(saveDirectory);
-		String[] imageFiles = dir.list(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.contains("image_");
-			}
-		});
-		map.put("imageFileNames", imageFiles);
-		ResultBean<Map<String,Object>> rb = new ResultBean<>();
-		rb.setStatus(1);
-		rb.setT(map);	
-
-		return rb;
-	}
 
 	/**
 	 * 검색어로 게시글 조회
@@ -213,7 +217,6 @@ public class ResaleBoardContoller {
 		return rb;
 	}
 
-
 	//	@GetMapping(value = {"board/search/{optWord}/{optCp}", "search/{optWord}", "search"})
 	//	public ResultBean<PageBean<ResaleBoardDto>> serch(
 	//			@PathVariable Optional<String> optWord,
@@ -249,7 +252,6 @@ public class ResaleBoardContoller {
 	//		}
 	//		return rb;
 	//	}
-
 
 	/**
 	 * 게시글 등록
@@ -324,23 +326,8 @@ public class ResaleBoardContoller {
 						int width = 100;
 						int height = 100;
 						Thumbnailator.createThumbnail(imageFileIS, thumbnailOS , width, height);
-						//						
 
-						//이미지 썸네일다운로드하기
-						//						HttpHeaders responseHeaders = new HttpHeaders();
-						//						responseHeaders.set(HttpHeaders.CONTENT_LENGTH, thumbnailFile.length()+"");
-						//						responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(thumbnailFile.toPath()));
-						//						responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename="+URLEncoder.encode("a", "UTF-8"));
-						//						logger.info("섬네일파일 다운로드"); 
-						//						return new ResponseEntity<>(FileCopyUtils.copyToByteArray(thumbnailFile), 
-						//								responseHeaders, 
-						//								HttpStatus.OK);
-						// 일반 응답가지고 안 됨. 다운로드용 응답헤더를ㄹ\ 설정 해 주어야함
-						// content_length 응답 내용의 크기, content_type 응답 형식, content_disposition 다운로드 해야한다
-						// 응답 내용 -> 썸네일 방식으로 
-						// 썸네일 파일의 내용을 바이트 배열로 만들어서 응답 내용으로 쓰겠다.
-						// Json형태로 응답받을 것이 아니라면 ResponseEntity형식으로 첫번째 인자를 string과 같은 것으로 받으면 됨
-
+						
 					} catch (IOException e) {
 						e.printStackTrace();
 						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -348,11 +335,11 @@ public class ResaleBoardContoller {
 					//						
 				}else {
 					logger.error("이미지 파일이 없습니다");
-					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+					return new ResponseEntity<>("이미지 파일이 없습니다", HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 			}
 		}
-		return new ResponseEntity<>("저장 완료",HttpStatus.OK);
+		return new ResponseEntity<>("저장 완료", HttpStatus.OK);
 
 	}
 
@@ -367,13 +354,6 @@ public class ResaleBoardContoller {
 	@PutMapping(value="board/write/{resaleBoardNo}",produces = MediaType.APPLICATION_JSON_VALUE) 
 	public ResponseEntity<?> modifyBoard(@PathVariable Long resaleBoardNo,
 			@RequestBody ResaleBoardDto dto){
-		//		 String loginedNickname = "데빌";
-
-		//		logger.error(loginedNickname);
-		//		logger.error("작성자 이름은 : " + dto.getUserNickname());
-		//		logger.error(dto.getResaleBoardTitle());
-		//		logger.error(dto.getResaleBoardContent());
-
 
 		if(dto.getResaleBoardTitle() == null || dto.getResaleBoardTitle().equals("")|| 
 				dto.getResaleBoardContent() == null || dto.getResaleBoardContent().equals("")) {
@@ -439,7 +419,7 @@ public class ResaleBoardContoller {
 			logger.error("부모댓글"+commentDto.getResaleCmtParentNo());
 
 			rb.setStatus(1);
-			rb.setMsg("댓글 등록 성공");
+			rb.setMsg("댓글 등록 완료");
 		} catch (AddException e) {
 			e.printStackTrace();
 			rb.setStatus(0);
@@ -504,7 +484,7 @@ public class ResaleBoardContoller {
 		}catch(ModifyException e){
 			e.printStackTrace();
 			rb.setStatus(0);
-			rb.setMsg("수정실패");
+			rb.setMsg("수정 실패");
 		}
 		return rb;
 	}

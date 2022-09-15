@@ -185,15 +185,17 @@ public class ResaleBoardService {
 	public void modifyBoard(ResaleBoardDto dto) throws ModifyException{
 		Long resaleBoardNo = dto.getResaleBoardNo();
 		Optional<ResaleBoardEntity> optRb = resaleBoardRepo.findById(resaleBoardNo);
+		
 		if(optRb.isPresent()) { // 게시글이 존재하면
-			ResaleBoardEntity entity = optRb.get();
-			entity.setResaleBoardContent(dto.getResaleBoardContent()); // resaleBoard.get
-			entity.setResaleBoardTitle(dto.getResaleBoardTitle());
+			ResaleBoardEntity boardEntity = optRb.get();
+			
+			boardEntity.setResaleBoardContent(dto.getResaleBoardContent()); // resaleBoard.get
+			boardEntity.setResaleBoardTitle(dto.getResaleBoardTitle());
 
-			logger.error("변경 내용?" + entity.getResaleBoardContent());
-			logger.error("변경 제목?" + entity.getResaleBoardTitle());
-			resaleBoardRepo.save(entity);
-
+			logger.error("변경 내용?" + boardEntity.getResaleBoardContent());
+			logger.error("변경 제목?" + boardEntity.getResaleBoardTitle());
+			resaleBoardRepo.save(boardEntity);
+			
 		}else {
 			throw new ModifyException("게시글이 없습니다");
 		}
