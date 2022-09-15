@@ -179,10 +179,12 @@ $(function(){
     });
     //6. 글쓰기로 이동하기 -> 보내줄 데이터 없음 (닉네임? )
     $("header>button.write").click(function(){
-        $(location).attr('href', '../html/roundreviewwrite.html');
+        $(location).attr('href', '../html/roundreviewboardwrite.html');
     })
 
-    //7. 제목이나 사진 눌렀을때 해당 게시글로 이동하기
+    //7 수정하기
+
+    //8. 제목이나 사진 눌렀을때 해당 게시글로 이동하기
     //undefined나오는것 해결하기 + 여기서 누른 번호 보내주기 roundreviewboardno
     $("div.board").on('click', "img.board-list__content__image, div.board-list__content__title", function(){
         let $roundReviewBoardNoObj = $(this).parent().find('div.board-list__content__no');

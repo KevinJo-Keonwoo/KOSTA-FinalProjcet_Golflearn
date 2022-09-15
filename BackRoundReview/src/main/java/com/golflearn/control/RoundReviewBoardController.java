@@ -180,13 +180,16 @@ public class RoundReviewBoardController {
 	
 	//게시물 작성하기
 	@PostMapping(value = "board", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> writeBoard(@RequestPart(required = false)List<MultipartFile> imageFiles, RoundReviewBoardDto dto, HttpSession session){
+	public ResponseEntity<?> writeBoard(@RequestPart(required = false)List<MultipartFile> imageFiles, RoundReviewBoardDto dto){
 		RoundReviewBoardDto boardDto = new RoundReviewBoardDto();
 		try {
 			//테스트 dt
-			java.util.Date utilDate = new java.util.Date();
-			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-			dto.setRoundReviewBoardDt(sqlDate);
+//			java.util.Date utilDate = new java.util.Date();
+//			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+//			dto.setRoundReviewBoardDt(sqlDate);
+			logger.error(dto.getRoundReviewBoardContent());
+			logger.error(dto.getRoundReviewBoardTitle());
+			logger.error(dto.getUserNickname());
 			boardDto = service.writeBoard(dto);
 //			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AddException e) {

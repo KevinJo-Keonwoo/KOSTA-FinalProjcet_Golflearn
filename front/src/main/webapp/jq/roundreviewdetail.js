@@ -107,8 +107,9 @@ $(function(){
         })
     })
     //3. 댓글 수정하기
-    
-    $("div.comment div.comment-list").on('click', "button.comment-list__modify", function(){
+    let $test = $("article");
+    let $test2 = $test.parents();
+    $test.on('click', "div.comment>div.comment-list>button.comment-list__modify", function(){
         let roundReviewCmtNo = $(this).siblings("div.comment-list__no").html();
         console.log(roundReviewCmtNo);
         $.ajax({
