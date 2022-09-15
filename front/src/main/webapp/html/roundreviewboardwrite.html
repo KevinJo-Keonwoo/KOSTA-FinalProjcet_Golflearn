@@ -32,16 +32,11 @@
     <header w3-include-html="header.html"></header>
     <main>
         <section>
-            <form class="write" action="http://localhost:1125/backroundreview/board/" method="post" enctype="multipart/form-data">
-                <header>
+            <form class="write" action="http://localhost:1125/backroundreview/board" method="post" enctype="multipart/form-data">
                     <div class="write__title">
-                        <input class="write__title-box" type="text" name="write__title-box" placeholder="제목을 입력해주세요">
+                        <input class="write__title-box" type="text" name="roundReviewBoardTitle" placeholder="제목을 입력해주세요">
                     </div>
-                </header>
-                <article>
-                    내용, 파일 첨부 카카오맵장소 이전, 작성완료
-                    <div class="write__content">내용</div>
-                    <textarea class = "write__summernote" id="summernote" name="content"></textarea>
+                    <textarea class = "write__summernote" id="summernote" name="roundReviewBoardContent" name="content"></textarea>
                     <div class="write__map">
                         <input class="search" type="text" name="write__map-box" placeholder="검색할 장소를 입력해주세요">
                         <button class="search__button">검색</button>
@@ -53,7 +48,6 @@
                         <input type="file" id="imgFiles" class="image" name="imageFiles" accept="image/*" multiple>
                     </div>
                     <ul id="preview" class="sortable"></ul>
-                </article>
             </form>
                 <div class="footer">
                     <button class="previous">이전</button>

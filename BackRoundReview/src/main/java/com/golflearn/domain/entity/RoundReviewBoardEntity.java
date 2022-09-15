@@ -15,8 +15,9 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -30,8 +31,8 @@ import lombok.Setter;
 					initialValue = 26,
 					allocationSize = 1)
 @Getter @Setter
-//@DynamicInsert
-//@DynamicUpdate			
+@DynamicInsert
+@DynamicUpdate			
 public class RoundReviewBoardEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,

@@ -47,7 +47,7 @@ import com.golflearn.service.RoundReviewBoardService;
 
 import net.coobird.thumbnailator.Thumbnailator;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 //@RequestMapping("roundreview/*")
 public class RoundReviewBoardController {
@@ -182,11 +182,15 @@ public class RoundReviewBoardController {
 	@PostMapping(value = "board", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> writeBoard(@RequestPart(required = false)List<MultipartFile> imageFiles, RoundReviewBoardDto dto){
 		RoundReviewBoardDto boardDto = new RoundReviewBoardDto();
+		logger.error(dto.getRoundReviewBoardContent());
+		logger.error(dto.getRoundReviewBoardTitle());
+		logger.error(dto.getUserNickname());
 		try {
 			//테스트 dt
 //			java.util.Date utilDate = new java.util.Date();
 //			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
 //			dto.setRoundReviewBoardDt(sqlDate);
+//			dto.setUserNickname("데빌");
 			logger.error(dto.getRoundReviewBoardContent());
 			logger.error(dto.getRoundReviewBoardTitle());
 			logger.error(dto.getUserNickname());

@@ -112,7 +112,8 @@ $(function(){
     // }
 
     // 세션의 닉네임
-    let loginedNickname = localStorage.getItem("loginedNickname");
+    // let loginedNickname = localStorage.getItem("loginedNickname");
+    let loginedNickname = "케빈";
     // 게시글 번호
     let queryString = location.search.split("=")[1];
     let roundReviewBoardNo = queryString;
@@ -139,9 +140,10 @@ $(function(){
     // 등록 버튼 객체 찾기
     let $btSubmit = $("div.footer>button.submit");
     // 버튼 클릭
-    $btSubmit.on("click", function(event){
+    $btSubmit.click(function(){
         //summernote 사용법 익히기 
         let text = $('#summernote').summernote('code');
+        // let text = $("input#summernote").val();
         let $formObj =$("form.write");
         console.log("formObj[0] =" + $formObj[0]);
         let formData = new FormData($formObj[0]);
@@ -152,10 +154,13 @@ $(function(){
         console.log("title: " + title);
 
         let obj = {};
-        obj = formData.set("userNickname", loginedNickname);
-        console.log("formdata :" + obj);
-        // formData.forEach(function(value,key){
-        // });
+        // obj = formData.set("userNickname", loginedNickname);
+        formData.append("userNickname", loginedNickname);
+        // formData.set("userNickname", loginedNickname);
+
+
+        formData.forEach(function(value,key){
+        });
         
         let obj2 = formData.get("imageFiles");
         if(obj2.size <= 0){
