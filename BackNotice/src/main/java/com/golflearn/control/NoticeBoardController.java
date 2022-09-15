@@ -87,42 +87,42 @@ public class NoticeBoardController {
 		}
 		return rb;
 	}
-	
-//	@GetMapping(value = "board/search/{optWord}")
-//	public ResultBean<PageBean<NoticeBoardDto>> search(
-//			@PathVariable Optional<String> optWord,
-//			@PathVariable Optional<Integer> optCp){
-//		ResultBean<PageBean<NoticeBoardDto>> rb = new ResultBean<>();
-//
-//		try {
-//			PageBean<NoticeBoardDto> pb ; 
-//			String word = ""; 
-//			if(optWord.isPresent()) {
-//				word = optWord.get();
-//			} else { 
-//				word = "";
-//			}
-//
-//			int currentPage = 1;
-//			if(optCp.isPresent()) {
-//				currentPage = optCp.get();
-//			}else {
-//
-//			}
-//			if("".equals(word)) {
-//				pb = service.boardList(currentPage);
-//			} else {
-//				pb = service.searchBoard(word, currentPage);
-//			} 
-//			rb.setStatus(1);
-//			rb.setT(pb);
-//		} catch (FindException e) {
-//			e.printStackTrace();
-//			rb.setStatus(0);
-//			rb.setMsg(e.getMessage());
-//		}
-//		return rb;
-//	}
+
+	@GetMapping(value = {"board/search/{optWord}", "board/search/{optWord}/{optCp}", "board/search"})
+	public ResultBean<PageBean<NoticeBoardDto>> search(
+			@PathVariable Optional<String> optWord,
+			@PathVariable Optional<Integer> optCp){
+		ResultBean<PageBean<NoticeBoardDto>> rb = new ResultBean<>();
+
+		try {
+			PageBean<NoticeBoardDto> pb; 
+			String word = ""; 
+			if(optWord.isPresent()) {
+				word = optWord.get();
+			} else { 
+				word = "";
+			}
+
+			int currentPage = 1;
+			if(optCp.isPresent()) {
+				currentPage = optCp.get();
+			}else {
+
+			}
+			if("".equals(word)) {
+				pb = service.boardList(currentPage);
+			} else {
+				pb = service.searchBoard(word, currentPage);
+			} 
+			rb.setStatus(1);
+			rb.setT(pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			rb.setStatus(0);
+			rb.setMsg(e.getMessage());
+		}
+		return rb;
+	}
 
 	@GetMapping("{boardNo}")
 	public ResultBean<NoticeBoardDto> viewBoard(@PathVariable int boardNo) {
@@ -325,24 +325,41 @@ public class NoticeBoardController {
 	}
 
 	@PutMapping(value="comment/{commentNo}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> modifyComment(
+	public ResultBean<NoticeCommentDto> modifyComment(
 			@PathVariable long commentNo,
-			@RequestBody NoticeCommentDto noticeComment){
+			@RequestBody NoticeCommentDto noticeComment,
+			HttpSession session){
 
+		// String loginedNickname = (String) session.getAttribute("loginNickname");
+		String loginedNickname = "id1";	
+		ResultBean<NoticeCommentDto> rb = new ResultBean<>();
 		try {
-			if(noticeComment.getNoticeCmtContent() == null || noticeComment.getNoticeCmtContent().equals("")) {
-				return new ResponseEntity<>("댓글내용은 반드시 입력하세요", HttpStatus.BAD_REQUEST);
+			if(loginedNickname == null) {
+				rb.setMsg("로그인하세요");
+				return rb;
+			} else if(loginedNickname.equals(noticeComment.getUserNickname())) {
+				if(noticeComment.getNoticeCmtContent() == null || noticeComment.getNoticeCmtContent().equals("")) {
+					rb.setMsg("내용을 반드시 입력해주세요");
+				} else {
+					System.out.println("-------------------");
+					noticeComment.setNoticeCmtNo(commentNo);
+					NoticeCommentEntity nCe = noticeComment.toEntity();
+					service.modifyComment(nCe);
+//					rb.setT();
+					rb.setStatus(1);
+					rb.setMsg("수정 성공");
+				}
+
+			} else {
+				rb.setMsg("사용자가 아닙니다.");
+				return rb;
 			}
-
-			NoticeCommentEntity nCe = noticeComment.toEntity();
-
-			service.modifyComment(nCe);
-
-			return new ResponseEntity<>(HttpStatus.OK);
 		}catch(ModifyException e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			rb.setStatus(0);
+			rb.setMsg("수정실패");
 		}
+		return rb;
 	}
 
 	@PostMapping(value = "like/add", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -392,9 +409,8 @@ public class NoticeBoardController {
 		else if(loginedNickname.equals(likeDto.getUserNickname())) {
 			try {
 				logger.error("원글 번호는"+likeDto.getNoticeBoardDto().getNoticeBoardNo());
-				
-				
-				
+
+
 				likeDto.setNoticeLikeNo(noticeLikeNo);
 				service.removeLike(likeDto);
 				rb.setStatus(1);

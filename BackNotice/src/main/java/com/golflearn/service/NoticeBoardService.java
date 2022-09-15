@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -109,26 +110,26 @@ public class NoticeBoardService {
 	}
 
 
-//	public PageBean<NoticeBoardDto> searchBoard(String word, int currentPage) throws FindException{
-//
-//		int endRow = currentPage * CNT_PER_PAGE;
-//		int startRow = endRow - CNT_PER_PAGE + 1;
-//		List<NoticeBoardEntity> entityList = boardRepository.findByWord(word, startRow, endRow);
-//
-//		int totalCnt = boardRepository.findCountByWord(word);
-//		int cntPerPageGroup = 5;
-//		
-//		//리스트로반환해야함
-//		
-////		ModelMapper modelMapper = new ModelMapper();
-////		List<NoticeBoardDto> dtoList = 
-////				entityList.stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
-////				.collect(Collectors.toList());
-//
-//		PageBean<NoticeBoardDto> pb = 
-//				new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
-//		return pb;
-//	}
+	public PageBean<NoticeBoardDto> searchBoard(String word, int currentPage) throws FindException{
+
+		int endRow = currentPage * CNT_PER_PAGE;
+		int startRow = endRow - CNT_PER_PAGE + 1;
+		List<NoticeBoardEntity> entityList = boardRepository.findByWord(word, startRow, endRow);
+
+		int totalCnt = boardRepository.findCountByWord(word);
+		int cntPerPageGroup = 5;
+		
+		//리스트로반환해야함
+		
+		ModelMapper modelMapper = new ModelMapper();
+		List<NoticeBoardDto> dtoList = 
+				entityList.stream().map(NoticeBoardEntity -> modelMapper.map(NoticeBoardEntity, NoticeBoardDto.class))
+				.collect(Collectors.toList());
+		
+		PageBean<NoticeBoardDto> pb = 
+				new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
+		return pb;
+	}
 
 
 	/**
@@ -200,9 +201,9 @@ public class NoticeBoardService {
 	 * @throws AddException
 	 */
 	public void replyBoard(NoticeCommentEntity noticeComment) throws AddException{
-		if(noticeComment.getNoticeCmtParentNo() == 0L) {
-			throw new AddException("답글쓰기의 부모글번호가 없습니다");
-		}
+//		if(noticeComment.getNoticeCmtParentNo() == 0L) {
+//			throw new AddException("답글쓰기의 부모글번호가 없습니다");
+//		}
 		//		noticeCommentDto = NoticeCommentDto.builder()
 		//								.noticeCmtNo(noticeCommentDto.getNoticeCmtNo())
 		//								.noticeCmtDt(noticeCommentDto.getNoticeCmtDt())

@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.golflearn.domain.entity.NoticeBoardEntity;
 import com.golflearn.domain.entity.NoticeCommentEntity;
 
@@ -26,6 +27,7 @@ public class NoticeBoardDto {
 	private Long noticeBoardNo;
 	private String noticeBoardTitle;
 	private String noticeBoardContent;
+	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	private Date noticeBoardDt;
 	private Long noticeBoardViewCnt;
 	private Long noticeBoardLikeCnt;
