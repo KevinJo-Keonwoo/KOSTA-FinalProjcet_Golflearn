@@ -18,6 +18,7 @@ $(function () {
           let $boardParent = $board.parent();
           $(pageBeanObj.list).each(function (index, board) {
             let $boardCopy = $board.clone();//복제본
+            // $boardCopy.find("a.board-link").html(board.meetBoardNo);
             $boardCopy.find("span.board-no").html(board.meetBoardNo);
             $boardCopy.find("span.board-ctg").html(board.meetCategory.meetCtgTitle);
             $boardCopy.find("span.board-nickname").html(board.userNickname);
@@ -27,8 +28,13 @@ $(function () {
             $boardCopy.find("span.board-cur_cnt").html(board.meetBaordCurCnt);
             $boardCopy.find("span.board-max_cnt").html(board.meetBaordCurCnt);
             $boardCopy.find("span.board-location").html(board.meetBoardLocation);
-            //내용은 앞에서 30자만 보이기
-            let meetBoardContent = board.meetBoardContent.substr(0, 30) + "...";
+            $boardCopy.find("span.board-view_cnt").html(board.meetBoardViewCnt);
+
+            //상세보기 링크 걸기
+            $boardCopy.find("a.board-link").attr("href", '../html/meetboarddetail.html?meet_board_no='+board.meetBoardNo);
+
+            //글내용은 앞에서 30자만 보이기
+            let meetBoardContent = board.meetBoardContent.substr(0, 30)+ '…';
             $boardCopy.find("p.board__body-content").html(meetBoardContent);
 
             //모집유형은 숫자값(0,1)므로 한글로 변경하여 넣기 
@@ -66,14 +72,15 @@ $(function () {
         }
       },
       error: function (jqXHR) {
-        alert("에러:" + jqXHR.status);
+        alert("에러:" + jqXHR.responseText);
       }
     });
+    return false;
   }
    //---------페이징처리 END---------
 
   //---페이지 로드되자 마자 게시글1페이지 검색 START---
-  showList('http://localhost:1129/backmeet/board/list');
+  showList('http://localhost:1129/backmeet/meet/board/list');
   //---페이지 로드되자 마자 게시글1페이지 검색 END---
 
   //---페이지 그룹의 페이지를 클릭 START---
@@ -93,30 +100,28 @@ $(function () {
 
     //------모집상태별 필터 값 유지 START---------
     var status = $("input[name='search__filter-status']:checked").val();
-    $("ul.search__filter-list>li").each(function (index, element) {
+    $("ul.search__filter-list").each(function (index, element) {
       let $inputObj = $(element).find('input');
       if ($inputObj.css("background-color") == 'rgb(255, 0, 0)') {
         console.log(index, "color", $inputObj.css("background-color"));
         status = index - 1;
-        return false;
       }
     });
     //-----모집상태별 필터 값 유지 END---------
 
     if (!status && word == '') {//모집상태 필터와 검색어가 없으면
-      url = 'http://localhost:1129/backmeet/board/list/' + pageNo;
+      url = 'http://localhost:1129/backmeet/meet/board/list/' + pageNo;
       data = 'currentPage=' + pageNo;
     } else if (word.length > 0) {//검색어가 있으면
-      url = 'http://localhost:1129/backmeet/board/search/' + word + '/' + pageNo;
+      url = 'http://localhost:1129/backmeet/meet/board/search/' + word + '/' + pageNo;
       data = 'word=' + word + '&currentPage=' + pageNo;
     } else {//모집상태 필터를 체크하면
       console.log(status);
-      url = 'http://localhost:1129/backmeet/board/filter/' + status + '/' + pageNo;
+      url = 'http://localhost:1129/backmeet/meet/board/filter/' + status + '/' + pageNo;
       data = 'meetBoardStatus=' + status + '&currentPage=' + pageNo;
     }
     console.log(url);
     showList(url, data);
-    return false;
   });
   //---페이지 그룹의 페이지를 클릭 END---
 
@@ -127,15 +132,16 @@ $(function () {
     let url = '';
     let data = '';
     if (status == "2") {//전체를 클릭했을 때
-      url = 'http://localhost:1129/backmeet/board/list';
+      url = 'http://localhost:1129/backmeet/meet/board/list';
       data = "";
     } else {
-      url = 'http://localhost:1129/backmeet/board/filter/' + status;
+      url = 'http://localhost:1129/backmeet/meet/board/filter/' + status;
       data = "meetBoardStatus" + status;
     }
 
     $("input[type='checkbox']").css("background-color", "yellow"); //기본
     $(this).css("background-color", "red"); //체크된 경우
+
     console.log(url);
     showList(url, data);
   });
@@ -144,7 +150,7 @@ $(function () {
   //---검색 클릭 START---
   $('button[name=board-search]').click(function () {
     let word = $('input[name=word]').val().trim();
-    let url = 'http://localhost:1129/backmeet/board/search/' + word;
+    let url = 'http://localhost:1129/backmeet/meet/board/search/' + word;
     let data = 'word=' + word;
     showList(url, data);
     return false;
@@ -156,15 +162,6 @@ $(function () {
     $(location).attr('href', '../html/meetboardwrite.html');
   })
   //----글쓰기 버튼 클릭 END----
-
-  //----게시글 클릭 START-----
-  // $("a").on('click', function () {
-  //   let $meetBoardNoObj = $(this).prev().find('meetBoardNo');
-  //   let meet_board_no = $meetBoardNoObj.html();
-  //   console.log(meet_board_no);
-  //   // location.href = "/front/html/meetboarddetail" + meet_board_no;
-  // })
-  //----게시글 클릭 END-----
 
 });
 
