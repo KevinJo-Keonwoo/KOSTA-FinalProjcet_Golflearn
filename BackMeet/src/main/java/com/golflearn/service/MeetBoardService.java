@@ -213,8 +213,8 @@ public class MeetBoardService {
 	@Transactional
 	public void removeMeetBoard(String userNickname, Long meetBoardNo) throws RemoveException{
 		Optional<MeetBoardEntity> meetBoard = meetBoardRepo.findById(meetBoardNo);//선택된 게시글 반환
-		String writer = meetBoard.get().getUserNickname();//해당 게시글의 작성자 유저네임 반환
-		if(userNickname.equals(writer)) {//로그인된 유저가 작성자인지 확인
+		String writer = meetBoard.get().getUserNickname();//해당 게시글의 작성자 반환
+		if(!userNickname.equals(writer)) {//로그인된 유저가 작성자인지 확인 
 			throw new RemoveException("해당 글의 작성자만 삭제할 수 있습니다.");
 		}else {
 			meetMemberRepo.DeleteByBoardNo(meetBoardNo);
@@ -234,9 +234,12 @@ public class MeetBoardService {
 		MeetBoardEntity meetBoardEntity = modelMapper.map(meetBoardDto, MeetBoardEntity.class);
 		//수정할 게시글을 가져온다
 		Optional<MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardEntity.getMeetBoardNo());
-		if(!optM.isPresent()) {
+		String writer = optM.get().getUserNickname();//작성자 가져오기
+		if(!optM.isPresent()) {//게시글 존재여부 확인
 			throw new ModifyException("존재하지 않는 게시글입니다.");
-		}else {
+		}else if(!meetBoardDto.getUserNickname().equals(writer)){//작성자여부 확인
+			throw new ModifyException("작성자만 수정할 수 있습니다.");
+		}else{
 			MeetBoardEntity meetBoard = optM.get();
 			meetBoard.setMeetBoardTitle(meetBoardDto.getMeetBoardTitle());
 			meetBoard.setMeetBoardContent(meetBoardDto.getMeetBoardContent());
@@ -255,12 +258,11 @@ public class MeetBoardService {
 	 */
 	public void modifyStatus(String userNickname, Long meetBoardNo, Long meetBoardStatus) throws ModifyException{
 		Optional <MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
-		if(!optM.isPresent()){//게시글 존재여부 확인
-			throw new ModifyException("존재하지 않는 게시글입니다.");
-		}
 		MeetBoardEntity meetBoard = optM.get();
 		String writer = meetBoard.getUserNickname();//해당 게시글의 작성자 닉네임 반환
-		if(userNickname.equals(writer)){//작성자 여부 확인
+		if(!optM.isPresent()){//게시글 존재여부 확인
+			throw new ModifyException("존재하지 않는 게시글입니다.");
+		}else if(!userNickname.equals(writer)){//작성자 여부 확인
 			throw new ModifyException("해당 글의 작성자만 수정할 수 있습니다.");
 		}else{
 			meetBoard.setMeetBoardStatus(meetBoardStatus);
@@ -276,18 +278,17 @@ public class MeetBoardService {
 	 */
 	public void addMember(String userNickname, Long meetBoardNo) throws AddException{
 		Optional <MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
-		if(!optM.isPresent()) {//글이 없는 경우
-			throw new AddException("글이 없습니다.");
-		}
 		MeetBoardEntity meetBoard = optM.get();//게시글 가져오기
 		int memberCheck = meetMemberRepo.countByUserNicknameMeetBoard(userNickname, meetBoardNo);//참여중인 모임인지 확인
-		if(memberCheck  != 0){//이미 참여중인 경우
+		if(!optM.isPresent()) {//글이 없는 경우
+			throw new AddException("글이 없습니다.");
+		}else if(memberCheck  != 0){//이미 참여중인 경우
 			throw new AddException("이미 참여중인 모임입니다.");
 		}else if(meetBoard.getMeetBoardStatus() == 1 ){//해당 모임글이 모집마감인 경우
 			throw new AddException("모집중인 모임이 아닙니다");
 		}else{
 			MeetMemberEntity meetMember= new MeetMemberEntity();//DB에 저장할 모임멤버 객체 생성
-			meetMember.setMeetMbNo(meetBoardNo);
+			meetMember.setMeetBoard(meetBoard);
 			meetMember.setUserNickname(userNickname);
 			meetMemberRepo.save(meetMember);//모임에 이미 참여인 경우 DB에서 유니크제약조건 발동
 		}
@@ -296,15 +297,18 @@ public class MeetBoardService {
 	/**
 	 * 모임에서 나간다
 	 * @param meetBoardNo 글 번호
-	 * @param UserNickname 모임에서 나가는 회원의 닉네임 
+	 * @param userNickname 모임에서 나가는 회원의 닉네임 
 	 */
 	@Transactional
-	public void removeMeetMember(Long meetBoardNo, String UserNickname) throws RemoveException{
+	public void removeMeetMember(Long meetBoardNo, String userNickname) throws RemoveException{
 		Optional <MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
+		int memberCheck = meetMemberRepo.countByUserNicknameMeetBoard(userNickname, meetBoardNo);//참여중인 모임인지 확인
 		if(!optM.isPresent()) {//글이 없는 경우
 			throw new RemoveException("글이 없습니다");
-		}else {
-			meetMemberRepo.DeleteByIdAndUserNickName(meetBoardNo, UserNickname);
+		}else if(memberCheck == 0){//참여중인 모임이 아닌 경우
+			throw new RemoveException("참여중인 모임이 아닙니다");
+		}else{
+			meetMemberRepo.DeleteByIdAndUserNickName(meetBoardNo, userNickname);
 		}
 	}
 	
