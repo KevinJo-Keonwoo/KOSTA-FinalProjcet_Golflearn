@@ -21,4 +21,5 @@ public class LessonReview {
 	private Date reviewEditDt;
 	private int myStarScore;
 	private LessonLine lsnLine;
+	private String stdtNickname;//수강생닉네임(DB존재X) -레슨상세보기페이지 서브쿼리구문
   }

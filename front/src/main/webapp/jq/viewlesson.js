@@ -1,100 +1,74 @@
 $(function(){
-	//---------------화면 로딩되자마자----------------
-	
-	//레슨정보 서블릿에 보내기
-	let queryString = location.search.substring(1); 
-	let lsn_no = jsonObj.lesson.lsnNo;//레슨번호
+	//전달받은 queryString에서 레슨넘버 얻기
+	// queryString = "http://localhost:1123/front/html/viewlesson.html?lsn_no=1"형태로 올 것임
+	let queryString = location.search.split("=")[1]; //새 코드
+	let loginedId = localStorage.getItem("loginedId");
+	console.log("레슨번호 : " + queryString, "로그인아이디 :" + loginedId);
+
+	let url = "http://localhost:1124/back/lesson/" + queryString;
 	$.ajax({
-		url: "http://localhost:1124/back/lesson/" + lsnNo,
+		url: url,
 		method: 'get',
-		data : 'lsnNo='+lsn_no, 
 		success: function (jsonObj) {
-			console.log(jsonObj);
-			//레슨정보
+			//레슨정보 불러오기
             let lesson = jsonObj.t;
-			let loc_no = jsonObj.lesson.locNo;	//지역코드(ex:11011에 해당하는 주소지역 다 문자로 표현)
-			let lsn_title = jsonObj.lesson.lsnTitle;
-			let lsn_star_score = jsonObj.lesson.lsnStarScore;
-			let lsn_review_cnt = jsonObj.lesson.lsnStarPplCnt; //리뷰갯수
-			let user_name = jsonObj.lesson.userInfo.userName;	
-			let pro_star_score = jsonObj.lesson.proStarScore;
-			let user_id = jsonObj.lesson.userInfo.userId;
+
+			let loc_no = lesson.locNo; //지역코드(ex:11011에 해당하는 주소지역 다 문자로 표현)
+			let lsn_title = lesson.lsnTitle; //레슨명
+			let lsn_star_score = lesson.lsnStarScore; //레슨별점
+			let lsn_review_cnt = lesson.lsnStarPplCnt; //리뷰갯수
+			let user_name = lesson.userInfo.userName; //프로명
+			let pro_star_score = lesson.proStarScore; //프로별점
 			//레슨상세정보(레슨소개, 프로소개) 서블릿에서 가져오기
-			let lsn_intro = jsonObj.lesson.lsnIntro;
-			let pro_intro = jsonObj.lesson.userInfo.proInfo.proCareer;
+			let lsn_intro = lesson.lsnIntro;//레슨소개
+			let pro_intro = lesson.userInfo.proInfo.proCareer;//프로소개
 
-			//레슨간략정보 WB에 붙이기
-			// $('div.viewlesson>img').attr('src', 'C:\\Golflearn_lib\\user_images\\' + lsn_no + '.png')
-			// 	.attr('alt', lsn_title);	//레슨썸네일 경로 파일 불러오기(경로 수정 필요)
-
-			// $('div.viewlesson>img').attr('src', '../lsn_images/' + lsn_no + '.jpg')
-			// 	.attr('alt', lsn_title);
-			$('div.viewlesson>img').attr('src', '../lsn_images/' + lsn_title + '_LessonThumbnail.jpg').attr('alt', lsn_title);
-
+			$('div.viewlesson>img').attr('src', '../lsn_images/' + queryString + '_LessonThumbnail.jpg').attr('alt', lsn_title);
 			$('div.viewlesson ul>div>li>span.loc_no').html(loc_no);	//지역은 api로 넘어갈때 수정
 			$('div.viewlesson ul>div>li>span.lsn_title').html(lsn_title);
 			$('div.viewlesson ul>div>li>span.lsn_star_score').html(lsn_star_score);
 			$('div.viewlesson ul>div>li>span.lsn_review_cnt').html(lsn_review_cnt);
 			$('div.viewlesson ul>div>li>span.user_name').html(user_name);
 			$('div.viewlesson ul>div>li>span.pro_star_score').html(pro_star_score);
-			//레슨상세정보 WB에 붙이기
 			$('div.lsn_intro').html(lsn_intro);
 			$('div.pro_intro').html(pro_intro);
 
 			//-----------레슨후기 list START-------------
-			let jsonarr = jsonObj.lesson.lines;
+			let lessonLines = lesson.lsnLines;
             let $lsnObj = $('div.reviewlist');
-            $(jsonarr).each(function(i, element){
+            $(lessonLines).each(function(i, element){
+				let reviewNickname = element.lsnReview.stdtNickname;
+                if(reviewNickname != null){//레슨리뷰가 있으면 append
 				$copyObj = $lsnObj.clone();
-                
-				let reviewId = element.userInfo.userID;
-				//리뷰작성날짜 sql에서 얻어온 값 형변환
 				let reviewDt = element.lsnReview.reviewDt;
-				let convertReviewDt = new Date(reviewDt);
-				convertReviewDt = convertReviewDt.toLocaleDateString();
                 let review = element.lsnReview.review;
 
                 let lessonReview = '<ul>';
-                lessonReview += '<li><div>작성자아이디: <span class = "reviewId">' + reviewId + '</span></div></li>'
-                lessonReview += '<li><div>작성날짜: <span class = "reviewDt">' + convertReviewDt + '</span></div></li>'
+                lessonReview += '<li><div>작성자아이디: <span class = "reviewId">' + reviewNickname + '</span></div></li>'
+                lessonReview += '<li><div>작성날짜: <span class = "reviewDt">' + reviewDt + '</span></div></li>'
                 lessonReview += '<li><div>리뷰: <span class = "review">' + review + '</span></div></li>'
                 lessonReview += '</ul>'
                 
                 $copyObj.find('div.reviewdetail').html(lessonReview);
                 
                 $('div.lsn').append($copyObj);
+				}
 			});	
 		},
-		error: function (jqXHR) {
-			alert('오류:' + jqXHR.status);
+		error: function (jsonObj) {
+			alert(jsonObj.msg);
 		}
 	});
 
 	//------------수강신청 버튼 클릭 START-------------
-	//(서블릿이없어서 alert띄우는방향으로하기 : 추후 결제와 실제수강신청구현)
-	$('div.simple button').click(function(jsonObj){
-		// let lsn_title = jsonObj.lesson.lsnTitle;
-		// alert('"' + lsn_title + '" 수강신청이 완료되었습니다.');
-		alert('수강신청이 완료되었습니다');
-	});
-
-	// $('div.viewlesson ul>li>button').click(function(){
-	// 	let lsn_no = $('div.viewlesson ul>li>span.lsn_no').html();
-	// 	let quantity = $('div.viewlesson ul>li>input[name=quantity]').val();
-
-	// 	$.ajax({
-	// 		url: '/back/addcart', // 아직안만든 서블릿 : /back/addEnrolment
-	// 		method: 'get',
-	// 		data: {수강생아이디, 레슨라인넘버} , 
-	// 		success: function(jsonObj){
-	// 			$('div.viewlesson div.result').show();
-	// 		},
-	// 		error: function(jqXHR){
-	// 			alert('오류:' + jqXHR.status);
-	// 		}
-	// 	});
-	// 	return false;
-	// });
+	let $btPaymentObj = $("button[name='payment']");
+    $btPaymentObj.click(function () {//취소버튼 클릭시
+        if (confirm("수강신청하시겠습니까?\n '확인'을 누르시면 결제 페이지로 이동합니다.")) {
+            return false;
+        } else {
+            window.location = '';	//결제창으로 넘어가기
+        }
+    });
 
 	//------------레슨상세정보 네비바 클릭 START-------------
 	$(document).ready(function(){
@@ -131,7 +105,6 @@ $(function(){
 		$('html, body').animate({scrollTop:0},400);
 		return false;
 	});
-
-	//------------레슨등록 프로회원만 보이도록 만들기 START-------------
+	//-----------상단이동버튼 클릭 END-------------
 
 });

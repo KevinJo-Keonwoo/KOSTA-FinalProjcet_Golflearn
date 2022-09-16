@@ -101,7 +101,7 @@ public class LessonController {
 			try {
 				List<Lesson> lessons = service.viewMain();
 				rb.setStatus(1);
-				rb.setLt(lessons);
+//				rb.setLt(lessons);
 				return rb;
 			} catch (FindException e) {
 				e.printStackTrace();
@@ -114,15 +114,12 @@ public class LessonController {
 
 	@Value("${spring.servlet.multipart.location}")
 	String saveDirectory;// 파일경로생성
-
 	@PostMapping("request") // list타입 필드가 있는 Lesson전달과 파일첨부를 동시에 하기 위해 String타입으로 Lesson얻기
 	public ResponseEntity<?> reuqestLesson(@RequestPart(required = false) MultipartFile file, String strLesson,
 			HttpSession session) throws JsonMappingException, JsonProcessingException {
 
-//		String loginedUserType = (String) session.getAttribute("userType");// 로그인한 유저의 유저타입가져오기
-//		String loginedId = (String) session.getAttribute("loginInfo");// 로그인한 유저의 아이디 가져오기
-		String loginedId = "ohpro@gmail.com";// 테스트용
-		String loginedUserType = "1";// 테스트용
+		String loginedUserType = (String) session.getAttribute("userType");// 로그인한 유저의 유저타입가져오기
+		String loginedId = (String) session.getAttribute("loginInfo");// 로그인한 유저의 아이디 가져오기
 
 		if (loginedUserType == null) {// 로그인 여부 확인
 			return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.INTERNAL_SERVER_ERROR);

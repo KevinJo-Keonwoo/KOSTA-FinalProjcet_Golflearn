@@ -58,7 +58,7 @@
 		    (SELECT ui.user_nickname
 		  				    FROM lesson_review lr2 LEFT JOIN lesson_line ll ON (lr2.lsn_line_no = ll.lsn_line_no)
 												   LEFT JOIN user_info ui ON (ll.user_id = ui.user_id)
-					        WHERE lr2.lsn_line_no = lr.lsn_line_no) lsnNickname,
+					        WHERE lr2.lsn_line_no = lr.lsn_line_no) stdtNickname,
 		  lr.review, lr.review_dt, lr.review_edit_dt
 	FROM lesson l JOIN user_info u ON (l.user_id = u.user_id)
 			      JOIN pro_info p ON (u.user_id = p.user_id)

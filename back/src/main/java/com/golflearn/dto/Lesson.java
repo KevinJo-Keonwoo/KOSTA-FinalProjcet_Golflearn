@@ -37,7 +37,7 @@ public class Lesson {
 
 	private float lsnStarScore;	//레슨별점(DB존재X) -레슨상세보기페이지
 	private float proStarScore;	//프로별점(DB존재X) -레슨상세보기페이지
-	private String stdtNickname;//수강생닉네임(DB존재X) -레슨상세보기페이지 서브쿼리구문
+	
 	private int lsnStarPoint;
   
 	private List<LessonClassification> lsnClassifications;
