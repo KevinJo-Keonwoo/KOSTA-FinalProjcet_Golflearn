@@ -9,7 +9,7 @@
 		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<script src="https://www.w3schools.com/lib/w3.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<link href="../css/resaledetail.css">
+	<link href="../css/resaledetail.css" rel="stylesheet">
 	<link href="../css/index.css" rel="stylesheet">
 	<script src="../jq/resaledetail.js"></script>
 	<title>Golflearn</title>
@@ -25,7 +25,9 @@
 			<header>
 				<h2>중고거래 상세</h2>
 			</header>
-			<div class="board-like">⭐️</div>
+			<div class="board-like">
+				<input type="radio"><label for="rate">🧡</label>
+			</div>
 			<div class="header-container">
 				<div class="board__content__title"></div>
 				<div class="board__content__nickname"></div>
@@ -55,7 +57,7 @@
 			</div>
 			<div class="comment-write">
 				<input type="text">
-				<button>댓글작성</button>
+				<button class="bt__cmt-write">댓글작성</button>
 			</div>
 			<div class="comment-list">
 				<div class="comment-content">
@@ -73,9 +75,8 @@
 
 					<div class="recomment-write">
 						<input type="text">
-						<button>대댓글작성</button>
+						<button class="bt__recmt-write">대댓글작성</button>
 					</div>
-					-----------------------------------------
 				</div>
 
 			</div>

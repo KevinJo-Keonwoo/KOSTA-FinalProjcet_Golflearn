@@ -131,7 +131,7 @@
                     //localStorage.getItem("loginedNickname")
                     // 세션 아이디와 좋아요 한 닉네임이 같으면
                     likeNo = like.resaleLikeNo;
-                    // likedNickname = likeNickname;
+                    likedNickname = likeNickname;
                     // console.log("좋아요 한 사람 & 로그인 된 사람" + likedNickname);
                     // console.log("좋아요 번호 : " + likeNo);
                 } // each 의 if문
@@ -357,9 +357,9 @@
     $("div.board-like").on("click", function () {
         // console.log("보드 넘버는" + resaleBoardNo);
         // 좋아요 여부
-        // console.log("좋아요한 닉넴" + likedNickname);
+        console.log("좋아요한 닉넴" + likedNickname);
         // console.log("좋아요 번호 " + likeNo);
-        if (likedNickname == localStorage.getItem("loginedNickname")) {
+        if (likedNickname == loginedNickname) {
         // localStorage.getItem("loginedNickname")
         // 세션 아이디와 좋아요 한 닉네임이 같으면
         // 좋아요 삭제
@@ -385,24 +385,30 @@
             },
         });
         } else { // 세션 아이디와 좋아요한 닉네임이 같지 않으면
-        let obj = { resaleBoardNo: resaleBoardNo };
-        //좋아요 클릭
-        $.ajax({
-            url: "http://localhost:1126/backresale/resale/like/add",
-            method: "post",
-            contentType: "application/json",
-            data: JSON.stringify(obj),
-            success: function (jsonObj) {
-            if ((jsonObj.status = 1)) {
-                alert("좋아요 추가 성공");
-                location.reload();
-            }
-            },
-            error: function (jqXHR) {
-                alert(jqXHR.status + ":" + "좋아요 추가 실패");
-                location.reload();
-            }, //error
-        }); // ajax
+            console.log("rmfqjsgh"+resaleBoardNo);
+            let obj = { 
+                resaleBoard: {
+                    resaleBoardNo : resaleBoardNo
+                },
+                userNickname : loginedNickname
+            };
+            //좋아요 클릭
+            $.ajax({
+                url: "http://localhost:1126/backresale/resale/like/add",
+                method: "post",
+                contentType: "application/json",
+                data: JSON.stringify(obj),
+                success: function (jsonObj) {
+                if ((jsonObj.status = 1)) {
+                    alert("좋아요 추가 성공");
+                    location.reload();
+                }
+                },
+                error: function (jqXHR) {
+                    alert(jqXHR.status + ":" + "좋아요 추가 실패");
+                    location.reload();
+                }, //error
+            }); // ajax
         } //else 끝
     }); //클릭 끝
      // -------- 좋아요 추가, 삭제 END ---------
