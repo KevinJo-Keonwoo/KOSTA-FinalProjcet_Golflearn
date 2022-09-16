@@ -32,6 +32,7 @@ public class LessonLineController {
 	@GetMapping(value = "student") //userId로 가는것이 맞나? 
 	public ResultBean<LessonLine> myPage(HttpSession session) {
 		ResultBean<LessonLine> rb = new ResultBean<>();
+		//테스트주석
 //		String userId = (String)session.getAttribute("loginInfo");
 		String userId = "zzeonsh@gmail.com";
 		try {
@@ -49,7 +50,9 @@ public class LessonLineController {
 	@GetMapping(value = "pro")
 	public ResultBean<Lesson> myProPage(HttpSession session){
 		ResultBean<Lesson> rb = new ResultBean<>();
-		String userId = (String)session.getAttribute("loginInfo");
+		//테스트주석
+//		String userId = (String)session.getAttribute("loginInfo");
+		String userId = "ohpro@gmail.com";
 		try {
 			List<Lesson> lesson = service.proLessonList(userId);
 			rb.setStatus(1);

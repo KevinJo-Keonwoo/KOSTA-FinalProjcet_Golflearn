@@ -14,6 +14,11 @@
 		</association>
 	</association>
 </resultMap>
+<resultMap type="Lesson" id="LessonMap" autoMapping="true">
+	<id property="lsnNo" column="lsn_no"/>
+	<result property="lsnTitle" column="lsn_title"/>
+	<result property="lsnStatus" column="lsn_status"/>
+</resultMap>
   <select id="selectById" resultMap="LessonLineMap" parameterType="string" >
 	SELECT ll.lsn_line_no, le.lsn_no, le.lsn_title, ll.lsn_exp_dt,
 	        ll.stdt_lsn_status, lr.my_star_score
@@ -24,7 +29,7 @@
 	WHERE ll.user_id = #{userId} 
 	ORDER BY ll.lsn_line_no
   </select>
-  <select id="selectByProId" resultType="Lesson" parameterType="string">
+  <select id="selectByProId" resultMap="LessonMap" parameterType="string">
   	SELECT lsn_no, lsn_title, lsn_status
 	FROM lesson
 	WHERE user_id = #{userId}

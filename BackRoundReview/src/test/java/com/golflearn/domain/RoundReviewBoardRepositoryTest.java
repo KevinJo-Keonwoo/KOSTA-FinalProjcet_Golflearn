@@ -55,40 +55,40 @@ class RoundReviewBoardRepositoryTest {
 //		List<RoundReviewBoardEntity> list = repo.findListByLike(startRow, endRow);
 	}
 	
-	@Test
-	void testFindDetail() throws FindException {
-		Long roundReviewBoardNo = 1L;
-		Optional<RoundReviewBoardEntity> entity= repo.findById(roundReviewBoardNo);
-		assertEquals("true", entity.isPresent());
+//	@Test
+//	void testFindDetail() throws FindException {
+//		Long roundReviewBoardNo = 1L;
+//		Optional<RoundReviewBoardEntity> entity= repo.findById(roundReviewBoardNo);
+//		assertEquals("true", entity.isPresent());
 //		List<RoundReviewBoardEntity> list = repo.findDetail(roundReviewBoardNo);
 //		assertEquals(entity.getRoundReviewBoardNo(), entity.getRoundReviewBoardNo());
 //		assertEquals(entity.getUserNickname(), "쩐승");
 //		assertEquals(entity.getRoundReviewComment().getRoundReviewCmtNo(), 1);
 //		assertEquals(entity.getRoundReviewComment().getRoundReviewCmtNo(), 2);
-	}
+//	}
 	
-	@Test
-	@Transactional
+//	@Test
+//	@Transactional
 //	@Rollback(false)
-	void testDeleteComments() throws RemoveException {
-		Long roundReviewBoardNo = 5L;
-		commentRepo.deleteComments(roundReviewBoardNo);
-	}
-	
-	@Test
-	@Transactional
-	void testDeleteRecomment() throws RemoveException {
-		Long roundReviewCmtNo = 9L;
-		commentRepo.deleteRecomment(roundReviewCmtNo);
-	}
-	
-	@Test
-	@Transactional
-	void testDeleteLike() throws RemoveException {
-		Long roundReviewBoardNo = 1L;
-		String userNickname = "dd";
-		likeRepo.deleteLike(roundReviewBoardNo, userNickname);
-	}
+//	void testDeleteComments() throws RemoveException {
+//		Long roundReviewBoardNo = 5L;
+//		commentRepo.deleteComments(roundReviewBoardNo);
+//	}
+//	
+//	@Test
+//	@Transactional
+//	void testDeleteRecomment() throws RemoveException {
+//		Long roundReviewCmtNo = 9L;
+//		commentRepo.deleteRecomment(roundReviewCmtNo);
+//	}
+//	
+//	@Test
+//	@Transactional
+//	void testDeleteLike() throws RemoveException {
+//		Long roundReviewBoardNo = 1L;
+//		String userNickname = "dd";
+//		likeRepo.deleteLike(roundReviewBoardNo, userNickname);
+//	}
 	
 	@Test
 	void testFindWord() throws FindException {

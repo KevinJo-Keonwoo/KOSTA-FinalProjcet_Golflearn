@@ -29,7 +29,7 @@ public class LessonLineService {
 	
 	public List<Lesson> proLessonList(String userId) throws FindException{
 		List<Lesson> lessonList = repository.selectByProdId(userId);
-		return null; 
+		return lessonList; 
 	}
 //	
 //	/**

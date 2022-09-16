@@ -1,11 +1,13 @@
 package com.golflearn.control;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -31,7 +33,7 @@ public class LessonReviewController {
 	private LessonReviewService service;
 	
 	@GetMapping(value = "new") //userId로 가는것이 맞나? 
-	public ResultBean<Lesson> newReview(@RequestParam int lsnLineNo) {
+	public ResultBean<Lesson> newReview(@RequestParam("lsn_line_no") int lsnLineNo) {
 		ResultBean<Lesson> rb = new ResultBean<>();
 		try {
 			Lesson lesson = service.newReview(lsnLineNo);
@@ -45,7 +47,7 @@ public class LessonReviewController {
 		return rb;
 	}
 	@GetMapping(value = "previous") 
-	public ResultBean<LessonLine> previous(@RequestParam int lsnLineNo){
+	public ResultBean<LessonLine> previous(@RequestParam("lsn_line_no") int lsnLineNo){
 		ResultBean<LessonLine> rb = new ResultBean<>();
 		try {
 			LessonLine lessonLine = service.previousReview(lsnLineNo);
@@ -59,9 +61,25 @@ public class LessonReviewController {
 		return rb;
 	}
 	@PostMapping(value = "write", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> write(@RequestBody LessonReview lsnReview) {
+	public ResponseEntity<?> write(@ModelAttribute LessonReview lsnReview, @ModelAttribute LessonLine lsnLine) {
 		try {
-			service.writeReview(lsnReview);
+//			Logger.getLogger("레슨라인넘버 = " + lsnLine.getLsnLineNo());
+//			LessonLine line = new LessonLine(); 
+//			line.setLsnLineNo(lsnLine.getLsnLineNo());
+//			lsnReview.setLsnLine(line);
+//			Logger.getLogger("레슨라인넘버 = " + line.getLsnLineNo());
+			LessonReview review = new LessonReview();
+			review.setMyStarScore(lsnReview.getMyStarScore());
+			review.setReview(lsnReview.getReview());
+			LessonLine line = new LessonLine();
+			line.setLsnLineNo(7);
+			
+			review.setLsnLine(line);
+			
+			
+			
+//			service.writeReview(lsnReview);
+			service.writeReview(review);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AddException e) {
 			e.printStackTrace();

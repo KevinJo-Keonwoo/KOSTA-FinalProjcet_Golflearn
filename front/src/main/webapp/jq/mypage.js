@@ -65,48 +65,21 @@ $(function(){
         method : 'get',
         success : function(jsonObj){
             if (jsonObj.status ==1){
-
-                let mypageObj = jsonObj.lt;
-                let lsn_no = "";
-                let lsn_title = "";
-                
-                $(mypageObj).each(function(index, lsnLine){
-                    $(mypageObj.lsns).each(function(index,lsns){
-                        let lsn_no = lsns.lsnNo;
-                        console.log(lsn_no);
-                        let lsn_title = lsns.lsnTitle;
-                        console.log(lsn_no);
-                    })
-                    console.log(lsnLine.lsns.lsn_no);
-                });
-                
-                
+                let lsnLineObj = jsonObj.lt;
                 let $lsnLine = $("div.content").first();
                 $lsnLine.show();
-
                 $("div.content").not($lsnLine).remove();
                 let $lsnLineParent = $lsnLine.parent();
-                
-                $(mypageObj).each(function(index, lsnLine){
+                $(lsnLineObj).each(function(index, lsnLine){
                     let $lsnLineCopy = $lsnLine.clone();
-                    
-                    let lsn_line_no = lsnLine.lsnLineNo;
-                    
-                    $lsnLineCopy.find("div.no").html(lsn_no);
-                    $lsnLineCopy.find("div.title").html(lsn_title);
-                    // $lsnLineCopy.find("div.current__cnt").html(lsn_cnt_sum);
-                    // let lsn_exp_dt = lsnLine.strLsnExpDt;
-                    // let stdt_lsn_status = lsnLine.stdtLsnStatus;
-                    // let my_star_score = lsnLine.lsns.lsnReview.myStarScore;
-                    // let crnt_lsn_cnt = lsnLine.crntLsnCnt;
 
-                    // $lsnLineCopy.find("div.no").html(lsn_line_no);
-                    // $lsnLineCopy.find("div.no").html(lsn_line_no);
+                    $lsnLineCopy.find("div.no").html(lsnLine.lsn.lsnNo);
+                    $lsnLineCopy.find("div.title").html(lsnLine.lsn.lsnTitle);
 
                     $lsnLineParent.append($lsnLineCopy);
                 });
                 $("div.content").first().hide();
-                
+
                 /*
                 let jsonarr = jsonObj.ll;
                 let $lsnObj = $('div.tr');
@@ -166,7 +139,7 @@ $(function(){
     $lsnListObj.on('click', 'input[value=레슨후기작성]', function(){
         let $lsnLineNoObj = $(this).parent().find('div.no');
         let lsn_line_no = $lsnLineNoObj.html();
-        location.href = "/front/html/review.html?reviewCnt=0&lsn_line_no=" + lsn_line_no;
+        location.href = "../html/review.html?reviewCnt=0&lsn_line_no=" + lsn_line_no;
     });
     
     // <input type="button" class = "add_review" value="레슨후기작성">
@@ -180,6 +153,6 @@ $(function(){
     $lsnListModiObj.on('click', 'input[value=레슨후기수정]', function(){
         let $lsnLineNoObj = $(this).parent().find('div.no');
         let lsn_line_no = $lsnLineNoObj.html();
-        location.href = "/front/html/review.html?reviewCnt=1&lsn_line_no=" + lsn_line_no;
+        location.href = "../html/review.html?reviewCnt=1&lsn_line_no=" + lsn_line_no;
     });
 })

@@ -23,7 +23,7 @@ public class LessonLine {
 	private int stdtLsnStatus;
 	private UserInfo userInfo;
 	private Lesson lsn;
-//	private List<Lesson> lsns;
+	private List<Lesson> lsns;
 	private LessonReview lsnReview;
 	private Payment payment;
 	private int lsnCnt;

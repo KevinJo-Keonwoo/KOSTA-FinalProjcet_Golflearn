@@ -88,29 +88,30 @@ public class LessonController {
 		}
 	}
 
-	@GetMapping(value = {"history", "history/{optCp}"}) // 프로의 레슨내역에서 레슨번호에 대한 히스토리
-	public ResultBean<LessonLine> viewHistory(@PathVariable int optCp, HttpSession session) {
-		ResultBean<LessonLine> rb = new ResultBean<>();
-		// 로그인 여부를 받아와야한다 HttpSession?
-		String loginedId = (String) session.getAttribute("loginInfo");
-		if (loginedId == null) {
-			rb.setStatus(0);
-			rb.setMsg("로그인하세요");
-			return rb;
-		} else {
-			try {
-				List<Lesson> lessons = service.viewMain();
-				rb.setStatus(1);
-				rb.setLt(lessons);
-				return rb;
-			} catch (FindException e) {
-				e.printStackTrace();
-				rb.setStatus(-1);
-				rb.setMsg(e.getMessage());
-				return rb;
-			}
-		}
-	}
+  //임시주석 ㅇㅇㄻㄹㄴㅇㄹ
+//	@GetMapping(value = {"history", "history/{optCp}"}) // 프로의 레슨내역에서 레슨번호에 대한 히스토리
+//	public ResultBean<LessonLine> viewHistory(@PathVariable int optCp, HttpSession session) {
+//		ResultBean<LessonLine> rb = new ResultBean<>();
+//		// 로그인 여부를 받아와야한다 HttpSession?
+//		String loginedId = (String) session.getAttribute("loginInfo");
+//		if (loginedId == null) {
+//			rb.setStatus(0);
+//			rb.setMsg("로그인하세요");
+//			return rb;
+//		} else {
+//			try {
+//				List<Lesson> lessons = service.viewMain();
+//				rb.setStatus(1);
+//				rb.setLt(lessons);
+//				return rb;
+//			} catch (FindException e) {
+//				e.printStackTrace();
+//				rb.setStatus(-1);
+//				rb.setMsg(e.getMessage());
+//				return rb;
+//			}
+//		}
+//	}
 
 	@Value("${spring.servlet.multipart.location}")
 	String saveDirectory;// 파일경로생성
