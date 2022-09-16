@@ -43,7 +43,7 @@ public class ResaleBoardService {
 	ResaleLikeRepository resaleLikeRepo;
 
 
-	private static final int CNT_PER_PAGE = 5; // 페이지별 보여줄 목록 수 
+//	private static final int CNT_PER_PAGE = 5; // 페이지별 보여줄 목록 수 
 	/**
 	 * 페이지별 게시글 목록과 페이지 그룹정보를 반환
 	 * @param resaleBoardNo

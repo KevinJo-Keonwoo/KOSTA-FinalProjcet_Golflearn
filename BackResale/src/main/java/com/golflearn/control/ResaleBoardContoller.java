@@ -559,16 +559,16 @@ public class ResaleBoardContoller {
 	 * @return
 	 */
 	@PostMapping(value = "like/add", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResultBean<ResaleLikeDto> addLike(ResaleLikeDto likeDto,
-			@RequestBody ResaleBoardDto boardDto,
-			HttpSession session){
+	public ResultBean<ResaleLikeDto> addLike(@RequestBody ResaleLikeDto likeDto){
+//			@RequestBody ResaleBoardDto boardDto){
 
 		//		String loginedNickname = (String) session.getAttribute("loginNickname");
-		String loginedNickname = "데빌";
+//		String loginedNickname = "데빌";
 		ResultBean<ResaleLikeDto> rb = new ResultBean<>();
 		try {
-			likeDto.setUserNickname(loginedNickname);
-			likeDto.setResaleBoard(boardDto);
+//			likeDto.setUserNickname(likeDto.);
+			
+//			likeDto.setResaleBoard(boardDto);
 			service.addLike(likeDto);
 			rb.setStatus(1);
 			rb.setMsg("좋아요 추가 성공");
