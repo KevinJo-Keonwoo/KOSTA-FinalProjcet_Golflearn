@@ -23,6 +23,7 @@ $(function(){
 			let lsn_intro = lesson.lsnIntro;//레슨소개
 			let pro_intro = lesson.userInfo.proInfo.proCareer;//프로소개
 
+
 			$('div.viewlesson>img').attr('src', '../lsn_images/' + queryString + '_LessonThumbnail.jpg').attr('alt', lsn_title);
 			$('div.viewlesson ul>div>li>span.loc_no').html(loc_no);	//지역은 api로 넘어갈때 수정
 			$('div.viewlesson ul>div>li>span.lsn_title').html(lsn_title);
@@ -30,6 +31,16 @@ $(function(){
 			$('div.viewlesson ul>div>li>span.lsn_review_cnt').html(lsn_review_cnt);
 			$('div.viewlesson ul>div>li>span.user_name').html(user_name);
 			$('div.viewlesson ul>div>li>span.pro_star_score').html(pro_star_score);
+
+			let lsn_cnt_sum = lesson.lsnCntSum;
+			let lsn_per_time = lesson.lsnPerTime + '분';
+			let lsn_days = lesson.lsnDays + '일';
+			let lsn_lv = lesson.lsnLv;
+			$('div.viewlesson ul>div>li>span.lsn_cnt_sum').html(lsn_cnt_sum);
+			$('div.viewlesson ul>div>li>span.lsn_per_time').html(lsn_per_time);
+			$('div.viewlesson ul>div>li>span.lsn_days').html(lsn_days);
+			$('div.viewlesson ul>div>li>span.lsn_lv').html(lsn_lv);
+
 			$('div.lsn_intro').html(lsn_intro);
 			$('div.pro_intro').html(pro_intro);
 
