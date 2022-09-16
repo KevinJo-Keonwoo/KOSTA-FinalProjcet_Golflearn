@@ -1,5 +1,24 @@
+.search{
+    display: flex;
+    justify-content: flex-end;
+}
+.order{
+    display:flex;
+    flex-direction: row;
+}
+li{
+    width: 100px;
+    height: 25px;
+}
+.write{
+    display: flex;
+}
 .board-list {
     /* margin: 0 auto; */
+    width : 100%;
+}
+.board-header{
+    width : 100%;
 }
 .board-header__bar{
     display: flex;
@@ -26,7 +45,7 @@
     justify-content: space-around;
     align-items: flex-start;
     text-align: center;
-    height: 170px;
+    height: 300px;
     width: 80%;
     margin: 0 auto;
     border-bottom: 1px solid #64DB99;
@@ -38,18 +57,89 @@
 .board-list__content:nth-last-child(1) {
     border: none;
 }
+.board-list__content:nth-last-child(1){
+    line-height: 240px;
+}
+.board-list__content:nth-child(odd){
+    background-color: rgba(243, 253, 185, 0.2);
+    /* opacity: 0.5; */
+}
+/* .board-list:nth-child(even){
+    background-color: aquamarine;
+} */
 
-.board-list__content > div {
+.board-list__content > div.board-list__content__no {
     width: 10%;
     height:100%;
 }
+.board-list__content > img.board-list__content__image {
+    width: 25%;
+    height: 100%;
+    object-fit: fill;
+}
+.board-list__content > div.board-list__content__title {
+    width: 25%;
+    height:100%;
+}
+.board-list__content > div.board-list__content__cmt-cnt {
+    width: 5%;
+    height:100%;
+}
+.board-list__content > div.board-list__content__nickname {
+    width: 10%;
+    height:100%;
+}
+.board-list__content > div.board-list__content__dt {
+    width: 10%;
+    height:100%;
+}
+.board-list__content > div.board-list__content__view-cnt {
+    width: 10%;
+    height:100%;
+}
+.board-list__content > div.board-list__content__like-cnt {
+    width: 10%;
+    height:100%;
+}
+
+.board-header__bar > p.no{
+    width: 10%;
+    height:100%;
+}
+.board-header__bar > p.img{
+    width: 25%;
+    height:100%;
+}
+.board-header__bar > p.title{
+    width: 25%;
+    height:100%;
+}
+.board-header__bar > p.cmt-cnt{
+    width: 5%;
+    height:100%;
+}
+.board-header__bar > p.nickname{
+    width: 10%;
+    height:100%;
+}
+.board-header__bar > p.dt{
+    width: 10%;
+    height:100%;
+}
+.board-header__bar > p.view-cnt{
+    width: 10%;
+    height:100%;
+}
+.board-header__bar > p.like-cnt{
+    width: 10%;
+    height:100%;
+}
+
+
+
 
 .board-list__content > div > img {
     width:100%;
     height:100%;
     object-fit:cover;
-}
-div.board-list__content>img {
-    width : 100px;
-    height : 100px;
 }

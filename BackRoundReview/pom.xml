@@ -16,6 +16,7 @@
 	<description>Golflearn project</description>
 	<properties>
 		<java.version>1.8</java.version>
+		<docker.image.prefix>roundreview</docker.image.prefix>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -110,6 +111,30 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<!--
+			<plugin>
+			  <groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.13</version>
+				<configuration>
+					<repository>${docker.image.prefix}/${project.artifactId}</repository>
+					<tag>${project.version}</tag>
+					<buildArgs>
+						<WAR_FILE>target/${project.build.finalName}.war</WAR_FILE>
+					</buildArgs>						
+				</configuration>
+				<executions>
+					<execution>
+						<id>default</id>
+						<phase>install</phase>
+						<goals>
+							<goal>build</goal>
+							<<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>-->
+			
 		</plugins>
 	</build>
 

@@ -61,33 +61,20 @@ public class LessonReviewController {
 		return rb;
 	}
 	@PostMapping(value = "write", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> write(@ModelAttribute LessonReview lsnReview, @ModelAttribute LessonLine lsnLine) {
+	public ResponseEntity<?> write(@ModelAttribute LessonReview lsnReview, @RequestParam("lsn_line_no") int lsnLineNo) {
 		try {
-//			Logger.getLogger("레슨라인넘버 = " + lsnLine.getLsnLineNo());
-//			LessonLine line = new LessonLine(); 
-//			line.setLsnLineNo(lsnLine.getLsnLineNo());
-//			lsnReview.setLsnLine(line);
-//			Logger.getLogger("레슨라인넘버 = " + line.getLsnLineNo());
-			LessonReview review = new LessonReview();
-			review.setMyStarScore(lsnReview.getMyStarScore());
-			review.setReview(lsnReview.getReview());
 			LessonLine line = new LessonLine();
-			line.setLsnLineNo(7);
-			
-			review.setLsnLine(line);
-			
-			
-			
-//			service.writeReview(lsnReview);
-			service.writeReview(review);
+			line.setLsnLineNo(lsnLineNo);
+			lsnReview.setLsnLine(line);
+			service.writeReview(lsnReview);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AddException e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("내용은 필수 입력 사항입니다", HttpStatus.BAD_REQUEST);
 		}
 	}
-	@PutMapping(value = "{lsnLineNo}")  //수정하기 코드이상할 수 있음 
-	public ResponseEntity<?> modify(@PathVariable int lsnLineNo, @RequestBody LessonReview lsnReview) {
+	@PutMapping(value = "modify", produces = MediaType.APPLICATION_JSON_VALUE)  //수정하기 코드이상할 수 있음 
+	public ResponseEntity<?> modify(@RequestBody LessonReview lsnReview) {
 		//front에서 누른 lsnLineNo받아서 가져오기 
 //		LessonLine lsnLine = new LessonLine();
 		

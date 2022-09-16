@@ -51,12 +51,81 @@ $(function(){
                 //카카오맵
                 let latitude = roundReview.roundReviewBoardLatitude;
                 let longitude = roundReview.roundReviewBoardLongitude;
-                let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-                let options = { //지도를 생성할 때 필요한 기본 옵션
-                center: new kakao.maps.LatLng(latitude, longitude), //지도의 중심좌표.
-                level: 3 //지도의 레벨(확대, 축소 정도)
+                let mapContainer = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+                let mapOption = { //지도를 생성할 때 필요한 기본 옵션
+                    center: new kakao.maps.LatLng(latitude, longitude), //지도의 중심좌표.
+                    level: 3 //지도의 레벨(확대, 축소 정도)
                 };
-                let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+                let map = new kakao.maps.Map(mapContainer, mapOption); //지도 생성 및 객체 리턴
+                //마커 위치
+                var markerPosition  = new kakao.maps.LatLng(latitude, longitude); 
+                //마커 생성
+                var marker = new kakao.maps.Marker({
+                    position: markerPosition,
+                    text : "장소"
+                });
+                marker.setMap(map);
+
+                let infowindow = new kakao.maps.InfoWindow({zIndex:1});
+                kakao.maps.event.addListener(marker, 'click', function(mouseEvent){
+                    let msg = "약속장소입니다"
+                    //마커를 클릭하면 장소명이 인포윈도위에 노출 
+                    infowindow.setContent('<div style="padding:5px; font-size:12px;">' + msg + '</div>');
+                    infowindow.open(map, marker);
+                })
+
+                //주소얻기 
+                // let geocoder = new kakao.maps.services.Geocoder();
+                
+                // searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+                // kakao.maps.event.addListener(map, 'click', function(mouseEvent){
+                //     searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
+                //         if (status === kakao.maps.services.Status.OK) {
+                //             var detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
+                //             detailAddr += '<div>지번 주소 : ' + result[0].address.address_name + '</div>';
+                            
+                //             var content = '<div class="bAddr">' +
+                //                             '<span class="title">법정동 주소정보</span>' + 
+                //                             detailAddr + 
+                //                         '</div>';
+                
+                //             // 마커를 클릭한 위치에 표시합니다 
+                //             marker.setPosition(mouseEvent.latLng);
+                //             marker.setMap(map);
+                
+                //             // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
+                //             infowindow.setContent(content);
+                //             infowindow.open(map, marker);
+
+                //         }
+                //     });
+                // });
+                // kakao.maps.event.addListener(map, 'idle', function() {
+                //     searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+                // });
+                // function searchAddrFromCoords(coords, callback) {
+                //     // 좌표로 행정동 주소 정보를 요청합니다
+                //     geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);         
+                // }
+                // function searchDetailAddrFromCoords(coords, callback) {
+                //     // 좌표로 법정동 상세 주소 정보를 요청합니다
+                //     geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+                // }
+                
+                // // 지도 좌측상단에 지도 중심좌표에 대한 주소정보를 표출하는 함수입니다
+                // function displayCenterInfo(result, status) {
+                //     if (status === kakao.maps.services.Status.OK) {
+                //         var infoDiv = document.getElementById('centerAddr');
+                
+                //         for(var i = 0; i < result.length; i++) {
+                //             // 행정동의 region_type 값은 'H' 이므로
+                //             if (result[i].region_type === 'H') {
+                //                 infoDiv.innerHTML = result[i].address_name;
+                //                 break;
+                //             }
+                //         }
+                //     }    
+                // }
             }else {
 
             }

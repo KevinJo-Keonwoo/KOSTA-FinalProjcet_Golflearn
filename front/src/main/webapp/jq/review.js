@@ -14,7 +14,6 @@ $(function(){
     //마이페이지에서 넘어올때 상태값 주고 querystring 으로 받기
     let params = location.search.substring(1).split('&');
     let review_exist = params[0].split("=")[1];
-    console.log(review_exist);
     //테스트 주석
     let lsn_line_no = params[1].split("=")[1]; 
     // let lsn_line_no = 1; 
@@ -32,18 +31,20 @@ $(function(){
                 $titleObj.html(lsn_title);
                 $lineNoObj.val(lsn_line_no);
                 
+                $("input.modify").hide();  
                 $("img.lsn__img").attr("src","../lesson_images/" + lsn_no + ".PNG");
                 //나중에 구현하기 
                 // let imgLine = '<img src = "../lsn_images/' + lsn_no + '.jpg" alt="' + lsn_no + '번째레슨">'
                 
                 // $lineNoObj.html(lsn_line_no);
                 console.log("작성으로 왔다");
+                review_exist = 0;
             },
             error : function(jqXHR){
                 alert('오류 : ' + jqXHR.status);
             }
         });
-    }else{ //후기조회요청 후기존재  
+    }else{ //후기조회요청 후기존재
         $.ajax({
             url : "http://localhost:1124/back/review/previous",
             method : 'get',
@@ -57,9 +58,15 @@ $(function(){
                 $titleObj.html(lsn_title);
                 $lineNoObj.val(lsn_line_no);
                 $reviewObj.val(review);
-
+                
+                $("input.submit").hide();  
                 $("img.lsn__img").attr("src","../lesson_images/" + lsn_no + ".PNG");
                 console.log("조회로 왔다");
+
+                // $("form.submit").attr("class", "modify");
+                // $("form.submit").attr("method", "put");
+                // $("form.submit").attr("action", "http://localhost:1124/back/review/modify");
+                // review_exist = 1;
             },
             error : function(jqXHR){
                 alert('오류 : ' + jqXHR.status);
@@ -69,55 +76,63 @@ $(function(){
 
     //나중에 타이틀클릭하면 상세내용 페이지로? ->click
     //2) 제출 클릭시  addreview
-    let $form = $('form.submit');
-    $form.submit(function(){
-        let data = $(this).serialize();
-        let lsn_line_no = $(div.lsn_line_no);
-        data.set("lsn_line_no", lsn_line_no);
-        console.log(data);
-        $.ajax({
-            url : "http://localhost:1124/back/review/write",
-            method : 'post',
-            data : data,
-            success : function(jsonObj){
-                alert(data);
-            },
-            error : function(jqXHR){
-                alert('오류 : ' + jqXHR.status);
-            }
+    console.log(review_exist);
+    if(review_exist == 0){
+        let $form = $('form.submit');
+        $form.submit(function(){
+            let data = $(this).serialize();
+            let lsn_line_no = $(div.lsn_line_no);
+            data.set("lsn_line_no", lsn_line_no);
+            console.log(data);
+            $.ajax({
+                url : "http://localhost:1124/back/review/write",
+                method : 'post',
+                data : data,
+                success : function(jsonObj){
+                    alert(data);
+                },
+                error : function(jqXHR){
+                    alert('오류 : ' + jqXHR.status);
+                }
+            });
+            return false;
         });
-        return false;
-    });
+    } else{
+    //3) 후기 수정 
+        $("input.modify").on('click', function(){
 
-    //3) 이전 클릭시 이전 페이지로 ->click
+            let lsn_line_no = $("input.lsn_line_no").val();
+            console.log(lsn_line_no);
+            let review = $("testarea#review").html();
+
+            console.log(review);
+            let my_star_score = $("fieldset[name=my_star_score]").html();
+            console.log(my_star_score);
+            let obj = {
+                lsnLineNo : lsn_line_no,
+                review : review,
+                myStarScore : my_star_score
+            }
+            $.ajax({
+                url : "http://localhost:1124/back/review/modify",
+                method : 'put',
+                data : JSON.stringify(obj),
+                contentType: "application/json; charset=UTF-8",
+                success : function(){
+                    alert("글 수정 성공");
+                    location.href="../html/roundreviewboardlist.html";
+                },
+                error : function(jqXHR){
+                    alert('오류 : ' + jqXHR.status);
+                }
+            })
+            return false;
+        });
+    }
+    //4) 이전 클릭시 이전 페이지로 ->click
     let $backObj = $('input.back');
     $backObj.click(function(){
         $(location).attr('href', '/front/html/mypage.html');
     });
-
-    //4) 후기 수정 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 });

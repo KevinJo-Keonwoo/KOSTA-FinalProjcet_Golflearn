@@ -15,14 +15,15 @@
 <div w3-include-html="header.html" class="w3"></div>
 <body>
     <section>
-        <div class = "body">
-            <form class = "submit" method="post" action="http://localhost:1124/back/review/write">
+        <form class = "submit" method="post" action="http://localhost:1124/back/review/write">
+            <div class = "body">
                 <h2>레슨후기</h2>
                 <div class = "top">
                     <input type="text" class = "lsn_line_no" name = "lsn_line_no" id = "lsn_line_no" readonly>
                     <div class = "content-left">
                         <div class = "img-box">
-                            <img class = "lsn__img" src = "" alt="">
+                            <img class = "lsn__img" src = "" a
+                            lt="">
                         </div>
                     </div>
                     <div class="content-right">
@@ -47,7 +48,8 @@
                 <div class="review-container">
                     <textarea id = "review" name="review" class ="review_context"></textarea>
                     <input type="button" class="back" value="이전">
-                    <input type="submit" value="제출">
+                    <input type="submit" class="submit" value="제출">
+                    <input type="submit" class="modify" value="수정">
                 </div>
             </div>
         </form>
