@@ -2,10 +2,11 @@ $(function(){
 	//---------------화면 로딩되자마자----------------
 	//레슨정보 서블릿에 보내기
 	// let queryString = location.search.substring(1); 
+	
 	let queryString = location.search.split("=")[1];
 	console.log(queryString);
-	let lsnTitle ;
-	let lsnPrice ;
+	let lsn_title ;
+	let lsn_price ;
 	$.ajax({
 		url: "http://localhost:1124/back/lesson/" + queryString ,
 		method: 'get',
@@ -16,17 +17,18 @@ $(function(){
 				console.log(jsonObj);
 				//레슨간략정보(레슨제목, 레슨별점,,, 등) 서블릿에서 가져오기
 				let loc_no = jsonObj.t.locNo;	//지역코드(ex:11011에 해당하는 주소지역 다 문자로 표현)
-				let lsn_title = jsonObj.t.lsnTitle;
+				lsn_title = jsonObj.t.lsnTitle;
 				let lsn_star_score = jsonObj.t.lsnStarScore;
 				let lsn_review_cnt = jsonObj.t.lsnStarPplCnt; //리뷰갯수
 				let user_name = jsonObj.t.userInfo.userName;	
 				let pro_star_score = jsonObj.t.proStarScore;
 				let lsn_no = jsonObj.t.lsnNo;
+				lsn_price= jsonObj.t.lsnPrice;
 				// let user_id = jsonObj.t.lesson.user.userID;
 				//레슨상세정보(레슨소개, 프로소개) 서블릿에서 가져오기
 				let lsn_intro = jsonObj.t.lsnIntro;
 				let pro_intro = jsonObj.t.userInfo.proInfo.proCareer;
-				let lsn_price = jsonObj.t.lsnPrice;
+				// let lsn_price = jsonObj.t.lsnPrice;
 			
 			// $('div.viewlesson>img').attr('src', '../lsn_images/' + lsn_no + '_LessonThumbnail.jpg')
 				// .attr('alt', lsn_title);
@@ -37,6 +39,7 @@ $(function(){
 			$('div.viewlesson ul>div>li>span.lsn_review_cnt').html(lsn_review_cnt);
 			$('div.viewlesson ul>div>li>span.user_name').html(user_name);
 			$('div.viewlesson ul>div>li>span.pro_star_score').html(pro_star_score);
+			$('div.viewlesson ul>div>li>span.lsn_price').html(lsn_price);
 			//레슨상세정보 WB에 붙이기
 			$('div.lsn_intro').html(lsn_intro);
 			$('div.pro_intro').html(pro_intro);
@@ -74,33 +77,39 @@ $(function(){
 	},
 });
 
-	console.log("가격" + lsnPrice);
-	console.log("제목" + lsnTitle);
-	// console.log(lsn_price);
 
-	//------------수강신청 버튼 클릭 START-------------
+// console.log(lsn_price);
 
-	//수강신청 버튼 찾기
-	let $btPayment = $("button[name=payment]");
-	
-	//입력된 객체 찾기
-	let pay_method = "";
-	let name = localStorage.getItem("loginedName");
-	console.log(name);
-	let nickname = localStorage.getItem("loginedNickname");
-	let email = localStorage.getItem("loginedId");
-	let phone = localStorage.getItem("loginedPhone");
+//------------수강신청 버튼 클릭 START-------------
 
+//수강신청 버튼 찾기
+let $btPayment = $("button[name=payment]");
 
-	$($btPayment).click(function () {
+//입력된 객체 찾기
+let pay_method = "";
+let name = localStorage.getItem("loginedName");
+// console.log(name);
+let nickname = localStorage.getItem("loginedNickname");
+let email = localStorage.getItem("loginedId");
+let phone = localStorage.getItem("loginedPhone");
+
+$(document).ready(function(){
+
+	// $("div.viewlesson ul>div>li").on("click","div.payment>button",function () {
+		$($btPayment).on("click",function(){
+		console.log(lsn_price);
+		console.log(lsn_title);
+
+		// lsn_price= 5000;
+		// lsn_title= "아아"
 		var IMP = window.IMP; // 생략가능
 		IMP.init("imp84404721"); // 가맹점 식별코드(부여받음)
-
+		
 		IMP.request_pay({
 			pg: "html5_inicis", //이니시스 결제 사용
 			pay_method: "card",
 			merchant_uid: "merchant_" + new Date().getTime(),
-			lsn_title: "주문명:" + lsn_title, //결제창에서 보여질 이름
+			name: lsn_title, //결제창에서 보여질 이름
 			amount: lsn_price, //가격
 			buyer_id: email,
 			buyer_name: name,
@@ -125,6 +134,7 @@ $(function(){
 		}
 		);
 	});
+});
 
 	//------------레슨상세정보 네비바 클릭 START-------------
 	$(document).ready(function(){
