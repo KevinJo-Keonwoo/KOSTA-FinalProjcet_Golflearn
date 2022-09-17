@@ -65,6 +65,7 @@ public class UserInfoService {
 		if(!userInfo.getUserPwd().equals(userPwd)) {
 			throw new FindException();
 		}
+//		System.out.println(userInfo);
 		return userInfo;
 	}
 	
