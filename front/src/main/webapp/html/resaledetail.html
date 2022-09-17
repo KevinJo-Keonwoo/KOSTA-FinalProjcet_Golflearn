@@ -14,6 +14,7 @@
 	<script src="../jq/resaledetail.js"></script>
 	<title>Golflearn</title>
 </head>
+
 <body>
 	<!-- Header-->
 	<header w3-include-html="header.html"></header>
@@ -21,64 +22,90 @@
 	<main>
 		<!-- Nav : 메뉴목록-->
 		<!-- <nav w3-include-html="nav.html"></nav> -->
-		<section>
-			<header>
-				<h2>중고거래 상세</h2>
-			</header>
-			<div class="board-like">
-				<input type="radio"><label for="rate">🧡</label>
-			</div>
-			<div class="header-container">
-				<div class="board__content__title"></div>
-				<div class="board__content__nickname"></div>
-				<div class="board__content__date"></div>
-				<div class="board__content__view_cnt"></div>
-				<div class="board__content__like_cnt"></div>
-			</div>
-			<div class="board-function">
-				<div class="board-content-modify">
-					<button class="bt__board-modify"> 게시글 수정 </button>
+		<section class="contents">
+			<div class="resaleboarddetail">중고거래 상세</div>
+			<div class="detail-container">
+				<!-- <div class="detail-header">
+				</div>	 -->
+				<div class="board-like">
+					<input type="radio" class="like"><label for="rate">🧡</label>
 				</div>
-				<div class="board-content-delete">
-					<button class="bt__board-delete"> 게시글 삭제</button>
+				<div class="board-function">
+					<div class="board-content-modify">
+						<button class="bt__board-modify btn btn-outline-warning"> 게시글 수정 </button>
+					</div>
+					<div class="board-content-delete">
+						<button class="bt__board-delete btn btn-outline-danger"> 게시글 삭제</button>
+					</div>
 				</div>
-			</div>
-		</section>
-		<article>
-			<div class="board-container">
-				<div class="board__content__images">
-					<!-- <img src="" alt="" width="30%"; height=" 30%;"> -->
-				</div>
-			</div>
-			<!-- .alll_wrap{margin: 0 auto;}
-				.alll_wrap img{margin: 3px;width: 200px;} -->
-			<div class="board__content">
-			</div>
-			</div>
-			<div class="comment-write">
-				<input type="text">
-				<button class="bt__cmt-write">댓글작성</button>
-			</div>
-			<div class="comment-list">
-				<div class="comment-content">
-					<div class="comment-list__nickname"></div>
-					<div class="comment-list__content"></div>
-					<div class="comment-list__date"></div>
-					<div class="comment-list__no"></div>
-					<div class="comment-list__parentno"></div>
-
-					<div class="comment-content-function">
-						<input type="text">
-						<button class="bt__cmt-modify">댓글수정</button>
-						<button class="bt__cmt-delete">댓글 삭제</button>
-					</div>					
-
-					<div class="recomment-write">
-						<input type="text">
-						<button class="bt__recmt-write">대댓글작성</button>
+				<div class="header-container">
+					<div class="title">
+						<div>제목</div>
+						<div class="board__content__title"></div>
+					</div>
+					<div class="nickname">
+						<div>작성자</div>
+						<div class="board__content__nickname"></div>
+					</div>
+					<div class="dt">
+						<div>작성일</div>
+						<div class="board__content__date"></div>
+					</div>
+					<div class="viewcnt">
+						<div>조회수</div>
+						<div class="board__content__view_cnt"></div>
+					</div>
+					<div class="cmtcnt">
+						<div>댓글수</div>
+						<div class="board__content__cmt_cnt"></div>
+					</div>
+					<div class="likecnt">
+						<div>좋아요수</div>
+						<div class="board__content__like_cnt"></div>
 					</div>
 				</div>
 
+			</div>
+		</section>
+		<article>
+			<div class="detail-contents">
+				<div class="board-container">
+					<div class="board__content">
+					</div>
+					<div class="board__content__images">
+					</div>
+				</div>
+				<div class="comment-write">
+					<input type="text" class="comment-write">
+					<button class="bt__cmt-write btn btn-outline-success">댓글작성</button>
+				</div>
+				<div class="comment-list">
+					<div class="comment-content">
+						<div class="cmt__nickname">
+							<!-- <div>작성자</div> -->
+							<div class="comment-list__nickname"></div>
+						</div>
+						<div class="cmt__dt">
+							<!-- <div>작성일</div> -->
+							<div class="comment-list__date"></div>
+						</div>
+						<div class="cmt__content">
+							<!-- <div>내용</div> -->
+							<div class="comment-list__content"></div>
+						</div>
+						<div class="comment-list__no"></div>
+						<div class="comment-list__parentno"></div>
+						<div class="comment-content-function">
+							<input type="text">
+							<button class="bt__cmt-modify btn btn-outline-warning">댓글수정</button>
+							<button class="bt__cmt-delete btn btn-outline-danger">댓글 삭제</button>
+						</div>
+						<!-- <div class="recomment-write">
+						<input type="text">
+						<button class="bt__recmt-write">대댓글작성</button>
+					</div> -->
+					</div>
+				</div>
 			</div>
 		</article>
 	</main>
