@@ -86,7 +86,7 @@ class UserInfoRepositoryTest {
 	//아이디 조회
 	void testSelectByUserNameAndPhone() throws FindException {
 		String userName = "전승현";
-		String userPhone = "010-4465-9015";
+		String userPhone = "010-7186-5611";
 		
 		String expectedUserId = "zzeonsh@gmail.com";
 		UserInfo userInfo = repository.selectByUserNameAndPhone(userName, userPhone);
