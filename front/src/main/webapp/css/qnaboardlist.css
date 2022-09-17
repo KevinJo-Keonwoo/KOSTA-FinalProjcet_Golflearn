@@ -5,27 +5,72 @@
 * {
 	box-sizing: border-box;
 }
-/*
-div.boardlist{
-	display: table;
-	width:80%;
-	border: 1px solid;
+main {
+	width: 90%;
+    margin: auto;
+	height: 1000px;
 }
-div.boardlist>div.board{
-	display: table-row;
-	width:100%;
+h1 {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 55px;
+    border-bottom: 2px solid rgb(183, 231, 199);
+    margin-right: 60px;
+    margin-left: 60px;
+    padding-bottom: 15px;
 }
+nav.filter-nav{
+	margin-left: 65px;
+    margin-top: 25px;
+}
+nav.filter-nav button {
+	width: 92px;
+    height: 40px;
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(183, 231, 199);
+    box-sizing: border-box;
+    border-radius: 23px;
+    text-align: center;
+    cursor: pointer;
+	font-weight: 300;
+}
+nav.filter-nav button:hover {
+	background-color:rgb(183, 231, 199); 
+	border-color: white;
+	color:black;
+}
+a.btn .btn-primary {
+	margin-left: 410px;
+}
+div.searchInput button {
+	width: 77px;
+    height: 40px;
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(183, 231, 199);
+    box-sizing: border-box;
+    border-radius: 23px;
+    text-align: center;
+    cursor: pointer;
+	font-weight: 300;
+	margin-left: 15px;
 
-div.boardlist>div.board>*{
-	display: table-cell;
-	width: 15%;
-	border: 1px solid;
 }
-div.boardlist>div.board:nth-child(1)>*{
-	vertical-align: middle;
-	text-align: center;
-	font-weight: bold;
-} */
+div.search {
+    margin-top: 30px;
+    margin-left: 45px;
+}
+div.search > div.searchInput {
+	margin-right: 64px;
+    margin-left: 23px;
+}
 
 div.boardlist_outline {
 	width: 100%;
@@ -36,6 +81,23 @@ div.boardlist {
 	table-layout: fixed; /*fixed로 지정하면 셀안에 데이터 값의 길이가 길어져도 셀 너비는 고정되며, 넘치는 데이터값은 줄바꿈처리*/
 	width: 90%;
 	border: 1px solid;
+	margin: auto;
+	margin-top: 10px;
+}
+[type=search] {
+	border: 2px solid rgb(183, 231, 199);
+    width: 25%;
+    height: 35px;
+	outline:none;
+}
+[type=search]:hover {
+	background-color:rgb(183, 231, 199); 
+	border: 1px solid rgb(183, 231, 199);
+	outline:rgb(183, 231, 199); 
+}
+[type=search]::placeholder {
+	color:rgb(97, 97, 97);
+	text-align: center;
 }
 /*행*/
 div.qnaboard {
@@ -55,6 +117,9 @@ div.cell > div.summary {
 	text-align: center;
 	width: 100%;
 }
+div.cell > div.summary:hover {
+	background: rgb(183 231 199 / 54%);
+}
 
 /*모든행의 열의 summary영역의 글번호, 부모글번호, 제목, 작성일자, 작성자ID,조회수 */
 div.qnaboard > div.cell > div.summary > div {
@@ -64,13 +129,13 @@ div.qnaboard > div.cell > div.summary > div {
 	color: #444;
 	line-height: 1.4;
 	font-size: 1em;
-	text-align: center;
+	text-align: left;
+	padding-left:50px;
 }
 /*1행의 열의 summary영역의 글번호, 부모글번호, 제목, 작성일자, 작성자ID,조회수 수평중앙정렬 */
 div.qnaboard:first-child > div.cell > div.summary > div {
 	vertical-align: middle;
-	text-align: center;
-	font-weight: bold;
+	text-align: left;
 }
 
 /*글번호*/
@@ -81,6 +146,7 @@ div.summary > div.board_no {
 /*제목*/
 div.summary > div.board_title {
 	width: 40%;
+	text-align: left;
 }
 /*작성일자*/
 div.summary > div.board_dt {
@@ -105,40 +171,46 @@ div.write-comment {
 /*1행외의 행들 열의 summary에 화살표 배경이미지 */
 /* div.arrow.down -> 여러 클래스에 속성값을 줄 수 있다. */
 /* div.board:not(:first-child)  첫번째 자식값이 아닌것*/
-div.qnaboard:not(:first-child) > div.cell > div.summary > div.arrow.down {
-	width: 10%;
-	background-image: url(../img/btn_arrow_down.png);
-	background-size: 25%;
-	background-position: right center;
-	background-repeat: no-repeat;
-	cursor: pointer;
-}
-div.qnaboard:not(:first-child) > div.cell > div.summary > div.arrow.up {
-	width: 10%;
-	background-image: url(../img/btn_arrow_up.png);
-	background-size: 25%;
-	background-position: right center;
-	background-repeat: no-repeat;
-	cursor: pointer;
-}
 /*--열의 summary영역 END--*/
 /*--열의 detail영역 START--*/
 div.qnaboard > div.cell > div.detail {
 	display: none;
+    text-align: left;
+    padding-left: 50px;
+	display: block;
+    margin-top: 20px;
+	display: block;
+    text-align: left;
+    padding-left: 50px;
 }
+	
 div.detail > div.modifyNremove {
-	display: inline-block;
+	display: block;
+	display: block;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 50px;
 }
 div.detail > div.modifyNremove > * {
-	display: inline-block;
+	display: block;
+}
+
+div.insertNremove {
+	display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 50px;
+    margin-bottom: 20px;
+    margin-left: 20px;
 }
 /*--열의 detail영역 END--*/
 
 /*    */
 div.pagegroup {
-	width: 80%;
-	margin: 10px;
-	text-align: center;
+	width: 100%;
+    margin-top: 70px;
+    text-align: center;
 }
 div.pagegroup > span:not(.disabled) {
 	border: 1px solid;
@@ -149,25 +221,152 @@ div.pagegroup > span:not(.disabled):hover {
 	cursor: pointer;
 }
 
-div.detail {
-    text-align: center;
-}
-div.detail > input.board_content {
+/*div.detail {
+
+}*/
+input.board_content {
 	border: none;
+	margin-left: 30px;
 }
 /*댓글 영역 START*/
-div.comment_detail > input.comment_content {
+input.comment_content {
 	width: 50%;
 	word-break:break-all;
+	margin-top: -26px;
+	height: 300px;
+    width: 462px;
+	margin-left: 30px;
 }
-div.detail>div.div.comment-detail{
-	width: 100%;
+div.detail>div.board-detail{
+	outline: none;
+    border: none;
+    margin-bottom: 30px;
 }
-
-div.comment input[type=text],div.reply textarea, div.comment-detail button{
+div.comment_detail, input.comment_content{
+	border:none;
+}
+div.comment_dt {
+	display: flex;
+    margin-left: 61px;
+}
+div.comment_dt, div.comment_user_nickname {
+    text-align: right;
+    margin-top: 11px;
+    vertical-align: middle;
+    margin: 0 auto;
+}
+div.write-comment input[type=text],div.write-comment textarea, div.comment button{
 	margin: 5px;
 }
-div.comment-detail textarea{
+div.write-comment textarea{
 	resize: none;
 }   
 /*답글 영역 END*/
+div.modify_status{
+	display:none;
+}
+button[name=board-modify-submit]{
+	display:none;
+	width: 60px;
+    height: 40px;
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: 300;
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(183, 231, 199);
+    box-sizing: border-box;
+    border-radius: 23px;
+    text-align: center;
+    cursor: pointer;
+}
+button[name=comment-insert] {
+	display:none;
+}
+button[name=comment-remove]{
+	display:none;
+}
+button[name=board-remove] {
+	margin-left: 30px;
+	width: 60px;
+    height: 40px;
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: 300;
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(183, 231, 199);
+    box-sizing: border-box;
+    border-radius: 23px;
+    text-align: center;
+    cursor: pointer;
+}
+button[name=board-modify] {
+	width: 60px;
+    height: 40px;
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: 300;
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(183, 231, 199);
+    box-sizing: border-box;
+    border-radius: 23px;
+    text-align: center;
+    cursor: pointer;
+}
+/*모달*/
+.btn-primary{
+	width: 92px;
+    height: 40px;
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: 300;
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(183, 231, 199);
+    box-sizing: border-box;
+    border-radius: 23px;
+    text-align: center;
+    cursor: pointer;
+	/*font-weight: 300;
+    margin-left: 720px;*/
+}
+button[name=comment-remove] {
+	display: block;
+    margin-left: 20px;
+	font-weight: 200;
+}
+button[name=comment-insert] {
+	display: block;
+	font-weight: 200;
+}
+div.modal fade show {
+	border:none;
+}
+button:hover {
+	background-color:rgb(183, 231, 199) !important; 
+	border-color: white !important;
+	color:black;
+}
+button:focus, 
+button:active{
+	border:none;
+	outline:none;
+	box-shadow: none;
+	background-color: rgb(183, 231, 199)!important;;
+	color:black;
+}
+.btn-primary:hover {
+	background-color:rgb(183, 231, 199) !important; 
+	border-color: white !important;
+	color:black;
+}
+.btn-primary:focus, 
+.btn-primary:active{
+	border:none;
+	outline:none;
+	box-shadow: none;
+	background-color: rgb(183, 231, 199)!important;;
+	color:black;
+}
