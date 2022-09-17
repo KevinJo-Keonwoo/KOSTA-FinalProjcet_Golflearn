@@ -142,7 +142,7 @@ input.comment-write {
     display: flex;
     justify-content: space-around;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
 
 }
 .comment-content{
@@ -175,6 +175,23 @@ input.comment-write {
 .cmt__dt>div{
     margin:6px;
 }
+.comment-list__content{
+    margin-left:10px;
+}
+.comment-content-function>input {
+    border-radius: 10px;
+    border: 1px solid;
+    text-align: center;
+    min-width: 200px;
+    letter-spacing: 2px;
+    padding: 1%;
+    /* min-width:50% */
+    border: 1px solid #9EB23B;
+    /* border: 2px solid #FAF4B7; */
+    margin-left: 10px;
+}
+
+
 
 /* 버튼 사이의 간격 */
 /* button[name=comment] {
