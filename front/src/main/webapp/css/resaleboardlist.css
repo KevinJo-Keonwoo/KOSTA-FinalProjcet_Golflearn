@@ -48,3 +48,20 @@
     height: 100%;
     object-fit: cover;
 }
+
+div.page-group{
+        display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            width: 40%;
+            margin: 0 auto;
+            /* padding: 0 10px; */
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            /* border-top: 1px solid #64DB99 */
+}
+span:hover{
+    color:red;
+}

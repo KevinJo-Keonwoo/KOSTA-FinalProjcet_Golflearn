@@ -7,37 +7,32 @@ a {
     color: inherit;
 }
 
-/* body {
-    width: 80%;
-    margin-top: 95px;
-} */
-
-hr{
-    border :0.5px solid rgb(183, 231, 199);
+hr {
+    border: 0.5px solid rgb(183, 231, 199);
 }
 
-ul{
-    list-style: none; 
+ul {
+    list-style: none;
 }
 
-div.reviewdetail > ul {
+div.reviewdetail>ul {
     border-bottom: 1px solid rgb(183, 231, 199);
 }
 
-div.lsn div.reviewlist:last-child >div.reviewdetail > ul {
-    border-bottom:none;
+div.lsn div.reviewlist:last-child>div.reviewdetail>ul {
+    border-bottom: none;
 }
 
-li{
+li {
     font-size: 20px;
     padding: 10px 10px 10px 0;
 }
 
-div.lsn div.reviewlist >div.reviewdetail > ul >li {
-    font-size:14px;
+div.lsn div.reviewlist>div.reviewdetail>ul>li {
+    font-size: 14px;
 }
 
-#btn{
+#btn {
     text-align: center;
     padding: 30px;
 }
@@ -49,10 +44,10 @@ section.section1 {
     align-content: flex-end;
     align-items: center;
     justify-content: center;
-    margin-top: 150px;
+    margin-top: 100px;
 }
 
-section.section1 > article > div.viewlesson >img {
+section.section1>article>div.viewlesson>img {
     width: 500px;
     height: 300px;
     object-fit: cover;
@@ -61,44 +56,49 @@ section.section1 > article > div.viewlesson >img {
 
 section.section2 {
     margin-top: 70px;
-    width:80%;
+    width: 80%;
     margin: 0 auto;
     padding-bottom: 70px;
 }
 
-section.section2 > article >div.navi > nav > a.lsndetail {
-    margin:20px;
+section.section2>article>div.navi>nav>a.lsndetail {
+    margin: 20px;
     font-size: 20px;
 }
 
 /*상단가기버튼*/
 .btn_gotop {
-    display:none;
-    position:fixed;
-    bottom:120px;
-    right:30px;
-    z-index:999;
+    display: none;
+    position: fixed;
+    bottom: 120px;
+    right: 30px;
+    z-index: 999;
     /* border:1px solid #ccc; */
-    outline:none;
+    outline: none;
     /* background-color:white; */
     /* color:#333; */
-    cursor:pointer;
-    padding:15px 20px;
-    border-radius:100%;
-} 
+    cursor: pointer;
+    padding: 15px 20px;
+    border-radius: 100%;
+}
 
-.btn_gotop img  {
+.btn_gotop img {
     width: 500px;
     height: 300px;
     object-fit: cover;
     vertical-align: middle;
 }
+
 /*레슨상세정보 서로의 간격*/
 div.detail>fieldset {
     /* padding-top: 10px; */
     margin-top: 3%;
     border: none;
-}    
+}
+
+a.lsndetail:hover {
+    color: rgb(183, 231, 199);
+}
 
 button {
     background-color: white;
@@ -112,14 +112,15 @@ button {
 }
 
 button:hover {
-	background-color:rgb(183, 231, 199);
+    background-color: rgb(183, 231, 199);
 }
 
-.lsnintroduce{
+.lsnintroduce {
     font-size: 26px;
 }
 
-div.lsn_intro, div.pro_intro{
-    font-size:14px;
+div.lsn_intro,
+div.pro_intro {
+    font-size: 14px;
     padding: 10px 0 0 40px;
 }
