@@ -1,7 +1,12 @@
-*{
+* {
     box-sizing: border-box;
 }
-
+.resaleboard {
+    color: #9EB23B;
+    font-size: xx-large;
+    margin-top: 1%;
+    text-align: center;
+}
 .board-header {
     display: flex;
     flex-direction: row;
@@ -12,11 +17,60 @@
     /* padding: 0 10px; */
     text-align: center;
     margin-bottom: 20px;
-    border-bottom: 1px solid #64DB99
+    border-bottom: 1.5px solid #ABCB89
+}
+.search__input {
+    border-radius: 10px;
+    border: 1px solid;
+    text-align: center;
+    min-width: 40px;
+    letter-spacing: 2px;
+    padding: 1%;
+    /* min-width:50% */
+    /* border:1.5px solid #9EB23B; */
+    border:2px solid #FAF4B7;
+
+}
+
+button.search__button {
+    min-width: 7%;
+    border-radius: 10px;
+    text-align: center;
+    /* padding: 2px; */
+    letter-spacing: 2px;
+    border: none;
+    background-color: #FAF4B7;
+    margin-left: 10px;
+    /* margin-top:10px; */
+}
+
+.btn-outline-success {
+    min-width: 7%;
+    height: 35px;
+    border-radius: 10px;
+    margin-bottom: 2%;
+    margin-top: 1%;
+    margin-left: 82%;
+    text-align: center;
+    border: none;
+    background-color: #E7F0D2;
+}
+
+.search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* margin-top:20px; */
+    margin-left: 63%;
 }
 
 .board-header>div {
     width: 10%;
+    margin-bottom: 1%;
+    font-size:large;
+    color: #040804;
 }
 
 .boardlist__content {
@@ -28,7 +82,7 @@
     height: 170px;
     width: 80%;
     margin: 0 auto;
-    border-bottom: 1px solid #64DB99;
+    border-bottom: 3px solid #83B271;
     padding: 20px 0;
     margin-bottom: 20px;
     cursor: pointer;
@@ -36,7 +90,14 @@
 
 .boardlist__content:nth-last-child(1) {
     border: none;
+    /* border-top : 3px solid #64DB99; */
+    border-bottom : 1px solid #83B271
 }
+/* 
+.boardlist__content:parent() {
+    border: none;
+    border-bottom: 4px solid #64DB99
+} */
 
 .boardlist__content>div {
     width: 10%;
@@ -48,3 +109,23 @@
     height: 100%;
     object-fit: cover;
 }
+
+div.page-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 20%;
+    margin: 0 auto;
+    /* padding: 0 10px; */
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    /* border-top: 1px solid #64DB99 */
+}
+
+span:hover {
+    color: red;
+    cursor: pointer;
+}
+
