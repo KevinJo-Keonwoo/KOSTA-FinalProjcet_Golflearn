@@ -46,22 +46,22 @@
             $parent.append(insertHtml);
 
             $("div.board__content__title").html(
-            "제목 : " + detailObj.resaleBoardTitle
+            detailObj.resaleBoardTitle
             );
             $("div.board__content__nickname").html(
-            "작성자 : " + detailObj.userNickname
+            detailObj.userNickname
             );
             $("div.board__content__date").html(
-            "작성일 : " + detailObj.resaleBoardDt
+            detailObj.resaleBoardDt
             );
             $("div.board__content__view_cnt").html(
-            "조회수 : " + detailObj.resaleBoardViewCnt
+            detailObj.resaleBoardViewCnt
             );
-            $("div.board__content__view_cnt").html(
-            "댓글수 : " + detailObj.resaleBoardCmtCnt
+            $("div.board__content__cmt_cnt").html(
+            detailObj.resaleBoardCmtCnt
             );
             $("div.board__content__like_cnt").html(
-            "좋아요수 : " + detailObj.resaleBoardLikeCnt
+            detailObj.resaleBoardLikeCnt
             );
             $("div.board__content").html(detailObj.resaleBoardContent);
             //-------------------------------------
@@ -81,19 +81,19 @@
                 console.log(comment);
                 $commentCopy
                     .find("div.comment-list__nickname")
-                    .html("닉네임 - " + comment.userNickname);
+                    .html(comment.userNickname);
+                $commentCopy
+                        .find("div.comment-list__date")
+                        .html(comment.resaleCmtDt);
                 $commentCopy
                     .find("div.comment-list__content")
-                    .html("댓글 - " + comment.resaleCmtContent);
-                $commentCopy
-                    .find("div.comment-list__date")
-                    .html("작성일 - " + comment.resaleCmtDt);
+                    .html(comment.resaleCmtContent);
                 $commentCopy
                     .find("div.comment-list__no")
-                    .html("댓글번호 - " +comment.resaleCmtNo);
+                    .html(comment.resaleCmtNo);
                 $commentCopy
                     .find("div.comment-list__parentno")
-                    .html("부모댓글번호 - " + comment.resaleCmtParentNo);
+                    .html(comment.resaleCmtParentNo);
 
                 $commnetParent.append($commentCopy);
 
@@ -131,7 +131,7 @@
                     //localStorage.getItem("loginedNickname")
                     // 세션 아이디와 좋아요 한 닉네임이 같으면
                     likeNo = like.resaleLikeNo;
-                    likedNickname = likeNickname;
+                    likedNickname = loginedNickname;
                     // console.log("좋아요 한 사람 & 로그인 된 사람" + likedNickname);
                     // console.log("좋아요 번호 : " + likeNo);
                 } // each 의 if문
@@ -186,38 +186,38 @@
     });
     // --------- 댓글 작성 END ---------
 
-    // --------- 대댓글 작성 START --------
-    console.log("부모댓글번호 : "+ cmtParentNo);
-    $("div.recomment-write>button").on("click", function () {
-        let recmtContent = $("div.recomment-write>input").val();
-        let recmtNickname = loginedNickname;
-        // alert(cmtNickname);
-        let obj = {
-            resaleCmtContent: recmtContent,
-            userNickname: recmtNickname,
-            resaleCmtParentNo : commentParentNo,
-            resaleBoard: { resaleBoardNo: resaleBoardNo },
-        };
-        $.ajax({
-            url: "http://localhost:1126/backresale/resale/comment/write",
-            method: "post",
-            contentType: "application/json",
-            data: JSON.stringify(obj), // userNickname 받아와야함
-            success: function (jsonObj) {
-                if (jsonObj.status == 1) {
-                    console.log(obj);
-                    alert(jsonObj.msg);
-                    location.reload();
-                }
-            },
-            error: function (jsonObj) {
-                alert(jsonObj.msg);
-                location.reload();
-            },
-        });
-        return false;
-    });
-    // --------- 대댓글 작성 END --------
+    // // --------- 대댓글 작성 START --------
+    // console.log("부모댓글번호 : "+ cmtParentNo);
+    // $("div.recomment-write>button").on("click", function () {
+    //     let recmtContent = $("div.recomment-write>input").val();
+    //     let recmtNickname = loginedNickname;
+    //     // alert(cmtNickname);
+    //     let obj = {
+    //         resaleCmtContent: recmtContent,
+    //         userNickname: recmtNickname,
+    //         resaleCmtParentNo : commentParentNo,
+    //         resaleBoard: { resaleBoardNo: resaleBoardNo },
+    //     };
+    //     $.ajax({
+    //         url: "http://localhost:1126/backresale/resale/comment/write",
+    //         method: "post",
+    //         contentType: "application/json",
+    //         data: JSON.stringify(obj), // userNickname 받아와야함
+    //         success: function (jsonObj) {
+    //             if (jsonObj.status == 1) {
+    //                 console.log(obj);
+    //                 alert(jsonObj.msg);
+    //                 location.reload();
+    //             }
+    //         },
+    //         error: function (jsonObj) {
+    //             alert(jsonObj.msg);
+    //             location.reload();
+    //         },
+    //     });
+    //     return false;
+    // });
+    // // --------- 대댓글 작성 END --------
     
     
     //-------- 댓글 수정 START ---------
@@ -225,7 +225,8 @@
         "div.comment-content>div.comment-content-function> button.bt__cmt-modify",
         function(){
             commentNo = $(this).parent().parent().find("div.comment-list__no").text();
-            commentNo = commentNo.split("-")[1].trim();
+            console.log(commentNo+"댓글")
+            // commentNo = commentNo.split("-")[1].trim();
             // console.log("수정댓글번호:" + commentNo1);    
         if(loginedNickname == commentNickname){
             console.log("댓글작성자" + commentNickname);
@@ -272,7 +273,7 @@
         function(){        
             commentNo = $(this).parent().parent().find("div.comment-list__no").text();
             // slice(commentNo)
-            commentNo = commentNo.split("-")[1].trim();
+            // commentNo = commentNo.split("-")[1].trim();
             console.log("삭제 할 댓글번호 : " + commentNo);
             console.log("삭제 할 부모댓글번호 : " + commentParentNo);
             console.log("삭제 할 닉네임 : " + commentNickname);
@@ -354,7 +355,7 @@
 
 
     // -------- 좋아요 추가, 삭제 START ---------
-    $("div.board-like").on("click", function () {
+    $("div.board-like").on("click",function () {
         // console.log("보드 넘버는" + resaleBoardNo);
         // 좋아요 여부
         console.log("좋아요한 닉넴" + likedNickname);

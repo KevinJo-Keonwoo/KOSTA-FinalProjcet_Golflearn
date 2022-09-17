@@ -3,7 +3,7 @@ $(function(){
     let queryString = location.search.split("=")[1];
     let resaleBoardNo = queryString;
     console.log(queryString);
-    let loginedNikcname = localStorage.getItem("loginedNickname");
+    let loginedNickname = localStorage.getItem("loginedNickname");
     $(document).ready(function() {  // 페이지 로딩이 끝나면
         let url = "http://localhost:1124/board/write";
         $('#summernote').summernote({ // summernote 실행
@@ -124,7 +124,7 @@ $(function(){
     // console.log(loginedNickname);
     // // ----- 글 등록 START -----
     // //등록 버튼 객체 찾기
-    let loginedNickname = localStorage.getItem("loginedNickname");
+    // let loginedNickname = localStorage.getItem("loginedNickname");
 
     let $btSubmitBoard = $("div.submit-board>button.submit-board__button");
     // // 버튼 클릭
@@ -167,7 +167,7 @@ $(function(){
                 cache: false, //이미지 다운로드용 설정
                 success: function (data) {
                     alert("등록완료");
-                    location.href= "../html/main.html";
+                    location.href= "../html/resaleboardlist.html";
                 }, // 알럿이랑 href와 같이 동작 안됨
                 error: function (jqXHR) {
                     //응답실패
@@ -196,7 +196,7 @@ $(function(){
         let obj = {
             resaleBoardContent : text,
             resaleBoardTitle : title,
-            userNickname : loginedNikcname,
+            userNickname : loginedNickname,
         };
 
         // if(obj2.size <= 0){
