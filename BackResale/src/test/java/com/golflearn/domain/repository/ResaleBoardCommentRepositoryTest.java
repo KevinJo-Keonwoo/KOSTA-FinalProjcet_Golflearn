@@ -79,7 +79,7 @@ class ResaleBoardCommentRepositoryTest {
 	@Test
 //	@Transactional
 	void testDeleteComments() {
-		Long resaleCommentNo = 30L;
+		Long resaleCommentNo = 106L;
 		Long resaleCmtParentNo = resaleCommentNo;
 
 		Optional<ResaleCommentEntity> optRbC = resaleCommentRepo.findById(resaleCommentNo);
@@ -89,6 +89,13 @@ class ResaleBoardCommentRepositoryTest {
 			System.out.println(rb.toString());
 //			logger.error(rb.toString());
 		});
+	}
+	
+	@Test
+	void tesFindCmtCnt() {
+		Long resaleCommentNo = 106L;
+		Integer cnt = resaleCommentRepo.findReCommentCnt(resaleCommentNo);
+		assertEquals(2, cnt);
 	}
 
 	@Test
@@ -134,19 +141,19 @@ class ResaleBoardCommentRepositoryTest {
 			});
 		}
 		
-		@Test
-		void testResaleCmt() {
-			Long resaleBoardNo = 28L;
-			int cnt = resaleCommentRepo.findParentCmtCnt(resaleBoardNo);
-			int expectedCnt = 4;
-			assertEquals(expectedCnt, cnt);
-		}
-		
-		@Test
-		void testResaleCmtParent() {
-			Long resaleBoardNo = 28L;
-			Long cmtParentNo = resaleCommentRepo.findParentCmtNo(resaleBoardNo);
-			Long expected = 17L;
-			assertEquals(cmtParentNo, expected);
-		}
+//		@Test
+//		void testResaleCmt() {
+//			Long resaleBoardNo = 28L;
+//			int cnt = resaleCommentRepo.findParentCmtCnt(resaleBoardNo);
+//			int expectedCnt = 4;
+//			assertEquals(expectedCnt, cnt);
+//		}
+//		
+//		@Test
+//		void testResaleCmtParent() {
+//			Long resaleBoardNo = 28L;
+//			Long cmtParentNo = resaleCommentRepo.findParentCmtNo(resaleBoardNo);
+//			Long expected = 17L;
+//			assertEquals(cmtParentNo, expected);
+//		}
 }

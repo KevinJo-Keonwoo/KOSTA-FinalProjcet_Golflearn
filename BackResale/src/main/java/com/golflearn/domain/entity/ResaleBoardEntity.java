@@ -84,7 +84,8 @@ public class ResaleBoardEntity {
 	
 	
 	@JsonManagedReference//연관관계의 주인이 아닌 쪽에 선언. 정상적으로 직렬화 수행
-	@OneToMany(mappedBy="resaleBoard",fetch=FetchType.LAZY , cascade=CascadeType.REMOVE) //LAZY
+//    @NotFound(action = NotFoundAction.IGNORE)
+	@OneToMany(mappedBy="resaleBoard",fetch=FetchType.LAZY, cascade=CascadeType.REMOVE) //LAZY
 	//@JoinColumn(name = "resale_board_no")
 	private List<ResaleLikeEntity> resaleLike;
 

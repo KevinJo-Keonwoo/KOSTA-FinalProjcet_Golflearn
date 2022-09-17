@@ -43,7 +43,7 @@ public class ResaleBoardService {
 	ResaleLikeRepository resaleLikeRepo;
 
 
-//	private static final int CNT_PER_PAGE = 5; // 페이지별 보여줄 목록 수 
+	//	private static final int CNT_PER_PAGE = 5; // 페이지별 보여줄 목록 수 
 	/**
 	 * 페이지별 게시글 목록과 페이지 그룹정보를 반환
 	 * @param resaleBoardNo
@@ -52,38 +52,38 @@ public class ResaleBoardService {
 	 */
 	public Page<ResaleBoardDto> boardList(int currentPage) throws FindException{ // 반환은 dto로, 주입은 entity
 		Page<ResaleBoardEntity> boardEntity = resaleBoardRepo.findAll(PageRequest.of(currentPage, 5, Sort.by("ResaleBoardNo").descending()));
-		
+
 		ModelMapper modelMapper = new ModelMapper();
-//		List<ResaleBoardDto> boarDto = boardEntity.getContent().stream().map(boardEntity ->
-//		sourceToDestination(boardEntity, new ResaleBoardDto()))
-//		.collect(Collectors.toList());
+		//		List<ResaleBoardDto> boarDto = boardEntity.getContent().stream().map(boardEntity ->
+		//		sourceToDestination(boardEntity, new ResaleBoardDto()))
+		//		.collect(Collectors.toList());
 		Page<ResaleBoardDto> boardDto = modelMapper.map(boardEntity, new TypeToken<Page<ResaleBoardDto>>(){}.getType());
-		
-//		Page<ResaleBoardDto> boardDto = 
-//				boardEntity.getContent().stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
-//				.collect(Collectors.toList());
-//		
+
+		//		Page<ResaleBoardDto> boardDto = 
+		//				boardEntity.getContent().stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
+		//				.collect(Collectors.toList());
+		//		
 		return boardDto;
 	}
 
 	//	public PageBean<ResaleBoardDto> boardList(int currentPage) throws FindException{ // 반환은 dto로, 주입은 entity
-//		int endRow = currentPage * CNT_PER_PAGE;
-//		int startRow = endRow - CNT_PER_PAGE + 1; 
-//
-//		List<ResaleBoardEntity> rbList = resaleBoardRepo.findByPage(startRow,endRow);
-//		long totalCnt = resaleBoardRepo.count(); // 총 행수를 얻어오는 메서드
-//		int cntPerPageGroup = 5;
-//
-//		ModelMapper modelMapper = new ModelMapper();
-//		List<ResaleBoardDto> dtoList = 
-//				rbList.stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
-//				.collect(Collectors.toList());
-//		
-//		PageBean<ResaleBoardDto> pbDto = new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
-//
-//		return pbDto;
-//	}
-	
+	//		int endRow = currentPage * CNT_PER_PAGE;
+	//		int startRow = endRow - CNT_PER_PAGE + 1; 
+	//
+	//		List<ResaleBoardEntity> rbList = resaleBoardRepo.findByPage(startRow,endRow);
+	//		long totalCnt = resaleBoardRepo.count(); // 총 행수를 얻어오는 메서드
+	//		int cntPerPageGroup = 5;
+	//
+	//		ModelMapper modelMapper = new ModelMapper();
+	//		List<ResaleBoardDto> dtoList = 
+	//				rbList.stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
+	//				.collect(Collectors.toList());
+	//		
+	//		PageBean<ResaleBoardDto> pbDto = new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
+	//
+	//		return pbDto;
+	//	}
+
 
 
 	/**
@@ -127,49 +127,49 @@ public class ResaleBoardService {
 	 * @return
 	 * @throws FindException
 	 */
-	
+
 	public Page<ResaleBoardDto> searchBoard(String word, int currentPage) throws FindException{
-		
+
 		Page<ResaleBoardEntity> boardEntity 
-				= resaleBoardRepo.findByWord(word,PageRequest.of(currentPage, 5));
-		
-		
+		= resaleBoardRepo.findByWord(word,PageRequest.of(currentPage, 5));
+
+
 		ModelMapper modelMapper = new ModelMapper();
 		Page<ResaleBoardDto> boardDto = modelMapper.map(boardEntity, new TypeToken<Page<ResaleBoardDto>>(){}.getType());
 
 		return boardDto;
 	}
-//	public PageBean<ResaleBoardDto> searchBoard(String word, int currentPage) throws FindException{
-//		
-//		int endRow = currentPage * CNT_PER_PAGE;
-//		int startRow = endRow - CNT_PER_PAGE + 1;
-//		List<ResaleBoardEntity> entityList = resaleBoardRepo.findByWord(word, startRow, endRow);
-//		
-//		int totalCnt = resaleBoardRepo.findCountByWord(word);
-//		int cntPerPageGroup = 5;
-//		
-//		ModelMapper modelMapper = new ModelMapper();
-//		List<ResaleBoardDto> dtoList = 
-//				entityList.stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
-//				.collect(Collectors.toList());
-//		
-//		PageBean<ResaleBoardDto> pb = 
-//				new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
-//		return pb;
-//	}
-	
+	//	public PageBean<ResaleBoardDto> searchBoard(String word, int currentPage) throws FindException{
+	//		
+	//		int endRow = currentPage * CNT_PER_PAGE;
+	//		int startRow = endRow - CNT_PER_PAGE + 1;
+	//		List<ResaleBoardEntity> entityList = resaleBoardRepo.findByWord(word, startRow, endRow);
+	//		
+	//		int totalCnt = resaleBoardRepo.findCountByWord(word);
+	//		int cntPerPageGroup = 5;
+	//		
+	//		ModelMapper modelMapper = new ModelMapper();
+	//		List<ResaleBoardDto> dtoList = 
+	//				entityList.stream().map(ResaleBoardEntity -> modelMapper.map(ResaleBoardEntity, ResaleBoardDto.class))
+	//				.collect(Collectors.toList());
+	//		
+	//		PageBean<ResaleBoardDto> pb = 
+	//				new PageBean<>(dtoList, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
+	//		return pb;
+	//	}
+
 	/**
 	 * 게시글 작성
 	 * @param resaleBoard
 	 * @throws AddException
 	 */
-	
+
 	public ResaleBoardDto writeBoard(ResaleBoardDto dto) throws AddException{
-		
+
 		ModelMapper modelMapper = new ModelMapper();
 		ResaleBoardEntity entity = modelMapper.map(dto, ResaleBoardEntity.class);
 		resaleBoardRepo.save(entity);
-		 
+
 		//-------- 파일 저장 경로에 폴더명을 게시글번호로 저장하기 위해 ----------
 		Optional<ResaleBoardEntity> optRb = resaleBoardRepo.findById(entity.getResaleBoardNo());
 		ResaleBoardEntity boardEntity = optRb.get();
@@ -185,13 +185,13 @@ public class ResaleBoardService {
 	public void modifyBoard(ResaleBoardDto dto) throws ModifyException{
 		Long resaleBoardNo = dto.getResaleBoardNo();
 		Optional<ResaleBoardEntity> optRb = resaleBoardRepo.findById(resaleBoardNo);
-		
+
 		if(optRb.isPresent()) { // 게시글이 존재하면
 			ResaleBoardEntity boardEntity = optRb.get();
 			if(boardEntity.getUserNickname().equals(dto.getUserNickname())) {
 				boardEntity.setResaleBoardContent(dto.getResaleBoardContent()); // resaleBoard.get
 				boardEntity.setResaleBoardTitle(dto.getResaleBoardTitle());
-	
+
 				logger.error("변경 내용?" + boardEntity.getResaleBoardContent());
 				logger.error("변경 제목?" + boardEntity.getResaleBoardTitle());
 				resaleBoardRepo.save(boardEntity);
@@ -217,11 +217,11 @@ public class ResaleBoardService {
 		if(optRb.isPresent()) { // 게시글 존재하면
 			resaleBoardRepo.deleteById(resaleBoardNo);
 			//	댓글, 대댓글 삭제
-//			resaleBoardRepo.deleteComments(resaleBoardNo);
+			//			resaleBoardRepo.deleteComments(resaleBoardNo);
 			//	좋아요 삭제
-//			resaleBoardRepo.deleteLike(resaleBoardNo);
+			//			resaleBoardRepo.deleteLike(resaleBoardNo);
 			//	원글 삭제
-//			resaleBoardRepo.deleteById(resaleBoardNo);
+			//			resaleBoardRepo.deleteById(resaleBoardNo);
 		}else {
 			throw new RemoveException("게시글이 없습니다");
 		}
@@ -236,34 +236,22 @@ public class ResaleBoardService {
 	 */
 	@Transactional
 	public void writeComment(ResaleCommentDto commentDto) throws AddException{
-		
+
 		Long resaleBoardNo = commentDto.getResaleBoard().getResaleBoardNo(); // 원글번호
 		ResaleBoardDto boardDto = commentDto.getResaleBoard();
 		//1. 댓글 테이블에서 그 글번호에 맞는 글이 있는지 확인
 		//2. 있으면 parentNo에 그 글번호를 넣음
-		Long resaleCmtParentNo = resaleCommentRepo.findParentCmtNo(resaleBoardNo);
-		if(resaleCmtParentNo != null) { // 부모글번호가 있으면
-			logger.error("부모댓글번호는 "+ resaleCmtParentNo);
-			logger.error("원글번호는 "+ resaleBoardNo);
-			
-			// 댓글 등록
-			ModelMapper modelMapper = new ModelMapper();
-			ResaleCommentEntity commentEntity = modelMapper.map(commentDto, ResaleCommentEntity.class);
-			commentEntity.setResaleCmtParentNo(resaleCmtParentNo);
-			
-			ResaleBoardEntity brdEntity = modelMapper.map(boardDto, ResaleBoardEntity.class);
-			
-			resaleCommentRepo.save(commentEntity);
-			
-		} else { // 부모 글번호가 없으면 0 번
-			// 댓글 등록
-			ModelMapper modelMapper = new ModelMapper();
-			ResaleCommentEntity commentEntity = modelMapper.map(commentDto, ResaleCommentEntity.class);
-			ResaleBoardEntity brdEntity = modelMapper.map(boardDto, ResaleBoardEntity.class);
-			commentEntity.setResaleBoard(brdEntity);
-			resaleCommentRepo.save(commentEntity);
-		}
-		
+		//		Integer parentCmtCnt = resaleCommentRepo.findParentCmtNo(resaleBoardNo);
+		//		logger.error("부모댓글 수는 " + parentCmtCnt);
+
+		//			logger.error("부모댓글번호는 "+ commentDto.getResaleCmtParentNo());
+		logger.error("원글번호는 "+ resaleBoardNo);
+
+		// 댓글 등록
+		ModelMapper modelMapper = new ModelMapper();
+		ResaleCommentEntity commentEntity = modelMapper.map(commentDto, ResaleCommentEntity.class);
+		//			ResaleBoardEntity brdEntity = modelMapper.map(boardDto, ResaleBoardEntity.class);
+		resaleCommentRepo.save(commentEntity);
 		// 댓글 수 증가
 		Optional <ResaleBoardEntity> optRb = resaleBoardRepo.findById(resaleBoardNo);
 		ResaleBoardEntity boardEntity = optRb.get(); 
@@ -271,8 +259,42 @@ public class ResaleBoardService {
 		boardEntity.setResaleBoardCmtCnt(oldCmtCnt+1);
 		resaleBoardRepo.save(boardEntity);
 	}
-	
-	
+
+
+	/**
+	 * 대댓글 등록
+	 * 댓글 수도 같이 증가
+	 * @param commentDto
+	 * @throws AddException
+	 */
+	@Transactional
+	public void writeReComment(ResaleCommentDto commentDto) throws AddException{
+
+		Long resaleBoardNo = commentDto.getResaleBoard().getResaleBoardNo(); // 원글번호
+		ResaleBoardDto boardDto = commentDto.getResaleBoard();
+		//1. 댓글 테이블에서 그 글번호에 맞는 글이 있는지 확인
+		//2. 있으면 parentNo에 그 글번호를 넣음
+//		Integer parentCmtCnt = resaleCommentRepo.findParentCmtNo(resaleBoardNo);
+//		logger.error("부모댓글 수는 " + parentCmtCnt);
+
+		logger.error("부모댓글번호는 "+ commentDto.getResaleCmtParentNo());
+		logger.error("원글번호는 "+ resaleBoardNo);
+
+		// 댓글 등록
+		ModelMapper modelMapper = new ModelMapper();
+		ResaleCommentEntity commentEntity = modelMapper.map(commentDto, ResaleCommentEntity.class);
+		resaleCommentRepo.save(commentEntity);
+
+		// 댓글 수 증가
+		Optional <ResaleBoardEntity> optRb = resaleBoardRepo.findById(resaleBoardNo);
+		ResaleBoardEntity boardEntity = optRb.get(); 
+		int oldCmtCnt = boardEntity.getResaleBoardCmtCnt();
+		boardEntity.setResaleBoardCmtCnt(oldCmtCnt+1);
+		resaleBoardRepo.save(boardEntity);
+	}
+
+
+
 	/**
 	 * (대)댓글 수정
 	 * @param dto
@@ -294,8 +316,8 @@ public class ResaleBoardService {
 			throw new ModifyException("댓글이 없습니다");
 		}
 	}
-	
-	
+
+
 	/**
 	 * 댓글 삭제
 	 * 대댓글 삭제, 댓글 삭제, 댓글 수 감소
@@ -304,51 +326,54 @@ public class ResaleBoardService {
 	 */
 	@Transactional
 	public void deleteComment(ResaleCommentDto commentDto) throws RemoveException{
-		
+
 		// 원글 번호
 		Long resaleBoardNo = commentDto.getResaleBoard().getResaleBoardNo();
-		
+		logger.error("글번호:"+resaleBoardNo);
 		// 댓글 번호
 		Long resaleCmtNo = commentDto.getResaleCmtNo();
+		logger.error("댓글번호:"+resaleCmtNo);
 
 		// 부모댓글 번호
 		Long resaleCmtParentNo = commentDto.getResaleCmtParentNo();
-		
+		logger.error("부모 댓글번호:"+resaleCmtParentNo);
+
+		Optional<ResaleCommentEntity> optRc = resaleCommentRepo.findById(commentDto.getResaleCmtNo());
+		ResaleCommentEntity cmtEntity = optRc.get();
 		//원글 조회
 		Optional<ResaleBoardEntity> optRb =resaleBoardRepo.findById(resaleBoardNo);
 		if(optRb.isPresent()) {
 			// 댓글 수 감소
 			ResaleBoardEntity boardEntity = optRb.get();
-			Integer boardCmtCnt = boardEntity.getResaleBoardCmtCnt();
-			System.out.println(boardCmtCnt);
-			
-//			logger.error("front에서 넘어온" + commentDto.getUserNickname());
-//			logger.error("엔티티에서 꺼내온"+boardEntity.getUserNickname());
-			
-			if(commentDto.getUserNickname().equals(boardEntity.getUserNickname())) {
+			int boardCmtCnt = boardEntity.getResaleBoardCmtCnt();
+			logger.error("댓글수 :" +  boardCmtCnt);
+
+			if(commentDto.getUserNickname().equals(cmtEntity.getUserNickname())) {
 				if(resaleCmtParentNo == 0) { // 부모댓글번호가 0이면
 					resaleCommentRepo.deleteReComment(resaleCmtNo); // 대댓글 삭제
 					resaleCommentRepo.deleteById(resaleCmtNo); // 댓글 삭제
+					logger.error("부모댓글 번호 " + resaleCmtParentNo);
 					
 					if(boardCmtCnt > 0) {
-						Integer oldCmtCnt = boardEntity.getResaleBoardCmtCnt(); //이전 댓글수
-						Integer TotalCmtCnt = resaleCommentRepo.findReCommentCnt(resaleCmtParentNo); //대댓글 수
-						System.out.println("대댓글 수는" + TotalCmtCnt);
-						boardEntity.setResaleBoardCmtCnt(oldCmtCnt- (TotalCmtCnt+1));					
+//						int oldCmtCnt = boardEntity.getResaleBoardCmtCnt(); //이전 댓글수
+						logger.error("댓글번호 -----" + resaleCmtNo);
+						int totalReCmtCnt = (int)resaleCommentRepo.findReCommentCnt(resaleCmtNo); //대댓글 수
+						logger.error("대댓글 수는" + totalReCmtCnt);
+						boardEntity.setResaleBoardCmtCnt(boardCmtCnt- (totalReCmtCnt+1));					
 					}else {
 						boardEntity.setResaleBoardCmtCnt(0);
 					}
 					resaleBoardRepo.save(boardEntity);
-					
+
 				}else { // 부모댓글번호가 0이 아니면 대댓글 삭제
 					resaleCommentRepo.deleteById(resaleCmtNo); // 대댓글 삭제
 					ResaleBoardEntity entity = optRb.get();
 					int oldCmtCnt = entity.getResaleBoardCmtCnt();
-						if(entity.getResaleBoardCmtCnt() > 0) {
-							entity.setResaleBoardCmtCnt(oldCmtCnt-1);
-						}else {
-							entity.setResaleBoardCmtCnt(0);
-						}
+					if(entity.getResaleBoardCmtCnt() > 0) {
+						entity.setResaleBoardCmtCnt(oldCmtCnt-1);
+					}else {
+						entity.setResaleBoardCmtCnt(0);
+					}
 					resaleBoardRepo.save(entity);
 				}			
 			}else {
@@ -357,8 +382,8 @@ public class ResaleBoardService {
 		}else {
 			throw new RemoveException("글이 없습니다");
 		}
-		
-		
+
+
 	}
 
 
@@ -371,16 +396,16 @@ public class ResaleBoardService {
 		Long resaleBoardNo = likeDto.getResaleBoard().getResaleBoardNo();
 		System.out.println(resaleBoardNo);
 		Long resaleLikeNo = likeDto.getResaleLikeNo();
-		
-		
+
+
 		Optional<ResaleBoardEntity> optRb = resaleBoardRepo.findById(resaleBoardNo); // 확인 / resaleBoard 객체 or resaleBoardNo?
 		if(optRb.isPresent()) {
 			ResaleBoardEntity entity = optRb.get();
-			
+
 			// 좋아요 추가
 			ModelMapper modelMapper = new ModelMapper();
 			ResaleLikeEntity likeEntity = modelMapper.map(likeDto, ResaleLikeEntity.class);	
-			
+
 			likeEntity.setResaleBoard(entity);
 			resaleLikeRepo.save(likeEntity); // 좋아요 추가
 			int oldLikeCnt = optRb.get().getResaleBoardLikeCnt();
@@ -390,7 +415,7 @@ public class ResaleBoardService {
 			throw new AddException("게시글이 없습니다");
 		}
 	}
-	
+
 	/**
 	 * 좋아요 취소(완성)
 	 * 좋아요 수가 0 이상인 경우 같이 감소 (0인 경우 감소시키지 않음)

@@ -139,7 +139,7 @@ public class ResaleBoardContoller {
 
 		// 저장된 이미지 파일의 이름을 가지고 오는 것 -> 사진 불러올 때 저장된 개수만큼 불러와야함
 		String saveDirectory = uploadDirectory +"\\"+ "resale_images" + "\\" +resaleBoardNo + "\\";
-		System.out.println("경로는" + saveDirectory);
+//		System.out.println("경로는" + saveDirectory);
 		File dir = new File(saveDirectory);
 
 		String[] imageFiles = dir.list(new FilenameFilter() {
@@ -470,14 +470,12 @@ public class ResaleBoardContoller {
 	 */
 	@PostMapping(value= "comment/write")
 	public ResultBean<ResaleCommentDto> writeComment(@RequestBody ResaleCommentDto commentDto){
-		//String loginedNickname = (String) session.getAttribute("loginNickname");
-		//String loginedNickname = "땡초";
 		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
 		try {
 			//commentDto.setUserNickname(loginedNickname); commentDto에 localStorage에 저장된 userNickname을 넣어서 보내줌
-			logger.error("원글번호는 "+commentDto.getResaleBoard().getResaleBoardNo());
 			service.writeComment(commentDto);
 			logger.error("부모댓글"+commentDto.getResaleCmtParentNo());
+			logger.error("원글번호는 "+commentDto.getResaleBoard().getResaleBoardNo());
 
 			rb.setStatus(1);
 			rb.setMsg("댓글 등록 완료");
@@ -489,6 +487,32 @@ public class ResaleBoardContoller {
 		return rb;
 	}
 
+	
+	/**
+	 * 대댓글 등록(완성)
+	 * @param boardDto
+	 * @param commentDto
+	 * @param session
+	 * @return
+	 */
+	@PostMapping(value= "recomment/write")
+	public ResultBean<ResaleCommentDto> writeReComment(@RequestBody ResaleCommentDto commentDto){
+		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
+		try {
+			//commentDto.setUserNickname(loginedNickname); commentDto에 localStorage에 저장된 userNickname을 넣어서 보내줌
+			service.writeReComment(commentDto);
+			logger.error("부모댓글"+commentDto.getResaleCmtParentNo());
+			logger.error("원글번호는 "+commentDto.getResaleBoard().getResaleBoardNo());
+
+			rb.setStatus(1);
+			rb.setMsg("대댓글 등록 완료");
+		} catch (AddException e) {
+			e.printStackTrace();
+			rb.setStatus(0);
+			rb.setMsg("대댓글 등록 실패");
+		}
+		return rb;
+	}
 	/**
 	 * 댓글, 대댓글 삭제
 	 * @param commentDto
@@ -502,9 +526,9 @@ public class ResaleBoardContoller {
 		//		String loginedNickname = "개발자";
 
 		ResultBean<ResaleCommentDto> rb = new ResultBean<>();
-
-		Long resaleCmtParentNo = commentDto.getResaleCmtParentNo();
-		logger.error("부모글번호"+resaleCmtParentNo); // OK
+//
+//		Long resaleCmtParentNo = commentDto.getResaleCmtParentNo();
+//		System.out.println(("부모글번호"+resaleCmtParentNo)); // OK
 
 		try {
 			service.deleteComment(commentDto);
