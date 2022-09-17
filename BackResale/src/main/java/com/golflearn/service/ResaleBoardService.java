@@ -347,35 +347,35 @@ public class ResaleBoardService {
 			ResaleBoardEntity boardEntity = optRb.get();
 			int boardCmtCnt = boardEntity.getResaleBoardCmtCnt();
 			logger.error("댓글수 :" +  boardCmtCnt);
-
 			if(commentDto.getUserNickname().equals(cmtEntity.getUserNickname())) {
-				if(resaleCmtParentNo == 0) { // 부모댓글번호가 0이면
-					resaleCommentRepo.deleteReComment(resaleCmtNo); // 대댓글 삭제
+//				if(resaleCmtParentNo == 0) { // 부모댓글번호가 0이면
+//					resaleCommentRepo.deleteReComment(resaleCmtNo); // 대댓글 삭제
 					resaleCommentRepo.deleteById(resaleCmtNo); // 댓글 삭제
-					logger.error("부모댓글 번호 " + resaleCmtParentNo);
+					logger.error("부모댓글 번호 " + resaleCmtParentNo);		
 					
 					if(boardCmtCnt > 0) {
+						boardEntity.setResaleBoardCmtCnt(boardCmtCnt-1);
 //						int oldCmtCnt = boardEntity.getResaleBoardCmtCnt(); //이전 댓글수
 						logger.error("댓글번호 -----" + resaleCmtNo);
-						int totalReCmtCnt = (int)resaleCommentRepo.findReCommentCnt(resaleCmtNo); //대댓글 수
-						logger.error("대댓글 수는" + totalReCmtCnt);
-						boardEntity.setResaleBoardCmtCnt(boardCmtCnt- (totalReCmtCnt+1));					
+//						int totalReCmtCnt = (int)resaleCommentRepo.findReCommentCnt(resaleCmtNo); //대댓글 수
+//						logger.error("대댓글 수는" + totalReCmtCnt);
+//						boardEntity.setResaleBoardCmtCnt(boardCmtCnt- (totalReCmtCnt+1));					
 					}else {
 						boardEntity.setResaleBoardCmtCnt(0);
 					}
 					resaleBoardRepo.save(boardEntity);
 
-				}else { // 부모댓글번호가 0이 아니면 대댓글 삭제
-					resaleCommentRepo.deleteById(resaleCmtNo); // 대댓글 삭제
-					ResaleBoardEntity entity = optRb.get();
-					int oldCmtCnt = entity.getResaleBoardCmtCnt();
-					if(entity.getResaleBoardCmtCnt() > 0) {
-						entity.setResaleBoardCmtCnt(oldCmtCnt-1);
-					}else {
-						entity.setResaleBoardCmtCnt(0);
-					}
-					resaleBoardRepo.save(entity);
-				}			
+//				}else { // 부모댓글번호가 0이 아니면 대댓글 삭제
+//					resaleCommentRepo.deleteById(resaleCmtNo); // 대댓글 삭제
+//					ResaleBoardEntity entity = optRb.get();
+//					int oldCmtCnt = entity.getResaleBoardCmtCnt();
+//					if(entity.getResaleBoardCmtCnt() > 0) {
+//						entity.setResaleBoardCmtCnt(oldCmtCnt-1);
+//					}else {
+//						entity.setResaleBoardCmtCnt(0);
+//					}
+//					resaleBoardRepo.save(entity);
+//				}			
 			}else {
 				throw new RemoveException("작성자와 로그인된 닉네임이 같지 않습니다.");
 			}
