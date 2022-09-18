@@ -6,6 +6,7 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 
 이 서비스는 골린이들을 위한 골프서비스입니다.
 
+
 <br>
 [노션페이지]https://wooden-phone-bba.notion.site/TEAM-_-D-A-L-M-O-25800aa80100491db3737baefd330848 👈 link <br>
 
@@ -17,6 +18,11 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 1 ~ 4일차 : 기능선정, 역할분담, 페이지 구상<br>
 5 ~ 13일차 : 설계 <br>
 11 ~ 24일차 : 코드 구현<br>
+
+## 목표
+- MyBatis를 이용하여 semi 프로젝트에서 만든 코드 수정 
+- JPA를 이용한 각자 게시판 만들기
+
 
 ## 서비스 기능
 
