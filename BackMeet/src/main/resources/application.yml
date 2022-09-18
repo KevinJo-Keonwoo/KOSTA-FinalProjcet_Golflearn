@@ -1,4 +1,8 @@
 spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: 'true'
   jpa:
     generate-ddl: 'true'
     hibernate:
@@ -25,10 +29,10 @@ spring:
       enabled: 'true'
   datasource:
     hikari:
-      password: dalmo
-      username: dalmo
+      password: Dalmo08230823
+      username: admin
       driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      jdbc-url: jdbc:log4jdbc:oracle:thin:@localhost:1521:xe
+      jdbc-url: jdbc:log4jdbc:oracle:thin:@golflearn_medium?TNS_ADMIN=C:/Project/wallet/Wallet_golflearn
       minimum-idle: '2'
   freemarker:
     cache: 'false'

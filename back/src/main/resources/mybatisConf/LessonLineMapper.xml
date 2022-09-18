@@ -7,12 +7,17 @@
 	<id property="lsnLineNo" column="lsn_line_no"/>
 	<result property="lsnExpDt" column="lsn_exp_dt"/>
 	<result property="stdtLsnStatus" column="stdt_lsn_status"/>
-	<collection property="lsns" ofType="Lesson" autoMapping="true">
+	<association property="lsn" javaType="Lesson" autoMapping="true">
 		<id property="lsnNo" column="lsn_no"/>
 		<result property="lsnCntSum" column="lsn_cnt_sum"/>
 		<association property="lsnReview" javaType="LessonReview" autoMapping="true">
 		</association>
-	</collection>
+	</association>
+</resultMap>
+<resultMap type="Lesson" id="LessonMap" autoMapping="true">
+	<id property="lsnNo" column="lsn_no"/>
+	<result property="lsnTitle" column="lsn_title"/>
+	<result property="lsnStatus" column="lsn_status"/>
 </resultMap>
   <select id="selectById" resultMap="LessonLineMap" parameterType="string" >
 	SELECT ll.lsn_line_no, le.lsn_no, le.lsn_title, ll.lsn_exp_dt,
@@ -24,7 +29,7 @@
 	WHERE ll.user_id = #{userId} 
 	ORDER BY ll.lsn_line_no
   </select>
-  <select id="selectByProId" resultType="Lesson" parameterType="string">
+  <select id="selectByProId" resultMap="LessonMap" parameterType="string">
   	SELECT lsn_no, lsn_title, lsn_status
 	FROM lesson
 	WHERE user_id = #{userId}
@@ -34,4 +39,9 @@
 	FROM user_info
 	WHERE user_id = #{userId}
   </select>
+  <!-- 결제 완료 시 레슨내역 등록 -->
+ 	<insert id="insertLessonLine" parameterType= "LessonLine">
+  		INSERT INTO lesson_line(lsn_line_no, user_id, lsn_no, payment_no,lsn_exp_dt, stdt_lsn_status)
+  		VALUES(lsn_line_no_seq.NEXTVAL,#{userId},#{lsnNo},#{paymentNo},SYSDATE,0)
+ 	</insert>
 </mapper>

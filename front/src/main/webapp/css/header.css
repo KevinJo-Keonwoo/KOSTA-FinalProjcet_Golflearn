@@ -11,6 +11,8 @@
 	}
 #index-header {
 	height: 95px;
+
+
 	color: white;
 	background: #f6f3eb;
 	font-weight: bold;
@@ -130,4 +132,12 @@ div#content-right >  a{
 	box-sizing: border-box;
 	font-family: "Godo";
 	font-weight: lighter;
+}
+
+a#content_menu{
+	display: block;
+	text-decoration: none;
+	font-family: "Godo";
+	color: black;
+	box-sizing: border-box;
 }

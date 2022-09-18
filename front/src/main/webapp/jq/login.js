@@ -24,8 +24,6 @@ $(function () {
 		success: function (jsonObj) {
 			if (jsonObj.status == 1) {
 				alert(jsonObj.msg);
-
-
 				let userObj = jsonObj.t;
 				localStorage.setItem("loginedUserType", userObj.userType);
 				localStorage.setItem("loginedNickname", userObj.userNickname);

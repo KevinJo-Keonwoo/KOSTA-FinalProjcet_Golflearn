@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.golflearn.domain.LessonLineRepository;
 import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonLine;
+
+import com.golflearn.dto.PageBean;
 import com.golflearn.exception.FindException;
 
 @Service(value = "lessonLineService")
@@ -24,13 +26,14 @@ public class LessonLineService {
 //			return lsnLineList;
 //		}else {
 //		}
+		
 		List<LessonLine> list = repository.selectById(userId);
 		return list;
 	}
 	
 	public List<Lesson> proLessonList(String userId) throws FindException{
 		List<Lesson> lessonList = repository.selectByProdId(userId);
-		return null; 
+		return lessonList; 
 	}
 	
 //	public int returnUserType(String userId) throws FindException{

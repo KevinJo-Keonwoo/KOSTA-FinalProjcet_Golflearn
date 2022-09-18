@@ -1,43 +1,46 @@
 $(function(){
     //1. 리스트 불러와서 보여주기
-    function showList(url){
+    function showList(url, data){
         $.ajax({
             url: url,
             method: "get",
             success: function(jsonObj){
                 if(jsonObj.status == 1){ //rb의 status가 1일때
                     let pageableContentObj = jsonObj.t.content;
-
+                    //board-list                comment
+                    //board-list__content       comment-list
                     let $board = $("div.board-list").first();
+                    $board.show();
+                    
                     $("div.board-list").not($board).remove();
-
                     let $boardParent = $board.parent();
                     //한줄씩 넣기 //나중에 span을 div로 바꾸고 테이블형식 넣기 
                     $(pageableContentObj).each(function(index, board){
                         let $boardCopy = $board.clone();
                         // 나중에 "" + 다 빼기
-                        $boardCopy.find("div.board-list__content__no").html("글번호 : " + board.roundReviewBoardNo)
-                        $boardCopy.find("img.board-list__content__image").attr("src", "../roundreview_images/" + board.roundReviewBoardNo + "_RoundReviewThumbnail.jpg");
-                        $boardCopy.find("div.board-list__content__title").html("제목 : " + board.roundReviewBoardTitle)
-                        $boardCopy.find("div.board-list__content__cmt-cnt").html("댓글수 : " + board.roundReviewBoardCmtCnt)
-                        $boardCopy.find("div.board-list__content__nickname").html("닉네임 : " + board.userNickname)
-                        $boardCopy.find("div.board-list__content__dt").html("작성일자 : " + board.roundReviewBoardDt)
-                        $boardCopy.find("div.board-list__content__view-cnt").html("조회수 : " + board.roundReviewBoardViewCnt)
-                        $boardCopy.find("div.board-list__content__like-cnt").html("좋아요수 : " + board.roundReviewBoardLikeCnt)
+                        $boardCopy.find("div.board-list__content__no").html(board.roundReviewBoardNo)
+                        $boardCopy.find("img.board-list__content__image").attr("src", "../roundreview_images/" + board.roundReviewBoardNo + "/image_1.png");
+                        $boardCopy.find("div.board-list__content__title").html(board.roundReviewBoardTitle)
+                        $boardCopy.find("div.board-list__content__cmt-cnt").html(board.roundReviewBoardCmtCnt)
+                        $boardCopy.find("div.board-list__content__nickname").html(board.userNickname)
+                        $boardCopy.find("div.board-list__content__dt").html(board.roundReviewBoardDt)
+                        $boardCopy.find("div.board-list__content__view-cnt").html(board.roundReviewBoardViewCnt)
+                        $boardCopy.find("div.board-list__content__like-cnt").html(board.roundReviewBoardLikeCnt)
 
                         $boardParent.append($boardCopy);
                     });
                     //맨앞에 뜨던 그지같은 이미지 삭제 
-                    $("img.board-list__content__image").first().remove();
+                    // $("img.board-list__content__image").first().hide();
+                    $("div.board-list").first().hide();
 
                     let $pageGroup = $("div.page-group");
                     let $pageGroupHtml = "";
 
                     let pageableObj = jsonObj.t;
-                    let currentPage = pageableObj.number + 1;  // 0 + 1
+                    let currentPage = pageableObj.number + 1;  
                     let totalPage = pageableObj.totalPages
-                    let size = pageableObj.size  //5
-                    let endPageNo = Math.ceil(currentPage/size)*size; // 5
+                    let size = pageableObj.size  
+                    let endPageNo = Math.ceil(currentPage/size)*size; 
                     let startPageNo = endPageNo - size + 1;
                     if (totalPage < endPageNo) {
                         endPageNo = totalPage;
@@ -50,7 +53,7 @@ $(function(){
                     //startPage부터 endPage까지 숫자 넣어주기 
                     //현재페이지면 disable클래스 줘서 css다르게 넣어주기 (링크안되게?)
                     for (let i = startPageNo; i<= endPageNo; i++){
-                        $pageGroupHtml += "&nbsp;&nbsp;";
+                        $pageGroupHtml += "&nbsp;&nbsp&nbsp&nbsp;";
                         // $pageGroupHtml += "<span>" + i + "</span>"; 
                         if (currentPage == i){
                             $pageGroupHtml += '<span class="disabled">' + i + "</span>";
@@ -60,7 +63,7 @@ $(function(){
                     }
                     //back에서 보내준 endPage 값이 totalPage값보다 작으면 화살표나오게  
                     if (endPageNo < totalPage) {
-                        $pageGroupHtml += "&nbsp;&nbsp;";
+                        $pageGroupHtml += "&nbsp;&nbsp&nbsp&nbsp;";
                         $pageGroupHtml += '<span class="next">▷</span>';
                     }
                     //pageGroupHtml에 받아놨던 정보를 pageGroup selector에 넣어주기 
@@ -79,9 +82,33 @@ $(function(){
     //span 태그들 중에서 disabled가 아닌 요소 찾기 
     
     $("div.page-group").on("click", "span:not(.disabled)", function() {
+        // log.console(data);
+        // let orderType = data.split("=");
         let orderType = 0;
+        $("ul.order>li").each(function(index, element){
+            let $aObj = $(element).find('a');
+            // if($aObj.css("background-color") == 'rgb(255, 0, 0)'){
+            if($aObj.css("color") == 'rgb(255, 0, 0)'){
+                // switch($(element).html()){
+                //     case '최신순':break;
+                //     case '조회순':break;
+                //     case '좋아요순':break
+                // }
+                // switch(index){
+                    //     case 0:break;
+                    //     case 1:break;
+                    //     case 2:break
+                    // }
+                orderType = index;
+                return false;
+            }
+        });
+        
+        //$("ul.order>li").is("background-color", "yellow"); //기본
+        
         let pageNo = 0;
         
+        //pageNo = $(this).html();
         //?? 이해안됨
         if($(this).hasClass("prev")){
             pageNo = parseInt($(this).next().html()) - 2;
@@ -94,13 +121,8 @@ $(function(){
         let word = $("div.search>input[name=search-box]").val().trim();
         let url = "";
         let data = "";
-
-        console.log(orderType);
-        console.log(pageNo);
-
         if(word == "") {
             url = "http://localhost:1125/backroundreview/board/list/" + orderType + "/" + pageNo;
-            console.log(url);
         } else {
             //검색어가 있는 경우 검색어를 path에 넣어주고 back 에 보낼 data를 만들기 
             url = "http://localhost:1125/backroundreview/search/" + word + "/" + pageNo;
@@ -115,9 +137,9 @@ $(function(){
     $("div.search>button.searchBtn").click(function(){
         let word = $("div.search>input[name=search-box]").val().trim();
         console.log(word);
-        let url = "http://localhost:1125/backroundreview/search/";
-        let data = "currentPage=1&word=" + word;
-        // let data = "";
+        let url = "http://localhost:1125/backroundreview/search/" + word;
+        // let data = "currentPage=1&word=" + word;
+        let data = "";
         showList(url, data);
         return false;
     });
@@ -128,13 +150,20 @@ $(function(){
         let orderType = 0;
         let url = "http://localhost:1125/backroundreview/board/list/" + orderType
         let data = "";
+        
+        $("ul.order>li>a").css("color", "#64DB99"); //기본
+        $(this).css("color", "red"); //클릭된경우
+        
         showList(url,data);
     });
     //4. 조회순 정렬하기
     $("ul.order>li.order__view-cnt>a").click(function(){ 
         let orderType = 1;
         let url = "http://localhost:1125/backroundreview/board/list/" + orderType
+        // let data = "orderType=" + orderType;;
         let data = "";
+        $("ul.order>li>a").css("color", "#64DB99"); //기본
+        $(this).css("color", "red"); //클릭된경우
         showList(url,data);
     });
     //5. 좋아요순 정렬하기
@@ -142,17 +171,41 @@ $(function(){
         let orderType = 2;
         let url = "http://localhost:1125/backroundreview/board/list/" + orderType
         let data = "";
+        
+        $("ul.order>li>a").css("color", "#64DB99"); //기본
+        
+        $(this).css("color", "red"); //클릭된경우
         showList(url,data);
     });
     //6. 글쓰기로 이동하기 -> 보내줄 데이터 없음 (닉네임? )
-    $("header>span.write").click(function(){
-        $(location).attr('href', '../html/roundreviewwrite.html');
+    $("header button.write").click(function(){
+        $(location).attr('href', '../html/roundreviewboardwrite.html');
+        // location.href = "http://localhost:1123/front/html/roundreviewboardwrite.html";
     })
 
-    //7. 제목이나 사진 눌렀을때 해당 게시글로 이동하기
-    $("div.board-list__content__thumbnail, div.board-list__content__title").on('click', function(){
-        let $roundReviewBoardNoObj = $(this).prev().find('roundReviewBoardNo');
+    //7 수정하기
+
+    //8. 제목이나 사진 눌렀을때 해당 게시글로 이동하기
+    //undefined나오는것 해결하기 + 여기서 누른 번호 보내주기 roundreviewboardno
+    $("div.board").on('click', "img.board-list__content__image, div.board-list__content__title", function(){
+        let $roundReviewBoardNoObj = $(this).parent().find('div.board-list__content__no');
         let round_review_board_no = $roundReviewBoardNoObj.html();
-        location.href = "/front/html/roundreview/board/" + round_review_board_no;
+        console.log(round_review_board_no);
+        location.href = '../html/roundreviewdetail.html?round_review_board_no=' + round_review_board_no;
+        // location.href = '../html/roundreviewdetail.html?round_review_board_no=' + 1;
+        // location.href = '../html/roundreviewdetail.html?round_review_board_no=1';
+        // location.href = "http://localhost:1125/front/board/" + round_review_board_no;
+        // $(location).attr('href', '../html/roundreview/board/' + round_review_board_no + '.html');
+        
+        // let url = "http://localhost:1128/noticeboard/"
+        // $.ajax({
+        //     url:url,
+        //     method: "GET",
+        //     success:function(jsonObj){
+        //         if(jsonObj.status ==1){
+        //             console.log(jsonObj.noticeBoardNo);
+        //         }
+        //     }
+        // })
     })
 })

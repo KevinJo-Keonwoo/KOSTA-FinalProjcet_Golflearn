@@ -17,7 +17,8 @@
     /* padding: 0 10px; */
     text-align: center;
     margin-bottom: 20px;
-    border-bottom: 1.5px solid #ABCB89
+    border-bottom: 1.5px solid #ABCB89;
+    margin-top: 2%;
 }
 .search__input {
     border-radius: 10px;

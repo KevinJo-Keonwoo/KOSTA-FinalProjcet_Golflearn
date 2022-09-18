@@ -109,5 +109,4 @@ public class SmsService {
 
 		return encodeBase64String;
 	}
-
 }

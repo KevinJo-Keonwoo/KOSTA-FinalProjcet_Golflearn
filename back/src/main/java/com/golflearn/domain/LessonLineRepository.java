@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonLine;
+import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 
 public interface LessonLineRepository {
@@ -31,6 +32,15 @@ public interface LessonLineRepository {
 //	 */
 //	int selectTypeById(String userId) throws FindException;
 	
+	/**
+	 * 결제 내역 추가 후 레슨내역 추가 
+	 * @param lessonLine
+	 * @throws AddException
+	 */
+	public void insertLsnLine(LessonLine lessonLine) throws AddException;
+
+
+
 	
 	
 	
