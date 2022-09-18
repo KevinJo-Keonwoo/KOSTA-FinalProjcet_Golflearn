@@ -111,9 +111,6 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 - ERD cloud
 - starUML
 
-## 팀빌딩 및 역할
-<img width="397" alt="스크린샷" src="">
-
 ### 팀원 (가나다순)<br>
 **김지연 [@Jiyeon](https://github.com/JiyeonKimbackend) - CSS 담당** <br>
 ✔️ 모임 게시판 담당<br>
