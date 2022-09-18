@@ -100,6 +100,11 @@ $(function() {
             return false;
         }
 
+    let loginedNickname = localStorage.getItem("loginedNickname");
+    if(loginedNickname == null){
+        $("button.btn-outline-success").hide();
+    }
+
     showList("http://localhost:1126/backresale/resale/board/list");
 
     // ----- 페이지 그룹의 페이지를 클릭 START -----
