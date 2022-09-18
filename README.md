@@ -128,9 +128,9 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 <br>
 **조건우 [@KevinJo-Keonwoo](https://github.com/KevinJo-Keonwoo) - PL**<br>
 ✔️ 라운딩 후기 게시판 담당<br>
-✔️ 카카오맵 API를 활용한 지도 표시/검색 기능 구현
-✔️ Pageable라이브러리를 활용한 페이징 처리 구현
-✔️ RESTful API, CRUD repository, ModelMapper 등 다방면으로 JPA구현
+✔️ 카카오맵 API를 활용한 지도 표시/검색 기능 구현<br>
+✔️ Pageable라이브러리를 활용한 페이징 처리 구현<br>
+✔️ RESTful API, CRUD repository, ModelMapper 등 다방면으로 JPA구현<br>
 ✔️ 담당 페이지 css 구현<br>
 <br>
 **한미래 [@devfuturo](https://github.com/devfuturo) - PM**<br>
