@@ -131,3 +131,11 @@ div#content-right >  a{
 	font-family: "Godo";
 	font-weight: lighter;
 }
+
+a#content_menu{
+	display: block;
+	text-decoration: none;
+	font-family: "Godo";
+	color: black;
+	box-sizing: border-box;
+}

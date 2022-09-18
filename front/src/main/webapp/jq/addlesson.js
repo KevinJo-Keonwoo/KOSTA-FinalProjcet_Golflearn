@@ -131,7 +131,6 @@ $(function () {
 	// 확장자가 이미지 파일인지 확인
 	function isImageFile(file) {
 		var ext = file.name.split(".").pop().toLowerCase(); // 파일명에서 확장자를 가져온다. 
-
 		return ($.inArray(ext, ["jpg", "jpeg", "gif", "png"]) === -1) ? false : true;
 	}
 	// 파일의 최대 사이즈 확인

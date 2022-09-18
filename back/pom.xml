@@ -92,11 +92,17 @@
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
+		    <version>2.10.1</version>
+		</dependency>  
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		    </dependency>  
-		 <dependency>
+		<dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-		 </dependency>
+		</dependency>
  		<dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -118,7 +124,7 @@
 		    <artifactId>httpcore</artifactId>
 		    <version>4.4.13</version>
 		</dependency>
-		<!-- 파일관련 / 썸네일라이브러리 -->
+				<!-- 파일관련 / 썸네일라이브러리 -->
 		<!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
 		<dependency>
 			<groupId>net.coobird</groupId>
@@ -130,8 +136,7 @@
 	    	<groupId>com.github.iamport</groupId>
 		    <artifactId>iamport-rest-client-java</artifactId>
 		    <version>0.2.22</version>
-		</dependency>
-		
+		</dependency>		
 		<!-- jsonParse-->
 		<dependency>
     		<groupId>com.googlecode.json-simple</groupId>
@@ -151,7 +156,6 @@
 	    <url>https://jitpack.io</url>
 	</repository>
 </repositories>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -168,5 +172,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
