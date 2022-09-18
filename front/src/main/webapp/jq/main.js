@@ -93,7 +93,8 @@ $(function () {
 
 /*
   $.ajax({
-    url: "http://localhost:1124/back/login",
+    url: "http://localhost:1124/back/user/loginstatus",
+    method: "get",
     success: function (jsonObj) {
       let $tabObj = $("div#content>div#content-right");
       let $tabObjHtml = "";

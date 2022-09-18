@@ -1,0 +1,60 @@
+
+.lesson-list{
+    padding: 10% 0;
+}
+
+.lessonlist__content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    text-align: center;
+    height: 100%;
+    width: 80%;
+    margin: 0 auto;
+    border-bottom: 1px solid;
+    padding: 40px 0 40px 0 ;
+    /* margin-bottom: 20px; */
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.lessonlist__content:nth-last-child(1) {
+    border: none;
+}
+
+.lessonlist__content > div {
+    height:10%;
+}
+
+.lesson-list__content__title{
+    width: 35%;
+}
+
+/**/
+h2{
+    width:100%;
+    text-align: center;
+}
+/*필터탭*/
+li.search__filter{
+    float: left;
+    margin-right:20px;
+    list-style:none;
+}
+
+/*페이징*/
+div.pagegroup{
+    width:80%;
+    margin: 10px;
+    text-align: center;
+}
+
+/* not함수를 사용하여 disabled안 된 span만 적용 */
+div.pagegroup>span:not(.disabled){ 
+    border:1px solid;
+    padding : 3px;
+}
+div.pagegroup>span:not(.disabled):hover{
+    background-color:#D9D9D9;
+}

@@ -7,11 +7,6 @@ a {
     color: inherit;
 }
 
-/* body {
-    width: 80%;
-    margin-top: 95px;
-} */
-
 hr{
     border :0.5px solid rgb(183, 231, 199);
 }
@@ -29,9 +24,10 @@ div.lsn div.reviewlist:last-child >div.reviewdetail > ul {
 }
 
 li{
-    font-size: 20px;
+    font-size: 15px;
     padding: 10px 10px 10px 0;
 }
+
 
 div.lsn div.reviewlist >div.reviewdetail > ul >li {
     font-size:14px;
@@ -43,21 +39,26 @@ div.lsn div.reviewlist >div.reviewdetail > ul >li {
 }
 
 /*헤더와 풋터에게서 섹션내용이 다 보여지도록 하기*/
-section.section1 {
-    text-align: left;
-    display: flex;
-    align-content: flex-end;
-    align-items: center;
-    justify-content: center;
-    margin-top: 150px;
-}
 
-section.section1 > article > div.viewlesson >img {
+/* section.section1 {
+    text-align: left;
+} */
+
+img[name='lsn_img']{
     width: 500px;
     height: 300px;
     object-fit: cover;
+    margin-top: 75px;
 }
 
+div.viewlesson {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+div.simple {
+    margin-top: 60px;
+}
 
 section.section2 {
     margin-top: 70px;
@@ -100,15 +101,20 @@ div.detail>fieldset {
     border: none;
 }    
 
+a.lsndetail:hover{
+    color: rgb(183, 231, 199);
+}
+
 button {
     background-color: white;
     border: 2px solid rgb(183, 231, 199);
-    border-radius: 23px;
+    border-radius: 10px;
     letter-spacing: 3px;
     font-size: medium;
     cursor: pointer;
     padding: 13px;
     font-size: 15px;
+    width:300px;
 }
 
 button:hover {
@@ -122,4 +128,16 @@ button:hover {
 div.lsn_intro, div.pro_intro{
     font-size:14px;
     padding: 10px 0 0 40px;
+}
+div.detail{
+    margin-left: 16px;
+}
+
+.reviewdetail li{
+    padding: 10px 0 0 40px;
+}
+
+.reviewdetail ul{
+    padding-top: 20px;
+    padding-bottom: 20px;
 }

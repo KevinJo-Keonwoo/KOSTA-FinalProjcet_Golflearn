@@ -36,7 +36,7 @@ import lombok.Setter;
 @Table(name = "resale_board")
 @SequenceGenerator(name ="resale_board_generator",
 					sequenceName="resale_board_no_seq",
-					initialValue=1, // 28부터 시작(샘플데이터가 27까지 있음)
+					initialValue=28, // 28부터 시작(샘플데이터가 27까지 있음)
 					allocationSize=1) // 1씩 증가
 @DynamicInsert
 @DynamicUpdate
@@ -84,7 +84,8 @@ public class ResaleBoardEntity {
 	
 	
 	@JsonManagedReference//연관관계의 주인이 아닌 쪽에 선언. 정상적으로 직렬화 수행
-	@OneToMany(mappedBy="resaleBoard",fetch=FetchType.LAZY , cascade=CascadeType.REMOVE) //LAZY
+//    @NotFound(action = NotFoundAction.IGNORE)
+	@OneToMany(mappedBy="resaleBoard",fetch=FetchType.LAZY, cascade=CascadeType.REMOVE) //LAZY
 	//@JoinColumn(name = "resale_board_no")
 	private List<ResaleLikeEntity> resaleLike;
 

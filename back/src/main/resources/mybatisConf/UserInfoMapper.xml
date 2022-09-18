@@ -3,18 +3,19 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace = "com.golflearn.mapper.UserInfoMapper">
+    <!-- 아이디 찾기 -->
     <select id="selectByUserNameAndPhone" parameterType="hashMap" resultType="UserInfo">
       SELECT user_id 
       FROM user_info 
       WHERE user_name = #{userName} AND user_phone = #{userPhone}
     </select>
-
+	<!-- 핸드폰번호 조회 -->
     <select id="selectByUserIdAndPhone" parameterType="UserInfo" resultType="UserInfo">
       SELECT user_phone 
       FROM user_info 
       WHERE user_id = #{userId} AND user_phone = #{userPhone}
     </select>
-
+	<!-- 비밀번호 변경 -->
     <update id="updateByUserPwd" parameterType="Hashmap">
       UPDATE user_info 
       SET user_pwd= #{userPwd}
@@ -47,7 +48,6 @@
 	<!-- 닉네임 중복확인 -->
 	<select id ="selectByUserNickname" resultType="UserInfo" parameterType="string">
 	SELECT * FROM user_info WHERE user_nickname = #{userNickname}
->>>>>>> 1e16e74dd5a4b6203106bd2d090d71e938a24bf1
 	</select>
 	
 	<!-- 로그인 -->

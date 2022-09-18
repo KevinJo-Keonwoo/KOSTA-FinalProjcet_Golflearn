@@ -58,7 +58,7 @@
 		    (SELECT ui.user_nickname
 		  				    FROM lesson_review lr2 LEFT JOIN lesson_line ll ON (lr2.lsn_line_no = ll.lsn_line_no)
 												   LEFT JOIN user_info ui ON (ll.user_id = ui.user_id)
-					        WHERE lr2.lsn_line_no = lr.lsn_line_no) lsnNickname,
+					        WHERE lr2.lsn_line_no = lr.lsn_line_no) stdtNickname,
 		  lr.review, lr.review_dt, lr.review_edit_dt
 	FROM lesson l JOIN user_info u ON (l.user_id = u.user_id)
 			      JOIN pro_info p ON (u.user_id = p.user_id)
@@ -70,13 +70,6 @@
 	
 	<!-- 레슨승인요청하기 : 레슨의 레슨분류정보 외 정보를 INSERT -->
 	<insert id="insertLsnInfo" parameterType="Lesson">
-		<selectKey
-  		keyProperty="lsnNo" 
-  		resultType="int"
-  		order="AFTER"
- 		statementType="PREPARED">
- 			SELECT lsn_no_seq.currval FROM dual
- 		</selectKey>
 	INSERT INTO lesson (lsn_no, user_id, loc_no, lsn_title, lsn_lv, lsn_days, lsn_intro, lsn_price, lsn_per_time, lsn_cnt_sum, lsn_status, lsn_req_dt)
 						VALUES (lsn_no_seq.NEXTVAL, #{userInfo.userId}, #{locNo}, 
 						#{lsnTitle}, 
@@ -92,9 +85,16 @@
 	
 	<!-- 레슨승인요청하기 : 레슨의 레슨분류정보들을 INSERT-->
 	<insert id="insertLsnClassification" parameterType="Lesson">
+		<selectKey
+  		keyProperty="lsnNo" 
+  		resultType="int"
+  		order="AFTER"
+ 		statementType="PREPARED">
+ 			SELECT lsn_no_seq.currval FROM dual
+ 		</selectKey>
 		INSERT ALL 
-		<foreach collection="lsnClassifications" item="lsnClassification">
-    	INTO lesson_classification (lsn_no, club_no) VALUES (#{lsnNo}, #{lsnClassification.clubNo})
+		<foreach collection="lsnClassifications" item="list">
+    	INTO lesson_classification (lsn_no, club_no) VALUES (lsn_no_seq.currval, #{list.clubNo})
     	</foreach>
     	SELECT *
   		FROM DUAL

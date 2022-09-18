@@ -1,90 +1,109 @@
 @import url(footer.css);
 @import url(header.css);
 
-/*테이블 첫번째 열*/
-div.addlesson>form>div.table div.td1 {
-    width: 30%;
-    padding: 5px;
-    display: inline-block;
-}
-
-/*테이블 두번째 열*/
-div.addlesson>form>div.table div.td2 {
-    width: 50%;
-    padding: 5px;
-    display: inline-block;
-}
-
-/*테이블 세번째 열*/
-div.addlesson>form>div.table div.td3 {
-    width: 20%;
-    padding: 5px;
-    display: inline-block;
-}
-
-.select {
-    padding: 15px 10px;
-}
-
-
-/*레슨 기타입력정보들*/
-div.td2>ul li { 
-    padding-top: 8px;
-}
-/* div.td2 input[name=lsn_intro] {
-    width: 500px;
-    height: 300px;
-}    */
-div.td2 textarea[name=lsn_intro] {
-    width: 500px;
-    height: 300px;
-    resize: vertical; /* 상하만 크기조절가능 */
-}  
-div.td2 input[name=lsn_lv], div.td2 input[name=lsn_cnt_sum],
-div.td2 input[name=lsn_per_time], div.td2 input[name=lsn_days] {
-    width: 50px;
-}     
-
-/*레슨분류*/
-.select input[type=checkbox]+label {
-    display: inline-block;
-    cursor: pointer;
-    height: 24px;
-    width: 90px;
-    border: 1px solid #333;
-    line-height: 24px;
-    text-align: center;
-    font-weight:bold;
-    font-size:13px;
-    border-radius: 23px;
-}
-/* .select input[type=checkbox] {
-    display: none;
-}     */
-.select input[type=checkbox]+label {
-    background-color: #fff;
-    color: #333;
-}
-.select input[type=checkbox]:checked+label {
-    background-color: #333;
-    color: #fff;
-}
-
 /*헤더와 풋터에게서 섹션내용이 다 보여지도록 하기*/
 section {
     padding-top: 120px; 
     padding-bottom: 120px;
     padding-left: 240px;
     padding-right: 240px;
+    min-width: 800px;
 }
 
+article{
+    margin-top: 30;
+    min-width: 800px;
+    font-size: 15px; /*글자 크기 지정*/
+}
+
+/*제목*/
+h1{
+    text-align: center;
+    font-size: 24px;
+}
+
+/*줄바꿈 높이*/
+p{
+    margin-bottom: 0;
+}
+
+/*실선*/
+hr{
+    color: #ced4da;
+}
+
+/*이미지 미리보기*/
 #preview {
+    margin:20px 0 20px 0;
     width: 500px;
     height: 300px;
     object-fit: cover;
     vertical-align: middle;
     text-align: center;
+    border-radius: 0.25rem;
 }
+
+/*레슨 지역 선택*/
+select[name='sd'], select[name='sgg']{
+    display: inline-block;
+    width: 40%;
+    margin-right: 20px;
+}
+
+/*레슨 소개 입력 칸*/
+textarea[name=lsn_intro] {
+    width: 500px;
+    height: 300px;
+    resize: vertical; /* 상하만 크기조절가능 */
+} 
+
+/*레슨분류 선택항목*/
+.select input[type=checkbox]+label {
+    margin:  0 20px 20px 0;
+    padding: 0.375rem 0.75rem;
+    display: inline-block;
+    cursor: pointer;
+    height: 35px;
+    width: 90px;
+    border: 1px solid #333;
+    line-height: 24px;
+    text-align: center;
+    font-weight:bold;
+    font-size:14px;
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    color: #333;
+}
+
+.select input[type=checkbox]:checked+label {
+    background-color: #333;
+    color: #fff;
+}
+
+.select input[type=checkbox]:hover+label {
+    background-color: #333;
+    color: #fff;
+}
+
+.select input[type=checkbox] {
+    display: none;
+}
+
+/*input태그 옆 단위 값 한줄에 정렬*/
+input[name='lsn_price'], input[name='lsn_cnt_sum'], input[name='lsn_per_time'], input[name='lsn_days']{
+    width: 60%;
+    display: inline-block;
+    margin: 10px 10px 10px 0;
+}
+
+/*input태그 옆 단위 값 한줄에 정렬*/
+li{
+    list-style:none;
+    width: 100%;
+}
+
+
 
 /*상단가기버튼*/
 .btn_gotop {
@@ -102,6 +121,23 @@ section {
     border-radius:100%;
 } 
 
-width: 500px;
-height: 300px;
-object-fit: cover;
+button[name='register']{
+    margin: 50px 0 0 190px;
+    background-color: white;
+    border: 2px solid rgb(183, 231, 199);
+    border-radius: 10px;
+    letter-spacing: 3px;
+    font-size: medium;
+    cursor: pointer;
+    padding: 13px;
+    width: 400px;
+    height: 40px;
+    font-size: 15px;
+    display: flex;
+    align-items:center; /*텍스트 가운데 정렬*/
+    justify-content: center;/*텍스트 가운데 정렬*/
+}
+
+button:hover {
+	background-color:rgb(183, 231, 199);
+}

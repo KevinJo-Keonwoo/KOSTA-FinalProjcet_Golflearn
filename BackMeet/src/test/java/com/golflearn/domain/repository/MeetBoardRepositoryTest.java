@@ -86,12 +86,12 @@ class MeetBoardRepositoryTest {
 		Optional<MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
 		optM.ifPresent((m)->{
 			logger.error(m.toString());
-			int oldViewCount = m.getMeetBoardViewCnt();
-			int newViewCount = oldViewCount+1;
+			long oldViewCount = m.getMeetBoardViewCnt();
+			long newViewCount = oldViewCount+1;
 			m.setMeetBoardViewCnt(newViewCount);
 			meetBoardRepo.save(m);
 			
-			int expectedNewViewCount = newViewCount;
+			long expectedNewViewCount = newViewCount;
 			assertEquals(expectedNewViewCount, meetBoardRepo.findById(meetBoardNo).get().getMeetBoardViewCnt());
 		});
 	}

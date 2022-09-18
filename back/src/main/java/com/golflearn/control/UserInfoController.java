@@ -264,7 +264,6 @@ public class UserInfoController {
 	@PostMapping(value="login")
 	public ResultBean<UserInfo> login(HttpSession session, @RequestParam String userId, @RequestParam String userPwd, String userNickname, String userType) {
 		ResultBean<UserInfo> rb = new ResultBean<>();
-
 		rb.setStatus(0);
 		rb.setMsg("로그아웃 상태");
 		session.removeAttribute("loginInfo");
@@ -276,8 +275,6 @@ public class UserInfoController {
 			rb.setStatus(1);
 			rb.setMsg("로그인 성공");
 			rb.setT(userInfo);
-			
-			
 			session.setAttribute("loginInfo", userId);
 			session.setAttribute("loginNickname", userInfo.getUserNickname());
 			session.setAttribute("userType", userInfo.getUserType());
@@ -313,7 +310,7 @@ public class UserInfoController {
 		return rb;
 
 	}
-
+	
 	// 로그아웃
 	@GetMapping(value = "logout")
 	private String logout(HttpSession session) {
@@ -381,8 +378,9 @@ public class UserInfoController {
 	//비밀번호 변경 인증 문자 발송
 	@PostMapping(value="find/pwd", produces = MediaType.APPLICATION_JSON_VALUE)
 	//Requestparam으로 userId와 userPhone값을 받아옴
-	public ResultBean <UserInfo> selectByUserIdAndPhone(HttpSession session, @RequestParam("userId") String userId, @RequestParam("userPhone") String userPhone) throws FindException, JsonProcessingException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
-		ResultBean<UserInfo> rb = new ResultBean<>();
+	public ResultBean <String> selectByUserIdAndPhone(@RequestParam("userId") String userId, @RequestParam("userPhone") String userPhone) throws FindException, JsonProcessingException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
+		ResultBean<String> rb = new ResultBean<>();
+
 		UserInfo userInfo = new UserInfo();
 		try {
 			//받아올 값을 담아줄 UserInfo 타입의 userInfo 객체를 생성한다
@@ -413,13 +411,7 @@ public class UserInfoController {
 			smsService.sendSms(message);
 			
 			rb.setStatus(1);
-			
-			//세션에 userId와 randomKey 저장
-			session.setAttribute("userId", userId);
-			session.setAttribute("authenticationKey", randomKey);
-			System.out.println("-------------this findpwd---------------------------------");
-			System.out.println("세션값 아이디 저장:" + session.getAttribute("userId"));
-			System.out.println("세션값 인증번호 저장:" + session.getAttribute("authenticationKey"));
+			rb.setT(randomKey);
 		}catch(FindException e) {
 			rb.setStatus(0);
 			rb.setMsg(e.getMessage());
@@ -427,36 +419,24 @@ public class UserInfoController {
 		return rb;
 	}	
 	@PostMapping(value="change/pwd", produces = MediaType.APPLICATION_JSON_VALUE) 
-	public ResultBean <?> updateByUserPwd(HttpSession session, @RequestParam("authenticationUser") String authenticationUser, @RequestParam("newPwd") String newPwd, @RequestParam("chkNewPwd") String chkNewPwd) throws FindException {
+	public ResultBean <?> updateByUserPwd(String userId, @RequestParam("newPwd") String newPwd) throws FindException {
 		ResultBean<?> rb = new ResultBean<>();
 		Message message = new Message();
-		//세션에 저장되어있는 Id와 인증번호 가져옴
-		String userId = (String)session.getAttribute("userId");
-		String authenticationKey = (String)session.getAttribute("authenticationKey");
-		System.out.println("-------------------this change------------------");
-		System.out.println("세션저장 아이디:" + (String)session.getAttribute("userId"));
-		System.out.println("세션저장 인증코드:" + (String)session.getAttribute("authenticationKey"));
-		System.out.println("작성한 인증코드:" + authenticationUser);
-//		//userInfo의 userId에 가져온 세션값 저장
-//		UserInfo userInfo = new UserInfo();
-//		userInfo.setUserId((String)session.getAttribute("userId"));
-		if (!authenticationUser.equals(authenticationKey)) {
-			rb.setStatus(0);
-			rb.setMsg("인증번호가 일치하지 않습니다.");
-		}else {
-			if(newPwd.equals(chkNewPwd)) {
+//		System.out.println("세션 isNew :" + session.isNew() + ", 세션ID:" + session.getId());
 				try {
 					service.updateByUserPwd(userId, newPwd);
 					rb.setStatus(1);
 					rb.setMsg("비밀번호가 변경되었습니다");
 				} catch (ModifyException e) {
 					e.printStackTrace();
+					rb.setStatus(0);
+					rb.setMsg(e.getMessage());
 				}
-			}else {
-				rb.setStatus(0);
-				rb.setMsg("비밀번호가 일치하지 않습니다");
-			}
-		}
+//			}else {
+//				rb.setStatus(0);
+//				rb.setMsg("비밀번호가 일치하지 않습니다");
+//			}
+//		}
 		return rb;
 	}
 

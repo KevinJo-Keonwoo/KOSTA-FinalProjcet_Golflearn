@@ -2,16 +2,17 @@ package com.golflearn.domain.repository;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 
 import com.golflearn.domain.entity.ResaleBoardEntity;
 
-public interface ResaleBoardRepository extends CrudRepository<ResaleBoardEntity, Long> {
+public interface ResaleBoardRepository extends JpaRepository<ResaleBoardEntity, Long> {
 	// 첫번째 인자 : ResaleBoard
 	// 두번째 인자 : pk의 자료형
-//	List<ResaleBoard> findAll(Pageable paging); //Pageable -> 페이지 처리를 도와주는
+	Page<ResaleBoardEntity> findAll(Pageable pageable); //Pageable -> 페이지 처리를 도와주는
 	
 	/**
 	 * 페이지별 게시물 목록 조회 (최신순)
@@ -63,15 +64,23 @@ public interface ResaleBoardRepository extends CrudRepository<ResaleBoardEntity,
 	 * @param endRow
 	 * @return
 	 */
-	@Query(value = "SELECT * FROM (SELECT rownum r, a.* "
-			+ "FROM (SELECT * FROM resale_board "
-					+ "WHERE resale_board_title LIKE %?1% "
-					+ "OR resale_board_content LIKE %?1% "
-					+ "OR user_nickname LIKE %?1% "
-					+ "ORDER BY resale_board_no DESC) a ) WHERE r BETWEEN ?2 AND ?3"
-			, 
-			nativeQuery=true)
-	public List<ResaleBoardEntity> findByWord(String word, int startRow, int endRow);
+//	@Query(value = "SELECT * FROM (SELECT rownum r, a.* "
+//			+ "FROM (SELECT * FROM resale_board "
+//					+ "WHERE resale_board_title LIKE %?1% "
+//					+ "OR resale_board_content LIKE %?1% "
+//					+ "OR user_nickname LIKE %?1% "
+//					+ "ORDER BY resale_board_no DESC) a ) WHERE r BETWEEN ?2 AND ?3"
+//			, 
+//			nativeQuery=true)
+//	public List<ResaleBoardEntity> findByWord(String word, int startRow, int endRow);
+	
+	
+	@Query(value = "SELECT * FROM resale_board "
+			+ "WHERE resale_board_title LIKE %?1% "
+			+ "OR resale_board_content LIKE %?1% "
+			+ "OR user_nickname LIKE %?1% "
+			+ "ORDER BY resale_board_no DESC", nativeQuery = true)
+	public Page<ResaleBoardEntity> findByWord(String word, Pageable pageable);
 	
 	/**
 	 * 대댓글 수를 조회한다
