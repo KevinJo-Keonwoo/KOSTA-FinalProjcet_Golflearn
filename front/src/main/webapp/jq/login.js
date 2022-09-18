@@ -24,7 +24,16 @@ $(function () {
 		success: function (jsonObj) {
 			if (jsonObj.status == 1) {
 				alert(jsonObj.msg);
-				location.replace("http://localhost:1123/front/html/main.html");
+
+				let userObj = jsonObj.t;
+				localStorage.setItem("loginedUserType", userObj.userType);
+				localStorage.setItem("loginedNickname", userObj.userNickname);
+				localStorage.setItem("loginedId", userObj.userId);
+
+				// location.replace("http://localhost:1123/front/html/main.html");
+				location.replace("../html/main.html");
+				
+			
 			} else {
 				alert(jsonObj.msg);
 			}

@@ -18,7 +18,7 @@ $(function () {
             // 원본 하나 선택 후 나머지 게시글의 div삭제하는 작업
             $("div.board-list").not($board1).remove();
             let $board = $("div.boardlist__content").first();
-            let src = "../notice_images/";
+            let src = "../notice_image/";
             $board1.empty();
             $(pageBeanObj.list).each(function (index, board) {
                 let $boardCopy = $board.clone();
@@ -50,7 +50,7 @@ $(function () {
                 .find("div>img.board-list__content__thumbnail")
                 .attr(
                     "src",
-                    src + board.noticeBoardNo + "_image_" + "pyeonan.png"
+                    src  + board.noticeBoardNo +  "/" + board.noticeBoardNo + "_image_" + "s_1" + ".jpeg"
                 );
                 $board1.append($boardCopy);
             });
@@ -110,16 +110,16 @@ $(function () {
     }
 
     // 글쓰기 버튼 클릭 시 글쓰기 페이지로 이동
-    let $btWrite = $("button[name=write-button]");
+    let $btWrite = $("div.write > button");
     $btWrite.click(function () {
-        location.href = "http://localhost:1128/front/html/noticeboardwrite.html";
+        location.href = "../html/noticeboardwrite.html";
     });
 
     //클릭한 해당 게시물로 이동
     $("div.board").on("click", "div.boardlist__content", function () {
         let $board = "div.board-list__content__no";
         $boardNo = $(this).children($board).text();
-        alert($boardNo);
+        // alert($boardNo);
         location.href = "../html/noticedetail.html?notice_board_no=" + $boardNo;
     });
 
