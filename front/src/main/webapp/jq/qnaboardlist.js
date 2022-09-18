@@ -11,6 +11,7 @@ $(function () {
 		success: function (jsonObj) {
 			if (jsonObj.status == 1) {
 			let pageBeanObj = jsonObj.t;
+			console.log(jsonObj.t);
 			//게시글 div를 원본으로 한다. 복제본만든다
 			let $board = $("div.qnaboard").first();
 			//나머지 게시글 div는 삭제한다
@@ -86,22 +87,24 @@ $(function () {
 		let url = "";
 		let data = "";
 		if (word == "") {
-		url = "http://localhost:1127/qna/board/list/" + pageNo;
-		data = "currentPage=" + pageNo;
-		} else {
-		url = "http://localhost:1127/qna/board/search/" + word + "/" + pageNo;
-		data = "word=" + word + "&currentPage=" + pageNo;
-		}
-		showList(url, data);
-		return false;
-		// }
-	});
+			url = "http://localhost:1127/qna/board/list/" + pageNo;
+			data = "currentPage=" + pageNo;
+			} else {
+			url = "http://localhost:1127/qna/board/search/" + word + "/" + pageNo;
+			data = "word=" + word + "&currentPage=" + pageNo;
+			}
+			showList(url, data);
+			return false;
+		});			
 	//---페이지 그룹의 페이지를 클릭 END---
 	//---검색 클릭 START---
 	$("div.searchInput>button[name=qna-searchBtn]").click(function () {
 		let word = $("div.searchInput>input[name=word]").val().trim();
 		let url = "http://localhost:1127/qna/board/search/" + word;
 		let data = "word=" + word;
+		if(word == "") {
+			alert("검색어를 입력해주세요");
+		}
 		showList(url, data);
 		return false;
 	});
@@ -117,9 +120,10 @@ $(function () {
 		url = "http://localhost:1127/qna/board/openlist/" + pageNo;
 		data = "currentPage=" + pageNo;
 		}
-		//$("div.wrapper>ul>button[name=publicboard]").css("background-color","white");
-		//$(this).css("background-color", rgb(183, 231, 199));
 		showList(url, data);
+		$("button[name=publicboard]").off("click").on("click", function() {
+			showList("http://localhost:1127/qna/board/list");
+		});
 		return false;
 	});
 	//--비밀글 제외 보기 클릭 END---
@@ -164,7 +168,7 @@ $(function () {
 								$modifySub.hide();
 								$writeCmt.show();
 								$cmtInsert.show();
-								$cmtRemove.show();
+								$cmtRemove.hide();
 							}
 						}else {
 							if(board.qnaBoardSecret != 0) {
@@ -175,8 +179,10 @@ $(function () {
 										$boardContent.val(board.boardContent).html(board.boardContent);
 										$detail.show();
 										$remove.show();
-										$modifySub.hide();
 										$modify.show();
+										$modifySub.hide();
+										$cmtInsert.hide();
+										$cmtRemove.hide();
 									}else if (board.comment != null) {
 										$boardContent.val(board.boardContent).html(board.boardContent);
 										$boardContent.attr("readonly", "readonly");
@@ -184,9 +190,11 @@ $(function () {
 										$qnaCmtdt.val(board.qnaCmtdtContent).html(board.qnaCmtdt);
 										$commentUserNickname.val(board.commentUserNickname).html(board.commentUserNickname);
 										$detail.show();
-										$remove.hide();
+										$remove.show();
 										$modify.hide();
 										$modifySub.hide();
+										$cmtInsert.hide();
+										$cmtRemove.hide();
 									}
 								}
 							}else if(board.qnaBoardSecret == 0) {
@@ -197,6 +205,8 @@ $(function () {
 										$remove.hide();
 										$modify.hide();
 										$modifySub.hide();
+										$cmtInsert.hide();
+										$cmtRemove.hide();
 									}else if (board.comment != null) {
 										$boardContent.val(board.boardContent).html(board.boardContent);
 										$qnaCmtContent.val(board.comment.qnaCmtContent).html(board.comment.qnaCmtContent);
@@ -206,6 +216,8 @@ $(function () {
 										$remove.hide();
 										$modify.hide();
 										$modifySub.hide();
+										$cmtInsert.hide();
+										$cmtRemove.hide();
 									}
 								}else if(loginedNickname == board.userNickname){
 									if(board.comment == null) {
@@ -214,6 +226,8 @@ $(function () {
 										$remove.show();
 										$modify.show();
 										$modifySub.hide();
+										$cmtInsert.hide();
+										$cmtRemove.hide();
 									}else if (board.comment != null) {
 										$boardContent.val(board.boardContent).html(board.boardContent);
 										$qnaCmtContent.val(boardcomment.qnaCmtContent).html(boardcomment.qnaCmtContent);
@@ -223,6 +237,8 @@ $(function () {
 										$remove.show();
 										$modify.hide();
 										$modifySub.hide();
+										$cmtInsert.hide();
+										$cmtRemove.hide();
 									}
 								}
 							}
@@ -251,6 +267,7 @@ $(function () {
 			let $modify = $detail.find("div.modifyNremove button[name=board-modify]");
 			let $remove = $detail.find("div.modifyNremove button[name=board-remove]");
 			let $modifySub = $detail.find("div.modifyNremove button[name=board-modify-submit]")
+			$boardTitle.removeClass("up");
 			if(loginedNickname == $userNickname) {
 				$boardTitle.attr("contenteditable","true");
 				$boardContent.removeAttr("readonly");
@@ -260,7 +277,8 @@ $(function () {
 				$remove.show();
 				$modifySub.show();
 			}
-			$("div.boardlist").on( "click", "div.qnaboard>div.cell>div.detail>div.modifyNremove button.modify",	function () {
+			$("div.boardlist").on( "click", "div.qnaboard>div.cell>div.detail>div.modifyNremove button.modifysubmit",	function () {
+				$boardTitle.addClass("up");
 				let boardNo = $(this).parents("div.cell").find("div.board_no").html();
 				let boardTitle = $(this).parents("div.cell").find("div.board_title").html();
 				let boardContent = $(this).parents("div.cell").find("input.board_content").val();
@@ -294,35 +312,7 @@ $(function () {
 				}
 			);
 		});
-	//		$.ajax({
-	//		url: "http://localhost:1127/qna/board/" + boardNo,
-	//		method: "PUT",
-	//		timeout: 0,
-	//		headers: {
-	//		"Content-Type": "application/json",
-	//		},
-	//		data: JSON.stringify({
-	//			boardNo: boardNo,
-	//			boardTitle: boardTitle,
-	//			boardContent: boardContent,
-	//			userNickname: loginedNickname,
-	//			qnaBoardSecret : boardSecret
-	//		}),
-	//		success: function (jsonObj) {
-	//		alert("수정성공");
-	//		console.log(userNickname);
-	//		},
-	//		error: function (jqXHR, textStatus) {
-	//		console.log(boardContent);
-	//		alert("수정 에러:" + jqXHR.status + ", jqXHR.responseText:" + jqXHR.responseText);
-	//		},
-	//	});
-	//	return false;
-	//	}
-	//);
 
-
-	
 	//---수정버튼 클릭 END---
 
 	//---글 삭제버튼 클릭 START 댓글이 있는글은 삭제할 수 없음---

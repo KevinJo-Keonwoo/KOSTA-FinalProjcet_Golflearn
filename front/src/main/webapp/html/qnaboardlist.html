@@ -24,8 +24,8 @@
 	<main id=main class=main role=main>
 		<h1>QnA</h1>
 		<nav class="filter-nav">
-			<button type="button" class="qna-nav-btn">답변대기</button>
-			<button type="button" class="qna-nav-btn">답변완료</button>
+			<!--<button type="button" class="qna-nav-btn">답변대기</button>
+			<button type="button" class="qna-nav-btn">답변완료</button>-->
 			<button type="button" class="qna-nav-btn" name="publicboard">비밀글 제외</button>
 		</nav>
 		<div class="search">
@@ -49,20 +49,20 @@
 						<div class="detail">
 							<div class="modifyNremove">
 								<button type="button" class=modify name="board-modify" >수정</button>
-								<button type="button" class=modify name="board-modify-submit">확인</button>
+								<button type="button" class=modifysubmit name="board-modify-submit" data-bs-toggle="modal" data-bs-target="#exampleModal">확인</button>
 								<button type="button" class="btn btn-primary" name="board-remove" data-bs-toggle="modal" data-bs-target="#exampleModal">삭제</button>
 							</div>
 							<div class="board-detail">
-								Q<input class="board_content" placeholder="게시글 내용" readonly required autocomplete="off">
+								Q<input class="board_content" readonly required autocomplete="off">
 							</div>
 							<div class="comment-detail">
-								A<input class="comment_content" placeholder="댓글 내용" readonly required autocomplete="off">
+								A<input class="comment_content" placeholder="답변 대기중인 글입니다" readonly required autocomplete="off">
 								<div class="comment_user_nickname"></div>
 								<div class="comment_dt"></div>
 							</div>
 							<div class="write-comment">
 								<textarea name="input_comment" rows="3" cols="50"
-									placeholder="댓글내용을 입력하세요" autocomplete="off"></textarea>
+									placeholder="답변을 입력하세요" autocomplete="off"></textarea>
 							</div>
 							<div class="insertNremove">
 								<button type="button" class="btn btn-primary" name="comment-insert" data-bs-toggle="modal" data-bs-target="#exampleModal">등록</button>
@@ -120,7 +120,7 @@
 		</div>
 		<div class="modal-footer">
 			<input type="checkbox" name="board-secret">비밀글
-			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+			<button type="button" class="btn btn-secondary" name="cancel" data-bs-dismiss="modal">취소</button>
 			<button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" name="submit-btn">등록하기</button>
 		</div>
 		</div>
