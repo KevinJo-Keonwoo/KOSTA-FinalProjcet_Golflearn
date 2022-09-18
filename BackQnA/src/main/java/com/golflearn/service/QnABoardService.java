@@ -54,7 +54,6 @@ public class QnABoardService {
 						.qnaBoardSecret(t.getQnaBoardSecret())
 						.build())
 				.collect(Collectors.toList());
-
 		PageBean<QnABoardDto> pb = new PageBean<>(dtolist, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
 		return pb;
 	}
@@ -110,6 +109,7 @@ public class QnABoardService {
 						.qnaBoardSecret(t.getQnaBoardSecret())
 						.build())
 				.collect(Collectors.toList());
+		
 		PageBean<QnABoardDto> pb = new PageBean<>(dtolist, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
 		return pb;
 	}

@@ -87,7 +87,7 @@ public class QnABoardController {
 	}
 
 	//userNickname으로 검색하기(for관리자)
-	@GetMapping(value= {"search/{optWord}/{optCp}", "search/{optWord}"})
+	@GetMapping(value= {"search", "search/{optWord}/{optCp}", "search/{optWord}"})
 	public ResultBean<PageBean<QnABoardDto>> searchList(@PathVariable Optional<Integer> optCp
 			,											@PathVariable Optional<String> optWord){
 		ResultBean<PageBean<QnABoardDto>> rb = new ResultBean<>();
