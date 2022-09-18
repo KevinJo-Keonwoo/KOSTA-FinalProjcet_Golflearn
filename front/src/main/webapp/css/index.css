@@ -7,8 +7,7 @@
 	/* 테두리까지 포함해서 박스 모델 너비로 계산 */
 }
 
-html,
-body {
+html, body{
 	height: 100%;
 }
 
@@ -28,4 +27,5 @@ nav {
 main {
 	height: 100%;
 	overflow: hidden;
+
 }
