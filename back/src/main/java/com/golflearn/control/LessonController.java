@@ -127,7 +127,6 @@ public class LessonController {
 			return new ResponseEntity<>("프로만 접근가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		} else {
 			// -----Lesson DB에 저장-----
-
 			ObjectMapper mapper = new ObjectMapper();
 			Lesson lesson = mapper.readValue(strLesson, Lesson.class);// String타입을 Lesson타입으로 변환
 
