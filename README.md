@@ -21,8 +21,9 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 
 ## 목표
 - MyBatis를 이용하여 semi 프로젝트에서 만든 코드 수정 
-- JPA를 이용한 각자 게시판 만들기
-
+- MSA를 이용한 배포를 위해 JPA를 이용하여 각자의 게시판 만들기
+- 다양한 외부 API/라이브러리 활용하기 
+- git/git issue/slack/notion등의 협업툴을 적극적으로 활용하기
 
 ## 서비스 기능
 ### 1. 메인 페이지
