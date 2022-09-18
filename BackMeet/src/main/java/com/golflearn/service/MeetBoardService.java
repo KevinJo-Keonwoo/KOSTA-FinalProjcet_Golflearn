@@ -251,7 +251,7 @@ public class MeetBoardService {
 	}
 	
 	/**
-	 * 글 작성자가 모집상태를 수정한다
+	 * 글 작성자가 모임을 모집종료한다
 	 * @param meetBoardNo 글번호
 	 * @param meetBoardStatus 모집상태
 	 * @throws ModifyException
@@ -265,7 +265,8 @@ public class MeetBoardService {
 		}else if(!userNickname.equals(writer)){//작성자 여부 확인
 			throw new ModifyException("해당 글의 작성자만 수정할 수 있습니다.");
 		}else{
-			meetBoard.setMeetBoardStatus(meetBoardStatus);
+			meetMemberRepo.DeleteByBoardNo(meetBoardNo);//모임멤버 삭제하기
+			meetBoard.setMeetBoardStatus(meetBoardStatus); //글의 모집상태 변경하기
 			meetBoardRepo.save(meetBoard);
 		}
 	}

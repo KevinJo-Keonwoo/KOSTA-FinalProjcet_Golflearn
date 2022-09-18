@@ -133,8 +133,8 @@ public class MeetBoardController {
 			int currentPage = 1;
 			if(loginedNickname == null){//로그인하지 않은 경우
 			rb.setStatus(0);
-			throw new FindException("로그인이 필요합니다.");
-			} else if (optCp.isPresent()) {//선택한 페이지가 있는 경우
+				throw new FindException("로그인이 필요합니다.");
+				} else if (optCp.isPresent()) {//선택한 페이지가 있는 경우
 				currentPage = optCp.get();
 				pb = service.viewMyMeetBoard(loginedNickname, currentPage);
 			} else {//선택한 페이지가 없는 경우
@@ -226,12 +226,12 @@ public class MeetBoardController {
 		}
 	}
 
-	// 글 작성자가 모임글의 상태를 수정한다
+	// 글 작성자가 모집종료하기
 	@PutMapping(value = "update/{meetBoardNo}")	
 	public ResponseEntity<String> modifySatus(@PathVariable Long meetBoardNo, @RequestBody MeetBoardDto meetBoardDto) {
 		try {
 			String loginedNickname = meetBoardDto.getUserNickname();
-			Long meetBoardStatus = meetBoardDto.getMeetBoardStatus();
+			Long meetBoardStatus = 1L;
 			service.modifyStatus(loginedNickname, meetBoardNo, meetBoardStatus);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (ModifyException e) {
