@@ -42,7 +42,7 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 
 ### 4. 아이디/비밀번호찾기 페이지
 - 아이디 찾기 : DB에 저장되어 있는 이름, 이메일 주소가 일치하면 모달창으로 값 전달
-- 비밀번호 찾기 : 메일로 인증코드를 전달함, smtp사용(자바 메일 라이브러리로 구글 smtp사용함)
+- 비밀번호 찾기 : 문자로 인증코드를 전달함, SENS SMS API사용(자바 메일 라이브러리로 구글 smtp사용함)
 
 ### 5. 레슨상세보기 페이지
 - 메인페이지에서 선택한 레슨에 대해 상세정보를 보여줌
@@ -142,7 +142,7 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 <br>
 **황초연 [@myCYWORLD](https://github.com/myCYWORLD) - Notion 관리자**<br>
 ✔️ 문의사항 게시판 담당<br>
-✔️ <br>
-✔️ <br>
-✔️ <br>
+✔️ 게시판 비밀글 기능 구현<br>
+✔️ 기존 비밀번호 변경 페이지에서 SMTP 라이브러리를 SENS SMS API로 대체하여 인증방법 변경<br>
+✔️ 팀 노션 관리<br>
 ✔️ 담당 페이지 css 구현 <br>
