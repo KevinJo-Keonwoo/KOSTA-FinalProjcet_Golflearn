@@ -1,1 +1,0 @@
-<img src="" alt="" width="30%;" height=" 30%;"/>
