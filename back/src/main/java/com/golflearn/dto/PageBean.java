@@ -17,7 +17,7 @@ public class PageBean<T> {
 	private int totalPage;//총페이지
 	private int startPage; //시작페이지
 	private int endPage; //끝페이지
-	private int cntPerPageGroup = 3; //페이지그룹별 보여줄 페이지수
+	private int cntPerPageGroup = 5; //페이지그룹별 보여줄 페이지수
 	
 	/**
 	 * 
