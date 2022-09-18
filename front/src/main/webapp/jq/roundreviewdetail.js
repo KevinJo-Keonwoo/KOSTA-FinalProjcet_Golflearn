@@ -286,46 +286,46 @@ $(function(){
         })
     })
 
-
-    //4. 댓글 삭제하기 
-
-    //5. 대댓글삭제하기?? 
-    
     
     //6. 좋아요 누르기/해제하기
     
     $("img.board__like").on("click", function () {
         let roundReviewBoardNo = board_no;
         let likedNickname = "데빌";
+        console.log(user_nickname);
+        console.log(likedNickname);
+
         // console.log("보드 넘버는" + resaleBoardNo);
         // 좋아요 여부
         console.log("좋아요한 닉넴" + likedNickname);
         // console.log("좋아요 번호 " + likeNo);
         if (likedNickname == user_nickname) {
-        // localStorage.getItem("loginedNickname")
-        // 세션 아이디와 좋아요 한 닉네임이 같으면
-        // 좋아요 삭제
-        // let obj = {
-        //     userNickname : likedNickname,
-        // };
-        let data = {userNickname : likedNickname};
-        $.ajax({
-            url: "http://localhost:1125/backroundreview/like/" + roundReviewBoardNo,
-            method: "delete",
-            // contentType: "application/json",
-            // data: JSON.stringify(obj),
-            data: data,
-            success: function (jsonObj) {
-            if (jsonObj.status == 1) {
-                alert(jsonObj.msg);
-                location.reload();
-            }
-            },
-            error: function (jqXHR) {
-                alert(jqXHR.status + ":" + "좋아요 삭제 실패");
-                location.reload();
-            },
-        });
+            // localStorage.getItem("loginedNickname")
+            // 세션 아이디와 좋아요 한 닉네임이 같으면
+            // 좋아요 삭제
+            // let obj = {
+            //     userNickname : likedNickname,
+            // };
+            let data = {userNickname : likedNickname};
+            $("img.board__like").attr('src', "https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-large/1f90d.png");
+            $.ajax({
+                url: "http://localhost:1125/backroundreview/like/" + roundReviewBoardNo,
+                method: "delete",
+                // contentType: "application/json",
+                // data: JSON.stringify(obj),
+                data: data,
+                success: function (jsonObj) {
+                if (jsonObj.status == 1) {
+                    alert(jsonObj.msg);
+                    location.reload();
+                    //흰색 하트
+                }
+                },
+                error: function (jqXHR) {
+                    alert(jqXHR.status + ":" + "좋아요 삭제 실패");
+                    location.reload();
+                },
+            });
         } else { // 세션 아이디와 좋아요한 닉네임이 같지 않으면
             let nickname = user_nickname;
             // let obj = { 
@@ -334,6 +334,7 @@ $(function(){
             //     }
             // };
             let data = {userNickname : nickname}
+            $("img.board__like").attr('src', "https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-medium/1f9e1.png");
             //좋아요 클릭
             $.ajax({
                 url: "http://localhost:1125/backroundreview/like/" + roundReviewBoardNo,
@@ -345,6 +346,7 @@ $(function(){
                 if ((jsonObj.status = 1)) {
                     alert("좋아요 추가 성공");
                     location.reload();
+                     //주황 하트
                 }
                 },
                 error: function (jqXHR) {
@@ -360,8 +362,6 @@ $(function(){
     $("div.footer").on('click', "button.previous", function(){
         location.href = './roundreviewboardlist.html';
     })
-    
-    
 
 
 
