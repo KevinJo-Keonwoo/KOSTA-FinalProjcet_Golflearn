@@ -116,7 +116,7 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 - starUML
 
 ### 팀원 (가나다순)<br>
-**김지연 [@Jiyeon](https://github.com/JiyeonKimbackend) - CSS 담당** <br>
+**김지연 [@Jiyeon](https://github.com/JiyeonKimbackend) - CSS 담당**<br>
 ✔️ 모임 게시판 담당<br>
 ✔️ <br> 
 ✔️ <br>
@@ -125,8 +125,8 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 <br>
 **전승현 [@cokesh](https://github.com/cokesh) - Git 관리자**<br>
 ✔️ 공지사항 게시판 담당<br>
-✔️ <br>
-✔️ <br>
+✔️ 시군구Api를 활용한 시도/시군구 검색 및 데이터 저장 기능 구현<br>
+✔️ RESTful API, CRUD repository, Builder 등 다방면으로 JPA 구현<br>
 ✔️ Git, Github 관리<br>
 ✔️ 담당 페이지 css 구현<br>
 <br>
