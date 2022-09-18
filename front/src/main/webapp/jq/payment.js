@@ -1,45 +1,48 @@
 $(function(){
-        let $btPayment = $("button[name=payment]");
-		
-		//입력된 객체 찾기
-		let lsn_title = "" ;
-		let pay_method = "";
-		let name = "";
+	let $btPayment = $("button[name=payment]");
+	
+	//입력된 객체 찾기
+	let lsn_title = "" ;
+	let pay_method = "";
+	let name = localStrage.getItem("loginedName");
+	let nickname = localStrage.getItem("loginedNickname");
+	let email = localStrage.getItem("loginedId");
+	let phone = localStrage.getItem("loginedPhone");
 
 
-        $($btPayment).click(function () {
-          	var IMP = window.IMP; // 생략가능
-          	IMP.init("imp84404721"); // 가맹점 식별코드(부여받음)
+	$($btPayment).click(function () {
+		var IMP = window.IMP; // 생략가능
+		IMP.init("imp84404721"); // 가맹점 식별코드(부여받음)
 
-			IMP.request_pay({
-            	pg: "html5_inicis", //이니시스 결제 사용
-				pay_method: "card",
-				merchant_uid: "merchant_" + new Date().getTime(),
-				lsn_title: "주문명:결제테스트", //결제창에서 보여질 이름
-				amount: 1000, //가격
-				buyer_id: "hanmr@nate.com",
-				buyer_name: "한미래",
-				buyer_nickname: "데빌",
-				buyer_tel: "010-1234-3949",
-				m_redirect_url: "https://localhost:1124/front/html/mypage.html", // 결제 이후 돌아가는 페이지
-            },
-            function (rsp) {
-				console.log(rsp);
-				if (rsp.success) {
-					var msg = "결제가 완료되었습니다.";
-					msg += "고유ID : " + rsp.imp_uid;
-					msg += "상점 거래ID : " + rsp.merchant_uid;
-					msg += "결제 금액 : " + rsp.paid_amount;
-					msg += "카드 승인번호 : " + rsp.apply_num;
-					msg += "결제 수단 : " + rsp.pay_method;
-				} else {
-					var msg = "결제에 실패하였습니다.";
-					msg += "에러내용 : " + rsp.error_msg;
-				}
-				alert(msg);
-            }
-			);
-        });
+		IMP.request_pay({
+			pg: "html5_inicis", //이니시스 결제 사용
+			pay_method: "card",
+			merchant_uid: "merchant_" + new Date().getTime(),
+			lsn_title: "주문명:결제테스트", //결제창에서 보여질 이름
+			amount: 1000, //가격
+			buyer_id: email,
+			buyer_name: name,
+			buyer_nickname: nickname,
+			buyer_tel: phone,
+			m_redirect_url: "https://localhost:1124/front/html/mypage.html", // 결제 이후 돌아가는 페이지
+		},
+		function (rsp) {
+			console.log(rsp);
+			if (rsp.success) {
+				var msg = "결제가 완료되었습니다.";
+				msg += "고유ID : " + rsp.imp_uid;
+				msg += "상점 거래ID : " + rsp.merchant_uid;
+				msg += "결제 금액 : " + rsp.paid_amount;
+				msg += "카드 승인번호 : " + rsp.apply_num;
+				msg += "결제 수단 : " + rsp.pay_method;
+			} else {
+				var msg = "결제에 실패하였습니다.";
+				msg += "에러내용 : " + rsp.error_msg;
+			}
+			alert(msg);
+		}
+		);
+	});
 
 	// // 수강신청 버튼 찾기
 	// let $btPayment =$("button[name=payment]");	

@@ -14,8 +14,8 @@ import com.golflearn.exception.FindException;
 import com.golflearn.exception.ModifyException;
 
 @SpringBootTest
-public class UserInfoRepositoryTest {
-
+class UserInfoRepositoryTest {
+	
 	@Autowired
 	private UserInfoRepository repository;
 	
@@ -32,6 +32,7 @@ public class UserInfoRepositoryTest {
 		user.setUserJoinDt(sqlDate);
 		repository.insertStdt(user);		
 	}
+	
 	
 	@Test
 	public void testInsertPro() throws AddException{
@@ -69,19 +70,20 @@ public class UserInfoRepositoryTest {
 		assertEquals(userNickname, ui.getUserNickname());
 	}
 	
-	//로그인
+	
 	@Test
 	public void testSelectByUserIdAndPwd() throws FindException {
-		String userNicakName = "프로한";
+//		String userNicakName = "프로한";
 		String expectedUserId = "pro.han@naver.com";
 		String expectedUserPwd = "12345";
 		UserInfo ui = repository.selectByUserIdAndPwd(expectedUserId, expectedUserPwd);
-		
+//		System.out.println("저장된 정보는 " + ui);
 		assertEquals(expectedUserId, ui.getUserId());
 		assertEquals(expectedUserPwd, ui.getUserPwd());
 	}
 	
 	@Test
+	//아이디 조회
 	void testSelectByUserNameAndPhone() throws FindException {
 		String userName = "전승현";
 		String userPhone = "010-4465-9015";
@@ -93,18 +95,19 @@ public class UserInfoRepositoryTest {
 	}
 	
 	@Test
+	//핸드폰 번호 조회
 	void testselectByUserIdAndPhone() throws FindException {
 		String userId = "zzeonsh@gmail.com";
-		String userPhone = "010-4465-9015";
-		
-		String expectedUserPhone = "010-4465-9015";
+		String userPhone = "010-7186-5611";
 		
 		UserInfo userInfo = repository.selectByUserIdAndPhone(userId, userPhone);
-		assertNotNull(userInfo);
+		
+		String expectedUserPhone = "010-7186-5611";
 		assertEquals(expectedUserPhone, userInfo.getUserPhone());
 	}
 	
 	@Test
+	//비밀번호 변경
 	void testupdateByUserPwd() throws ModifyException {
 		UserInfo userInfo = new UserInfo();
 		String userId = "zzeonsh@gmail.com";

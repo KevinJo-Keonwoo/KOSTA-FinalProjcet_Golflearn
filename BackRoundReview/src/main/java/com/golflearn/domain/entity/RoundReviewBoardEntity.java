@@ -1,5 +1,6 @@
 package com.golflearn.domain.entity;
 
+
 import java.util.Date;
 import java.util.List;
 

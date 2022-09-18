@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonLine;
-import com.golflearn.dto.Payment;
-import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 
 public interface LessonLineRepository {
@@ -39,6 +37,7 @@ public interface LessonLineRepository {
 	 * @throws AddException
 	 */
 	public void insertLsnLine(LessonLine lessonLine) throws AddException;
+
 
 
 	

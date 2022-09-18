@@ -11,8 +11,7 @@
 	<!-- iamport.payment.js -->
 	<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
 	<script src="../jq/viewlesson.js"></script>
-	<script src="../jq/payment.js"></script>
-
+	<link rel="stylesheet" href="../css/index.css">
 	<link rel="stylesheet" href="../css/viewlesson.css">
 </head>
 <div w3-include-html="header.html" class="w3"></div>
@@ -26,20 +25,24 @@
 	<section class="section1">
 		<article>
 			<div class="viewlesson">
-				<img src="" alt="" />
 				<!--레슨썸네일-->
+				<img src="" alt="" style="max-width: 140px; height: auto;" />
 				<div class="simple">
 					<ul>
 						<div>
 							<li>레슨지역:<span class="loc_no"></span> </li>
 							<li>레슨명:<span class="lsn_title"></span></li>
 							<li>레슨별점:<span class="lsn_star_score"></span></li>
+							<li>레슨가격:<span class="lsn_price"></span></li>
 							<li>레슨후기갯수:<span class="lsn_review_cnt"></span></li>
 							<li>프로명:<span class="user_name"></span></li>
-							<li>프로별점:<span class="pro_star_score"></span></li>
+							<li>유효기간:<span class="lsn_days"></span></li>
+							<li>레슨횟수:<span class="lsn_cnt_sum"></span></li>
+							<li>회당레슨시간:<span class="lsn_per_time"></span></li>
+							<li>레슨레벨:<span class="lsn_lv"></span></li>
 						</div>
 						<div id="btn">
-							<button id="payment", name="payment">수강신청</button>
+							<button id="payment" , name="payment">수강신청</button>
 						</div>
 					</ul>
 				</div>
@@ -49,13 +52,15 @@
 	<!--본문섹션(레슨상세정보)-->
 	<section class="section2">
 		<!--네비바 영역-->
+		<hr>
+		<br>
 		<article>
 			<div class="navi">
 				<nav>
 					<!--레슨상세탭 네비바(레슨소개, 프로소개, 레슨후기)-->
-					<a  class="lsndetail" href="#lsnIntro" id="lsnIntroLink">레슨소개</a>
-					<a  class="lsndetail" href="#proIntro" id="proIntroLink">프로소개</a>
-					<a  class="lsndetail" href="#review" id="reviewLink">레슨후기</a>
+					<a class="lsndetail" href="#lsnIntro" id="lsnIntroLink">레슨소개</a>
+					<a class="lsndetail" href="#proIntro" id="proIntroLink">프로소개</a>
+					<a class="lsndetail" href="#review" id="reviewLink">레슨후기</a>
 				</nav>
 			</div>
 		</article>
