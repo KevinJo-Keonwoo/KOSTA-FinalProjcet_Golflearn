@@ -13,15 +13,15 @@ footer {
     /* height: 100%;  */
     width: 100%;
 
-    color: rgb(255, 255, 255);
+    color: rgb(16, 16, 16);
     background: #B7E7C7;
     position: absolute;
-    /*bottom: 0; */
+    /* bottom: 0; */
     padding: 10px;
     z-index: 9999;
     font-family: 'Godo';
     font-size: 12px;
-    left: 0; 
+    left: 0;
     right: 0;
 }
 
@@ -38,3 +38,11 @@ footer > #container > #content {
 footer > #container > #content > p {
     margin: 0px 0px;
 }
+
+div.people> div > p:hover {
+    color: rgb(255, 136, 0);
+    cursor: pointer;
+}
+/* div.team>a{
+    margin-bottom:10%;
+} */

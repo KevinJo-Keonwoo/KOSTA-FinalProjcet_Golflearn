@@ -275,7 +275,7 @@ public class UserInfoController {
 			rb.setStatus(1);
 			rb.setMsg("로그인 성공");
 			rb.setT(userInfo);
-				
+      
 			session.setAttribute("loginInfo", userId);
 			session.setAttribute("loginNickname", userInfo.getUserNickname());
 			session.setAttribute("userType", userInfo.getUserType());

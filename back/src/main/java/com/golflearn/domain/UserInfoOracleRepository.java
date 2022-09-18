@@ -15,7 +15,7 @@ import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 import com.golflearn.exception.ModifyException;
 
-@Repository(value="userInfoRepository")
+@Repository//(value="userInfoRepository")
 public class UserInfoOracleRepository implements UserInfoRepository {
 	//Mybatis 사용하기 위해 Autowired 된 SqlSessionFactory가 필요
 	//SqlSessionFactory를 사용하기 위해선 스프링 컨테이너에 의해 관리가 되어야함

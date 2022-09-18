@@ -85,7 +85,7 @@ public class LessonController {
 		}
 	}
 
-	@GetMapping(value = {"lesson", "lesson/{optCp}"}) // 프로의 레슨내역에서 레슨번호에 대한 히스토리
+	@GetMapping(value = {"history", "history/{optCp}"}) // 프로의 레슨내역에서 레슨번호에 대한 히스토리
 	public ResultBean<LessonLine> viewHistory(@PathVariable int optCp, HttpSession session) {
 		ResultBean<LessonLine> rb = new ResultBean<>();
 		// 로그인 여부를 받아와야한다 HttpSession?

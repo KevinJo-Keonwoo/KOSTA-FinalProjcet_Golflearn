@@ -1,5 +1,5 @@
 $(function() {
-	let $inputAuthenticationUser = $("input[name=authenticationUser]");
+	let $inputAuthUser = $("input[name=authenticationUser]");
 	let $inputNewPwd = $("input[name=user_newpwd]");
 	let $inputChkNewPwd = $("input[name=user_chknewpwd]");
 
@@ -77,9 +77,11 @@ $(function() {
 			error: function (jqXHR,textStatus,errorThrown) {
 				$('#content.modal-body').html("오류:" + jqXHR.status);
 				$('button#btn-secondary').click(function () {
+
 	//			location.href = "http://localhost:1123/front/html/changepwd.html";
 				});
 			}
+
 		});
 		//event.preventDefault();
 		return false;

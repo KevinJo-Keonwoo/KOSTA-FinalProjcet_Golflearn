@@ -25,13 +25,16 @@ $(function () {
 			if (jsonObj.status == 1) {
 				alert(jsonObj.msg);
 
+
 				let userObj = jsonObj.t;
 				localStorage.setItem("loginedUserType", userObj.userType);
 				localStorage.setItem("loginedNickname", userObj.userNickname);
 				localStorage.setItem("loginedId", userObj.userId);
+				localStorage.setItem("loginedPhone", userObj.userPhone);
+				localStorage.setItem("loginedName", userObj.userName);
 
 				// location.replace("http://localhost:1123/front/html/main.html");
-				location.replace("../front/html/main.html");
+				location.replace("../html/main.html");
 				
 			
 			} else {
