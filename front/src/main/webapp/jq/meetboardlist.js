@@ -12,6 +12,7 @@ $(function () {
 
           //게시글 div를 원본으로 한다. 복제본만든다
           let $board = $('li.board-container').first();
+          $board.show();
           //나머지 게시글 div는 삭제한다
           $('li.board-container').not($board).remove();
 
@@ -19,14 +20,14 @@ $(function () {
           $(pageBeanObj.list).each(function (index, board) {
             let $boardCopy = $board.clone();//복제본
             // $boardCopy.find("a.board-link").html(board.meetBoardNo);
-            $boardCopy.find("span.board-no").html(board.meetBoardNo);
+            // $boardCopy.find("span.board-no").html(board.meetBoardNo);
             $boardCopy.find("span.board-ctg").html(board.meetCategory.meetCtgTitle);
             $boardCopy.find("span.board-nickname").html(board.userNickname);
             $boardCopy.find("h3.board-title").html(board.meetBoardTitle);
             $boardCopy.find("span.board-dt").html(board.meetBoardDt);
             $boardCopy.find("span.board-meet_dt").html(board.meetBoardMeetDt);
-            $boardCopy.find("span.board-cur_cnt").html(board.meetBaordCurCnt);
-            $boardCopy.find("span.board-max_cnt").html(board.meetBaordCurCnt);
+            let meetCnt = board.meetBaordCurCnt + '/' + board.meetBoardMaxCnt + '명';
+            $boardCopy.find("span.board-cnt").html(meetCnt);
             $boardCopy.find("span.board-location").html(board.meetBoardLocation);
             $boardCopy.find("span.board-view_cnt").html(board.meetBoardViewCnt);
 
@@ -39,12 +40,16 @@ $(function () {
 
             //모집유형은 숫자값(0,1)므로 한글로 변경하여 넣기 
             if (board.meetBoardStatus == 0) {
-              $boardCopy.find("span.board-status").html("모집중");
+              $boardCopy.find('span.board-status').html("모집중");
+              $boardCopy.find('span.board-status').css('background-color', '#92B23B').css('color', 'white');
+
             } else {
               $boardCopy.find("span.board-status").html("모집완료");
+              $boardCopy.find('span.board-status').css('background-color', '#a9a9a9').css('color', 'white');
             }
             $boardParent.append($boardCopy);
           });
+            $board.hide();
 
           //---------페이징처리 START---------
           let $pagegroup = $('div.pagegroup')
@@ -68,11 +73,11 @@ $(function () {
 
           $pagegroup.html($pagegroupHtml);
         } else {
-          alert(jsonObj.msg);
+          // alert(jsonObj.msg);
         }
       },
       error: function (jqXHR) {
-        alert("에러:" + jqXHR.responseText);
+        // alert("에러:" + jqXHR.responseText);
       }
     });
     return false;

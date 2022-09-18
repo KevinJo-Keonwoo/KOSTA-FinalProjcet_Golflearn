@@ -24,36 +24,37 @@
             <header>
                 <h2>모임글 상세</h2>
             </header>
+            <hr>
             <article>
+                
                 <div class="board__header">
                     <span class="board-status"></span>
                     <h1 class="board_title"></h1>
-                    <h6 class="user-nickname"></h6>
+                    <div class="board__header-sub">
+                    <span class="user-nickname"></span>
                     <span class="sub-title__meetboard_dt"></span>
                 </div>
+                </div>
+                <hr>
+                
                 <div class="board__content-info">
                     <div class="board__content-row">
-                        <label for="board__content-ctg" class="form-label">유형</label>
+                        <label for="board__content-ctg" >유형</label>
                         <span class="board__content-ctg"></span>
-                        <label for="board__content-location" class="form-label">장소</label>
+                        <label for="board__content-location" >장소</label>
                         <span class="board__content-location"></span>
                     </div>
+                    <hr>
                     <div class="board__content-row">
-                        <label for="board__content-max" class="form-label">인원</label>
-                        <div class="board__content-cnt">
-                            <span class="board__content-cur"></span>
-                            <span class="board__content-max"></span>
-                        </div>
-
-                        <label for="board__content-dt" class="form-label">모임날짜</label>
+                        <label for="board__content-max">인원</label>
+                        <span class="board-cnt"></span>
+                        <label for="board__content-dt" >모임날짜</label>
                         <span class="board__content-dt"></span>
                     </div>
                 </div>
+                <hr>
                 <div class="board__content-detail">
-                    <div class="board__content-row">
-                        <label for="board__content-content" class="form-label">내용</label>
                         <span class="board__content-content"></span>
-                    </div>
                 </div>
                 <div class="d-grid gap-2 col-2 mx-auto">
                     <button class="btn btn-primary" type="button" name="btn-in">참여하기</button>

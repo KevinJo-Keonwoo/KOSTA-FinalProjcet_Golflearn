@@ -13,7 +13,7 @@ $(function () {
             if (jsonObj.status == 1) {
 
                 $("h1.board_title").html(jsonObj.t.meetBoardTitle);
-                $("h6.user-nickname").html(jsonObj.t.userNickname);
+                $("span.user-nickname").html(jsonObj.t.userNickname);
 
                 // $("span.board__content-content").html(jsonObj.t.meetBoardContent);
                 //summernote태그 변환
@@ -21,19 +21,21 @@ $(function () {
                 
                 $("span.sub-title__meetboard_dt").html(jsonObj.t.meetBoardDt);
                 $("span.board__content-dt").html(jsonObj.t.meetBoardMeetDt);
-                $("span.board__content-cur").html(jsonObj.t.meetBaordCurCnt);
-                $("span.board__content-max").html(jsonObj.t.meetBoardMaxCnt);
+                
+                let meetCnt =jsonObj.t.meetBaordCurCnt + '/' +jsonObj.t.meetBoardMaxCnt + '명';
+                $("span.board-cnt").html(meetCnt);
                 $("span.board__content-location").html(jsonObj.t.meetBoardLocation);
                 $("span.board__content-ctg").html(jsonObj.t.meetCategory.meetCtgTitle);
-                // $("span.board-status").html(jsonObj.t.meetBoardStatus);
 
                 //모집상태에 따른 버튼
                 if (jsonObj.t.meetBoardStatus == 1) {//모집완료인 경우
                     $("span.board-status").html("모집완료");
                     $("button[name='btn-in']").hide();//참여하기, 나가기 버튼 숨기기
                     $("button[name='btn-out']").hide();
+                    $('span.board-status').css('background-color', '#a9a9a9').css('color', 'white');
                 } else {//모집중인 경우
                     $("span.board-status").html("모집중");
+                    $('span.board-status').css('background-color', '#92B23B').css('color', 'white');
                 }
 
                 //작성자여부에 따른 버튼

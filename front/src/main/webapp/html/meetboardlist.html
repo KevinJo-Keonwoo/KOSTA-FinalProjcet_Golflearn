@@ -20,28 +20,37 @@
             <!--헤더태그 겹쳐서 index이상? -->
             <header>
                 <h1>모임</h1>
+                <hr>
                 <!--모집상태 필터탭-->
                 <div class="search-container">
-                        <ul class="search__filter-list">
-                            <li class="search__filter" id="search__filter" >
-                                <input type ="checkbox" class="search__filter-status" name="search__filter-status" value="2"><label for="2">전체</label>
-                            </li>
-                            <li class="search__filter" id="search__filter">
-                                <input type ="checkbox" class="search__filter-status" name="search__filter-status" value=0><label for="0">모집중</label>
-                            </li>
-                            <li class="search__filter" id="search__filter">
-                                <input type ="checkbox" class="search__filter-status" name="search__filter-status" value=1><label for="1">모집완료</label>
-                            </li>
-                        </ul>
-                    <!--검색-->
-                    <form class="d-flex">
-                        <input class="form-control me-2" name="word" type="search" placeholder="제목을 검색하세요"
+                    <ul class="search__filter-list">
+                        <li class="search__filter" id="search__filter">
+                            <input type="checkbox" class="search__filter-status" name="search__filter-status" id="2"
+                                value="2"><label for="2">전체</label>
+                        </li>
+                        <li class="search__filter" id="search__filter">
+                            <input type="checkbox" class="search__filter-status" name="search__filter-status" id="0"
+                                value=0><label for="0">모집중</label>
+                        </li>
+                        <li class="search__filter" id="search__filter">
+                            <input type="checkbox" class="search__filter-status" name="search__filter-status" id="1"
+                                value=1><label for="1">모집완료</label>
+                        </li>
+                    </ul>
+                </div>
+                <p></p>
+                <hr>
+                <!--검색-->
+                <div class="header-nav">
+                    <form class="search-container">
+                        <input class="form-control" name="word" type="search" placeholder="제목을 검색하세요"
                             aria-label="Search">
                         <button class="btn btn-outline-success" href="#" name="board-search" type="submit">검색</button>
+                        <!--글쓰기 버튼-->
+                        <button class="btn btn-secondary" name="write-button" type="button">글쓰기</button>
                     </form>
+
                 </div>
-                <!--글쓰기 버튼-->
-                <button name="write-button" type="button">글쓰기</button>
             </header>
             <!--본문-->
             <article>
@@ -50,24 +59,38 @@
                     <li class="board-container">
                         <a class="board-link">
                             <div class="board">
-                                <div class="board__header">
-                                    <span class="board-no"></span>
-                                    <span class="board-status"></span>
-                                    <h3 class="board-title"></h3>
+                                <div class="board__main">
+                                    <div class="board__header">
+                                        <span class="board-status"></span>
+                                        <h3 class="board-title"></h3>
+                                    </div>
+
+                                    <p class="board__body-content"></p>
+
+                                    <p></p>
                                     <span class="board-ctg"></span>
-                                </div>
-                                <p class="board__body-content"></p>
-                                <div class="board__footer">
-                                    <span class="board-nickname"></span>
-                                    <span class="board-dt"></span>
+                                    <p></p>
+                                    <div class="board__footer">
+                                        <span class="board-nickname"></span>
+                                        <span class="board-dt"></span>
+                                        <span class="board-view_cnt"></span>
+                                    </div>
                                 </div>
                                 <div class="board__aside">
-                                    <span class="board-meet_dt"></span>
-                                    <span class="board-cur_cnt"></span>
-                                    <span class="board-max_cnt"></span>
-                                    <span class="board-location"></span>
-                                    <span class="board-view_cnt"></span>
+                                    <div class="board__aside-row">
+                                        <img src="../img/calendar-check.svg" style="width:20px; height:20px;">
+                                        <span class="board-meet_dt"></span>
+                                    </div>
+                                    <div class="board__aside-row">
+                                        <img src="../img/people-fill.svg" style="width:20px; height:20px;">
+                                        <span class="board-cnt"></span>
+                                    </div>
+                                    <div class="board__aside-row">
+                                        <img src="../img/geo-alt-fill.svg" style="width:20px; height:20px;">
+                                        <span class="board-location"></span>
+                                    </div>
                                 </div>
+
                             </div>
                         </a>
                     </li>
@@ -84,7 +107,9 @@
     </main>
     <footer w3-include-html="footer.html" class="w3"></footer>
     <script>w3.includeHTML();</script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
