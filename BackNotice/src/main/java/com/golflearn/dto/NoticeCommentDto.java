@@ -2,6 +2,7 @@ package com.golflearn.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.golflearn.domain.entity.NoticeBoardEntity;
 import com.golflearn.domain.entity.NoticeCommentEntity;
 
@@ -19,6 +20,7 @@ import lombok.Setter;
 public class NoticeCommentDto {
 	private Long noticeCmtNo;
 	private String noticeCmtContent;
+	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	private Date noticeCmtDt;
 	private Long noticeCmtParentNo;
 	private String userNickname;

@@ -21,6 +21,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.golflearn.dto.NoticeBoardDto;
@@ -55,7 +56,7 @@ public class NoticeCommentEntity {
 	@Column(name="notice_cmt_no")
 	private Long noticeCmtNo;
 
-	@JsonManagedReference
+	@JsonBackReference
 	@ManyToOne(optional = false)
 	@JoinColumn(name="notice_board_no")
 	private NoticeBoardEntity noticeBoard;

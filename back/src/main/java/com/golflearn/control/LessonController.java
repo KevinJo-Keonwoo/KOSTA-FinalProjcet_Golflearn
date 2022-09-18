@@ -97,8 +97,6 @@ public class LessonController {
 				List<LessonLine> lsnHistories = service.viewLessonHistory(optCp);
 				rb.setStatus(1);
 				rb.setLt(lsnHistories);
-//				rb.setLt(lessons);
-
 				return rb;
 			} catch (FindException e) {				
 				e.printStackTrace();

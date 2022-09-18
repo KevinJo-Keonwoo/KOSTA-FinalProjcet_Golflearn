@@ -1,34 +1,65 @@
 $(function () {
-  let url = "http://localhost:1124/back/lesson/";
-  $.ajax({
-    url: url,
+  let url = "http://localhost:1124/back/main";
+  let apiUrl = "http://localhost:1124/back/seeksidosigu";
+  $.ajax ({
+    url: apiUrl,
+    method: "GET",
     success: function (jsonObj) {
-      //card
-      // header div#normal
 
       $sidebarObj = $("div#sidebar");
       var arr = [];
       let sido = "<ul>";
       $(jsonObj.sido).each(function (key, item) {
-        // console.log(Object.values(item));
+        console.log(Object.values(item));
         $keyObj = Object.keys(item);
         $itemObj = Object.values(item);
+        console.log($itemObj);
         for (let i = 0; i < $itemObj.length; i++) {
           arr.push($itemObj[i]);
-          console.log($keyObj);
+          // console.log($keyObj);
           sido += '<li class="sido" name="sido" value="' + $keyObj[i] + '"';
           sido += ">" + $itemObj[i] + "</li>";
         }
       });
       sido += "</ul>";
       $sidebarObj.append(sido);
+    },
+    error: function (jqXHR) {
+		  alert("오류 : " + jqXHR.status);
+    }
+  })
+  $.ajax({
+    url: url,
+    success: function (jsonObj) {
+      //card
+      // header div#normal
+      // console.log(jsonObj);
+
+      // sidebar 에 시도구 선택창 띄우기
+      // $sidebarObj = $("div#sidebar");
+      // var arr = [];
+      // let sido = "<ul>";
+      // $(jsonObj.lt).each(function (key, item) {
+      //   // console.log(Object.values(item));
+      //   $keyObj = Object.keys(item);
+      //   $itemObj = Object.values(item);
+      //   // console.log($itemObj);
+      //   for (let i = 0; i < $itemObj.length; i++) {
+      //     arr.push($itemObj[i]);
+      //     // console.log($keyObj);
+      //     sido += '<li class="sido" name="sido" value="' + $keyObj[i] + '"';
+      //     sido += ">" + $itemObj[i] + "</li>";
+      //   }
+      // });
+      // sido += "</ul>";
+      // $sidebarObj.append(sido);
 
       $lsnObj = $("div.col");
       // $lsnObj = $('<div class="col">');
       // $('div#card-container').append($lsnObj);
-      $(jsonObj.lsns).each(function (index, item) {
-        console.log(item.user.userName + "  " + item.locNo);
-        console.log(item.user.userID);
+      $(jsonObj.lt).each(function (index, item) {
+        // console.log(item.userInfo.userName + "  " + item.locNo);
+        // console.log(item.userInfo.userID);
         let product = '<div class="lsn" id=' + item.lsnNo + ">";
         product +=
           '<img src= "../lsn_images/' +
@@ -41,7 +72,7 @@ $(function () {
         product += '<div class="lsn_content">';
         product += '<h5 class="lsn_title">' + item.lsnTitle + "</h5>";
         product +=
-          '<p class="pro_name">프로이름 : ' + item.user.userName + "</p>";
+          '<p class="pro_name">프로이름 : ' + item.userInfo.userName + "</p>";
         // product +='<p class="tag_name">태그이름 : ' + item.locNo + '</p>';// 지역번호/
         product +=
           '<p class="star_point">별점  : ' + item.lsnStarPoint + "</p></div>";
@@ -60,6 +91,7 @@ $(function () {
     },
   });
 
+/*
   $.ajax({
     url: "http://localhost:1124/back/user/loginstatus",
     method: "get",
@@ -91,7 +123,7 @@ $(function () {
     error: function (jqXHR) {
       alert(jqXHR.status);
     },
-  });
+  }); */
 
   // $.ajax({
   // 	url: "http://localhost:1124/back/login",
