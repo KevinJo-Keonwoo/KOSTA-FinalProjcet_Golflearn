@@ -43,15 +43,11 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 - 
 
 ## 구현기능
-- 이미지 업로드
-- 회원가입 시 유효성검사
-- SMTP를 활용한 비밀번호 찾기
-- 지역api를 활용한 지역별 레슨필터링
-- 레슨 등록 / 수정
-- job scheduler 이용한 DB자동 업데이트
-- 이미지 드래그 앤 드랍(예정)
-- 소셜 로그인 기능(예정)
-- 채팅 시스템 및 알림(예정)
+- 게시판 이미지 업로드
+- 문자 인증
+- 결제
+- 지도
+- 채팅
 
 ## 사용도구
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"><img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"><img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white"><img src="https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jQuery&logoColor=white"><br>
