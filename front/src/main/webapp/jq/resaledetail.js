@@ -305,7 +305,6 @@
     });
     //-------- 댓글 삭제 END ---------
 
-
     //--------  게시글 삭제 START -------- 
     // 게시글 삭제(완성)
     if (userNickname == loginedNickname) {
@@ -347,7 +346,6 @@
         let nickName = userNickname;
         // console.log("작성자 닉네임은" + nickName);
         // alert("작성자 닉네임은" + nickName);
-
         // alert("게시글번호는" + resaleBoardNo);
         location.href = "../html/resaleboardwrite.html?resaleBoardNo=" + resaleBoardNo;
     });

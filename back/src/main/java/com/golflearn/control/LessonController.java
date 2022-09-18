@@ -110,6 +110,7 @@ public class LessonController {
 	}
 	
 	//restcontroller가 아님
+
 	@Value("${spring.servlet.multipart.location}")
 	String saveDirectory;//파일경로생성
 //	String saveDirectory = sc.getInitParameter("filePath");

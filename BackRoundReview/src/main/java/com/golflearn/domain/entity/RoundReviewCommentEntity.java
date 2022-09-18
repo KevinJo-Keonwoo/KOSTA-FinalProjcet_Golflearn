@@ -13,6 +13,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -28,8 +30,8 @@ import lombok.Setter;
 					allocationSize = 1)
 
 @Getter @Setter
-//@DynamicInsert
-//@DynamicUpdate
+@DynamicInsert
+@DynamicUpdate
 public class RoundReviewCommentEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,

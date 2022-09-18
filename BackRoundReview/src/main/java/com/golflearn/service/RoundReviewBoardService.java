@@ -293,10 +293,15 @@ public class RoundReviewBoardService {
 	 * @param dto
 	 * @throws AddException
 	 */
-	public void writeBoard(RoundReviewBoardDto dto) throws AddException {
+	public RoundReviewBoardDto writeBoard(RoundReviewBoardDto dto) throws AddException {
 		ModelMapper modelMapper = new ModelMapper();
 		RoundReviewBoardEntity entity = modelMapper.map(dto, RoundReviewBoardEntity.class);
 		boardRepo.save(entity);
+		
+		Optional<RoundReviewBoardEntity> optRb = boardRepo.findById(entity.getRoundReviewBoardNo());
+		RoundReviewBoardEntity boardEntity = optRb.get();
+		RoundReviewBoardDto boardDto = modelMapper.map(boardEntity, RoundReviewBoardDto.class);
+		return boardDto;
 	}
 	/**
 	 * 댓글 등록 + 댓글 수 증가 
@@ -304,6 +309,7 @@ public class RoundReviewBoardService {
 	 * @throws AddException
 	 */
 	public void addComment(Long roundReviewBoardNo, RoundReviewCommentDto dto) throws AddException{
+		logger.error("날짜" + dto.getRoundReviewCmtDt());
 		Optional<RoundReviewBoardEntity> optB = boardRepo.findById(roundReviewBoardNo);
 		RoundReviewBoardEntity boardEntity = optB.get();
 		boardEntity.setRoundReviewBoardCmtCnt(boardEntity.getRoundReviewBoardCmtCnt()+1);
@@ -311,6 +317,7 @@ public class RoundReviewBoardService {
 		
 		ModelMapper modelMapper = new ModelMapper();
 		RoundReviewCommentEntity commentEntity = modelMapper.map(dto, RoundReviewCommentEntity.class);
+		logger.error("엔터티날짜" + commentEntity.getRoundReviewCmtDt());
 		commentRepo.save(commentEntity);
 	}
 	//댓글 수정

@@ -31,6 +31,15 @@ public interface LessonLineRepository {
 //	 */
 //	int selectTypeById(String userId) throws FindException;
 	
+	/**
+	 * 결제 내역 추가 후 레슨내역 추가 
+	 * @param lessonLine
+	 * @throws AddException
+	 */
+	public void insertLsnLine(LessonLine lessonLine) throws AddException;
+
+
+
 	
 	
 	
