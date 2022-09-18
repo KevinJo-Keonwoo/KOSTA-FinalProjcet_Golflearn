@@ -4,22 +4,48 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="http: //netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="http: //netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <!--드래그 앤 드롭-->   
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script src="../jq/noticewrite.js"></script>
+    <!-- <script src="../jq/write2.js"></script> -->
+    <script src="../jq/summernote-lite.js"></script>
+    <script src="../jq/summernote-ko-KR.js"></script>
+    <link rel="stylesheet" href="../css/summernote-lite.css">
+    <!-- <link rel="stylesheet" href="../css/noticeboardwrite.css"> -->
 </head>
 <body>
+    
     <h2> 공지사항 글쓰기 페이지</h2>
     <div>
-        <form class="write" action="http://localhost:1128/backnotice/notice/board/write" method="post"
-		enctype="multipart/form-data">
-            <div>
-                <input type="text" name="write-title" placeholder="제목을 입력해주세요">
+        <form class="write" action="http://localhost:1128/noticeboard/notice/writeboard" method="post" enctype="multipart/form-data">
+            <div class="write">
+                <div>
+                    <input class="write-title" name ="noticeBoardTitle" type="text" placeholder="제목을 입력해주세요">
+                </div>
+                <div>
+                    <textarea class = "write-summernote"  name = "noticeBoardContent" id="summernote" name="content">                
+                    </textarea>
+                </div>
             </div>
-            <textarea name="write-summernote" id="summernote">                
-            </textarea>
+            <div class="filebox clearfix">
+                <div class="inputFile">
+                    <div> 다중 선택 가능 </div>
+                    <label for="AddImgs" class="addImgBtn"></label>
+                    <input type="file" id="imgFiles" class="image" name = "imageFile" accept="image/*" multiple>
+                </div>
+                <ul id="preview" class="sortable"></ul>
+            </div>       
         </form>
     </div>
     <div class= "submit-board">
         <button class = "submit-board__button" type="submit"> 등록하기 </button>
+        <button class = "modify-board__button" type="submit"> 수정하기 </button>
     </div>
 </body>
 </html>

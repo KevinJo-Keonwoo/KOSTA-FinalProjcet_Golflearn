@@ -16,6 +16,7 @@ import lombok.Setter;
 @EqualsAndHashCode(of = {"lsnLineNo, lsnChkDt"})
 public class LessonHistory {
 	private LessonLine lsnLine;
+
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	private Date lsnChkDt;
 	private Lesson lsn;

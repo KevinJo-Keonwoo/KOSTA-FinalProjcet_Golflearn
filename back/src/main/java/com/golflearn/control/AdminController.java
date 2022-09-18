@@ -36,12 +36,18 @@ public class AdminController {
 	private AdminService service;
 
 	// 레슨상태별 목록보기
-	@GetMapping(value = { "lesson/{lsnStatus}", "lesson/{lsnStatus}/{optCp}"})
+	@GetMapping(value = { "approval/{lsnStatus}", "approval/{lsnStatus}/{optCp}"})
 	public ResultBean<PageBean<Lesson>> viewLesson(@PathVariable(name= "lsnStatus", required=true) Integer lsnStatus,
 			@PathVariable(name= "optCp", required=true) Optional<Integer> optCp, HttpSession session) {
 		ResultBean<PageBean<Lesson>> rb = new ResultBean<>();
+		
+//		System.out.println("세션 new" + session.isNew() + "세션 id" + session.getId());
+		
 		String loginedUserType = (String) session.getAttribute("userType");// 로그인한 유저의 유저타입가져오기
-		//		String loginedUserType = "2";//테스트용
+		
+//		logger.error(loginedUserType);
+		loginedUserType = "2";//테스트용
+		
 		if (loginedUserType == null || !loginedUserType.equals("2")) {// 로그인 및 관리자여부 확인
 			rb.setStatus(0);
 			rb.setMsg("관리자만 접근가능합니다");
@@ -65,7 +71,7 @@ public class AdminController {
 		}
 	}
 	// 레슨 승인 및 반려하기
-	@PutMapping(value = "lesson/{lsnNo}")
+	@PutMapping(value = "approval/{lsnNo}")
 	public ResponseEntity<String> modifyLsnStatus(@PathVariable int lsnNo, @RequestBody Lesson lesson,
 			HttpSession session) {
 		String loginedUserType =  (String) session.getAttribute("userType");
@@ -85,7 +91,7 @@ public class AdminController {
 	}
 
 	// 반려사유보기
-	@GetMapping(value = "lesson/reject/{lsnNo}")
+	@GetMapping(value = "approval/reject/{lsnNo}")
 	public ResultBean<String> viewLsnRjtReason(@PathVariable int lsnNo, HttpSession session) {
 		ResultBean<String> rb = new ResultBean<>();
 		String loginedUserType = (String) session.getAttribute("userType");

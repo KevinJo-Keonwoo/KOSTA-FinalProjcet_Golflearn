@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="http: //netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="http: //netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <script src="https://www.w3schools.com/lib/w3.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../jq/noticedetail.js"></script>
+    <link href="../css/index.css" rel="stylesheet">
+    <link href="../css/noticedetail.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Header-->
+    <header w3-include-html="header.html"></header>
+    <!-- Nav : 메뉴목록-->
+    <!-- <nav w3-include-html="nav.html"></nav> -->
+
+    <!-- Main-->
+    <main>
+        <section>
+            <div class="header_container">
+                <div class="board__content__title"></div>
+                <div class="board__content__date"></div>
+                <div class="board__content__view_cnt"></div>
+                <div class="board__content__like_cnt"></div>
+                <div class="board-like">🧡️️</div>
+            </div>
+
+            <article>
+                <div class="board-container">
+                    <div class="board__content__thumbnail">
+                        <img src="" alt="">
+                    </div>
+                    <div class="board__content"></div>
+                    <button class="bt__board-modify btn btn-secondary"> 게시글 수정 </button>
+                    <button class="bt__board-delete btn btn-secondary">글 삭제</button>
+                </div>
+                
+                <!-- <form method="post" action="http://localhost:1128/noticeboard/notice/comment/write" class="comment"> -->
+                <div class="comment-write">
+                    <h6 style="display:inline-block; background-color:#FBE884;">댓글을 달아주세요!</h6>
+                    <input type="text">
+                    <button type="submit" name="comment" class="btn btn-secondary">작성</button>
+                </div>
+                <!-- </form> -->
+                <div class="comment-list">
+                    <div class="comment-header">
+                        <div>댓글번호</div>
+                        <div>작성자</div>
+                        <div>댓글내용</div>
+                        <div>작성일자</div>
+                    </div>
+                    <div class="comment-content">
+                        <div class="comment-list__cmtNo"></div>
+                        <div class="comment-list__nickname"></div>
+                        <div class="comment-list__content"></div>
+                        <div class="comment-list__date"></div>
+                        <!-- <div class="comment-list__content__modify">
+                            <input type="text">
+                            <button name="cmtModify">수정</button>
+                            <button name="cmtDelete">댓글삭제</button>
+                        </div> -->
+                    </div>
+                </div>
+            </article>
+        </section>
+
+    </main>
+
+    <!-- Footer-->
+    <footer w3-include-html="footer.html"></footer>
+    <script>
+        w3.includeHTML();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>

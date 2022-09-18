@@ -7,7 +7,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonLine;
 import com.golflearn.exception.FindException;
 
@@ -39,5 +38,4 @@ public class LessonHistoryOracleRepository implements LessonHistoryRepository {
 		}
 		
 	}
-	
 }

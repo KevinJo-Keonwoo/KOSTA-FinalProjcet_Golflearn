@@ -13,7 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-@EqualsAndHashCode(of = {"lsnLineNo"})
 public class LessonReview {
 	private String review;
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
@@ -22,4 +21,5 @@ public class LessonReview {
 	private Date reviewEditDt;
 	private int myStarScore;
 	private LessonLine lsnLine;
+	private String stdtNickname;//수강생닉네임(DB존재X) -레슨상세보기페이지 서브쿼리구문
   }

@@ -1,4 +1,4 @@
-
+/* 
 @import url(base.css);
 * {
     margin: 0 0;
@@ -51,7 +51,6 @@ div.top {
 }
 
 form.submit .starform fieldset{
-    /* display: inline-block; */
     direction: rtl;
     border: 0;
 }
@@ -77,7 +76,6 @@ form.submit .starform label:hover ~ label {
 }
 div.body{
     margin: 0 auto;
-    /* background-color: antiquewhite; */
     display: flex;
     justify-content: center; 
 }
@@ -117,4 +115,125 @@ textarea.review_context{
 #review{
     height:120px;
 }
+ */
+h2{
+    text-align: center;
+    height : 50px;
+    margin-top: 0px;
+    color: rgb(113, 139, 255);
+    margin-bottom: 40px;
+}
+.top{
+    display: flex;
+}
+.top > .lsn_line_no{
+    display:none;
+    text-align: center;
+    border: none;
+}
+.content-left{
+    width:400px;
+    margin-left: 10%;
+}
+.content-right{
+    width:600px;
+}
+.img-box{
+    width :300px;
 
+}
+.lsn__img{
+    width : 300px;
+    height: 300px;
+    object-fit: fill;
+}
+.lsn_title{
+    text-align: left;
+    height: 100px;
+    font-size: 25px;
+    background-color: #fafaea;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 30px;
+}
+.my_star_score{
+    background-color: #fafaea;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+
+form.submit .starform fieldset{
+    direction: rtl;
+    border: 0;
+}
+form.submit .starform fieldset legend{
+    text-align: left;
+}
+form.submit .starform input[type=radio]{
+    display: none;
+}
+form.submit .starform input[type=radio]:checked ~ label {
+    text-shadow: 0 0 0 #FFA500;
+}
+.starform label{
+    font-size : 3em;
+    color: transparent;
+    text-shadow: 0 0 0 #f0f0f0;
+}
+form.submit .starform label:hover{
+    text-shadow: 0 0 0 #FFE5B4;
+}
+form.submit .starform label:hover ~ label {
+    text-shadow: 0 0 0 #FFE5B4;
+}
+.review{
+    width: 1000px;
+    margin-left: 10%;
+    margin-bottom: 20px;
+    font-size : 30px;
+    background-color: #fafaea;
+    border-radius: 10px;
+    padding:10px;
+}
+.review_context{
+    width: 1000px;
+    height:500px;
+    margin-left: 10%;
+    border-radius: 10px;
+    padding : 15px;
+}
+.buttons{
+    display: flex;
+    justify-content: center;
+    width :80%;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+.review-container > .buttons > .back{
+    width: 50px;
+    margin-left: 10%;
+    margin-right : 20px;
+    border: 1px solid;
+    height : 30px;
+    border-radius: 5px;
+    background-color: #fcde9f;
+    border:none;
+    
+}
+.review-container > .buttons > .submit{
+    width: 50px;
+    border: 1px solid;
+    height : 30px;
+    border-radius: 5px;
+    background-color: #fcde9f;
+    border:none;
+}
+.review-container > .buttons > .modify{
+    width: 50px;
+    border: 1px solid;
+    height : 30px;
+    border-radius: 5px;
+    background-color: #fcde9f;
+    border:none;
+}

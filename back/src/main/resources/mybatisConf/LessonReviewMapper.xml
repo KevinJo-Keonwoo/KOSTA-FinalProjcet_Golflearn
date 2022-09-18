@@ -12,14 +12,14 @@
 	<collection property="lsnReview" ofType="LessonReview" autoMapping="true"/>
 </resultMap>
   <select id="selectTitleByLsnLineNo" resultMap="LessonReviewMap" parameterType="int">
-	SELECT ll.lsn_line_no, le.lsn_title
+	SELECT ll.lsn_line_no, ll.lsn_no, le.lsn_title
     FROM lesson le JOIN lesson_line ll ON (le.lsn_no = ll.lsn_no)
     WHERE ll.lsn_line_no = ${lsnLineNo}
   </select>
   <select id="selectReviewByLsnLineNo" resultMap="LessonReviewModifyMap" parameterType="int">
-	SELECT ll.lsn_line_no, le.lsn_title, lr.my_star_score, lr.review
+	SELECT ll.lsn_no, ll.lsn_line_no, le.lsn_title, lr.my_star_score, lr.review
 	FROM lesson_line ll JOIN lesson_review lr ON (lr.lsn_line_no = ll.lsn_line_no)
-	                    JOIeview/writeN lesson le ON (le.lsn_no = ll.lsn_no)
+	                    JOIN lesson le ON (le.lsn_no = ll.lsn_no)
 	WHERE ll.lsn_line_no = ${lsnLineNo}
   </select>
   <insert id="insertReview" parameterType="LessonReview">

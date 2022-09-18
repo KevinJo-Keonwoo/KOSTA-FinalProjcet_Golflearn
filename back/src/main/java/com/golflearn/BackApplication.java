@@ -2,8 +2,9 @@ package com.golflearn;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-//@MapperScan(basePackages = "com.golflearn.domain")
+
 @SpringBootApplication
+//@MapperScan(basePackages = "com.golflearn.domain")
 public class BackApplication {
 
 	public static void main(String[] args) {

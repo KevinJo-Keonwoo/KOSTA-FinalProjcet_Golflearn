@@ -1,19 +1,23 @@
 package com.golflearn.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.golflearn.domain.UserInfoRepository;
 import com.golflearn.dto.ProInfo;
 import com.golflearn.dto.UserInfo;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
+import com.golflearn.exception.ModifyException;
 
 @Service
 public class UserInfoService {
-	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired // 빈 객체 주입받음
 	private UserInfoRepository repository;
@@ -21,17 +25,18 @@ public class UserInfoService {
 	//아이디 찾기
 	public UserInfo selectByUserNameAndPhone(String userName, String userPhone) throws FindException{
 		UserInfo userInfo = repository.selectByUserNameAndPhone(userName, userPhone);
-		System.out.println(userInfo.getUserId());
-
 		return userInfo;
 	}
-	//비밀번호 찾기
-	public  UserInfo selectByUserIdAndPhone(String userId, String userPhone) throws FindException{
-		UserInfo userInfo = repository.selectByUserIdAndPhone(userId, userPhone);
-		if(!userInfo.getUserId().equals(userId)|| userInfo.getUserPhone().equals(userPhone)) {
-    			throw new FindException();
-		}
+	
+	//핸드폰번호조회
+	public UserInfo selectByUserIdAndPhone(String userId, String userPhone) throws FindException, JsonProcessingException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException{
+		UserInfo userInfo = repository.selectByUserIdAndPhone(userId, userPhone);	
 		return userInfo;
+	}
+	
+	//비밀번호 변경
+	public void updateByUserPwd(String userId, String userPwd) throws ModifyException{
+		repository.updateByUserPwd(userId, userPwd);
 	}
 	
 	// 회원가입 - 수강생
@@ -57,11 +62,10 @@ public class UserInfoService {
 	// 로그인
 	public UserInfo login(String userId, String userPwd) throws FindException {
 		UserInfo userInfo = repository.selectByUserIdAndPwd(userId, userPwd);
-		logger.error("정보는"+ userInfo);
-		
 		if(!userInfo.getUserPwd().equals(userPwd)) {
-			throw new FindException();
+			throw new FindException("비밀번호가 일치하지 않습니다.");
 		}
+//		System.out.println(userInfo);
 		return userInfo;
 	}
 	

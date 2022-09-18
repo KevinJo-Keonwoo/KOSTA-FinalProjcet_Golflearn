@@ -1,16 +1,17 @@
 $(function() {
 
 	let $sidoBtn = $('div#sidebar');
-	let sidoguUrl = 'http://localhost:1124/back/seeksidosigu';
 	let $tagContent = $('#tag-container');
 	$sidoBtn.on('click', 'li', function(event) {
 		$(this).toggleClass('choice');
-
+		
 		$tagContent.empty();
-		let $sidoVal = $(this);
+		let sidoVal = $(this);
+		// alert(sidoVal.val());
+		let sidoguUrl = 'http://localhost:1124/back/seeksidosigu/'+ sidoVal.val();
 		$.ajax({
 			url: sidoguUrl,
-			data: {sido : $sidoVal.val()},
+			data: {sido : sidoVal.val()},
 			success: function(jsonObj) {
 				let sigu='';
 				$(jsonObj.sigungu).each(function(index, item) {
@@ -42,12 +43,14 @@ $(function() {
 		$(this).toggleClass('choice');
 
 		let data = ''; //sigu=1111&sigu=2222
+		let data1 = '';
 		$('#tag-container>li').each(function(index, element){
 			if($(element).hasClass('choice')){
 				if(data != ''){
 					data += '&';
 				}
 				data += 'sigu=' + $(element).attr('value');
+				data1 += $(element).attr('value')
 			}
 			// return false;
 		});
@@ -57,25 +60,28 @@ $(function() {
 		if(data == ''){
 			url ='http://localhost:1124/back/main';
 		} else {
-			url ='http://localhost:1124/back/filterlesson';
+			url ='http://localhost:1124/back/main/'+data;
 		}
+		console.log(data1);
+
 		$.ajax({
 			url:url,
+
 			data:data,
 			success: function(jsonObj) {
 				// console.log(url);
-				// console.log(jsonObj.lsns);
+				
 				$('div#card-container').empty();
 				$lsnObj = $('<div class="col">');
 				$('div#card-container').append($lsnObj);
 				// let product ='';
-				$(jsonObj.lsns).each(function(index, item) {
+				$(jsonObj.lt).each(function(index, item) {
 					// console.log(item);
 					let product = '<div class="lsn" id='+ item.lsnNo + '>';
 					product +='<img src="../lsn_images/' + item.lsnNo+ '_LessonThumbnail.jpg">';// 각레슨의 이미지경로 다시 설정해야함 c밑의 경로임
 					product +='<div class="lsn_content">';
 					product +='<h5 class="lsn_title">' + item.lsnTitle + '</h5>';
-					product +='<p class="prod_price">프로이름 : '+item.user.userName + '</p>';
+					product +='<p class="prod_price">프로이름 : '+item.userInfo.userName + '</p>';
 					// product +='<p class="tag_name">태그이름 : ' + item.locNo + '</p>';// 지역번호
 					product +='<p class="star_point">별점  : '+ item.lsnStarPoint + '</p></div>';
 					product +='</div>';

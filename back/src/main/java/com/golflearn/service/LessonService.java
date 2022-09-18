@@ -16,7 +16,7 @@ import com.golflearn.exception.FindException;
 public class LessonService {
 	@Autowired
 	private LessonHistoryRepository lsnHistoryRepository;
-  
+
 	@Autowired
 	private LessonRepository lsnRepository;
 	
@@ -40,9 +40,11 @@ public class LessonService {
 		//레슨정보를 추가한다
 		lsnRepository.insertLsnInfo(lesson);
 
+		//레슨분류정보를 추가한다
+		//lsnRepository.insertLsnClassification(lesson);
 	}
 
-  public List<LessonLine> viewLessonHistory(int lsnNo) throws FindException{
+  	public List<LessonLine> viewLessonHistory(int lsnNo) throws FindException{
 		return lsnHistoryRepository.selectLessonHistoryByLsnNo(lsnNo);
 	}
 	

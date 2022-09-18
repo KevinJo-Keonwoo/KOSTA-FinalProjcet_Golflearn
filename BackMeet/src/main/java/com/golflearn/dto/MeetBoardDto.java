@@ -41,6 +41,8 @@ public class MeetBoardDto {
 	private Long meetBoardMaxCnt;
 
 	private String meetBoardLocation;
+	
+	private Long meetBoardViewCnt;
 
 
 }

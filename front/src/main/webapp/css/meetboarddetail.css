@@ -1,0 +1,100 @@
+article, aside, figure, footer, header, section,div{
+    display: block;
+}
+
+section{
+    width: 750px;
+    /* text-align: center;*/
+    margin: 0 auto;
+    line-height: 70% ; 
+    margin-top: 20px;
+    margin-bottom: 100px;
+    font-size: 16px !important;
+    align-items:center; /*텍스트 가운데 정렬*/
+    justify-content: center;/*가운데 정렬*/
+}
+
+/*실선*/
+hr{
+    color: #a9a9a9;
+    width: 100%;
+}
+
+/*줄바꿈 높이*/
+p{
+    margin-bottom: 0;
+}
+
+h1{
+    font-size: 20px;
+    margin-top: 10px;
+}
+h2{
+    text-align: center;
+    font-size: 20px!important;
+    margin-block-end: 16px;
+    margin-bottom: 16px !important;
+    font-weight: bolder;
+}
+
+article{
+    margin-top: 30px;
+    margin-bottom: 100px;
+    width: 100%;
+}
+
+article>div{
+    display: inline-block;
+}
+
+.board__content-row {
+    width: 750px;
+    margin: 2px;
+    display: inline-block;
+}
+
+.board__content-row > label{
+    display: inline-block;
+    width: 10%;
+    font-weight: bolder;
+}
+
+.board__content-row > span{
+    margin: 2px;
+    display: inline-block;
+    width: 30%;
+    font-weight: lighter;
+}
+
+.d-grid gap-2 d-md-flex justify-content-md-end{
+    margin-top: 70px !important;
+}
+
+/*내용*/
+.board__content-detail{
+    width: 100%;
+    min-height: 200px;
+    padding: 3%;
+    justify-content: center;/*가운데 정렬*/
+
+}
+
+.board__content-content{
+    height: 100%;
+}
+
+.board__header-sub {
+    margin-top: 10px;
+    color : #686868;
+    font-weight:lighter;
+    width: 100%;
+    /* display: inline-block; */
+    float:right;
+}
+
+
+.boarder__header-sub> span{
+    width: 40%;
+    /* display: inline-block; */
+    
+}

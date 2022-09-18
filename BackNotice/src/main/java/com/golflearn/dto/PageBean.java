@@ -18,7 +18,7 @@ public class PageBean<T> { // 목록을 보여줄 자료형을 선언함(어떤 
 	private int totalPage; // 총페이지
 	private int startPage; // 시작페이지
 	private int endPage; //끝페이지
-	private int cntPerPageGroup = 2; // 하단부에 보여줄 페이지 갯수를 말한다. (자료가 많지 않은 관계로 2page설정)
+	private int cntPerPageGroup = 5; // 하단부에 보여줄 페이지 갯수를 말한다. (자료가 많지 않은 관계로 2page설정)
 	
 	/**
 	 * 

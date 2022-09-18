@@ -6,8 +6,10 @@ import java.util.List;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.golflearn.domain.entity.NoticeBoardEntity;
 import com.golflearn.domain.entity.NoticeCommentEntity;
+import com.golflearn.domain.entity.NoticeLikeEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,16 +28,18 @@ public class NoticeBoardDto {
 	private Long noticeBoardNo;
 	private String noticeBoardTitle;
 	private String noticeBoardContent;
+	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
 	private Date noticeBoardDt;
 	private Long noticeBoardViewCnt;
 	private Long noticeBoardLikeCnt;
 	private Long noticeBoardCmtCnt;
 	private String userNickname;
 	@Singular("cmtList")
-	private List<NoticeCommentDto> noticeCommentList;
+	private List<NoticeCommentEntity> noticeCommentList;
+	private List<NoticeLikeEntity> noticeLikeList;
 	
 	@Builder
-	public NoticeBoardDto(Long noticeBoardNo, String noticeBoardTitle, String noticeBoardContent, Date noticeBoardDt, Long noticeBoardViewCnt, Long noticeBoardLikeCnt, Long noticeBoardCmtCnt, String userNickname, List<NoticeCommentDto> noticeCommentList) {
+	public NoticeBoardDto(Long noticeBoardNo, String noticeBoardTitle, String noticeBoardContent, Date noticeBoardDt, Long noticeBoardViewCnt, Long noticeBoardLikeCnt, Long noticeBoardCmtCnt, String userNickname, List<NoticeCommentEntity> noticeCommentList, List<NoticeLikeEntity> noticeLikeList) {
 		this.noticeBoardNo = noticeBoardNo;
 		this.noticeBoardTitle = noticeBoardTitle;
 		this.noticeBoardContent = noticeBoardContent;
@@ -45,6 +49,7 @@ public class NoticeBoardDto {
 		this.noticeBoardCmtCnt = noticeBoardCmtCnt;
 		this.userNickname = userNickname;
 		this.noticeCommentList = noticeCommentList;
+		this.noticeLikeList = noticeLikeList;
 	}
 
 	@Builder
