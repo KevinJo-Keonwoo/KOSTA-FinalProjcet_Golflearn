@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
- 
+@Service(value = "openApiService")
 public class OpenApi {
 	// exception try catch 해줘야함
 	public List<Map<String, String>> sidoApi() throws Exception{
@@ -53,18 +56,22 @@ public class OpenApi {
 		return resultList;
 	}
 
-	public List<Map<String, String>> siguApi(String siguVal) throws Exception{
+	public List<Map<String, String>> siguApi(Optional<String> sido) throws Exception{
 		String serviceKey = "44228818-3486-397D-A167-6B8B05C5ACEC";
 		String domain = "www.golflearn.com/main.html";
 		String sigCd = "sig_cd"; //매개변수- 시도
-		System.out.println(siguVal);
+		System.out.println(sido);
 		//각각의 정보를 넣어줍니다.
 		StringBuilder urlBuilder = new StringBuilder("http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIGG_INFO"); /* URL */
-
+		String sidoVal = "";
+		if(sido.isPresent()) {
+			sidoVal = sido.get();
+		}
+		
 		urlBuilder.append("&" + URLEncoder.encode("key", "UTF-8") + "=" + serviceKey);
 		urlBuilder.append("&" + URLEncoder.encode("domain", "UTF-8") + "=" + domain);
 		urlBuilder.append("&" + URLEncoder.encode("attrFilter","UTF-8") + "=" + sigCd + ":like:");
-		urlBuilder.append(URLEncoder.encode(siguVal, "UTF-8"));
+		urlBuilder.append(URLEncoder.encode(sidoVal, "UTF-8"));
 		urlBuilder.append("&" + URLEncoder.encode("geometry","UTF-8") + "=" + "false");
 		urlBuilder.append("&" + URLEncoder.encode("size","UTF-8") + "=" + 50);
 
