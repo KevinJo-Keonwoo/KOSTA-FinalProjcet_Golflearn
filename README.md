@@ -144,5 +144,6 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 ✔️ 문의사항 게시판 담당<br>
 ✔️ 게시판 비밀글 기능 구현<br>
 ✔️ 기존 비밀번호 변경 페이지에서 SMTP 라이브러리를 SENS SMS API로 대체하여 인증방법 변경<br>
+✔️ Admin 유저 관리 페이지 기능 구현<br>
 ✔️ 팀 노션 관리<br>
 ✔️ 담당 페이지 css 구현 <br>
