@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonLine;
+import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;
 
 @Repository(value = "lessonLineRepository")
@@ -48,6 +49,11 @@ public class LessonLineOracleRepository implements LessonLineRepository {
 				session.close();
 			}
 		}
+	}
+	@Override
+	public void insertLsnLine(LessonLine lessonLine) throws AddException {
+		// TODO Auto-generated method stub
+		
 	}
 
 //	@Override
