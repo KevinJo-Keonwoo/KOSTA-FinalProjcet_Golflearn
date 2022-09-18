@@ -21,9 +21,13 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.golflearn.dto.NoticeBoardDto;
 import com.golflearn.dto.NoticeBoardDto.NoticeBoardDtoBuilder;
 import com.golflearn.dto.NoticeCommentDto;
@@ -33,6 +37,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.Singular;
 
 @Entity
@@ -48,7 +53,7 @@ import lombok.Singular;
 					)
 @DynamicInsert
 @DynamicUpdate
-@Getter
+@Getter @Setter
 //@Builder
 public class NoticeBoardEntity {
 	@Id
@@ -83,17 +88,24 @@ public class NoticeBoardEntity {
 	@ColumnDefault(value = "0")
 	private Long noticeBoardCmtCnt;
 	
-	@JsonBackReference
-	@JoinColumn(name="notice_board_no")
-	@OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@JsonManagedReference
+//	@JoinColumn(name="notice_board_no")
+	@OneToMany(mappedBy="noticeBoard", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@Fetch(value = FetchMode.SUBSELECT)
 	@Singular("cmtList") // collection 타입에 붙이는 어노테이션 내부로직 파악 필요함
 	private List<NoticeCommentEntity> noticeCommentList;
-
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy="noticeBoard", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@Fetch(value = FetchMode.SUBSELECT)
+	@JsonIgnore
+	private List<NoticeLikeEntity> noticeLikeList;
+	
 	@Transient
 	private NoticeCommentEntity noticeCommentEntity;
 	
 	@Builder
-	public NoticeBoardEntity(Long noticeBoardNo, String noticeBoardTitle, String noticeBoardContent, Date noticeBoardDt, Long noticeBoardViewCnt, Long noticeBoardLikeCnt, Long noticeBoardCmtCnt, String userNickname, List<NoticeCommentEntity> noticeCommentList) {
+	public NoticeBoardEntity(Long noticeBoardNo, String noticeBoardTitle, String noticeBoardContent, Date noticeBoardDt, Long noticeBoardViewCnt, Long noticeBoardLikeCnt, Long noticeBoardCmtCnt, String userNickname, List<NoticeCommentEntity> noticeCommentList, List<NoticeLikeEntity> noticeLikeList) {
 		this.noticeBoardNo = noticeBoardNo;
 		this.noticeBoardTitle = noticeBoardTitle;
 		this.noticeBoardContent = noticeBoardContent;
@@ -103,6 +115,7 @@ public class NoticeBoardEntity {
 		this.noticeBoardCmtCnt = noticeBoardCmtCnt;
 		this.userNickname = userNickname;
 		this.noticeCommentList = noticeCommentList;
+		this.noticeLikeList = noticeLikeList;
 	}
 	
 	@Builder

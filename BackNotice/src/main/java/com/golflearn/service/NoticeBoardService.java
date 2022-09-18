@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.golflearn.domain.entity.NoticeBoardEntity;
 import com.golflearn.domain.entity.NoticeCommentEntity;
@@ -40,19 +41,25 @@ public class NoticeBoardService {
 	private NoticeLikeRepository likeRepository;
 
 	private static final int CNT_PER_PAGE = 5;
-
+	
+	@Transactional
 	public PageBean<NoticeBoardDto> boardList(int currentPage) throws FindException {
 
 		int endRow = currentPage * CNT_PER_PAGE;
 		int startRow = endRow - CNT_PER_PAGE + 1; 
 		List<NoticeBoardEntity> list = boardRepository.findByPage(startRow,endRow);
+		
+//		List<NoticeBoardDto> boarDto = list.getContent().stream().map(boardEntity ->
+//		sourceToDestination(boardEntity, new ResaleBoardDto()))
+//		.collect(Collectors.toList());
 		long totalCnt = boardRepository.count(); // 총 행수를 얻어오는 메서드
 		int cntPerPageGroup = 5;
 
 		PageBean<NoticeBoardDto> pb = new PageBean(list, totalCnt, currentPage, cntPerPageGroup, CNT_PER_PAGE);
 		return pb;
 	}
-
+	
+	@Transactional
 	public NoticeBoardDto viewNoticeBoard(long noticeBoardNo) throws FindException {
 		Optional<NoticeBoardEntity> optB = boardRepository.findById(noticeBoardNo);
 		NoticeBoardDto dto = new NoticeBoardDto();
@@ -66,6 +73,7 @@ public class NoticeBoardService {
 					.noticeBoardContent(en.getNoticeBoardContent())
 					.noticeBoardDt(en.getNoticeBoardDt())
 					.noticeCommentList(en.getNoticeCommentList())
+					.noticeLikeList(en.getNoticeLikeList())
 					.userNickname(en.getUserNickname())
 					.noticeBoardNo(en.getNoticeBoardNo())
 					.noticeBoardLikeCnt(en.getNoticeBoardLikeCnt())
@@ -76,37 +84,51 @@ public class NoticeBoardService {
 			throw new FindException("게시글이 없습니다");
 		}
 
-		Optional<NoticeBoardEntity> optB1 = boardRepository.findById(noticeBoardNo);
-		if(optB1.isPresent()) {
+//		Optional<NoticeBoardEntity> optB1 = boardRepository.findById(noticeBoardNo);
+		NoticeBoardEntity optB1 = optB.get();
+//		if(optB1.isPresent()) {
 
-			List<NoticeCommentDto> cDto = new ArrayList<>();
-			for(NoticeCommentEntity nCe : optB.get().getNoticeCommentList()){
-				NoticeCommentDto cmtDto = NoticeCommentDto.builder()
-						.noticeCmtContent(nCe.getNoticeCmtContent())
-						.noticeCmtDt(nCe.getNoticeCmtDt())
-						.noticeCmtNo(nCe.getNoticeCmtNo())
-						.noticeCmtParentNo(nCe.getNoticeCmtParentNo())
-						.userNickname(nCe.getUserNickname())
-						.build();
-				cDto.add(cmtDto);
-			}
-			NoticeBoardEntity nBe = optB1.get();
-			dto = NoticeBoardDto.builder()
-					.noticeBoardNo(nBe.getNoticeBoardNo())
-					.noticeBoardTitle(nBe.getNoticeBoardTitle())
-					.noticeBoardContent(nBe.getNoticeBoardContent())
-					.noticeBoardDt(nBe.getNoticeBoardDt())
-					.noticeBoardCmtCnt(nBe.getNoticeBoardCmtCnt())
-					.noticeBoardLikeCnt(nBe.getNoticeBoardLikeCnt())
-					.noticeBoardViewCnt(nBe.getNoticeBoardViewCnt())
-					.userNickname(nBe.getUserNickname())
-					.noticeCommentList(cDto)
-					.build();
+//			List<NoticeCommentDto> cDto = new ArrayList<>();
+//			for(NoticeCommentEntity nCe : optB.get().getNoticeCommentList()){
+//				NoticeCommentDto cmtDto = NoticeCommentDto.builder()
+//						.noticeCmtContent(nCe.getNoticeCmtContent())
+//						.noticeCmtDt(nCe.getNoticeCmtDt())
+//						.noticeCmtNo(nCe.getNoticeCmtNo())
+//						.noticeCmtParentNo(nCe.getNoticeCmtParentNo())
+//						.userNickname(nCe.getUserNickname())
+//						.build();
+//				cDto.add(cmtDto);
+//			}
+//			
+//			List<NoticeLikeDto> lDto = new ArrayList<>();
+//			for(NoticeLikeEntity nLe : optB.get().getNoticeLikeList()){
+//				NoticeLikeDto likeDto = NoticeLikeDto.builder()
+//						.noticeLikeNo(nLe.getNoticeLikeNo())
+//						.userNickname(nLe.getUserNickname())
+//						.build();
+//				lDto.add(likeDto);
+//			}
+			ModelMapper modelMapper = new ModelMapper();
+			NoticeBoardDto dto1 = modelMapper.map(optB1,NoticeBoardDto.class); 
+			
+//			NoticeBoardEntity nBe = optB1.get();
+//			dto = NoticeBoardDto.builder()
+//					.noticeBoardNo(nBe.getNoticeBoardNo())
+//					.noticeBoardTitle(nBe.getNoticeBoardTitle())
+//					.noticeBoardContent(nBe.getNoticeBoardContent())
+//					.noticeBoardDt(nBe.getNoticeBoardDt())
+//					.noticeBoardCmtCnt(nBe.getNoticeBoardCmtCnt())
+//					.noticeBoardLikeCnt(nBe.getNoticeBoardLikeCnt())
+//					.noticeBoardViewCnt(nBe.getNoticeBoardViewCnt())
+//					.userNickname(nBe.getUserNickname())
+//					.noticeCommentList(nBe.getNoticeCommentList())
+//					.noticeLikeList(nBe.getNoticeLikeList())
+//					.build();
 
-			return dto;
-		}else {
-			throw new FindException("게시글이 없습니다");
-		}
+			return dto1;
+//		}else {
+//			throw new FindException("게시글이 없습니다");
+//		}
 	}
 
 
@@ -261,35 +283,46 @@ public class NoticeBoardService {
 	 */
 	public void addLike(NoticeLikeDto likeDto) throws AddException{
 		Long noticeBoardNo = likeDto.getNoticeBoardDto().getNoticeBoardNo();
-		//		System.out.println(resaleBoardNo);
+		
+		
+				System.out.println("--------"+ noticeBoardNo);
 		Long noticeLikeNo = likeDto.getNoticeLikeNo();
 
 
 		Optional<NoticeBoardEntity> optB = boardRepository.findById(noticeBoardNo); // 확인 / resaleBoard 객체 or resaleBoardNo?
 		if(optB.isPresent()) {
 			NoticeBoardEntity entity = optB.get();
-
-			// 좋아요 추가
-			NoticeLikeEntity likeEntity = likeDto.toEntity();	
-			System.out.println("-----"+likeEntity.getNoticeBoard().getNoticeBoardNo());
-			likeEntity = NoticeLikeEntity.builder()
-					.noticeBoard(entity)
-					.noticeLikeNo(likeEntity.getNoticeLikeNo())
-					.userNickname(likeEntity.getUserNickname())
-					.build();
-
+			ModelMapper modelMapper = new ModelMapper();
+			NoticeLikeEntity likeEntity = modelMapper.map(likeDto, NoticeLikeEntity.class);	
+			
+			likeEntity.setNoticeBoard(entity);
 			likeRepository.save(likeEntity); // 좋아요 추가
-			System.out.println("-0-0-00-0-" + entity.getNoticeBoardLikeCnt());
-			entity = NoticeBoardEntity.builder()
-					.noticeBoardNo(entity.getNoticeBoardNo())
-					.userNickname(entity.getUserNickname())
-					.noticeBoardContent(entity.getNoticeBoardContent())
-					.noticeBoardCmtCnt(entity.getNoticeBoardCmtCnt())
-					.noticeBoardDt(entity.getNoticeBoardDt())
-					.noticeBoardTitle(entity.getNoticeBoardTitle())
-					.noticeBoardViewCnt(entity.getNoticeBoardViewCnt())
-					.noticeBoardLikeCnt(entity.getNoticeBoardLikeCnt()+1)
-					.build();
+			Long oldLikeCnt = optB.get().getNoticeBoardLikeCnt();
+			entity.setNoticeBoardLikeCnt(oldLikeCnt+1);
+			
+			//--------------
+			
+			// 좋아요 추가
+//			NoticeLikeEntity likeEntity = likeDto.toEntity();	
+//			System.out.println("-----"+likeEntity.getNoticeBoard().getNoticeBoardNo());
+//			likeEntity = NoticeLikeEntity.builder()
+//					.noticeBoard(entity)
+//					.noticeLikeNo(likeEntity.getNoticeLikeNo())
+//					.userNickname(likeEntity.getUserNickname())
+//					.build();
+//
+//			likeRepository.save(likeEntity); // 좋아요 추가
+//			System.out.println("-0-0-00-0-" + entity.getNoticeBoardLikeCnt());
+//			entity = NoticeBoardEntity.builder()
+//					.noticeBoardNo(entity.getNoticeBoardNo())
+//					.userNickname(entity.getUserNickname())
+//					.noticeBoardContent(entity.getNoticeBoardContent())
+//					.noticeBoardCmtCnt(entity.getNoticeBoardCmtCnt())
+//					.noticeBoardDt(entity.getNoticeBoardDt())
+//					.noticeBoardTitle(entity.getNoticeBoardTitle())
+//					.noticeBoardViewCnt(entity.getNoticeBoardViewCnt())
+//					.noticeBoardLikeCnt(entity.getNoticeBoardLikeCnt()+1)
+//					.build();
 
 			boardRepository.save(entity); // 좋아요 수 증가
 		}else {
@@ -315,16 +348,7 @@ public class NoticeBoardService {
 			Long oldLikeCnt = entity.getNoticeBoardLikeCnt();
 			if(oldLikeCnt > 0) { // 좋아요 수가 0보다 크면
 				likeRepository.deleteById(likeDto.getNoticeLikeNo()); // 좋아요 삭제
-				entity = NoticeBoardEntity.builder()
-						.noticeBoardNo(entity.getNoticeBoardNo())
-						.noticeBoardContent(entity.getNoticeBoardContent())
-						.noticeBoardCmtCnt(entity.getNoticeBoardCmtCnt())
-						.noticeBoardDt(entity.getNoticeBoardDt())
-						.noticeBoardTitle(entity.getNoticeBoardTitle())
-						.noticeBoardViewCnt(entity.getNoticeBoardViewCnt())
-						.noticeBoardLikeCnt(entity.getNoticeBoardLikeCnt()-1)
-						.build();
-				boardRepository.save(entity);
+				entity.setNoticeBoardLikeCnt(oldLikeCnt-1); // 좋아요 수 감소
 			}
 		} else {
 			throw new RemoveException("게시글이 없습니다");

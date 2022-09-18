@@ -25,11 +25,11 @@ public class NoticeLikeDto {
 		this.userNickname = userNickname;
 	}
 	
-	public NoticeLikeEntity toEntity() {
-		return NoticeLikeEntity.builder()
-				.noticeLikeNo(noticeLikeNo)
-				.noticeBoard(noticeBoardDto.toEntity())
-				.userNickname(userNickname)
-				.build();
-	}
+//	public NoticeLikeEntity toEntity() {
+//		return NoticeLikeEntity.builder()
+//				.noticeLikeNo(noticeLikeNo)
+//				.noticeBoard(noticeBoardDto.toEntity())
+//				.userNickname(userNickname)
+//				.build();
+//	}
 }
