@@ -142,7 +142,7 @@ $(function() {
 
     // 글쓰기 버튼 클릭 시 글쓰기 페이지로 이동
     // ----- 글쓰기 버튼 클릭 START -----
-    let $btWrite = $("button[name=write-button]");
+    let $btWrite = $("button[name=write-write]");
     $btWrite.click(function(){
         location.href = "http://localhost:1123/front/html/resaleboardwrite.html";
     });

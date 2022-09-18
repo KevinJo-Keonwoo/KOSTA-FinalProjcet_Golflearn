@@ -19,7 +19,7 @@ $(function(){
                         let $boardCopy = $board.clone();
                         // 나중에 "" + 다 빼기
                         $boardCopy.find("div.board-list__content__no").html(board.roundReviewBoardNo)
-                        $boardCopy.find("img.board-list__content__image").attr("src", "../roundreview_images/" + board.roundReviewBoardNo + "_RoundReviewThumbnail.png");
+                        $boardCopy.find("img.board-list__content__image").attr("src", "../roundreview_images/" + board.roundReviewBoardNo + "/image_1.png");
                         $boardCopy.find("div.board-list__content__title").html(board.roundReviewBoardTitle)
                         $boardCopy.find("div.board-list__content__cmt-cnt").html(board.roundReviewBoardCmtCnt)
                         $boardCopy.find("div.board-list__content__nickname").html(board.userNickname)
@@ -53,7 +53,7 @@ $(function(){
                     //startPage부터 endPage까지 숫자 넣어주기 
                     //현재페이지면 disable클래스 줘서 css다르게 넣어주기 (링크안되게?)
                     for (let i = startPageNo; i<= endPageNo; i++){
-                        $pageGroupHtml += "&nbsp;&nbsp;";
+                        $pageGroupHtml += "&nbsp;&nbsp&nbsp&nbsp;";
                         // $pageGroupHtml += "<span>" + i + "</span>"; 
                         if (currentPage == i){
                             $pageGroupHtml += '<span class="disabled">' + i + "</span>";
@@ -63,7 +63,7 @@ $(function(){
                     }
                     //back에서 보내준 endPage 값이 totalPage값보다 작으면 화살표나오게  
                     if (endPageNo < totalPage) {
-                        $pageGroupHtml += "&nbsp;&nbsp;";
+                        $pageGroupHtml += "&nbsp;&nbsp&nbsp&nbsp;";
                         $pageGroupHtml += '<span class="next">▷</span>';
                     }
                     //pageGroupHtml에 받아놨던 정보를 pageGroup selector에 넣어주기 
@@ -87,7 +87,8 @@ $(function(){
         let orderType = 0;
         $("ul.order>li").each(function(index, element){
             let $aObj = $(element).find('a');
-            if($aObj.css("background-color") == 'rgb(255, 0, 0)'){
+            // if($aObj.css("background-color") == 'rgb(255, 0, 0)'){
+            if($aObj.css("color") == 'rgb(255, 0, 0)'){
                 // switch($(element).html()){
                 //     case '최신순':break;
                 //     case '조회순':break;
@@ -150,8 +151,8 @@ $(function(){
         let url = "http://localhost:1125/backroundreview/board/list/" + orderType
         let data = "";
         
-        $("ul.order>li>a").css("background-color", "yellow"); //기본
-        $(this).css("background-color", "red"); //클릭된경우
+        $("ul.order>li>a").css("color", "#64DB99"); //기본
+        $(this).css("color", "red"); //클릭된경우
         
         showList(url,data);
     });
@@ -161,9 +162,8 @@ $(function(){
         let url = "http://localhost:1125/backroundreview/board/list/" + orderType
         // let data = "orderType=" + orderType;;
         let data = "";
-
-        $("ul.order>li>a").css("background-color", "yellow"); //기본
-        $(this).css("background-color", "red"); //클릭된경우
+        $("ul.order>li>a").css("color", "#64DB99"); //기본
+        $(this).css("color", "red"); //클릭된경우
         showList(url,data);
     });
     //5. 좋아요순 정렬하기
@@ -172,14 +172,15 @@ $(function(){
         let url = "http://localhost:1125/backroundreview/board/list/" + orderType
         let data = "";
         
-        $("ul.order>li>a").css("background-color", "yellow"); //기본
+        $("ul.order>li>a").css("color", "#64DB99"); //기본
         
-        $(this).css("background-color", "red"); //클릭된경우
+        $(this).css("color", "red"); //클릭된경우
         showList(url,data);
     });
     //6. 글쓰기로 이동하기 -> 보내줄 데이터 없음 (닉네임? )
-    $("header>button.write").click(function(){
+    $("header button.write").click(function(){
         $(location).attr('href', '../html/roundreviewboardwrite.html');
+        // location.href = "http://localhost:1123/front/html/roundreviewboardwrite.html";
     })
 
     //7 수정하기

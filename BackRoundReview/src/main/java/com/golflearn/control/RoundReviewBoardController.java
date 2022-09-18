@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -226,7 +227,8 @@ public class RoundReviewBoardController {
 					logger.error("파일확장자: " + fileExtension);
 					
 					//저장파일생성
-					String savedImageFileName = "image_" + (savedImgFileCnt+1) + fileExtension;
+					String savedImageFileName = "image_" + (savedImgFileCnt+1) + ".PNG";
+//					String savedImageFileName = "image_" + (savedImgFileCnt+1) + fileExtension;
 					//이미지 파일 생성
 					File savedImageFile = new File(saveDirectory, savedImageFileName);
 					
@@ -336,17 +338,22 @@ public class RoundReviewBoardController {
 	}
 	//좋아요 추가하기
 	@PostMapping(value = "like/{roundReviewBoardNo}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> addlike(@PathVariable Long roundReviewBoardNo, @RequestBody RoundReviewLikeDto dto){
+	public ResponseEntity<?> addlike(@PathVariable Long roundReviewBoardNo, @RequestParam("userNickname") String userNickname){
 		//테스트닉네임
-		String loginedNickName = "데빌";
+//		String loginedNickName = "데빌";
+		RoundReviewBoardDto boardDto = new RoundReviewBoardDto(); 
+		RoundReviewLikeDto likeDto = new RoundReviewLikeDto();
 //			Long rr = 1L;
 //			roundReviewLike.setRoundReviewLikeNo(rr);
 //			dto.setRoundReviewLikeNo(roundReviewBoardNo);
 //			roundReviewLike.getRoundReviewBoard().setRoundReviewBoardNo(rr);
-		dto.setUserNickname(loginedNickName);
+		boardDto.setRoundReviewBoardNo(roundReviewBoardNo);
+		likeDto.setUserNickname(userNickname);
+		likeDto.setRoundReviewBoard(boardDto);
+		
 		logger.error(roundReviewBoardNo.toString());
 		try {
-			service.addLike(roundReviewBoardNo, dto);
+			service.addLike(roundReviewBoardNo, likeDto);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AddException e) {
 			e.printStackTrace();
@@ -356,7 +363,7 @@ public class RoundReviewBoardController {
 	//좋아요 삭제하기
 	@Transactional
 	@DeleteMapping(value = "like/{roundReviewBoardNo}")
-	public ResponseEntity<?> removeLike(@PathVariable Long roundReviewBoardNo, String userNickname){
+	public ResponseEntity<?> removeLike(@PathVariable Long roundReviewBoardNo, @RequestParam("userNickname") String userNickname){
 		try {
 			//테스트
 			String nickname = userNickname;

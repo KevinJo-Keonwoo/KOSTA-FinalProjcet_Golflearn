@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.golflearn.dto.Lesson;
 import com.golflearn.dto.LessonLine;
-import com.golflearn.dto.PageBean;
 import com.golflearn.dto.ResultBean;
 import com.golflearn.exception.FindException;
 import com.golflearn.service.LessonLineService;
@@ -30,11 +30,11 @@ public class LessonLineController {
 //	}	
 	
 	@GetMapping(value = "student") //userId로 가는것이 맞나? 
-	public ResultBean<LessonLine> myPage(HttpSession session) {
+	public ResultBean<LessonLine> myPage(@RequestParam("userId") String userId) {
 		ResultBean<LessonLine> rb = new ResultBean<>();
 		//테스트주석
 //		String userId = (String)session.getAttribute("loginInfo");
-		String userId = "zzeonsh@gmail.com";
+//		String userId = "zzeonsh@gmail.com";
 		try {
 			
 			List<LessonLine> lessonLine = service.myLessonList(userId);
@@ -48,11 +48,11 @@ public class LessonLineController {
 		return rb;
 	}
 	@GetMapping(value = "pro")
-	public ResultBean<Lesson> myProPage(HttpSession session){
+	public ResultBean<Lesson> myProPage(@RequestParam("userId") String userId){
 		ResultBean<Lesson> rb = new ResultBean<>();
 		//테스트주석
 //		String userId = (String)session.getAttribute("loginInfo");
-		String userId = "ohpro@gmail.com";
+//		String userId = "ohpro@gmail.com";
 		try {
 			List<Lesson> lesson = service.proLessonList(userId);
 			rb.setStatus(1);

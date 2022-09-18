@@ -1,4 +1,4 @@
-@import url(base.css);
+/* @import url(base.css);
 section {
     margin: 0 auto;
     height:1000px;
@@ -18,7 +18,7 @@ section {
 }
 div.table{
     width: 100%;
-    /* height: 100%; */
+    height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -39,4 +39,126 @@ section {
     margin: 0 auto;
     margin-top: 95px;
     width : 80%;
+} */
+h2{
+    text-align: center;
+    margin-bottom: 100px;
+    margin-top: 30px;
+    color: rgb(113, 139, 255);
+}
+
+section{
+    width:100%;
+}
+.table{
+    width:100%;
+}
+.tr{
+    width:100%;
+}
+.td{
+    width:100%;
+}
+.content{
+    width: 100%;
+    height : 300px;
+}
+.mypropage-header{
+    width : 100%;
+}
+.mypropage-header__bar{
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-around; */
+    align-items: flex-start;
+    text-align: center;
+    height: 10px;
+    width: 1260px;
+    margin: 0 auto;
+    border-bottom: 1px solid #64DB99;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    /* cursor: pointer;  */
+    border : none;
+    align-items: center;
+    background-color: rgb(250, 243, 233);
+    border-radius: 10px;
+    /* font-size : 20px; */
+}
+.mypropage-header__bar > .no{
+    width: 200px;
+}
+.mypropage-header__bar > .img{
+    width: 300px;
+}
+.mypropage-header__bar > .title{
+    width: 500px;
+}
+.mypropage-header__bar > .lsn__status{
+    width: 100px;
+}
+.lsn{
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-around; */
+    align-items: flex-start;
+    text-align: center;
+    height: 250px;
+    width: 1260px;
+    margin: 0 auto;
+    border-bottom: 1px solid #64DB99;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    /* cursor: pointer;  */
+    border : none;
+    align-items: center;
+    background-color: #fafaea;
+    border-radius: 10px;
+}
+.lsn__no{
+    width : 200px;
+}
+.lsn__image{
+    width : 300px;
+    height : 150px;
+    object-fit: contain;
+}
+.lsn__title{
+    width : 500px;
+}
+.lsn__close{
+    width : 100px;
+    border: 1px solid;
+    height : 30px;
+    margin-right: 10px;
+    border-radius: 5px;
+    background-color: #fcde9f;
+    border:none;
+}
+.lsn__resume{
+    border: 1px solid;
+    width : 100px;
+    height : 30px;
+    margin-right: 10px;
+    border-radius: 5px;
+    background-color: #fcde9f;
+    border:none;
+}
+.lsn__wait{
+    border: 1px solid;
+    width : 100px;
+    height : 30px;
+    margin-right: 10px;
+    border-radius: 5px;
+    background-color: #fcde9f;
+    border:none;
+}
+.lsn__reject{
+    border: 1px solid;
+    width : 100px;
+    height : 30px;
+    margin-right: 10px;
+    border-radius: 5px;
+    background-color: #fcde9f;
+    border:none;
 }

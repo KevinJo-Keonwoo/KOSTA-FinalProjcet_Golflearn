@@ -3,11 +3,7 @@ $(function(){
     //1) 레슨이 눌렸을 때 레슨상세페이지로 연결 
     //레슨 내역에서 아무거나 눌러도 연결되게 -> 만약 img같은것에도 
     //일일이 달아줘야하는 경우 설정하기 
-    let $viewlsnObj = $('div.tr');
-    $viewlsnObj.click(function(){
-        // location.href("/front/html/viewlesson.html");
-        $(location).attr('href', '/front/html/viewlesson.html'); //테스트용
-    });
+
     
     //수강상태 설정해주기 
     //수강예정 : 레슨신청일이 존재하나, 레슨일자가 존재하지 않음.
@@ -26,7 +22,7 @@ $(function(){
 
     // });
 
-    /* 임시주석
+/*
     $.ajax({
 		url: "http://localhost:1124/back/login",
 		success: function (jsonObj) {
@@ -57,15 +53,19 @@ $(function(){
 	});
     */
 
+
     //$(this).val 해서 val값 설정해줄 수 있음 
     //3)레슨내역 주르르르르륵나오게 
-    
+    // let loginedId = localStorage.getItem("loginedId")
+    let loginedId = "zzeonsh@gmail.com"
     $.ajax({
         url : "http://localhost:1124/back/mypage/student",
         method : 'get',
+        data : {userId : loginedId},
         success : function(jsonObj){
             if (jsonObj.status ==1){
                 let lsnLineObj = jsonObj.lt;
+                // let myStarScore = lsnLineObj.lsn.lsnReview.myStarScore;
                 let $lsnLine = $("div.content").first();
                 $lsnLine.show();
                 $("div.content").not($lsnLine).remove();
@@ -73,12 +73,44 @@ $(function(){
                 $(lsnLineObj).each(function(index, lsnLine){
                     let $lsnLineCopy = $lsnLine.clone();
 
+                    $lsnLineCopy.find("img.lsn__image").attr("src", "../lesson_images/" + lsnLine.lsn.lsnNo + ".PNG");
                     $lsnLineCopy.find("div.no").html(lsnLine.lsn.lsnNo);
                     $lsnLineCopy.find("div.title").html(lsnLine.lsn.lsnTitle);
+                    $lsnLineCopy.find("div.exp_dt").html(lsnLine.lsnExpDt);
+                    $lsnLineCopy.find("div.current__cnt").html(lsnLine.lsnCnt);
+                    $lsnLineCopy.find("div.total__cnt").html(lsnLine.lsn.lsnCntSum);
+
+                    // let myStarScore = lsnLine.lsn.lsnReview.myStarScore;
+                    // console.log(myStarScore);
+
+                    // let $writeReviewObj = $('input[value=레슨후기작성]');
+                    // let $modifyReviewObj = $('input[value=레슨후기수정]');
+                    // if (myStarScore = 0) { //작성한 후기가 없으면 수정 버튼숨기기
+                    //     $modifyReviewObj.hide();
+                    // }else {
+                    //     $writeReviewObj.hide();
+                    // }
+                    // if (myStarScore = 0) { 
+                    //     $modifyReviewObj.hide();
+                    // }else {
+                    //     $writeReviewObj.hide();
+                    // }
+
 
                     $lsnLineParent.append($lsnLineCopy);
                 });
                 $("div.content").first().hide();
+                
+                
+                // let myStarScore = lsnLine.lsn.lsnReview.myStarScore;
+                // let $writeReviewObj = $('input[value=레슨후기작성]');
+                // let $modifyReviewObj = $('input[value=레슨후기수정]');
+                // if (myStarScore = 0) { //작성한 후기가 없으면 수정 버튼숨기기
+                //     $modifyReviewObj.hide();
+                // }else {
+                //     $writeReviewObj.hide();
+                // }
+
 
                 /*
                 let jsonarr = jsonObj.ll;
@@ -132,6 +164,14 @@ $(function(){
         }
     });
 
+    //레슨상세 가기 -> 실패 
+    $('div.td').on('click', 'div.middle>img.lsn__image', function(){
+        //레슨번호 찾아오기  //1번완료 후 
+        let $lsnNoObj = $(this).siblings("div.no");  //URL종우한테 확인 필요 
+        let lsn_no = $lsnNoObj.html(); 
+        console.log(lsn_no);
+        location.href = "/front/html/viewlesson.html?lsn_no=" + lsn_no;
+    });
     //4) 리뷰작성 눌렀을 때 누른 lsn_line_no, status 0 보내주기 
     // let $addReviewObj = $('input.add_review');
     

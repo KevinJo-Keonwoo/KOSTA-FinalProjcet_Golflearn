@@ -226,5 +226,8 @@ $(function(){
         return false;
     }); // 글 저장 버튼 클릭
 
+    // 내용 trim해줄때 
+    // $("span.board__content-content").html(jsonObj.t.meetBoardContent.replace(
+    //     /&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g,'"').replace(/&#40;/g,'(').replace(/&#41;/g,')').replace(/&#35;/g,'#'));
 }); //function
 

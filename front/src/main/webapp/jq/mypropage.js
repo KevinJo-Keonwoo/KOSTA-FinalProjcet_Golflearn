@@ -28,10 +28,14 @@ $(function(){
 		},
 	});
     */
+
+    // let loginedId = localStorage.getItem("loginedId")
+    let loginedId = "ohpro@gmail.com"
     //1)페이지 로딩되었을 때 프로면 레슨 보여주기...
     $.ajax({
         url : "http://localhost:1124/back/mypage/pro",
         method : 'get',
+        data : {userId : loginedId},
         success : function(jsonObj){
             if (jsonObj.status == 1){
                 let lsnObj = jsonObj.lt;
@@ -42,8 +46,8 @@ $(function(){
                 $(lsnObj).each(function(index, lsn){
                     let $lsnCopy = $lsn.clone();
 
-
                     $lsnCopy.find("div.lsn__no").html(lsn.lsnNo);
+                    $lsnCopy.find("img.lsn__image").attr("src", "../lesson_images/" + lsn.lsnNo + ".PNG");
                     $lsnCopy.find("div.lsn__title").html(lsn.lsnTitle);
                     let lsn_status = lsn.lsnStatus;
                     
@@ -154,8 +158,7 @@ $(function(){
             alert("곧 구현 예정입니다 :) 기다려주세요!");
     });
     //2)레슨사진눌렀을때 레슨상세페이지 연결 
-    $lsnNoObj = $('div.no');
-    console.log($lsnNoObj);
+    // $lsnNoObj = $('div.no');
     $('div.td').on('click', 'div.lsn>img.lsn__image', function(){
         //레슨번호 찾아오기  //1번완료 후 
         let $lsnNoObj = $(this).siblings("div.lsn__no");  //URL종우한테 확인 필요 
