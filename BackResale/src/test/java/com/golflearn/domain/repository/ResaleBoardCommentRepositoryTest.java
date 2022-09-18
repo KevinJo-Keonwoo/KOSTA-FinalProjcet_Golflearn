@@ -140,7 +140,7 @@ class ResaleBoardCommentRepositoryTest {
 				logger.error(rb.toString());
 			});
 		}
-		
+
 //		@Test
 //		void testResaleCmt() {
 //			Long resaleBoardNo = 28L;

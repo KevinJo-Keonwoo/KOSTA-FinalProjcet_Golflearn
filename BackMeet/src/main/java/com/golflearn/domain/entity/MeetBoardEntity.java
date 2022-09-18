@@ -66,7 +66,7 @@ public class MeetBoardEntity {
 	
 	@ColumnDefault(value = "0")
 	@Column(name="meet_board_view_cnt")
-	private Integer meetBoardViewCnt;
+	private Long meetBoardViewCnt;
 	
 	@Column(name="meet_board_status")
 	@ColumnDefault(value = "0")//모집중

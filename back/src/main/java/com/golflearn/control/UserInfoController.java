@@ -275,7 +275,6 @@ public class UserInfoController {
 			rb.setStatus(1);
 			rb.setMsg("로그인 성공");
 			rb.setT(userInfo);
-      
 			session.setAttribute("loginInfo", userId);
 			session.setAttribute("loginNickname", userInfo.getUserNickname());
 			session.setAttribute("userType", userInfo.getUserType());
@@ -381,6 +380,7 @@ public class UserInfoController {
 	//Requestparam으로 userId와 userPhone값을 받아옴
 	public ResultBean <String> selectByUserIdAndPhone(@RequestParam("userId") String userId, @RequestParam("userPhone") String userPhone) throws FindException, JsonProcessingException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
 		ResultBean<String> rb = new ResultBean<>();
+
 		UserInfo userInfo = new UserInfo();
 		try {
 			//받아올 값을 담아줄 UserInfo 타입의 userInfo 객체를 생성한다

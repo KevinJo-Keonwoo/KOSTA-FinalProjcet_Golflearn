@@ -17,6 +17,7 @@
 <div w3-include-html="header.html" class="w3"></div>
 
 <body>
+	<main>
 	<!-- 상단 이동하기 버튼 -->
 	<a href="#" class="btn_gotop">
 		<img src="../img/TOP.jpeg" style="width:45px; height:45px;">
@@ -25,8 +26,10 @@
 	<section class="section1">
 		<article>
 			<div class="viewlesson">
-				<!--레슨썸네일-->
-				<img src="" alt="" style="max-width: 140px; height: auto;" />
+				<div class="viewlesson-img">
+					<!--레슨썸네일-->
+					<img name="lsn_img" src="" alt="" style="max-width: 300px; height: auto;" />
+				</div>
 				<div class="simple">
 					<ul>
 						<div>
@@ -44,7 +47,11 @@
 						<div id="btn">
 							<button id="payment" , name="payment">수강신청</button>
 						</div>
+						
 					</ul>
+					<div id="btn">
+						<button id="payment" , name="payment">수강신청</button>
+					</div>
 				</div>
 			</div>
 		</article>
@@ -91,6 +98,7 @@
 			</div>
 		</article>
 	</section>
+</main>
 	<!--풋터 네비바-->
 	<div w3-include-html="footer.html" class="w3"></div>
 	<script>

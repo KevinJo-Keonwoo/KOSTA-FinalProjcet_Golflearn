@@ -36,8 +36,7 @@ public interface LessonRepository {
 	 * @throws FindException
 	 */
 	List<Lesson> selectAll() throws FindException;
-	
+		
 	List<Lesson> selectSidogu(int[] locNoArr) throws FindException;
-	
 }
 

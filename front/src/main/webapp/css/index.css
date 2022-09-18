@@ -18,11 +18,11 @@ body {
 	/* body전체의 너비*/
 }
 
-header,
+/* header,
 footer,
 nav {
 	width: 100%;
-}
+} */
 
 main {
 	height: 100%;
