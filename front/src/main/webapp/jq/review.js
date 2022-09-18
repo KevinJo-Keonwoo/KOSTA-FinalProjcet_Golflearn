@@ -85,7 +85,9 @@ $(function(){
                 method : 'post',
                 data : data,
                 success : function(jsonObj){
-                    // alert(data);
+                    if(jsonObj.status == 1){
+                        alert('제출이 완료되었습니다');
+                    }
                 },
                 error : function(jqXHR){
                     alert('오류 : ' + jqXHR.status);

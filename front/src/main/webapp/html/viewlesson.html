@@ -16,89 +16,87 @@
 </head>
 <div w3-include-html="header.html" class="w3"></div>
 
+
 <body>
 	<main>
-	<!-- 상단 이동하기 버튼 -->
-	<a href="#" class="btn_gotop">
-		<img src="../img/TOP.jpeg" style="width:45px; height:45px;">
-	</a>
-	<!--본문섹션(레슨간략정보)-->
-	<section class="section1">
-		<article>
-			<div class="viewlesson">
-				<div class="viewlesson-img">
-					<!--레슨썸네일-->
-					<img name="lsn_img" src="" alt="" style="max-width: 300px; height: auto;" />
-				</div>
-				<div class="simple">
-					<ul>
-						<div>
-							<li>레슨지역:<span class="loc_no"></span> </li>
-							<li>레슨명:<span class="lsn_title"></span></li>
-							<li>레슨별점:<span class="lsn_star_score"></span></li>
-							<li>레슨가격:<span class="lsn_price"></span></li>
-							<li>레슨후기갯수:<span class="lsn_review_cnt"></span></li>
-							<li>프로명:<span class="user_name"></span></li>
-							<li>유효기간:<span class="lsn_days"></span></li>
-							<li>레슨횟수:<span class="lsn_cnt_sum"></span></li>
-							<li>회당레슨시간:<span class="lsn_per_time"></span></li>
-							<li>레슨레벨:<span class="lsn_lv"></span></li>
-						</div>
+		<!-- 상단 이동하기 버튼 -->
+		<a href="#" class="btn_gotop">
+			<img src="../img/TOP.jpeg" style="width:45px; height:45px;">
+		</a>
+		<!--본문섹션(레슨간략정보)-->
+		<section class="section1">
+			<article>
+				<div class="viewlesson">
+					<div class="viewlesson-img">
+						<!--레슨썸네일-->
+						<img name="lsn_img" src="" alt="" style="max-width: 300px; height: auto;" />
+					</div>
+					<div class="simple">
+						<ul>
+							<div>
+								<li>레슨지역:<span class="loc_no"></span> </li>
+								<li>레슨명:<span class="lsn_title"></span></li>
+								<li>레슨별점:<span class="lsn_star_score"></span></li>
+								<li>레슨가격:<span class="lsn_price"></span></li>
+								<li>레슨후기갯수:<span class="lsn_review_cnt"></span></li>
+								<li>프로명:<span class="user_name"></span></li>
+								<li>유효기간:<span class="lsn_days"></span></li>
+								<li>레슨횟수:<span class="lsn_cnt_sum"></span></li>
+								<li>회당레슨시간:<span class="lsn_per_time"></span></li>
+								<li>레슨레벨:<span class="lsn_lv"></span></li>
+							</div>
+
+						</ul>
 						<div id="btn">
 							<button id="payment" , name="payment">수강신청</button>
 						</div>
-						
-					</ul>
-					<div id="btn">
-						<button id="payment" , name="payment">수강신청</button>
 					</div>
 				</div>
-			</div>
-		</article>
-	</section>
-	<!--본문섹션(레슨상세정보)-->
-	<section class="section2">
-		<!--네비바 영역-->
-		<hr>
-		<br>
-		<article>
-			<div class="navi">
-				<nav>
-					<!--레슨상세탭 네비바(레슨소개, 프로소개, 레슨후기)-->
-					<a class="lsndetail" href="#lsnIntro" id="lsnIntroLink">레슨소개</a>
-					<a class="lsndetail" href="#proIntro" id="proIntroLink">프로소개</a>
-					<a class="lsndetail" href="#review" id="reviewLink">레슨후기</a>
-				</nav>
-			</div>
-		</article>
-		<br>
-		<hr>
-		<!-- <br> -->
-		<!--레슨소개영역-->
-		<article>
-			<div class="detail">
-				<fieldset>
-					<legend class="lsnintroduce">레슨소개</legend>
-					<div class="lsn_intro"></div>
-				</fieldset>
-				<!--프로소개영역-->
-				<fieldset>
-					<legend class="lsnintroduce">프로소개</legend>
-					<div class="pro_intro"></div>
-				</fieldset>
-				<!--레슨후기영역-->
-				<fieldset>
-					<legend class="lsnintroduce">후기</legend>
-					<div class="lsn">
-						<div class="reviewlist">
-							<div class="reviewdetail"></div>
+			</article>
+		</section>
+		<!--본문섹션(레슨상세정보)-->
+		<section class="section2">
+			<!--네비바 영역-->
+			<hr>
+			<br>
+			<article>
+				<div class="navi">
+					<nav>
+						<!--레슨상세탭 네비바(레슨소개, 프로소개, 레슨후기)-->
+						<a class="lsndetail" href="#lsnIntro" id="lsnIntroLink">레슨소개</a>
+						<a class="lsndetail" href="#proIntro" id="proIntroLink">프로소개</a>
+						<a class="lsndetail" href="#review" id="reviewLink">레슨후기</a>
+					</nav>
+				</div>
+			</article>
+			<br>
+			<hr>
+			<!-- <br> -->
+			<!--레슨소개영역-->
+			<article>
+				<div class="detail">
+					<fieldset>
+						<legend class="lsnintroduce">레슨소개</legend>
+						<div class="lsn_intro"></div>
+					</fieldset>
+					<!--프로소개영역-->
+					<fieldset>
+						<legend class="lsnintroduce">프로소개</legend>
+						<div class="pro_intro"></div>
+					</fieldset>
+					<!--레슨후기영역-->
+					<fieldset>
+						<legend class="lsnintroduce">후기</legend>
+						<div class="lsn">
+							<div class="reviewlist">
+								<div class="reviewdetail"></div>
+							</div>
 						</div>
-					</div>
-				</fieldset>
-			</div>
-		</article>
-	</section>
-</main>
+					</fieldset>
+				</div>
+			</article>
+		</section>
+	</main>
 	<!--풋터 네비바-->
 	<div w3-include-html="footer.html" class="w3"></div>
 	<script>

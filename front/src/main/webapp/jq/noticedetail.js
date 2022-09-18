@@ -1,4 +1,3 @@
-<<<<<<< HEAD
     $(function () {
     //로딩 되자마자 글 목록 불러오기(1 페이지)
     // let url = "http://localhost:1126/backresale/resale/board/list/1";
@@ -13,31 +12,15 @@
     let cmtParentNo = 0;
     let likedNickname = "";
     let loginedNickname = localStorage.getItem("loginedNickname");
-=======
-$(function () {
-    //로딩 되자마자 글 목록 불러오기(1 페이지)
-    // let url = "http://localhost:1126/backresale/resale/board/list/1";
-    let queryString = location.search.split("=")[1];
-    console.log(queryString);
-    let url = "http://localhost:1128/noticeboard/notice/" + queryString;
-    let src = "../notice_images/";
-    let boardNo = 0;
->>>>>>> af51f6caae409e33b46dcc24bd27b786abbc0df0
     $.ajax({
         url: url,
         method: "GET",
         success: function (jsonObj) {
-<<<<<<< HEAD
         // console.log("----" + jsonObj.t.noticeBoardLikeCnt);
         if (jsonObj.status == 1) {
             userNickname = jsonObj.t.userNickname;
             // console.log("user=" + userNickname);
             boardNo = jsonObj.t.noticeBoardNo;
-=======
-        console.log("----" + jsonObj.t.noticeBoardLikeCnt);
-        if (jsonObj.status == 1) {
-            let noticeNo = jsonObj.t.noticeBoardNo;
->>>>>>> af51f6caae409e33b46dcc24bd27b786abbc0df0
             $("div.board__content__title").html(
             "제목 : " + jsonObj.t.noticeBoardTitle
             );
@@ -46,45 +29,30 @@ $(function () {
             $("div.board__content__like_cnt").html(jsonObj.t.noticeBoardLikeCnt);
             $("div.board__content__thumbnail>img").attr(
             "src",
-<<<<<<< HEAD
             src  + boardNo +  "/" + boardNo + "_image_" + "s_1" + ".jpeg"
             // src + boardNo + "_image_" + "pyeonan.png"
-=======
-            src + noticeNo + "_image_" + "pyeonan.png"
->>>>>>> af51f6caae409e33b46dcc24bd27b786abbc0df0
             );
             $("div.board__content").html(jsonObj.t.noticeBoardContent);
 
             let commentList = jsonObj.t.noticeCommentList;
-<<<<<<< HEAD
             let $commentParent = $("div.comment-list");
-=======
-            let $commnetParent = $("div.comment-list");
->>>>>>> af51f6caae409e33b46dcc24bd27b786abbc0df0
 
             let $comment = $("div.comment-content").first();
             $("div.comment-content").not($comment).remove();
 
             $(commentList).each(function (index, comment) {
-<<<<<<< HEAD
             // console.log(comment);
             let $commentCopy = $comment.clone();
             $commentCopy
                 .find("div.comment-list__cmtNo")
                 .html(comment.noticeCmtNo);
             $commentCopy
-=======
-            console.log(comment);
-            let $commentCopy = $comment.clone();
-            $commentCopy
->>>>>>> af51f6caae409e33b46dcc24bd27b786abbc0df0
                 .find("div.comment-list__nickname")
                 .html(comment.userNickname);
             $commentCopy
                 .find("div.comment-list__content")
                 .html(comment.noticeCmtContent);
             $commentCopy.find("div.comment-list__date").html(comment.noticeCmtDt);
-<<<<<<< HEAD
 
             let cmt =
                 "<div class='comment-list__content__modify'><input type='text'><button name='cmtModify'>수정</button><button name='cmtDelete'>댓글삭제</button></div>";
@@ -354,33 +322,4 @@ $(function () {
         }
         }
     );
-
-   
-
     });
-=======
-            $commnetParent.append($commentCopy);
-            });
-            $comment.remove();
-            boardNo = noticeNo;
-            // $("div.comment-list").html(jsonObj.t.noticeCommentList);
-        }
-        },
-    });
-
-    $("div.board-like").on("click", function () {
-        let url = "http://localhost:1128/noticeboard/notice/like/add";
-        console.log(boardNo);
-        $.ajax({
-        url: url,
-        method: "post",
-        contentType: "application/json",
-        data: JSON.stringify({ noticeBoardNo: boardNo }), // userNickname 받아와야함
-        success: function (jsonObj) {
-            console.log("좋아요 성공");
-            location.reload();
-        },
-        });
-    });
-});
->>>>>>> af51f6caae409e33b46dcc24bd27b786abbc0df0

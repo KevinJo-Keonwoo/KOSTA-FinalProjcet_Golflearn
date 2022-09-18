@@ -13,7 +13,7 @@ $(function () {
         console.log(Object.values(item));
         $keyObj = Object.keys(item);
         $itemObj = Object.values(item);
-        console.log($itemObj);
+        // console.log($itemObj);
         for (let i = 0; i < $itemObj.length; i++) {
           arr.push($itemObj[i]);
           // console.log($keyObj);
@@ -153,6 +153,6 @@ $(function () {
     // 클릭한 lsn_no
     $lsnId = $(this).attr("id");
     console.log($lsnId);
-    location.href = "/front/html/viewlesson.html?lsn_no=" + $lsnId;
+    location.href = "../html/viewlesson.html?lsn_no=" + $lsnId;
   });
 });

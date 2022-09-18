@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.UUID;
 import java.util.Optional;
 
 import javax.servlet.ServletContext;
@@ -25,13 +24,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.golflearn.dto.Lesson;
+import com.golflearn.dto.LessonClassification;
 import com.golflearn.dto.LessonLine;
 import com.golflearn.dto.ResultBean;
 import com.golflearn.dto.UserInfo;
@@ -41,27 +43,29 @@ import com.golflearn.service.LessonService;
 
 import net.coobird.thumbnailator.Thumbnailator;
 
-@CrossOrigin(origins = "*")//모든포트에서 접속가능 + 메서드마다 각각 설정도 가능
+@CrossOrigin(origins = "*") // 모든포트에서 접속가능 + 메서드마다 각각 설정도 가능
 @RestController
-@RequestMapping("lesson/*") //합의 필요
+@RequestMapping("lesson/*")
 public class LessonController {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Autowired
 	private LessonService service;
 
 	@Autowired
-	private ServletContext sc;//파일path설정 시 필요
-	
+	private ServletContext sc;// 파일path설정 시 필요
+
 	@GetMapping("{lsnNo}")
 	public ResultBean<Lesson> viewLessonDetail(@PathVariable int lsnNo) {
 		ResultBean<Lesson> rb = new ResultBean<>();
 		try {
-			Lesson l = service.viewLessonDetail(lsnNo);
-			rb.setStatus(1); //성공시 satus : 1
-			rb.setT(l); //lesson객체 담기
+			Lesson lesson = service.viewLessonDetail(lsnNo);
+			rb.setStatus(1); // 성공시 satus : 1
+			rb.setT(lesson); // lesson객체 담기
 		} catch (FindException e) {
 			e.printStackTrace();
-			rb.setStatus(0); //성공 실패시 satus : 0
+			rb.setStatus(0); // 성공 실패시 satus : 0
 			rb.setMsg(e.getMessage());
 		}
 		return rb;
@@ -87,18 +91,18 @@ public class LessonController {
 	public ResultBean<LessonLine> viewHistory(@PathVariable int optCp, HttpSession session) {
 		ResultBean<LessonLine> rb = new ResultBean<>();
 		// 로그인 여부를 받아와야한다 HttpSession?
-		String loginedId = (String)session.getAttribute("loginInfo");
-		if(loginedId == null) {
+		String loginedId = (String) session.getAttribute("loginInfo");
+		if (loginedId == null) {
 			rb.setStatus(0);
 			rb.setMsg("로그인하세요");
 			return rb;
-		}else {
+		} else {
 			try {
-				List<LessonLine> lsnHistories = service.viewLessonHistory(optCp);
+				List<Lesson> lessons = service.viewMain();
 				rb.setStatus(1);
-				rb.setLt(lsnHistories);
+//				rb.setLt(lessons);
 				return rb;
-			} catch (FindException e) {				
+			} catch (FindException e) {
 				e.printStackTrace();
 				rb.setStatus(-1);
 				rb.setMsg(e.getMessage());
@@ -106,8 +110,6 @@ public class LessonController {
 			}
 		}
 	}
-	
-	//restcontroller가 아님
 
 	@Value("${spring.servlet.multipart.location}")
 	String saveDirectory;// 파일경로생성
@@ -202,8 +204,8 @@ public class LessonController {
 				e.printStackTrace();
 				return new ResponseEntity<>("오류가 발생하였습니다. 다시 시도해주세요",HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-		}
 
+		}
 	}
-	
+
 }
