@@ -86,7 +86,11 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 
 
 ### 14. 모임 게시판
-
+- 골프와 관련된 활동을 함께할 모임을 구하는 게시판
+- 모집상태별 목록 필터링 및 검색 기능
+- 모임 참여하기 및 나가기 기능 유효성검사
+- 잡 스케줄러를 활용하여 모임 날짜에 따른 모집상태 자동 변경
+- 동일 모임 참여자 간 채팅 기능 (예정)
 
 ## 구현기능
 - 이미지 다중 업로드
@@ -114,7 +118,7 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 ### 팀원 (가나다순)<br>
 **김지연 [@Jiyeon](https://github.com/JiyeonKimbackend) - CSS 담당** <br>
 ✔️ 모임 게시판 담당<br>
-✔️ <br>
+✔️ <br> 
 ✔️ <br>
 ✔️ <br>
 ✔️ 담당 페이지 css 구현<br>
