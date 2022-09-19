@@ -29,8 +29,8 @@ $(function(){
 	});
     */
 
-    // let loginedId = localStorage.getItem("loginedId")
-    let loginedId = "ohpro@gmail.com"
+    let loginedId = localStorage.getItem("loginedId")
+    // let loginedId = "ohpro@gmail.com"
     //1)페이지 로딩되었을 때 프로면 레슨 보여주기...
     $.ajax({
         url : "http://localhost:1124/back/mypage/pro",

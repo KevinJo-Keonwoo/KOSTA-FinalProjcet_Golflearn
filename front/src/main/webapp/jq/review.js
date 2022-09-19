@@ -46,7 +46,7 @@ $(function(){
         });
     }else{ //후기조회요청 후기존재
         $.ajax({
-            url : "http://localhost:1124/back/review/previous",
+            url : "http://localhost:1124/back/review/previous/",
             method : 'get',
             data : {lsn_line_no : lsn_line_no},
             success : function(jsonObj){

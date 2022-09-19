@@ -326,6 +326,7 @@ $(function(){
                     location.reload();
                 },
             });
+            alert("좋아요 삭제 성공");
         } else { // 세션 아이디와 좋아요한 닉네임이 같지 않으면
             let nickname = user_nickname;
             // let obj = { 
@@ -354,6 +355,7 @@ $(function(){
                     location.reload();
                 }, //error
             }); // ajax
+            alert("좋아요 추가 성공");
         } //else 끝
     }); //클릭 끝
     // ----------------------------------

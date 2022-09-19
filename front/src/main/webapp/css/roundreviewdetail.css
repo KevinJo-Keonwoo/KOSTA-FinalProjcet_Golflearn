@@ -19,7 +19,7 @@ div.images > img {
     background-color: rgba(243, 253, 185, 0.2);
     margin-left : 10%;
     margin-bottom: 1%;
-    margin-top : 1%;
+    margin-top : 2%;
     font-size: 25px;
     background-color: #fafaea;
     border-radius: 10px;
@@ -95,6 +95,7 @@ div.images > img {
     margin-left: 10%;
     background-color: #fafaea;
     border-radius: 10px;
+    padding : 20px;
 }
 .board__map{
     display: flex;

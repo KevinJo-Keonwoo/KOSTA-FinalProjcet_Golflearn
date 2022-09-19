@@ -26,7 +26,7 @@
 
 function mypage() {
 	$.ajax({
-		url: "http://localhost:1124/back/user/login",
+		url: "http://localhost:1124/back/ ",
 		//   dataType: "json",
 		success: function (jsonObj) {
 		console.log("usertype =" + jsonObj.type);
