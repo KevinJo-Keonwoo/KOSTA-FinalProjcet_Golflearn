@@ -85,12 +85,12 @@ $(function(){
                 method : 'post',
                 data : data,
                 success : function(jsonObj){
-                    if(jsonObj.status == 1){
-                        alert('제출이 완료되었습니다');
-                    }
+                    alert('제출이 완료되었습니다');
+                    // location.href="../html/mypage.html";
                 },
                 error : function(jqXHR){
                     alert('오류 : ' + jqXHR.status);
+                    // location.href="../html/mypage.html";
                 }
             });
             return false;
