@@ -35,10 +35,10 @@ class MeetBoardRepositoryTest {
 	@Test
 	void testFindById() {
 		Long meetBoardNo = 10L;
-​
+
 		Optional<MeetBoardEntity> optM = meetBoardRepo.findById(meetBoardNo);
 		assert (optM.isPresent());
-​
+
 	}
 	
 	//모임글 목록을 페이징 처리하여 최신순으로 보여준다
@@ -67,7 +67,7 @@ class MeetBoardRepositoryTest {
 			logger.error(m.toString());
 		});
 	}
-​
+
 	//검색어가 제목에 포함된 모임글의 목록을 불러온다
 	@Test
 	void testFindByWordAndPage(){
@@ -147,5 +147,5 @@ class MeetBoardRepositoryTest {
 		Long meetBoardNo = 6L;
 		meetMemberRepo.countByUserNicknameMeetBoard(userNickname, meetBoardNo);
 	}
-​
+
 }
