@@ -101,6 +101,7 @@ $(function () {
 			let loginedUserType = localStorage.getItem("loginedUserType");
 
 			// document.write('<script src="../jq/loginStatus.js"></script>');
+			let loginedId = localStorage.getItem("loginedId");
 			
 
 			console.log(jsonObj);
