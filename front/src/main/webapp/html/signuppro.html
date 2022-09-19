@@ -8,12 +8,14 @@
 	<script src="https://www.w3schools.com/lib/w3.js"></script>
 	<script src="../jq/signuppro.js"></script>
 	<link rel="stylesheet" href="../css/signuppro.css">
+	<link href="../css/index.css" rel="stylesheet">
 	<title>레슨프로 회원가입</title>
 </head>
-<div w3-include-html="header.html" class="w3"></div>
 <h1> 레슨프로 회원가입 </h1>
 
 <body>
+	<!-- Header-->
+	<header w3-include-html="header.html"></header>
 	<form class="signuppro" action="http://localhost:1124/back/user/signuppro" method="post" enctype="multipart/form-data">
 
 		<table id="wrapper">
@@ -29,7 +31,7 @@
 			<tr class="pwd">
 				<th> 비밀번호
 				<td id="pwd">
-					<input id="user_pwd" class="input-box" name="userPwd" type="password" placeholder="영문 소문자+숫자+특수문자 (20자 이내)" required>
+					<input id="user_pwd" class="input-box" name="userPwd" type="password" placeholder="비밀번호를 입력 해 주세요" required>
 					<!-- pattern="^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_-+=[]{}~?:;`|/]).{1,20}$" -->
 				</td>
 				</th>
@@ -37,7 +39,7 @@
 			<tr>
 				<th> 비밀번호 확인
 				<td class="pwd_chk">
-					<input id="user_pwd_chk" class="input-box" name="user_pwd_chk" type="password" placeholder="영문 소문자+숫자+특수문자 (20자 이내)" required>
+					<input id="user_pwd_chk" class="input-box" name="user_pwd_chk" type="password" placeholder="비밀번호 확인을 입력 해 주세요" required>
 					<!-- pattern="^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_-+=[]{}~?:;`|/]).{1,20}$" -->
 					</th>
 				</td>
@@ -52,7 +54,7 @@
 			<tr>
 				<th> 닉네임
 				<td id="nickname">
-					<input id="user_nickname" class="input-box" name="userNickname" type="text" required>
+					<input id="user_nickname" class="input-box" name="userNickname" type="text" placeholder="영문 대소문자, 숫자, 한글 (10자 이내)" required>
 					<!-- pattern = "^[A-Za-z가-힣0-9]{2,7}$" placeholder="영문 대소문자, 숫자, 한글 (10자 이내)" -->
 					<button id="nicknamedupchk" name="nicknamedupchk" type="submit" required>중복확인</button>
 				</td>
@@ -77,15 +79,15 @@
 			<tr>
 				<th> <p> 자격/경력 증명 </p> 서류 업로드
 				<td id="certification">
-					<input id="pro_certf" name="certifFile" type="file" required>
+					<input id="pro_certf" name="certifFiles" type="file" required>
 				</td>
 				</th>
 			</tr>
 			<tr>
 				<th> 경력기술
 				<td id="career">
-					<textarea id="pro_career" name="proCareer" placeholder="경력사항을 입력 해 주세요
-					예: 2020.01 ~ 2022.03 필드 종합 강의"></textarea>
+					<textarea id="pro_career" name="proCareer" placeholder="경력사항을 입력 해 주세요.	 
+								예: 2020.01 ~ 2022.03 필드 종합 강의"></textarea>
 				</td>
 				</th>
 			</tr>
@@ -94,11 +96,12 @@
 			<button id="signup" name="signup" type="submit"> 가입하기 </button>
 		</div>
 	</form>
-	<div w3-include-html="footer.html" class="w3"></div>
-	
-	<script>
-		w3.includeHTML();
-	</script>
+	<!-- Footer-->
+	<footer w3-include-html="footer.html"> </footer>
+	<script>w3.includeHTML();</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+		crossorigin="anonymous"></script>
 </body>
 
 </html>

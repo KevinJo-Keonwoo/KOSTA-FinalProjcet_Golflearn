@@ -5,13 +5,14 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,6 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -51,6 +52,7 @@ import net.coobird.thumbnailator.Thumbnailator;
 
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "http://172.31.192.1:5500/", allowCredentials = "true")
 @RestController
 @RequestMapping("resale/*")
 public class ResaleBoardContoller {
@@ -64,7 +66,8 @@ public class ResaleBoardContoller {
 
 	// 파일 저장 경로
 	//	@Value("${spring.servlet.multipart.location}") // 이 경로 사용 시 임시 파일이 만들어짐
-	String uploadDirectory = "C:\\Project\\GolfLearn\\front\\src\\main\\webapp\\";
+//	String uploadDirectory = "C:\\Project\\GolfLearn\\front\\src\\main\\webapp\\";
+	String uploadDirectory = "/images/";
 
 	/**
 	 * 게시글 목록보기
@@ -95,29 +98,6 @@ public class ResaleBoardContoller {
 		return rb;
 	}
 
-	//	@GetMapping(value={"board/list","board/list/{optCp}"})
-	//	public ResultBean<PageBean<ResaleBoardDto>> BoardList(@PathVariable Optional<Integer> optCp){
-	//		// 요청전달데이터 전달 되지 않을 때를 대비하여 사용하는 RESTful의  @PathVariable은 Optional로 설정해줘야함 
-	//
-	//		ResultBean<PageBean<ResaleBoardDto>> rb = new ResultBean<>();
-	//		try {
-	//			int currentPage;
-	//			if(optCp.isPresent()) { //currentPage 가 있으면(optional)
-	//				currentPage = optCp.get();
-	//			}else { // 없으면
-	//				currentPage = 1;				
-	//			}
-	//			PageBean<ResaleBoardDto> pb = service.boardList(currentPage);
-	//			rb.setStatus(1);
-	//			rb.setT(pb);
-	//		} catch (FindException e) {
-	//			e.printStackTrace();
-	//			rb.setStatus(0);
-	//			rb.setMsg(e.getMessage());
-	//		}
-	//		return rb;
-	//	}
-
 	/**
 	 * 게시글 상세보기
 	 * @param resaleBoardNo
@@ -138,7 +118,7 @@ public class ResaleBoardContoller {
 		}
 
 		// 저장된 이미지 파일의 이름을 가지고 오는 것 -> 사진 불러올 때 저장된 개수만큼 불러와야함
-		String saveDirectory = uploadDirectory +"\\"+ "resale_images" + "\\" +resaleBoardNo + "\\";
+		String saveDirectory = uploadDirectory +"/"+ "resale_images" + "/" +resaleBoardNo + "/";
 //		System.out.println("경로는" + saveDirectory);
 		File dir = new File(saveDirectory);
 
@@ -157,22 +137,6 @@ public class ResaleBoardContoller {
 
 		return rb;
 	}
-	//	@GetMapping(value = "board/{resaleBoardNo}")
-	//	public ResultBean<ResaleBoardDto> viewBoardDetail(@PathVariable Long resaleBoardNo){
-	//		ResultBean<ResaleBoardDto> rb = new ResultBean<>();
-	//		try {
-	//			ResaleBoardDto rbd = service.boardDetail(resaleBoardNo);
-	//			rb.setStatus(1);
-	//			rb.setMsg("상세 목록 불러오기 성공");
-	//			rb.setT(rbd);
-	//		} catch (FindException e) {
-	//			e.printStackTrace();
-	//			rb.setStatus(0);
-	//			rb.setMsg(e.getMessage());
-	//		}	
-	//		return rb;
-	//	}
-
 
 	/**
 	 * 검색어로 게시글 조회
@@ -218,42 +182,6 @@ public class ResaleBoardContoller {
 		return rb;
 	}
 
-	//	@GetMapping(value = {"board/search/{optWord}/{optCp}", "search/{optWord}", "search"})
-	//	public ResultBean<PageBean<ResaleBoardDto>> serch(
-	//			@PathVariable Optional<String> optWord,
-	//			@PathVariable Optional<Integer> optCp){
-	//		ResultBean<PageBean<ResaleBoardDto>> rb = new ResultBean<>();
-	//
-	//		try {
-	//			PageBean<ResaleBoardDto> pb ; 
-	//			String word = ""; 
-	//			if(optWord.isPresent()) {
-	//				word = optWord.get();
-	//			} else { 
-	//				word = "";
-	//			}
-	//
-	//			int currentPage = 1;
-	//			if(optCp.isPresent()) {
-	//				currentPage = optCp.get();
-	//			}else {
-	//
-	//			}
-	//			if("".equals(word)) {
-	//				pb = (PageBean<ResaleBoardDto>) service.boardList(currentPage);
-	//			} else {
-	//				pb = service.searchBoard(word, currentPage);
-	//			} 
-	//			rb.setStatus(1);
-	//			rb.setT(pb);
-	//		} catch (FindException e) {
-	//			e.printStackTrace();
-	//			rb.setStatus(0);
-	//			rb.setMsg(e.getMessage());
-	//		}
-	//		return rb;
-	//	}
-
 	/**
 	 * 게시글 등록
 	 * @param imageFiles
@@ -265,7 +193,7 @@ public class ResaleBoardContoller {
 	@PostMapping(value = "board/write", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> writeBoard (@RequestPart(required = false)List<MultipartFile> imageFiles,
 			ResaleBoardDto dto) {
-
+		logger.error("board/write start");
 		//		String loginedNickname = (String) session.getAttribute("loginNickname");
 		// 입력 내용 게시글 저장
 		ResaleBoardDto boardDto = new ResaleBoardDto();
@@ -277,17 +205,18 @@ public class ResaleBoardContoller {
 		} catch (AddException e1) {
 			e1.printStackTrace();
 		}
-
+		logger.error("setUserNickName");
 		Long resaleBoardNo = boardDto.getResaleBoardNo();
 		//		logger.error("글번호는"+boardDto.getResaleBoardNo());
 
 		// 파일 저장 폴더
-		String saveDirectory = uploadDirectory + "resale_images\\"+ resaleBoardNo;
+		String saveDirectory = uploadDirectory + "resale_images/"+ resaleBoardNo;
 		//파일 경로 생성
 		if(!new File(saveDirectory).exists()) {
 			new File(saveDirectory).mkdirs(); //파일 경로에 폴더 없으면 저장
 		}
-
+		
+		logger.error("saveDirectory : " + new File(saveDirectory).getAbsolutePath());
 		//이미지 저장
 		int savedImgFileCnt = 0; // 서버에 저장된 파일 수
 		if(!imageFiles.isEmpty()) {
@@ -643,6 +572,43 @@ public class ResaleBoardContoller {
 		//		}
 		return rb;
 	}
-
+	
+	/*
+	 * 게시글 목록 - 썸네일 파일 다운로드(노출)
+	 */
+	@GetMapping(value ="/downloadimage")///{resaleBoardNo}") //GetMapping 사용 가능
+	public ResponseEntity<?>  downloadImage(String resaleBoardNo){//@PathVariable String resaleBoardNo){//String imageFileName) {
+		File thumbnailFile = new File(uploadDirectory+"/resale_images/"+resaleBoardNo, "s_1.jpg");
+		HttpHeaders responseHeaders = new HttpHeaders();
+		try {
+			responseHeaders.set(HttpHeaders.CONTENT_LENGTH, thumbnailFile.length()+"");
+	    	responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(thumbnailFile.toPath()));
+		   	responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename="+URLEncoder.encode("a", "UTF-8"));
+			logger.info("썸네일파일 다운로드");
+	    	return new ResponseEntity<>(FileCopyUtils.copyToByteArray(thumbnailFile), responseHeaders, HttpStatus.OK);
+		}catch(IOException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("이미지파일 다운로드 실패" , HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
+	}
+	
+	/*
+	 * 게시글 상세 - 썸네일 파일 다운로드(노출)
+	 */
+	@GetMapping(value ="/downloadimage/detail")///{resaleBoardNo}") //GetMapping 사용 가능
+	public ResponseEntity<?>  downloadImage(String fileName, String resaleBoardNo){//@PathVariable String resaleBoardNo){//String imageFileName) {
+		File thumbnailFile = new File(uploadDirectory+"/resale_images/"+resaleBoardNo, fileName);
+		HttpHeaders responseHeaders = new HttpHeaders();
+		try {
+			responseHeaders.set(HttpHeaders.CONTENT_LENGTH, thumbnailFile.length()+"");
+	    	responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(thumbnailFile.toPath()));
+		   	responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename="+URLEncoder.encode("a", "UTF-8"));
+			logger.info("썸네일파일 다운로드");
+	    	return new ResponseEntity<>(FileCopyUtils.copyToByteArray(thumbnailFile), responseHeaders, HttpStatus.OK);
+		}catch(IOException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("이미지파일 다운로드 실패" , HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
+	}
 }
 

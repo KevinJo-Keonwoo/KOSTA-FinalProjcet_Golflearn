@@ -38,10 +38,11 @@
             let insertHtml = "";
             let $parent = $("div.board__content__images");
             for (let i = 0; i < fileNameArr.length; i++) {
-                insertHtml += "<img src='";
-                insertHtml += src + detailObj.resaleBoardNo + "/" + fileNameArr[i];
-                insertHtml += "' alt='' width='30%;' height=' 30%;'/>";
-                insertHtml += "&nbsp;&nbsp";
+              insertHtml += "<img src=''";
+              // insertHtml += src + detailObj.resaleBoardNo + "/" + fileNameArr[i];
+              insertHtml += " alt='' width='30%;' height=' 30%;'/>";
+              insertHtml += "&nbsp;&nbsp";
+              //-----------------
             }
             $parent.append(insertHtml);
 
@@ -138,6 +139,35 @@
                 } // each 의 if문
             // userNickname = detailObj.userNickname;
             });
+
+//-----------------------------
+let $imgs =  $('div.board__content__images>img');
+            for (let i = 0; i < fileNameArr.length; i++) {
+              $.ajax({
+                url: "http://172.31.192.1:1126/backresale/resale/downloadimage/detail",
+                data: {fileName : fileNameArr[i], resaleBoardNo : resaleBoardNo},
+                method: "get",
+                // credentials:true,
+                cache: false,
+                xhrFields: {
+                  responseType: "blob", //이미지 다운로드 문법
+                  // withCredentials: true,
+                },
+                success: function (responseData) {
+                  // 받아온 이미지들 객체를 넣어줌
+                  let url = URL.createObjectURL(responseData);
+                  //body > main > article > div > div.board-container > div.board__content__images > img:nth-child(1)
+                  //"div.board__content__images
+                  console.log("----------");
+                  console.log($imgs); //[i]);
+                  $($imgs[i]).attr("src", url);
+                },
+              });
+            }//end for
+
+
+
+
         } // if문
         }, // success
         error: function (jsonObj) {

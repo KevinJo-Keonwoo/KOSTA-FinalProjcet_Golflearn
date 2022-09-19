@@ -322,4 +322,42 @@
         }
         }
     );
-    });
+
+    $.ajax({
+      url: "http://localhost:1124/back/user/loginstatus",
+      method: "get",
+      success: function (jsonObj) {
+        let $tabObj = $("div#content>div#content-right");
+        let $tabObjHtml = "";
+        let loginedUserType = localStorage.getItem("loginedUserType");
+
+        // document.write('<script src="../jq/loginStatus.js"></script>');
+
+        console.log(jsonObj);
+        if (loginedUserType == 1) {
+          // $('header div#logined').show();
+          $tabObjHtml +=
+            '<div id="logined"><div id="logout" onclick="logout()">로그아웃</div>';
+          $tabObjHtml +=
+            '<div id="addlsn"><a id="mypage" href="../html/addlesson.html">레슨등록</a></div>';
+          $tabObjHtml +=
+            '<div id="mypage" onclick="mypage()">마이페이지</div></div>';
+        } else if (loginedUserType == 0) {
+          $tabObjHtml +=
+            '<div id="logined"><div id="logout" onclick="logout()">로그아웃</div>';
+          // $tabObjHtml += '<div id="addlsn"><a id="mypage" href="../html/addlesson.html">레슨등록</a></div>';
+        } else {
+          // $('header div#normal').show();
+          $tabObjHtml +=
+            ' <div id="normal"><a href="../html/login.html">로그인</a>';
+          $tabObjHtml += '<a href="../html/signuptype.html">회원가입</a></div>';
+        }
+        $tabObj.html($tabObjHtml);
+
+        // return false;
+      },
+      error: function (jqXHR) {
+        alert(jqXHR.status);
+      },
+    }); 
+});

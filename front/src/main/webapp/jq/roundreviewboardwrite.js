@@ -143,8 +143,8 @@ $(function(){
     // }
 
     // 세션의 닉네임
-    // let loginedNickname = localStorage.getItem("loginedNickname");
-    let loginedNickname = "케빈";
+    let loginedNickname = localStorage.getItem("loginedNickname");
+    // let loginedNickname = "케빈";
     // 게시글 번호
     let queryString = location.search.split("=")[1];
     let roundReviewBoardNo = queryString;

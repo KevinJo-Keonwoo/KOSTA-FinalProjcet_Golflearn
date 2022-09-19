@@ -114,25 +114,20 @@ public class LessonController {
 	@Value("${spring.servlet.multipart.location}")
 	String saveDirectory;// 파일경로생성
 	@PostMapping("request") // list타입 필드가 있는 Lesson전달과 파일첨부를 동시에 하기 위해 String타입으로 Lesson얻기
-	public ResponseEntity<?> reuqestLesson(@RequestPart(required = false) MultipartFile file, String strLesson,
-			HttpSession session) throws JsonMappingException, JsonProcessingException {
+	public ResponseEntity<?> reuqestLesson(@RequestPart(required = false) MultipartFile file, String strLesson) throws JsonMappingException, JsonProcessingException {
 
-		String loginedUserType = (String) session.getAttribute("userType");// 로그인한 유저의 유저타입가져오기
-		String loginedId = (String) session.getAttribute("loginInfo");// 로그인한 유저의 아이디 가져오기
-
-		if (loginedUserType == null) {// 로그인 여부 확인
+		ObjectMapper mapper = new ObjectMapper();
+		Lesson lesson = mapper.readValue(strLesson, Lesson.class);// String타입을 Lesson타입으로 변환
+//		String loginedId = lesson.getUserInfo().getUserId();
+		String loginedId = "jangpro@gmail.com";
+				
+		if (loginedId == null) {// 로그인 여부 확인
 			return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.INTERNAL_SERVER_ERROR);
-		} else if (!loginedUserType.equals("1")) {// 프로여부 확인
-			return new ResponseEntity<>("프로만 접근가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		} else {
 			// -----Lesson DB에 저장-----
-			ObjectMapper mapper = new ObjectMapper();
-			Lesson lesson = mapper.readValue(strLesson, Lesson.class);// String타입을 Lesson타입으로 변환
-
 			UserInfo userInfo = new UserInfo();
 			userInfo.setUserId(loginedId);
 			lesson.setUserInfo(userInfo);// lesson객체 내 userInfo 저장
-			lesson.setLocNo("11002");// 테스트
 
 			List<LessonClassification> classifications = lesson.getLsnClassifications();// 클럽분류 저장
 			try {
@@ -207,5 +202,4 @@ public class LessonController {
 
 		}
 	}
-
 }

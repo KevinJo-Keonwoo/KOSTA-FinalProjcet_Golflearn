@@ -1,5 +1,5 @@
 $(function() {
-	let $inputAuthUser = $("input[name=authenticationUser]");
+	let $inputAuthenticationUser = $("input[name=authenticationUser]");
 	let $inputNewPwd = $("input[name=user_newpwd]");
 	let $inputChkNewPwd = $("input[name=user_chknewpwd]");
 
@@ -60,7 +60,8 @@ $(function() {
 					$('button#btn-secondary').click(function () {
 						localStorage.removeItem("userId");
 						localStorage.removeItem("authenticationKey");
-						location.href = "http://localhost:1123/front/html/login.html";
+						// location.href = "http://localhost:1123/front/html/login.html";
+						location.href = "../html/login.html";
 					});		//let data = "authenticationUser=" + inputAuthUser + "&user_newpwd=" + inputNewPwd + "&user_chknewpwd=" + inputChkNewPwd;
 				}else{
 					$('#content.modal-body').html("비밀번호 변경에 실패했습니다");
@@ -77,11 +78,9 @@ $(function() {
 			error: function (jqXHR,textStatus,errorThrown) {
 				$('#content.modal-body').html("오류:" + jqXHR.status);
 				$('button#btn-secondary').click(function () {
-
 	//			location.href = "http://localhost:1123/front/html/changepwd.html";
 				});
 			}
-
 		});
 		//event.preventDefault();
 		return false;
