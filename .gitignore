@@ -205,3 +205,12 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 DockerFile
+
+DockerFile
+
+.back/DockerFile
+.BackMeet/DockerFile
+.BackNotice/DockerFile
+.BackQnA/DockerFile
+.BackResale/DockerFile
+/BackRoundReview/DockerFile
