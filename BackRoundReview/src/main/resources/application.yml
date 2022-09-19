@@ -29,13 +29,13 @@ spring:
       max-file-size: 1MB
       max-request-size: 15MB
       location: C:\\Project\\GolfLearn\\front\\src\\main\\webapp\\
-logging:
-  charset:
-    console: UTF-8
-  level:
-    org:
-      hibernate: error
-    root: error
+#logging:
+#  charset:
+#    console: UTF-8
+#  level:
+#    org:
+#      hibernate: error
+#    root: error
 server:
   servlet:
     context-path: /backroundreview

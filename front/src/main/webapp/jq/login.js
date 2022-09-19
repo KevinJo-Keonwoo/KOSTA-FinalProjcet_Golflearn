@@ -39,11 +39,11 @@ $(function () {
 				
 			
 			} else {
-				alert(jsonObj.msg);
+				alert("로그인에 실패했습니다");
 			}
 		},
 		error: function (jqXHR, statusText, errorThrown) {
-			alert(jqXHR.status + ":" + jqXHR.statusText);
+			alert("로그인에 실패했습니다");
 		},
     });
     return false;

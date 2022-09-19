@@ -20,14 +20,30 @@ $(function() {
                     $("div.board-list").not($board).remove();
                     
                     let $boardParent = $board.parent();
-                    let src = "../resale_images/";
+                    //let src = "../resale_images/";
                     $(pageContentObj).each(function (index, board) {
                         let $boardCopy = $board.clone();
                         // console.log(board.userNickname); // 출력됨
-                        // console.log(board.resaleBoardNo);
-
+                        console.log("게시판번호는"+board.resaleBoardNo);
+                        let no = board.resaleBoardNo;
                         $boardCopy.find("div.board-list__board__no").html(board.resaleBoardNo);
-                        $boardCopy.find("div>img.board-list__content__thumbnail").attr("src", src+ board.resaleBoardNo +"/s_1" +".jpg");
+                        // $boardCopy.find("div>img.board-list__content__thumbnail").attr("src", src+ board.resaleBoardNo +"/s_1" +".jpg");
+                        $.ajax({
+                            url:
+                            "http://localhost:1126/backresale/resale/downloadimage/"
+                            +board.resaleBoardNo,
+                            method: "get",                         
+                            cache: false,
+                            xhrFields: {
+                            responseType: "blob",
+                            },
+                            success: function (responseData) {
+                            let url = URL.createObjectURL(responseData);
+                            $boardCopy
+                              .find("div>img.board-list__content__thumbnail")
+                              .attr.attr("src", url);
+                          },
+                        });
                         $boardCopy.find("div.board-list__content__title").html(board.resaleBoardTitle);
                         $boardCopy.find("div.board-list__content__nickname").html(board.userNickname);
                         $boardCopy.find("div.board-list__content__dt").html(board.resaleBoardDt);
