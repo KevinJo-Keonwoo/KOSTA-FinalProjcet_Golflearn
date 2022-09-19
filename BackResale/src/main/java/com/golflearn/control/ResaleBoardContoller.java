@@ -52,6 +52,7 @@ import net.coobird.thumbnailator.Thumbnailator;
 
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "http://172.31.192.1:5500/", allowCredentials = "true")
 @RestController
 @RequestMapping("resale/*")
 public class ResaleBoardContoller {
@@ -140,7 +141,7 @@ public class ResaleBoardContoller {
 		}
 
 		// 저장된 이미지 파일의 이름을 가지고 오는 것 -> 사진 불러올 때 저장된 개수만큼 불러와야함
-		String saveDirectory = uploadDirectory +"\\"+ "resale_images" + "\\" +resaleBoardNo + "\\";
+		String saveDirectory = uploadDirectory +"/"+ "resale_images" + "/" +resaleBoardNo + "/";
 //		System.out.println("경로는" + saveDirectory);
 		File dir = new File(saveDirectory);
 
@@ -646,9 +647,9 @@ public class ResaleBoardContoller {
 		//		}
 		return rb;
 	}
-	@GetMapping(value ="/downloadimage/{resaleBoardNo}") //GetMapping 사용 가능
-	public ResponseEntity<?>  downloadImage(@PathVariable String resaleBoardNo){//String imageFileName) {
-		File thumbnailFile = new File(uploadDirectory+"/"+resaleBoardNo, "s_1.jpg");
+	@GetMapping(value ="/downloadimage")///{resaleBoardNo}") //GetMapping 사용 가능
+	public ResponseEntity<?>  downloadImage(String resaleBoardNo){//@PathVariable String resaleBoardNo){//String imageFileName) {
+		File thumbnailFile = new File(uploadDirectory+"/resale_images/"+resaleBoardNo, "s_1.jpg");
 		HttpHeaders responseHeaders = new HttpHeaders();
 		try {
 			responseHeaders.set(HttpHeaders.CONTENT_LENGTH, thumbnailFile.length()+"");
@@ -657,6 +658,24 @@ public class ResaleBoardContoller {
 			logger.info("섬네일파일 다운로드");
 	    	return new ResponseEntity<>(FileCopyUtils.copyToByteArray(thumbnailFile), responseHeaders, HttpStatus.OK);
 		}catch(IOException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("이미지파일 다운로드 실패" , HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
+	}
+	
+	
+	@GetMapping(value ="/downloadimage/detail")///{resaleBoardNo}") //GetMapping 사용 가능
+	public ResponseEntity<?>  downloadImage(String fileName, String resaleBoardNo){//@PathVariable String resaleBoardNo){//String imageFileName) {
+		File thumbnailFile = new File(uploadDirectory+"/resale_images/"+resaleBoardNo, fileName);
+		HttpHeaders responseHeaders = new HttpHeaders();
+		try {
+			responseHeaders.set(HttpHeaders.CONTENT_LENGTH, thumbnailFile.length()+"");
+	    	responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(thumbnailFile.toPath()));
+		   	responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename="+URLEncoder.encode("a", "UTF-8"));
+			logger.info("섬네일파일 다운로드");
+	    	return new ResponseEntity<>(FileCopyUtils.copyToByteArray(thumbnailFile), responseHeaders, HttpStatus.OK);
+		}catch(IOException e) {
+			e.printStackTrace();
 			return new ResponseEntity<>("이미지파일 다운로드 실패" , HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
 	}
