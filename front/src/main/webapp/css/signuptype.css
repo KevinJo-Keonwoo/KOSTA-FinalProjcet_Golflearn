@@ -14,6 +14,9 @@ div#wrapper {
     flex-wrap: nowrap;
     align-content: center;
 }
+main{
+    text-align: center;
+}
 
 button {
     background-color: white;
