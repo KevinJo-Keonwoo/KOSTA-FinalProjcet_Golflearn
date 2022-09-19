@@ -2,6 +2,7 @@ $(function () {
     //로딩 되자마자 글 목록 불러오기(1 페이지)
     // let url = "http://localhost:1126/backresale/resale/board/list/1";
     showList("http://localhost:1128/noticeboard/notice/list");
+    let type = localStorage.getItem("loginedUserType");
     function showList(url) {
         $.ajax({
         url: url,
@@ -112,12 +113,22 @@ $(function () {
     // 글쓰기 버튼 클릭 시 글쓰기 페이지로 이동
     let loginedUserType = localStorage.getItem("loginedUserType");
     let $btWrite = $("div.write > button");
+<<<<<<< HEAD
     if(loginedUserType == 0) {
         $btWrite.show();
         $btWrite.click(function () {
             location.href = "../html/noticeboardwrite.html";
         });
         
+=======
+    if (type == 2) {
+        $btWrite.click(function () {
+            $btWrite.show();
+            location.href = "../html/noticeboardwrite.html";
+        });
+    } else {
+        $btWrite.hide();
+>>>>>>> 70289a6181575de116e6369800ec9198833152df
     }
 
     //클릭한 해당 게시물로 이동

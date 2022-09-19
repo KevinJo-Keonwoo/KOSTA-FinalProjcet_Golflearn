@@ -1,15 +1,18 @@
 @import url(footer.css);
 @import url(header.css);
 @import url(index.css);
+
 /*@import url(base.css);*/
 * {
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
+
 main {
-	width: 90%;
+    width: 90%;
     margin: auto;
-	height: 100%;
+    height: 100%;
 }
+
 h1 {
     text-align: center;
     margin-top: 50px;
@@ -19,12 +22,14 @@ h1 {
     margin-left: 60px;
     padding-bottom: 15px;
 }
-nav.filter-nav{
-	margin-left: 65px;
+
+nav.filter-nav {
+    margin-left: 65px;
     margin-top: 25px;
 }
+
 nav.filter-nav button {
-	width: 92px;
+    width: 92px;
     height: 40px;
     vertical-align: middle;
     font-size: 16px;
@@ -36,18 +41,21 @@ nav.filter-nav button {
     border-radius: 23px;
     text-align: center;
     cursor: pointer;
-	font-weight: 300;
+    font-weight: 300;
 }
+
 nav.filter-nav button:hover {
-	background-color:rgb(183, 231, 199); 
-	border-color: white;
-	color:black;
+    background-color: rgb(183, 231, 199);
+    border-color: white;
+    color: black;
 }
+
 a.btn .btn-primary {
-	margin-left: 410px;
+    margin-left: 410px;
 }
+
 div.searchInput button {
-	width: 77px;
+    width: 77px;
     height: 40px;
     vertical-align: middle;
     font-size: 16px;
@@ -59,16 +67,18 @@ div.searchInput button {
     border-radius: 23px;
     text-align: center;
     cursor: pointer;
-	font-weight: 300;
-	margin-left: 15px;
+    font-weight: 300;
+    margin-left: 15px;
 
 }
+
 div.search {
     margin-top: 30px;
     margin-left: 45px;
 }
-div.search > div.searchInput {
-	margin-right: 64px;
+
+div.search>div.searchInput {
+    margin-right: 64px;
     margin-left: 23px;
 }
 
@@ -78,141 +88,161 @@ div.boardlist_outline {
     margin-top: 25px;
     overflow-y: scroll;
 }
+
 div.boardlist_outline::-webkit-scrollbar {
-    width:5px;
+    width: 5px;
 }
+
 div.boardlist_outline::-webkit-scrollbar-thumb {
-    background:rgb(183, 231, 199);
+    background: rgb(183, 231, 199);
     border-radius: 10px;
 }
+
 div.boardlist_outline::-webkit-scrollbar-track {
-    background: rgba(183, 231, 199, 0.363); 
+    background: rgba(183, 231, 199, 0.363);
     opacity: 0.5;
     border-radius: 10px;
-    display:none;
+    display: none;
 }
+
 div.boardlist {
-	display: table;
-	table-layout: fixed; /*fixed로 지정하면 셀안에 데이터 값의 길이가 길어져도 셀 너비는 고정되며, 넘치는 데이터값은 줄바꿈처리*/
-	width: 90%;
-	border: 1px solid;
-	margin: auto;
-	margin-top: 10px;
+    display: table;
+    table-layout: fixed;
+    /*fixed로 지정하면 셀안에 데이터 값의 길이가 길어져도 셀 너비는 고정되며, 넘치는 데이터값은 줄바꿈처리*/
+    width: 90%;
+    border: 1px solid;
+    margin: auto;
+    margin-top: 10px;
 }
+
 [type=search] {
-	border: 2px solid rgb(183, 231, 199);
+    border: 2px solid rgb(183, 231, 199);
     width: 25%;
     height: 35px;
-	outline:none;
+    outline: none;
 }
+
 [type=search]:hover {
-	background-color:rgb(183, 231, 199); 
-	border: 1px solid rgb(183, 231, 199);
-	outline:rgb(183, 231, 199); 
+    background-color: rgb(183, 231, 199);
+    border: 1px solid rgb(183, 231, 199);
+    outline: rgb(183, 231, 199);
 }
+
 [type=search]::placeholder {
-	color:rgb(97, 97, 97);
-	text-align: center;
+    color: rgb(97, 97, 97);
+    text-align: center;
 }
+
 /*행*/
 div.qnaboard {
-	display: table-row;
+    display: table-row;
 }
+
 /*행의 열1개*/
-div.qnaboard > div.cell {
-	display: table-cell;
-	width: 100%;
-	border-bottom: 1px solid #eceae5;
+div.qnaboard>div.cell {
+    display: table-cell;
+    width: 100%;
+    border-bottom: 1px solid #eceae5;
 }
+
 /*--열의 summary영역 START--*/
 /*열의 summary영역*/
-div.cell > div.summary {
-	display: table;
-	table-layout: fixed;
-	text-align: center;
-	width: 100%;
+div.cell>div.summary {
+    display: table;
+    table-layout: fixed;
+    text-align: center;
+    width: 100%;
 }
-div.cell > div.summary:hover {
-	background: rgb(183 231 199 / 54%);
+
+div.cell>div.summary:hover {
+    background: rgb(183 231 199 / 54%);
 }
 
 /*모든행의 열의 summary영역의 글번호, 부모글번호, 제목, 작성일자, 작성자ID,조회수 */
-div.qnaboard > div.cell > div.summary > div {
-	display: table-cell;
-	padding: 17px 0;
-	cursor: pointer;
-	color: #444;
-	line-height: 1.4;
-	font-size: 1em;
-	text-align: left;
-	padding-left:50px;
+div.qnaboard>div.cell>div.summary>div {
+    display: table-cell;
+    padding: 17px 0;
+    cursor: pointer;
+    color: #444;
+    line-height: 1.4;
+    font-size: 1em;
+    text-align: left;
+    padding-left: 50px;
 }
+
 /*1행의 열의 summary영역의 글번호, 부모글번호, 제목, 작성일자, 작성자ID,조회수 수평중앙정렬 */
-div.qnaboard:first-child > div.cell > div.summary > div {
-	vertical-align: middle;
-	text-align: left;
+div.qnaboard:first-child>div.cell>div.summary>div {
+    vertical-align: middle;
+    text-align: left;
 }
 
 /*글번호*/
-div.summary > div.board_no {
-	width: 10%;
-	text-align: left;
-}
-/*제목*/
-div.summary > div.board_title {
-	width: 40%;
-	text-align: left;
-}
-/*작성일자*/
-div.summary > div.board_dt {
-	width: 15%;
-}
-/*작성자*/
-div.summary > div.board_nickname {
-	width: 15%;
-}
-/*1행의 열의 화살표 */
-div.summary > div.arrow {
-	width: 10%;
+div.summary>div.board_no {
+    width: 10%;
+    text-align: left;
 }
 
-div.summary > div.board_secret {
-	display:none;
+/*제목*/
+div.summary>div.board_title {
+    width: 40%;
+    text-align: left;
+}
+
+/*작성일자*/
+div.summary>div.board_dt {
+    width: 15%;
+}
+
+/*작성자*/
+div.summary>div.board_nickname {
+    width: 15%;
+}
+
+/*1행의 열의 화살표 */
+div.summary>div.arrow {
+    width: 10%;
+}
+
+div.summary>div.board_secret {
+    display: none;
 }
 
 div.write-comment {
-	display:none;
+    display: none;
 }
+
 /*1행외의 행들 열의 summary에 화살표 배경이미지 */
 /* div.arrow.down -> 여러 클래스에 속성값을 줄 수 있다. */
 /* div.board:not(:first-child)  첫번째 자식값이 아닌것*/
 /*--열의 summary영역 END--*/
 /*--열의 detail영역 START--*/
-div.qnaboard > div.cell > div.detail {
-	display: none;
+div.qnaboard>div.cell>div.detail {
+    display: none;
     text-align: left;
     padding-left: 50px;
-	display: block;
+    display: block;
     margin-top: 20px;
-	display: block;
+    display: block;
     text-align: left;
     padding-left: 50px;
 }
-	
-div.detail > div.modifyNremove {
-	display: block;
+
+div.detail>div.modifyNremove {
+    display: block;
     margin-bottom: 20px;
     display: flex;
     justify-content: flex-end;
     margin-right: 50px;
 }
-div.detail > div.modifyNremove > * {
-	display: block;
+
+div.detail>div.modifyNremove>* {
+    display: block;
 }
 
 div.insertNremove {
     margin: 30px 50px 20px 30px;
 }
+
 /*--열의 detail영역 END--*/
 
 /*    */
@@ -222,16 +252,20 @@ div.pagegroup {
     text-align: center;
     margin-bottom: 40px;
 }
-div.pagegroup > span:not(.disabled) {
+
+div.pagegroup>span:not(.disabled) {
     color: rgb(183, 231, 199);
 }
-div.pagegroup > span:not(.disabled):hover {
-	cursor: pointer;
+
+div.pagegroup>span:not(.disabled):hover {
+    cursor: pointer;
     color: rgb(183, 231, 199);
 }
-div.pagegroup > span:not(.disabled):focus {
+
+div.pagegroup>span:not(.disabled):focus {
     color: black;
 }
+
 span:active {
     cursor: pointer;
     color: rgb(183, 231, 199);
@@ -241,20 +275,22 @@ span:active {
 
 }*/
 input.board_content {
-	border: none;
-    width:600px;
-    height:300px;
+    border: none;
+    width: 600px;
+    height: 300px;
     margin-left: 30px;
 }
+
 /*input.board-content::after {
     content:attr(readonly);
     border: 2px solid rgb(183, 231, 199);
     width:600px;
     height:800px;
 }*/
-input:focus,input:active{
-    outline:none;
-    border:none;
+input:focus,
+input:active {
+    outline: none;
+    border: none;
 }
 
 /*댓글 영역 START*/
@@ -262,50 +298,60 @@ input.comment_content {
     margin-top: -26px;
     margin-left: 39px;
     margin-right: 160px;
-	word-break: break-all;
+    word-break: break-all;
     height: 300px;
     width: 90%;
-	border:none;
+    border: none;
 }
-div.detail>div.board-detail{
-	outline: none;
+
+div.detail>div.board-detail {
+    outline: none;
     border: none;
     margin-bottom: 30px;
 }
+
 div.comment-detail {
-	display: flex;
+    display: flex;
     align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
 div.comment_dt {
-	display: flex;
+    display: flex;
     margin-left: 61px;
 }
-div.comment_dt, div.comment_user_nickname {
+
+div.comment_dt,
+div.comment_user_nickname {
     text-align: right;
     margin-top: 11px;
     margin-left: 39px;
     vertical-align: middle;
 }
-div.write-comment input[type=text],div.write-comment textarea, div.comment button{
-	margin: 5px;
+
+div.write-comment input[type=text],
+div.write-comment textarea,
+div.comment button {
+    margin: 5px;
 }
-div.write-comment textarea{
+
+div.write-comment textarea {
     resize: none;
     margin-left: 30px;
     border: 2px solid rgb(183, 231, 199);
     width: 902px;
     height: 90px;
-} 
+}
+
 div.write-comment textarea:focus {
-	outline:none
+    outline: none
 }
+
 /*답글 영역 END*/
-button[name=board-modify-submit]{
-	display:none;
-	width: 60px;
+button[name=board-modify-submit] {
+    display: none;
+    width: 60px;
     height: 40px;
     vertical-align: middle;
     font-size: 16px;
@@ -318,17 +364,20 @@ button[name=board-modify-submit]{
     text-align: center;
     cursor: pointer;
 }
+
 button[name=comment-insert] {
-	display:none;
-	width:60px;
+    display: none;
+    width: 60px;
 }
-button[name=comment-remove]{
-	display:none;
-    
+
+button[name=comment-remove] {
+    display: none;
+
 }
+
 button[name=board-remove] {
-	margin-left: 30px;
-	width: 60px;
+    margin-left: 30px;
+    width: 60px;
     height: 40px;
     vertical-align: middle;
     font-size: 16px;
@@ -341,8 +390,9 @@ button[name=board-remove] {
     text-align: center;
     cursor: pointer;
 }
+
 button[name=board-modify] {
-	width: 60px;
+    width: 60px;
     height: 40px;
     vertical-align: middle;
     font-size: 16px;
@@ -354,14 +404,15 @@ button[name=board-modify] {
     border-radius: 23px;
     text-align: center;
     cursor: pointer;
-    display:none;
+    display: none;
 }
-button[name=cancel]{
+
+button[name=cancel] {
     width: 60px;
     height: 40px;
     font-size: 16px;
     font-weight: 300;
-    background-color: white!important;
+    background-color: white !important;
     color: black;
     border: 2px solid rgb(183, 231, 199) !important;
     box-sizing: border-box;
@@ -369,9 +420,10 @@ button[name=cancel]{
     text-align: center;
     cursor: pointer;
 }
+
 /*모달*/
-.btn-primary{
-	width: 92px;
+.btn-primary {
+    width: 92px;
     height: 40px;
     vertical-align: middle;
     font-size: 16px;
@@ -383,18 +435,21 @@ button[name=cancel]{
     border-radius: 23px;
     text-align: center;
     cursor: pointer;
-	/*font-weight: 300;
+    /*font-weight: 300;
     margin-left: 720px;*/
 }
+
 button[name=comment-remove] {
-    display:none;
-	display: block;
-	font-weight: 200;
+    display: none;
+    display: block;
+    font-weight: 200;
 }
+
 button[name=comment-insert] {
-	display: block;
-	font-weight: 200;
+    display: block;
+    font-weight: 200;
 }
+
 button[name=close] {
     width: 65px;
     height: 40px;
@@ -406,68 +461,96 @@ button[name=close] {
     text-align: center;
     cursor: pointer;
 }
+
 div.modal fade show {
-	border:none;
+    border: none;
 }
+
 button:hover {
-	background-color:rgb(183, 231, 199) !important; 
-	border-color: white !important;
-	color:black;
+    background-color: rgb(183, 231, 199) !important;
+    border-color: white !important;
+    color: black;
 }
-button:focus, 
-button:active{
-	border:none;
-	outline:none;
-	box-shadow: none;
-	background-color: rgb(183, 231, 199)!important;;
-	color:black;
+
+button:focus,
+button:active {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background-color: rgb(183, 231, 199) !important;
+    ;
+    color: black;
 }
-button.btn-secondary:focus
-button.btn-secondary:active{
-    border:none;
-	outline:none;
-	box-shadow: none;
-	background-color: rgb(183, 231, 199)!important;;
-	color:black;
+
+button.btn-secondary:focus button.btn-secondary:active {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background-color: rgb(183, 231, 199) !important;
+    ;
+    color: black;
 }
+
 .btn-primary:hover {
-	background-color:rgb(183, 231, 199) !important; 
-	border-color: white !important;
-	color:black;
+    background-color: rgb(183, 231, 199) !important;
+    border-color: white !important;
+    color: black;
 }
-.btn-primary:focus, 
-.btn-primary:active{
-	border:none;
-	outline:none;
-	box-shadow: none;
-	background-color: rgb(183, 231, 199)!important;;
-	color:black;
+
+.btn-primary:focus,
+.btn-primary:active {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background-color: rgb(183, 231, 199) !important;
+    ;
+    color: black;
 }
+
 /*모달*/
 div.modal-content {
-	border: 2px solid rgb(183, 231, 199);
-	border-radius: 20px;
+    border: 2px solid rgb(183, 231, 199);
+    border-radius: 20px;
 }
+
 div.modal-header {
-	border-bottom: 2px solid rgb(183, 231, 199);
-	box-sizing: border-box;
-	text-align: center;
-} 
+    border-bottom: 2px solid rgb(183, 231, 199);
+    box-sizing: border-box;
+    text-align: center;
+}
+
 div.modal-footer {
     border-top: 2px solid rgb(183, 231, 199);
 }
-div.modal-body-alert{
+
+div.modal-body-alert {
     height: 99px;
     text-align: center;
     margin-top: 33px;
     margin-bottom: -46px;
 }
-input.message-text {
-    height: 350px;
+
+input[name=board-content] {
+    height: 350px !important;
 }
-input.recipient-name {
-    height: 50px;
+
+input[name=board-title] {
+    height: 50px !important;
 }
-div.modal-content{
+
+div[name=qnawrite] {
     height: 700px;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
 }

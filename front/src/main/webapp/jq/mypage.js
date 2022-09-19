@@ -53,11 +53,11 @@ $(function(){
 	});
     */
 
+   //$(this).val 해서 val값 설정해줄 수 있음 
 
-    //$(this).val 해서 val값 설정해줄 수 있음 
     //3)레슨내역 주르르르르륵나오게 
-    // let loginedId = localStorage.getItem("loginedId")
-    let loginedId = "zzeonsh@gmail.com"
+    let loginedId = localStorage.getItem("loginedId")
+    // let loginedId = "zzeonsh@gmail.com"
     $.ajax({
         url : "http://localhost:1124/back/mypage/student",
         method : 'get',

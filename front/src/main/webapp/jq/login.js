@@ -28,18 +28,21 @@ $(function () {
 				localStorage.setItem("loginedUserType", userObj.userType);
 				localStorage.setItem("loginedNickname", userObj.userNickname);
 				localStorage.setItem("loginedId", userObj.userId);
+
 				localStorage.setItem("loginedPhone", userObj.userPhone);
 				localStorage.setItem("loginedName", userObj.userName);
+
+
 				// location.replace("http://localhost:1123/front/html/main.html");
 				location.replace("../html/main.html");
 				
 			
 			} else {
-				alert(jsonObj.msg);
+				alert("로그인에 실패했습니다");
 			}
 		},
 		error: function (jqXHR, statusText, errorThrown) {
-			alert(jqXHR.status + ":" + jqXHR.statusText);
+			alert("로그인에 실패했습니다");
 		},
     });
     return false;

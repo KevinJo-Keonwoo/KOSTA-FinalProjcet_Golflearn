@@ -18,7 +18,7 @@ footer {
     position: absolute;
     /* bottom: 0; */
     padding: 10px;
-    z-index: 9999;
+    z-index: 9998;
     font-family: 'Godo';
     font-size: 12px;
     left: 0;

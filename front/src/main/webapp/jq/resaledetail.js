@@ -38,10 +38,11 @@
             let insertHtml = "";
             let $parent = $("div.board__content__images");
             for (let i = 0; i < fileNameArr.length; i++) {
-                insertHtml += "<img src='";
-                insertHtml += src + detailObj.resaleBoardNo + "/" + fileNameArr[i];
-                insertHtml += "' alt='' width='30%;' height=' 30%;'/>";
-                insertHtml += "&nbsp;&nbsp";
+              insertHtml += "<img src=''";
+              // insertHtml += src + detailObj.resaleBoardNo + "/" + fileNameArr[i];
+              insertHtml += " alt='' width='30%;' height=' 30%;'/>";
+              insertHtml += "&nbsp;&nbsp";
+              //-----------------
             }
             $parent.append(insertHtml);
 
@@ -111,6 +112,7 @@
                 if (commentNickname == loginedNickname) { // 댓글 작성자 중 로그인한 닉네임과 일치하는 것이 있으면
                     commentNo = comment.resaleCmtNo; // 일치한 댓글 번호
                     commentParentNo = comment.resaleCmtParentNo; // 부모댓글번호를 가지고 옴
+                    commentNickname = loginedNickname;
                     // console.log("댓글 번호 : " + commentNo);
                     $commentCopy.find("div.comment-content-function").show();
                 }else{
@@ -137,6 +139,35 @@
                 } // each 의 if문
             // userNickname = detailObj.userNickname;
             });
+
+//-----------------------------
+let $imgs =  $('div.board__content__images>img');
+            for (let i = 0; i < fileNameArr.length; i++) {
+              $.ajax({
+                url: "http://172.31.192.1:1126/backresale/resale/downloadimage/detail",
+                data: {fileName : fileNameArr[i], resaleBoardNo : resaleBoardNo},
+                method: "get",
+                // credentials:true,
+                cache: false,
+                xhrFields: {
+                  responseType: "blob", //이미지 다운로드 문법
+                  // withCredentials: true,
+                },
+                success: function (responseData) {
+                  // 받아온 이미지들 객체를 넣어줌
+                  let url = URL.createObjectURL(responseData);
+                  //body > main > article > div > div.board-container > div.board__content__images > img:nth-child(1)
+                  //"div.board__content__images
+                  console.log("----------");
+                  console.log($imgs); //[i]);
+                  $($imgs[i]).attr("src", url);
+                },
+              });
+            }//end for
+
+
+
+
         } // if문
         }, // success
         error: function (jsonObj) {
@@ -221,6 +252,7 @@
     
     
     //-------- 댓글 수정 START ---------
+
         $("div.comment-list").on("click", 
         "div.comment-content>div.comment-content-function> button.bt__cmt-modify",
         function(){
@@ -228,8 +260,8 @@
             console.log(commentNo+"댓글")
             // commentNo = commentNo.split("-")[1].trim();
             // console.log("수정댓글번호:" + commentNo1);    
-        if(loginedNickname == commentNickname){
             console.log("댓글작성자" + commentNickname);
+        // if(loginedNickname == commentNickname){
             let url = "http://localhost:1126/backresale/resale/comment/"+commentNo;
             // console.log(url);
             let cmtContent = $(this).parent().find("input").val();
@@ -252,9 +284,9 @@
                     alert(jsonObj.msg);
                 }
             });
-        }else{ // if문
-            alert("댓글 작성자가 아닙니다.");
-        } 
+        // }else{ // if문
+           // alert("댓글 작성자가 아닙니다.");
+        // } 
         return false;
     });
     //-------- 댓글 수정 END ---------

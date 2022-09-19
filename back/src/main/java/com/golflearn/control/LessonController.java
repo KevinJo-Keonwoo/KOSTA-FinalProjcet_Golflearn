@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.UUID;
 import java.util.Optional;
 
 import javax.servlet.ServletContext;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,27 +43,29 @@ import com.golflearn.service.LessonService;
 
 import net.coobird.thumbnailator.Thumbnailator;
 
-@CrossOrigin(origins = "*")//모든포트에서 접속가능 + 메서드마다 각각 설정도 가능
+@CrossOrigin(origins = "*") // 모든포트에서 접속가능 + 메서드마다 각각 설정도 가능
 @RestController
-@RequestMapping("lesson/*") //합의 필요
+@RequestMapping("lesson/*")
 public class LessonController {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Autowired
 	private LessonService service;
 
 	@Autowired
-	private ServletContext sc;//파일path설정 시 필요
-	
+	private ServletContext sc;// 파일path설정 시 필요
+
 	@GetMapping("{lsnNo}")
 	public ResultBean<Lesson> viewLessonDetail(@PathVariable int lsnNo) {
 		ResultBean<Lesson> rb = new ResultBean<>();
 		try {
-			Lesson l = service.viewLessonDetail(lsnNo);
-			rb.setStatus(1); //성공시 satus : 1
-			rb.setT(l); //lesson객체 담기
+			Lesson lesson = service.viewLessonDetail(lsnNo);
+			rb.setStatus(1); // 성공시 satus : 1
+			rb.setT(lesson); // lesson객체 담기
 		} catch (FindException e) {
 			e.printStackTrace();
-			rb.setStatus(0); //성공 실패시 satus : 0
+			rb.setStatus(0); // 성공 실패시 satus : 0
 			rb.setMsg(e.getMessage());
 		}
 		return rb;
@@ -91,18 +91,18 @@ public class LessonController {
 	public ResultBean<LessonLine> viewHistory(@PathVariable int optCp, HttpSession session) {
 		ResultBean<LessonLine> rb = new ResultBean<>();
 		// 로그인 여부를 받아와야한다 HttpSession?
-		String loginedId = (String)session.getAttribute("loginInfo");
-		if(loginedId == null) {
+		String loginedId = (String) session.getAttribute("loginInfo");
+		if (loginedId == null) {
 			rb.setStatus(0);
 			rb.setMsg("로그인하세요");
 			return rb;
-		}else {
+		} else {
 			try {
-				List<LessonLine> lsnHistories = service.viewLessonHistory(optCp);
+				List<Lesson> lessons = service.viewMain();
 				rb.setStatus(1);
-				rb.setLt(lsnHistories);
+//				rb.setLt(lessons);
 				return rb;
-			} catch (FindException e) {				
+			} catch (FindException e) {
 				e.printStackTrace();
 				rb.setStatus(-1);
 				rb.setMsg(e.getMessage());
@@ -110,31 +110,24 @@ public class LessonController {
 			}
 		}
 	}
-	
-	//restcontroller가 아님
 
 	@Value("${spring.servlet.multipart.location}")
 	String saveDirectory;// 파일경로생성
 	@PostMapping("request") // list타입 필드가 있는 Lesson전달과 파일첨부를 동시에 하기 위해 String타입으로 Lesson얻기
-	public ResponseEntity<?> reuqestLesson(@RequestPart(required = false) MultipartFile file, String strLesson,
-			HttpSession session) throws JsonMappingException, JsonProcessingException {
+	public ResponseEntity<?> reuqestLesson(@RequestPart(required = false) MultipartFile file, String strLesson) throws JsonMappingException, JsonProcessingException {
 
-		String loginedUserType = (String) session.getAttribute("userType");// 로그인한 유저의 유저타입가져오기
-		String loginedId = (String) session.getAttribute("loginInfo");// 로그인한 유저의 아이디 가져오기
-
-		if (loginedUserType == null) {// 로그인 여부 확인
+		ObjectMapper mapper = new ObjectMapper();
+		Lesson lesson = mapper.readValue(strLesson, Lesson.class);// String타입을 Lesson타입으로 변환
+//		String loginedId = lesson.getUserInfo().getUserId();
+		String loginedId = "jangpro@gmail.com";
+				
+		if (loginedId == null) {// 로그인 여부 확인
 			return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.INTERNAL_SERVER_ERROR);
-		} else if (!loginedUserType.equals("1")) {// 프로여부 확인
-			return new ResponseEntity<>("프로만 접근가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		} else {
 			// -----Lesson DB에 저장-----
-			ObjectMapper mapper = new ObjectMapper();
-			Lesson lesson = mapper.readValue(strLesson, Lesson.class);// String타입을 Lesson타입으로 변환
-
 			UserInfo userInfo = new UserInfo();
 			userInfo.setUserId(loginedId);
 			lesson.setUserInfo(userInfo);// lesson객체 내 userInfo 저장
-			lesson.setLocNo("11002");// 테스트
 
 			List<LessonClassification> classifications = lesson.getLsnClassifications();// 클럽분류 저장
 			try {
@@ -206,8 +199,7 @@ public class LessonController {
 				e.printStackTrace();
 				return new ResponseEntity<>("오류가 발생하였습니다. 다시 시도해주세요",HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-		}
 
+		}
 	}
-	
 }
