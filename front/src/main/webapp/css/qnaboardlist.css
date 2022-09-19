@@ -538,7 +538,7 @@ input[name=board-title] {
     height: 50px !important;
 }
 
-div.modal-content {
+div[name=qnawrite] {
     height: 700px;
 }
 
