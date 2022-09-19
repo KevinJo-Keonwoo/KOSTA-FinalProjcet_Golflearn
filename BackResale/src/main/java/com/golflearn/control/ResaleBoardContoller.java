@@ -98,29 +98,6 @@ public class ResaleBoardContoller {
 		return rb;
 	}
 
-	//	@GetMapping(value={"board/list","board/list/{optCp}"})
-	//	public ResultBean<PageBean<ResaleBoardDto>> BoardList(@PathVariable Optional<Integer> optCp){
-	//		// 요청전달데이터 전달 되지 않을 때를 대비하여 사용하는 RESTful의  @PathVariable은 Optional로 설정해줘야함 
-	//
-	//		ResultBean<PageBean<ResaleBoardDto>> rb = new ResultBean<>();
-	//		try {
-	//			int currentPage;
-	//			if(optCp.isPresent()) { //currentPage 가 있으면(optional)
-	//				currentPage = optCp.get();
-	//			}else { // 없으면
-	//				currentPage = 1;				
-	//			}
-	//			PageBean<ResaleBoardDto> pb = service.boardList(currentPage);
-	//			rb.setStatus(1);
-	//			rb.setT(pb);
-	//		} catch (FindException e) {
-	//			e.printStackTrace();
-	//			rb.setStatus(0);
-	//			rb.setMsg(e.getMessage());
-	//		}
-	//		return rb;
-	//	}
-
 	/**
 	 * 게시글 상세보기
 	 * @param resaleBoardNo
@@ -160,22 +137,6 @@ public class ResaleBoardContoller {
 
 		return rb;
 	}
-	//	@GetMapping(value = "board/{resaleBoardNo}")
-	//	public ResultBean<ResaleBoardDto> viewBoardDetail(@PathVariable Long resaleBoardNo){
-	//		ResultBean<ResaleBoardDto> rb = new ResultBean<>();
-	//		try {
-	//			ResaleBoardDto rbd = service.boardDetail(resaleBoardNo);
-	//			rb.setStatus(1);
-	//			rb.setMsg("상세 목록 불러오기 성공");
-	//			rb.setT(rbd);
-	//		} catch (FindException e) {
-	//			e.printStackTrace();
-	//			rb.setStatus(0);
-	//			rb.setMsg(e.getMessage());
-	//		}	
-	//		return rb;
-	//	}
-
 
 	/**
 	 * 검색어로 게시글 조회
@@ -220,42 +181,6 @@ public class ResaleBoardContoller {
 		}
 		return rb;
 	}
-
-	//	@GetMapping(value = {"board/search/{optWord}/{optCp}", "search/{optWord}", "search"})
-	//	public ResultBean<PageBean<ResaleBoardDto>> serch(
-	//			@PathVariable Optional<String> optWord,
-	//			@PathVariable Optional<Integer> optCp){
-	//		ResultBean<PageBean<ResaleBoardDto>> rb = new ResultBean<>();
-	//
-	//		try {
-	//			PageBean<ResaleBoardDto> pb ; 
-	//			String word = ""; 
-	//			if(optWord.isPresent()) {
-	//				word = optWord.get();
-	//			} else { 
-	//				word = "";
-	//			}
-	//
-	//			int currentPage = 1;
-	//			if(optCp.isPresent()) {
-	//				currentPage = optCp.get();
-	//			}else {
-	//
-	//			}
-	//			if("".equals(word)) {
-	//				pb = (PageBean<ResaleBoardDto>) service.boardList(currentPage);
-	//			} else {
-	//				pb = service.searchBoard(word, currentPage);
-	//			} 
-	//			rb.setStatus(1);
-	//			rb.setT(pb);
-	//		} catch (FindException e) {
-	//			e.printStackTrace();
-	//			rb.setStatus(0);
-	//			rb.setMsg(e.getMessage());
-	//		}
-	//		return rb;
-	//	}
 
 	/**
 	 * 게시글 등록
@@ -647,6 +572,10 @@ public class ResaleBoardContoller {
 		//		}
 		return rb;
 	}
+	
+	/*
+	 * 게시글 목록 - 썸네일 파일 다운로드(노출)
+	 */
 	@GetMapping(value ="/downloadimage")///{resaleBoardNo}") //GetMapping 사용 가능
 	public ResponseEntity<?>  downloadImage(String resaleBoardNo){//@PathVariable String resaleBoardNo){//String imageFileName) {
 		File thumbnailFile = new File(uploadDirectory+"/resale_images/"+resaleBoardNo, "s_1.jpg");
@@ -655,7 +584,7 @@ public class ResaleBoardContoller {
 			responseHeaders.set(HttpHeaders.CONTENT_LENGTH, thumbnailFile.length()+"");
 	    	responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(thumbnailFile.toPath()));
 		   	responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename="+URLEncoder.encode("a", "UTF-8"));
-			logger.info("섬네일파일 다운로드");
+			logger.info("썸네일파일 다운로드");
 	    	return new ResponseEntity<>(FileCopyUtils.copyToByteArray(thumbnailFile), responseHeaders, HttpStatus.OK);
 		}catch(IOException e) {
 			e.printStackTrace();
@@ -663,7 +592,9 @@ public class ResaleBoardContoller {
 		}		
 	}
 	
-	
+	/*
+	 * 게시글 상세 - 썸네일 파일 다운로드(노출)
+	 */
 	@GetMapping(value ="/downloadimage/detail")///{resaleBoardNo}") //GetMapping 사용 가능
 	public ResponseEntity<?>  downloadImage(String fileName, String resaleBoardNo){//@PathVariable String resaleBoardNo){//String imageFileName) {
 		File thumbnailFile = new File(uploadDirectory+"/resale_images/"+resaleBoardNo, fileName);
@@ -672,7 +603,7 @@ public class ResaleBoardContoller {
 			responseHeaders.set(HttpHeaders.CONTENT_LENGTH, thumbnailFile.length()+"");
 	    	responseHeaders.set(HttpHeaders.CONTENT_TYPE, Files.probeContentType(thumbnailFile.toPath()));
 		   	responseHeaders.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename="+URLEncoder.encode("a", "UTF-8"));
-			logger.info("섬네일파일 다운로드");
+			logger.info("썸네일파일 다운로드");
 	    	return new ResponseEntity<>(FileCopyUtils.copyToByteArray(thumbnailFile), responseHeaders, HttpStatus.OK);
 		}catch(IOException e) {
 			e.printStackTrace();
