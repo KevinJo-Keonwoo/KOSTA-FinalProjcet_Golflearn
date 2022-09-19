@@ -113,14 +113,6 @@ $(function () {
     // 글쓰기 버튼 클릭 시 글쓰기 페이지로 이동
     let loginedUserType = localStorage.getItem("loginedUserType");
     let $btWrite = $("div.write > button");
-<<<<<<< HEAD
-    if(loginedUserType == 0) {
-        $btWrite.show();
-        $btWrite.click(function () {
-            location.href = "../html/noticeboardwrite.html";
-        });
-        
-=======
     if (type == 2) {
         $btWrite.click(function () {
             $btWrite.show();
@@ -128,7 +120,6 @@ $(function () {
         });
     } else {
         $btWrite.hide();
->>>>>>> 70289a6181575de116e6369800ec9198833152df
     }
 
     //클릭한 해당 게시물로 이동
