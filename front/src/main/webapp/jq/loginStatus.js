@@ -1,6 +1,6 @@
 // $(function() {
 //     $.ajax({
-// 		url: "http://localhost:1124/back/login",
+// 		url: "http://localhost:1124/back/user/login",
 // 		success: function (jsonObj) {
 // 		console.log("usertype =" + jsonObj.type);
 // 		$contentObj = $("div#content>div#content-right>div#logined");

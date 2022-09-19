@@ -24,20 +24,12 @@ $(function () {
 		success: function (jsonObj) {
 			if (jsonObj.status == 1) {
 				alert(jsonObj.msg);
-<<<<<<< HEAD
-
-=======
->>>>>>> af51f6caae409e33b46dcc24bd27b786abbc0df0
 				let userObj = jsonObj.t;
 				localStorage.setItem("loginedUserType", userObj.userType);
 				localStorage.setItem("loginedNickname", userObj.userNickname);
 				localStorage.setItem("loginedId", userObj.userId);
-<<<<<<< HEAD
-=======
 				localStorage.setItem("loginedPhone", userObj.userPhone);
 				localStorage.setItem("loginedName", userObj.userName);
->>>>>>> af51f6caae409e33b46dcc24bd27b786abbc0df0
-
 				// location.replace("http://localhost:1123/front/html/main.html");
 				location.replace("../html/main.html");
 				

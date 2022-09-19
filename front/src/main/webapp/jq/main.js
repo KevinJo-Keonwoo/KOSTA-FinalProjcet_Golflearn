@@ -10,10 +10,10 @@ $(function () {
       var arr = [];
       let sido = "<ul>";
       $(jsonObj.sido).each(function (key, item) {
-        console.log(Object.values(item));
+        // console.log(Object.values(item));
         $keyObj = Object.keys(item);
         $itemObj = Object.values(item);
-        console.log($itemObj);
+        // console.log($itemObj);
         for (let i = 0; i < $itemObj.length; i++) {
           arr.push($itemObj[i]);
           // console.log($keyObj);
@@ -84,37 +84,38 @@ $(function () {
       });
       $lsnObj.hide(); // 복제본이 아닌 td태그를 숨김
 
-      return false;
+    return false;
     },
     error: function (jqXHR) {
       alert("error: " + jqXHR.status);
     },
   });
 
-/*
+
   $.ajax({
     url: "http://localhost:1124/back/user/loginstatus",
     method: "get",
     success: function (jsonObj) {
       let $tabObj = $("div#content>div#content-right");
       let $tabObjHtml = "";
-      if (jsonObj.status == 1) {
-        // $('header div#logined').show();
+      let loginedUserType = localStorage.getItem("loginedUserType");
 
-        $tabObjHtml +=
-          '<div id="logined"><div id="logout" onclick="logout()">로그아웃</div>';
-        if (jsonObj.type == 1) {
+      console.log(jsonObj);
+      if (loginedUserType == 1 || loginedUserType == 0 ) {
+        // $('header div#logined').show();
+        $tabObjHtml += '<div id="logined"><div id="logout" onclick="logout()">로그아웃</div>';
+        if (loginedUserType== 1) {
           $tabObjHtml +=
-            '<div id="addlsn"><a id="mypage" href="/front/html/addlesson.html">레슨등록</a></div>';
+            '<div id="addlsn"><a id="mypage" href="../html/addlesson.html">레슨등록</a></div>';
         }
         $tabObjHtml +=
           '<div id="mypage" onclick="mypage()">마이페이지</div></div>';
       } else {
         // $('header div#normal').show();
         $tabObjHtml +=
-          ' <div id="normal"><a href="/front/html/login.html">로그인</a>';
+          ' <div id="normal"><a href="../html/login.html">로그인</a>';
         $tabObjHtml +=
-          '<a href="/front/html/signuptype.html">회원가입</a></div>';
+          '<a href="../html/signuptype.html">회원가입</a></div>';
       }
       $tabObj.html($tabObjHtml);
 
@@ -123,10 +124,10 @@ $(function () {
     error: function (jqXHR) {
       alert(jqXHR.status);
     },
-  }); */
+  }); 
 
   // $.ajax({
-  // 	url: "http://localhost:1124/back/login",
+  // 	url: "http://localhost:1124/back/user/login",
   // 	success: function (jsonObj) {
   // 	console.log("usertype =" + jsonObj.type);
   // 	$contentObj = $("div#content>div#content-right>div#logined");

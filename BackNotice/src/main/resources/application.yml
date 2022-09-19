@@ -3,9 +3,9 @@ spring:
     hikari:
       username: admin
       driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      jdbc-url: jdbc:log4jdbc:oracle:thin:@golflearn_medium?TNS_ADMIN=/Users/jasonmilian/Desktop/dalmo/Wallet_golflearn
+      jdbc-url: jdbc:log4jdbc:oracle:thin:@golflearn_low?TNS_ADMIN=/Users/jasonmilian/Desktop/dalmo/Wallet_golflearn
       password: Dalmo08230823
-      minimum-idle: '2'
+      minimum-idle: '4'
   jpa:
     generate-ddl: 'true'
     open-in-view: 'false'
