@@ -165,14 +165,14 @@ $(function(){
                 processData: false, //파일업로드용 설정
                 data: formData, //파일업로드용 설정
                 cache: false, //이미지 다운로드용 설정
-                success: function (data) {
-                    alert("등록완료");
-                    location.href= "../html/resaleboardlist.html";
-                }, // 알럿이랑 href와 같이 동작 안됨
+                success: //function () {
+                    alert("등록완료"),
+                    // location.href= "../html/resaleboardlist.html";
+                //}, // 알럿이랑 href와 같이 동작 안됨
                 error: function (jqXHR) {
-                    //응답실패
-                    alert("에러 : " + jqXHR.status);
-                    
+                  //응답실패
+                  // alert("에러 : " + jqXHR.status);
+                    location.href= "../html/resaleboardlist.html";
                 }
             });
             return false;
