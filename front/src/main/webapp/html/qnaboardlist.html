@@ -32,7 +32,8 @@
 			<div class="searchInput">
 				<input type="search" name="word" placeholder="닉네임을 입력해주세요" autocomplete="off">
 				<button type="button" href=# name="qna-searchBtn">검색</button>
-				<a class="btn btn-primary" name="question" data-bs-toggle="modal" href="#exampleModalToggle" role="button">문의하기</a>
+				<a class="btn btn-primary" name="question" data-bs-toggle="modal" href="#exampleModalToggle"
+					role="button">문의하기</a>
 			</div>
 		</div>
 		<div class="boardlist_outline">
@@ -48,26 +49,31 @@
 						</div>
 						<div class="detail">
 							<div class="modifyNremove">
-								<button type="button" class=modify name="board-modify" >수정</button>
-								<button type="button" class=modifysubmit name="board-modify-submit" data-bs-toggle="modal" data-bs-target="#exampleModal">확인</button>
-								<button type="button" class="btn btn-primary" name="board-remove" data-bs-toggle="modal" data-bs-target="#exampleModal">삭제</button>
+								<button type="button" class=modify name="board-modify">수정</button>
+								<button type="button" class=modifysubmit name="board-modify-submit"
+									data-bs-toggle="modal" data-bs-target="#exampleModal">확인</button>
+								<button type="button" class="btn btn-primary" name="board-remove" data-bs-toggle="modal"
+									data-bs-target="#exampleModal">삭제</button>
 							</div>
 							<div class="board-detail">
 								Q<input class="board_content" readonly required autocomplete="off">
 							</div>
 							<div class="comment-detail">
-								A<input class="comment_content" placeholder="답변 대기중인 글입니다" readonly required autocomplete="off">
+								A<input class="comment_content" placeholder="답변 대기중인 글입니다" readonly required
+									autocomplete="off">
 								<div class="comment_user_nickname"></div>
 								<div class="comment_dt"></div>
 							</div>
 							<div class="write-comment">
-								<textarea name="input_comment" rows="3" cols="50"
-									placeholder="답변을 입력하세요" autocomplete="off"></textarea>
+								<textarea name="input_comment" rows="3" cols="50" placeholder="답변을 입력하세요"
+									autocomplete="off"></textarea>
 							</div>
 							<div class="insertNremove">
-								<button type="button" class="btn btn-primary" name="comment-insert" data-bs-toggle="modal" data-bs-target="#exampleModal">등록</button>
-									<!--<button type="button" name="comment-insert">등록</button>-->
-								<button type="button" class="btn btn-primary" name="comment-remove" data-bs-toggle="modal" data-bs-target="#exampleModal">답변삭제</button>
+								<button type="button" class="btn btn-primary" name="comment-insert"
+									data-bs-toggle="modal" data-bs-target="#exampleModal">등록</button>
+								<!--<button type="button" name="comment-insert">등록</button>-->
+								<button type="button" class="btn btn-primary" name="comment-remove"
+									data-bs-toggle="modal" data-bs-target="#exampleModal">답변삭제</button>
 							</div>
 						</div>
 					</div>
@@ -79,70 +85,79 @@
 		</div>
 
 
-<!--모달-->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">QnA</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body-alert" name="modal-body" id="content">
-				<!--<p name="content"></p>-->
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" name="close" data-bs-dismiss="modal">확인</button>
+
+	</main>
+
+
+
+	<!--모달-->
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">QnA</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body-alert" name="modal-body" id="content">
+					<!--<p name="content"></p>-->
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" name="close" data-bs-dismiss="modal">확인</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
 
 
-<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalToggleLabel">QnA</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+		tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalToggleLabel">QnA</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="mb-3">
+							<label for="recipient-name" class="col-form-label">제목</label>
+							<input type="text" class="form-control" name="board-title" id="recipient-name"
+								autocomplete="off">
+						</div>
+						<div class="mb-3">
+							<label for="message-text" class="col-form-label">내용</label>
+							<input type="text" class="form-control" name="board-content" id="message-text"
+								autocomplete="off">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<input type="checkbox" name="board-secret">비밀글
+					<button type="button" class="btn btn-secondary" name="cancel" data-bs-dismiss="modal">취소</button>
+					<button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+						name="submit-btn">등록하기</button>
+				</div>
 			</div>
-		<div class="modal-body">
-			<form>
-				<div class="mb-3">
-					<label for="recipient-name" class="col-form-label">제목</label>
-					<input type="text" class="form-control" name="board-title" id="recipient-name" autocomplete="off">
-				</div>
-				<div class="mb-3">
-					<label for="message-text" class="col-form-label">내용</label>
-					<input type="text" class="form-control" name="board-content" id="message-text" autocomplete="off">
-				</div>
-			</form>
-		</div>
-		<div class="modal-footer">
-			<input type="checkbox" name="board-secret">비밀글
-			<button type="button" class="btn btn-secondary" name="cancel" data-bs-dismiss="modal">취소</button>
-			<button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" name="submit-btn">등록하기</button>
-		</div>
 		</div>
 	</div>
-</div>
-	<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+	<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+		tabindex="-1">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalToggleLabel2">QnA</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
-			<div class="modal-body" name="second-modal-body">
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" name="okbtn" data-bs-dismiss="modal">확인</button>
-			</div>
+				<div class="modal-body" name="second-modal-body">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" name="okbtn" data-bs-dismiss="modal">확인</button>
+				</div>
 			</div>
 		</div>
-</div>
+	</div>
 
-	</main>
 	<!-- Footer-->
 	<footer w3-include-html="footer.html"> </footer>
 	<script>w3.includeHTML();</script>

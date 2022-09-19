@@ -33,7 +33,7 @@ spring:
       username: admin
       driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
       jdbc-url: jdbc:log4jdbc:oracle:thin:@golflearn_medium?TNS_ADMIN=wallet/Wallet_golflearn
-      minimum-idle: '2'
+      minimum-idle: '3'
   freemarker:
     cache: 'false'
   servlet:
