@@ -21,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -65,6 +66,9 @@ public class NoticeBoardController {
 
 	@Value("${spring.servlet.multipart.location}")
 	private String saveDirectory;
+	
+	String uploadDirectory = "/Users/jasonmilian/Desktop/projects/golflearn/front/src/main/webapp/";
+//			"C:\\Project\\GolfLearn\\front\\src\\main\\webapp\\";
 
 	@GetMapping(value= {"list", "list/{optCp}"}) //두개의값 모두 전달 OK
 	public ResultBean<PageBean<NoticeBoardDto>> list(@PathVariable Optional<Integer> optCp) {
@@ -87,42 +91,42 @@ public class NoticeBoardController {
 		}
 		return rb;
 	}
-	
-//	@GetMapping(value = "board/search/{optWord}")
-//	public ResultBean<PageBean<NoticeBoardDto>> search(
-//			@PathVariable Optional<String> optWord,
-//			@PathVariable Optional<Integer> optCp){
-//		ResultBean<PageBean<NoticeBoardDto>> rb = new ResultBean<>();
-//
-//		try {
-//			PageBean<NoticeBoardDto> pb ; 
-//			String word = ""; 
-//			if(optWord.isPresent()) {
-//				word = optWord.get();
-//			} else { 
-//				word = "";
-//			}
-//
-//			int currentPage = 1;
-//			if(optCp.isPresent()) {
-//				currentPage = optCp.get();
-//			}else {
-//
-//			}
-//			if("".equals(word)) {
-//				pb = service.boardList(currentPage);
-//			} else {
-//				pb = service.searchBoard(word, currentPage);
-//			} 
-//			rb.setStatus(1);
-//			rb.setT(pb);
-//		} catch (FindException e) {
-//			e.printStackTrace();
-//			rb.setStatus(0);
-//			rb.setMsg(e.getMessage());
-//		}
-//		return rb;
-//	}
+
+	@GetMapping(value = {"board/search/{optWord}", "board/search/{optWord}/{optCp}", "board/search"})
+	public ResultBean<PageBean<NoticeBoardDto>> search(
+			@PathVariable Optional<String> optWord,
+			@PathVariable Optional<Integer> optCp){
+		ResultBean<PageBean<NoticeBoardDto>> rb = new ResultBean<>();
+
+		try {
+			PageBean<NoticeBoardDto> pb; 
+			String word = ""; 
+			if(optWord.isPresent()) {
+				word = optWord.get();
+			} else { 
+				word = "";
+			}
+
+			int currentPage = 1;
+			if(optCp.isPresent()) {
+				currentPage = optCp.get();
+			}else {
+
+			}
+			if("".equals(word)) {
+				pb = service.boardList(currentPage);
+			} else {
+				pb = service.searchBoard(word, currentPage);
+			} 
+			rb.setStatus(1);
+			rb.setT(pb);
+		} catch (FindException e) {
+			e.printStackTrace();
+			rb.setStatus(0);
+			rb.setMsg(e.getMessage());
+		}
+		return rb;
+	}
 
 	@GetMapping("{boardNo}")
 	public ResultBean<NoticeBoardDto> viewBoard(@PathVariable int boardNo) {
@@ -140,18 +144,26 @@ public class NoticeBoardController {
 	}
 
 	@PostMapping("/writeboard")
-	public ResponseEntity<?> write( @RequestPart(required = false) MultipartFile imageFile, NoticeBoardDto noticeBoard, HttpSession session
-			){
+	public ResponseEntity<?> write( @RequestPart(required = false) MultipartFile imageFile, NoticeBoardDto noticeBoard){
 		logger.info("요청전달데이터 title=" + noticeBoard.getNoticeBoardTitle() + ", content=" + noticeBoard.getNoticeBoardContent());
 		//		logger.info("letterFiles.size()=" + letterFiles.size());
 		logger.info("imageFile.getSize()=" + imageFile.getSize() + ", imageFile.getOriginalFileName()=" + imageFile.getOriginalFilename());
 
 		System.out.println("제목" + noticeBoard.getNoticeBoardContent());
 		NoticeBoardDto nbDto = new NoticeBoardDto();
+		
+		Long noticeBoardNo = noticeBoard.getNoticeBoardNo();
+		//		logger.error("글번호는"+boardDto.getResaleBoardNo());
+
+		// 파일 저장 폴더
+		//파일 경로 생성
+//		if(!new File(saveDirectory).exists()) {
+//			new File(saveDirectory).mkdirs(); //파일 경로에 폴더 없으면 저장
+//		}
 		//게시글내용 DB에 저장
 		try {
 			//---로그인대신할 샘플데이터--
-			String loginedId = "id1";
+//			String loginedId = "id1";
 			//----------------------
 			//			board.setBoardId(loginedId);
 
@@ -159,7 +171,7 @@ public class NoticeBoardController {
 					.noticeBoardNo(noticeBoard.getNoticeBoardNo())
 					.noticeBoardTitle(noticeBoard.getNoticeBoardTitle())
 					.noticeBoardContent(noticeBoard.getNoticeBoardContent())
-					.userNickname(loginedId)
+					.userNickname(noticeBoard.getUserNickname())
 					.build();
 			NoticeBoardEntity nBe = noticeBoard.toEntity();
 
@@ -172,12 +184,13 @@ public class NoticeBoardController {
 		//파일 경로 생성
 		//		String saveDirectory = sc.getInitParameter("filePath");
 		//		String saveDirectory = "/Users/jasonmilian/Desktop/files";
+		Long wroteBoardNo = nbDto.getNoticeBoardNo();
+		String saveDirectory = uploadDirectory + "notice_image/"+ wroteBoardNo;
 		if (! new File(saveDirectory).exists()) {
 			logger.info("업로드 실제경로생성");
 			new File(saveDirectory).mkdirs();
 		}
 
-		Long wroteBoardNo = nbDto.getNoticeBoardNo();
 
 		int savedletterFileCnt = 0;//서버에 저장된 파일수
 		logger.info("저장된 letter 파일개수: " + savedletterFileCnt);
@@ -187,10 +200,11 @@ public class NoticeBoardController {
 		if(imageFileSize > 0) {
 			//이미지파일 저장하기
 			String imageOrignFileName = imageFile.getOriginalFilename(); //이미지파일원본이름얻기
+			String fileExtension = imageOrignFileName.substring(imageOrignFileName.lastIndexOf("."));
 			logger.info("이미지 파일이름:" + imageOrignFileName +", 파일크기: " + imageFile.getSize());
 
 			//저장할 파일이름을 지정한다 ex) 글번호_image_XXXX_원본이름
-			String imageFileName = wroteBoardNo + "_image_" + imageOrignFileName;
+			String imageFileName = wroteBoardNo + "_image_s_1" + fileExtension;
 			//이미지파일생성
 			File savedImageFile = new File(saveDirectory, imageFileName);
 			try {
@@ -287,9 +301,9 @@ public class NoticeBoardController {
 		//		String loginedId = (String)session.getAttribute("loginInfo");
 		//---로그인대신할 샘플데이터--
 		Long u = commentDto.getNoticeBoardDto().getNoticeBoardNo();
-		String loginedId = "id1";
+//		String loginedId = "id1";
 		commentDto = NoticeCommentDto.builder()
-				.userNickname(loginedId)
+				.userNickname(commentDto.getUserNickname())
 				.noticeCmtNo(commentDto.getNoticeCmtNo())
 				.noticeCmtDt(commentDto.getNoticeCmtDt())
 				.noticeBoardDto(commentDto.getNoticeBoardDto())
@@ -325,40 +339,48 @@ public class NoticeBoardController {
 	}
 
 	@PutMapping(value="comment/{commentNo}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> modifyComment(
+	public ResultBean<NoticeCommentDto> modifyComment(
 			@PathVariable long commentNo,
-			@RequestBody NoticeCommentDto noticeComment){
-
-		try {
-			if(noticeComment.getNoticeCmtContent() == null || noticeComment.getNoticeCmtContent().equals("")) {
-				return new ResponseEntity<>("댓글내용은 반드시 입력하세요", HttpStatus.BAD_REQUEST);
-			}
-
-			NoticeCommentEntity nCe = noticeComment.toEntity();
-
-			service.modifyComment(nCe);
-
-			return new ResponseEntity<>(HttpStatus.OK);
-		}catch(ModifyException e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@GetMapping(value = "like/add", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResultBean<NoticeLikeDto> addLike(NoticeLikeDto likeDto,
-			@RequestBody NoticeBoardDto boardDto,
+			@RequestBody NoticeCommentDto noticeComment,
 			HttpSession session){
 
-		//		String loginedNickname = (String) session.getAttribute("loginNickname");
-		String loginedNickname = "데빌";
+		// String loginedNickname = (String) session.getAttribute("loginNickname");
+		String loginedNickname = "id1";	
+		ResultBean<NoticeCommentDto> rb = new ResultBean<>();
+		try {
+			if(loginedNickname == null) {
+				rb.setMsg("로그인하세요");
+				return rb;
+			} else if(loginedNickname.equals(noticeComment.getUserNickname())) {
+				if(noticeComment.getNoticeCmtContent() == null || noticeComment.getNoticeCmtContent().equals("")) {
+					rb.setMsg("내용을 반드시 입력해주세요");
+				} else {
+					System.out.println("-------------------");
+					noticeComment.setNoticeCmtNo(commentNo);
+					NoticeCommentEntity nCe = noticeComment.toEntity();
+					service.modifyComment(nCe);
+//					rb.setT();
+					rb.setStatus(1);
+					rb.setMsg("수정 성공");
+				}
+
+			} else {
+				rb.setMsg("사용자가 아닙니다.");
+				return rb;
+			}
+		}catch(ModifyException e) {
+			e.printStackTrace();
+			rb.setStatus(0);
+			rb.setMsg("수정실패");
+		}
+		return rb;
+	}
+
+	@PostMapping(value = "like/add", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResultBean<NoticeLikeDto> addLike(@RequestBody NoticeLikeDto likeDto) {
+
 		ResultBean<NoticeLikeDto> rb = new ResultBean<>();
 		try {
-			likeDto = NoticeLikeDto.builder()
-					.noticeBoardDto(boardDto)
-					.userNickname(loginedNickname)
-					.build();
-
 			service.addLike(likeDto);
 			rb.setStatus(1);
 			rb.setMsg("좋아요 추가");
@@ -379,23 +401,14 @@ public class NoticeBoardController {
 	 */
 	@DeleteMapping(value = "like/{noticeLikeNo}", produces = MediaType.APPLICATION_JSON_VALUE) //Json 형태로 return?!
 	public ResultBean<NoticeLikeDto> removeLike(@PathVariable Long noticeLikeNo, 
-			@RequestBody NoticeLikeDto likeDto, 
-			HttpSession session){
+			@RequestBody NoticeLikeDto likeDto){
 
-		//		String loginedNickname = (String)session.getAttribute("loginNickname");
-		String loginedNickname = "데빌";
 		ResultBean<NoticeLikeDto> rb = new ResultBean<>(); // 객체 생성
 
-		if(loginedNickname == null) {
-			rb.setMsg("로그인하세요");
-		}
-		else if(loginedNickname.equals(likeDto.getUserNickname())) {
 			try {
 				logger.error("원글 번호는"+likeDto.getNoticeBoardDto().getNoticeBoardNo());
 				
-				
-				
-				likeDto.setNoticeLikeNo(noticeLikeNo);
+//				likeDto.setUserNickname(likeDto.getUserNickname());
 				service.removeLike(likeDto);
 				rb.setStatus(1);
 				rb.setMsg("좋아요 삭제 성공");
@@ -404,9 +417,6 @@ public class NoticeBoardController {
 				rb.setStatus(0);
 				rb.setMsg("좋아요 삭제 실패");
 			}
-		}else {
-			rb.setMsg("로그인된 아이디와 좋아요한 아이디가 일치하지 않습니다");
-		}
 		return rb;
 	}
 

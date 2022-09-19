@@ -25,4 +25,6 @@ public class DatabaseConfiguration {
 		DataSource dataSource = new HikariDataSource(hikariConfig());
 		return dataSource;
 	}
+
+
 }

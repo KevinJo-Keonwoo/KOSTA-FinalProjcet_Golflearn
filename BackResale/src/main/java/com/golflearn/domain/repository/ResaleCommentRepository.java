@@ -23,27 +23,28 @@ public interface ResaleCommentRepository extends CrudRepository<ResaleCommentEnt
 	 * @return
 	 */
 	@Query(value = "SELECT SUM(COUNT(resale_cmt_no)) \r\n"
-					+ "FROM resale_comment\r\n"
-					+ "WHERE resale_cmt_parent_no = ?1 \r\n"
-					+ "GROUP BY resale_cmt_no",nativeQuery=true)
-	public Integer findReCommentCnt(Long resaleCmtParentNo);
+					+ "FROM resale_comment"
+					+ "WHERE resale_cmt_parent_no = ?1 "
+					+ "GROUP BY resale_cmt_no",nativeQuery = true)
+	public Integer findReCommentCnt(Long resaleCmtNo);
 	
-	/**
-	 * 부모 댓글 수 조회
-	 * @param resaleBoardNo
-	 * @return
-	 */
-	@Query(value="SELECT SUM(COUNT(resale_cmt_no))"
-			+ "FROM resale_comment WHERE resale_cmt_parent_no =0 AND resale_board_no = ?1 \r\n"
-			+ "GROUP BY resale_cmt_no", nativeQuery=true)
-	public Integer findParentCmtCnt(Long resaleBoardNo);
-	
-	/**
-	 * 원글에 댓글번호 있는지 조회
-	 * @param resaleCmtParentNo
-	 * @return
-	 */
-	@Query(value = "SELECT resale_cmt_no\r\n"
-			+ "FROM resale_comment WHERE resale_board_no = ?1" , nativeQuery=true)
-	public Long findParentCmtNo(Long resaleCmtParentNo);
+//	/**
+//	 * 부모 댓글 수 조회
+//	 * @param resaleBoardNo
+//	 * @return
+//	 */
+//	@Query(value="SELECT SUM(COUNT(resale_cmt_no))"
+//			+ "FROM resale_comment WHERE resale_cmt_parent_no =0 AND resale_board_no = ?1 \r\n"
+//			+ "GROUP BY resale_cmt_no", nativeQuery=true)
+//	public Integer findParentCmtCnt(Long resaleBoardNo);
+//	
+//	/**
+//	 * 원글에 댓글번호 있는지 조회
+//	 * @param resaleCmtParentNo
+//	 * @return
+//	 */
+//	@Query(value = "SELECT sum(count(resale_cmt_no))\r\n"
+//			+ "FROM resale_comment WHERE resale_board_no = ?1 and resale_cmt_parent_no = 0 \r\n"
+//			+ "GROUP BY resale_cmt_no" , nativeQuery=true)
+//	public Integer findParentCmtNo(Long resaleCmtParentNo);
 }

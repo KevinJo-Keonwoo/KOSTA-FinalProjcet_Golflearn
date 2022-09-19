@@ -204,3 +204,19 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+.DockerFile
+
+.application.yml
+
+/back/DockerFile
+/BackMeet/DockerFile
+/BackNotice/DockerFile
+/BackQnA/DockerFile
+/BackResale/DockerFile
+/BackRoundReview/DockerFile
+
+/BackMeet/wallet/wallet_golflearn
+/BackNotice/wallet/wallet_golflearn
+/BackQnA/wallet/wallet_golflearn
+/BackResale/wallet/wallet_golflearn
+/BackRoundReview/wallet/wallet_golflearn

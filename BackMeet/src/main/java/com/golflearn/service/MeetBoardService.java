@@ -17,7 +17,6 @@ import com.golflearn.domain.repository.MeetCategoryRepository;
 import com.golflearn.domain.repository.MeetMemberRepository;
 import com.golflearn.dto.MeetBoardDto;
 import com.golflearn.dto.MeetCategoryDto;
-import com.golflearn.dto.MeetMemberDto;
 import com.golflearn.dto.PageBean;
 import com.golflearn.exception.AddException;
 import com.golflearn.exception.FindException;

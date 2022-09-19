@@ -17,11 +17,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = {"resaleCmtNo"})
-@JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ResaleCommentDto {
 	private Long resaleCmtNo;
 
-	@NotEmpty(message="내용은 필수 입력값입니다.")
+//	@NotEmpty(message="내용은 필수 입력값입니다.")
 	private String resaleCmtContent;
 	
 	@JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")

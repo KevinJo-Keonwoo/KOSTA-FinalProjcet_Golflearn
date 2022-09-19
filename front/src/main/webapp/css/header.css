@@ -4,11 +4,10 @@
 	font-family: "Godo";
 	font-style: normal;
 	font-weight: 400;
-	src: url("//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoM.woff2")
-		format("woff2"),
-	url("//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoM.woff")
-		format("woff");
-	}
+	src: url("//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoM.woff2") format("woff2"),
+		url("//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoM.woff") format("woff");
+}
+
 #index-header {
 	height: 120px;
 	color: white;
@@ -21,12 +20,13 @@
 	left: 0;
 	right: 0;
 }
-#index-header > #navbar {
+
+#index-header>#navbar {
 	width: 100%;
 	height: 100%;
 }
 
-#index-header > #navbar > #content {
+#index-header>#navbar>#content {
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -34,31 +34,31 @@
 	align-items: center;
 }
 
-#index-header > #navbar > #content > #content-left {
+#index-header>#navbar>#content>#content-left {
 	margin-left: 10px;
-    width: 326px;
-    height: 100%;
+	width: 326px;
+	height: 100%;
 	display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-around;
-    align-items: center;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+	align-items: center;
 	align-items: end;
-    padding-bottom: 50px;
+	padding-bottom: 50px;
 }
 
-#index-header > #navbar > #content > #content-center {
+#index-header>#navbar>#content>#content-center {
 	width: 70%;
 	height: 100%;
 }
 
-#index-header > #navbar > #content > #content-center > #logo {
+#index-header>#navbar>#content>#content-center>#logo {
 	width: 160px;
 	height: 100%;
 	margin: auto;
 }
 
-#index-header > #navbar > #content > #content-center > #logo > a > img {
+#index-header>#navbar>#content>#content-center>#logo>a>img {
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
@@ -67,16 +67,16 @@
 	background-size: cover;
 }
 
-#index-header > #navbar > #content > #content-right {
+#index-header>#navbar>#content>#content-right {
 	margin-left: 10px;
-    width: 326px;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-around;
-    align-items: end;
-    padding-bottom: 50px;
+	width: 326px;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+	align-items: end;
+	padding-bottom: 50px;
 }
 
 /* header > #navbar > #content > #content-right > #addlesson {
@@ -91,20 +91,20 @@ header > #navbar > #content > #content-right > #addlesson > a{
 	font-weight: lighter;
 } */
 
-#index-header > #navbar > #content > #content-right > #logined {
-    min-width: 200px;
+#index-header>#navbar>#content>#content-right>#logined {
+	min-width: 200px;
 	margin-left: 10px;
-    width: 326px;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-around;
-    align-items: center;
+	width: 326px;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+	align-items: center;
 }
 
-#index-header > #navbar > #content > #content-right > #logined > div{
-    cursor: pointer;
+#index-header>#navbar>#content>#content-right>#logined>div {
+	cursor: pointer;
 	text-decoration: none;
 	color: #b7e7c7;
 	box-sizing: border-box;
@@ -112,11 +112,11 @@ header > #navbar > #content > #content-right > #addlesson > a{
 	font-weight: lighter;
 }
 
-#index-header > #navbar > #content > #content-right > #normal {
+#index-header>#navbar>#content>#content-right>#normal {
 	min-width: 980px;
 }
 
-#index-header > #navbar > #content > #content-right > #normal > a {
+#index-header>#navbar>#content>#content-right>#normal>a {
 	text-decoration: none;
 	color: #b7e7c7;
 	box-sizing: border-box;
@@ -125,12 +125,13 @@ header > #navbar > #content > #content-right > #addlesson > a{
 	padding: 8px;
 }
 
-#index-header > #navbar > #content > #content-right > #logined {
+#index-header>#navbar>#content>#content-right>#logined {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
 }
-#index-header > #navbar > #content > #content-right > #logined > #addlsn > a {
+
+#index-header>#navbar>#content>#content-right>#logined>#addlsn>a {
 	text-decoration: none;
 	color: #b7e7c7;
 	box-sizing: border-box;
@@ -138,7 +139,7 @@ header > #navbar > #content > #content-right > #addlesson > a{
 	font-weight: lighter;
 }
 
-#index-header > #navbar > #content > #content-right > #logined > a {
+#index-header>#navbar>#content>#content-right>#logined>a {
 	text-decoration: none;
 	color: #b7e7c7;
 	box-sizing: border-box;
@@ -147,17 +148,17 @@ header > #navbar > #content > #content-right > #addlesson > a{
 	/*text-shadow: 2px 2px 4px gray;*/
 }
 
-div#content-right >  a{
+div#content-right>a {
 	display: block;
 	text-decoration: none;
 	color: #b7e7c7;
 	box-sizing: border-box;
 	font-family: "Godo";
 	margin-left: -500px;
-	color : #3F8D54;
+	color: #3F8D54;
 }
 
-a#content_menu{
+a#content_menu {
 	display: block;
 	text-decoration: none;
 	font-family: "Godo";
@@ -165,3 +166,4 @@ a#content_menu{
 	box-sizing: border-box;
 	font-weight: lighter;
 }
+

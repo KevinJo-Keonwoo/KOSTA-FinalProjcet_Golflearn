@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.golflearn.domain.entity.ResaleBoardEntity;
 import com.golflearn.domain.entity.ResaleLikeEntity;
@@ -28,12 +27,12 @@ class ResaleBoardLikeRepositoryTest {
 		ResaleLikeEntity resaleLike = new ResaleLikeEntity();
 		ResaleBoardEntity resaleBoard = new ResaleBoardEntity();
 		resaleBoard.setResaleBoardNo(27L);
-		resaleLike.setResaleBoardEntity(resaleBoard);
+		resaleLike.setResaleBoard(resaleBoard);
 		resaleLike.setUserNickname("데빌");
 		
 		logger.error("닉네임은 " + resaleLike.getUserNickname());
 		logger.error("좋아요는 " + resaleLike.getResaleLikeNo());
-		logger.error("글번호는 " + resaleLike.getResaleBoardEntity().getResaleBoardNo());
+		logger.error("글번호는 " + resaleLike.getResaleBoard().getResaleBoardNo());
 		
 		resaleLikeRepo.save(resaleLike);
 	}

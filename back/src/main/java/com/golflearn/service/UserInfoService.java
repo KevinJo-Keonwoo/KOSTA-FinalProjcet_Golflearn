@@ -63,7 +63,7 @@ public class UserInfoService {
 	public UserInfo login(String userId, String userPwd) throws FindException {
 		UserInfo userInfo = repository.selectByUserIdAndPwd(userId, userPwd);
 		if(!userInfo.getUserPwd().equals(userPwd)) {
-			throw new FindException();
+			throw new FindException("비밀번호가 일치하지 않습니다.");
 		}
 //		System.out.println(userInfo);
 		return userInfo;

@@ -17,7 +17,7 @@ import com.golflearn.exception.ModifyException;
 @SpringBootTest
 class LessonReviewRepositoryTest {
 	@Autowired
-	private LessonReviewOracleRepository repository;
+	private LessonReviewRepository repository;
 	
 	@Test
 	void selectTitleByLsnLineNo() throws FindException{

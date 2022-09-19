@@ -8,7 +8,6 @@ import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;

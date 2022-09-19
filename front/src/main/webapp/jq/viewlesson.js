@@ -2,7 +2,7 @@ $(function () {
 	//---------------화면 로딩되자마자----------------
 	//레슨정보 서블릿에 보내기
 	// let queryString = location.search.substring(1); 
-
+	
 	let queryString = location.search.split("=")[1];
 	console.log(queryString);
 	let lsn_title;
@@ -14,7 +14,6 @@ $(function () {
 		success: function (jsonObj) {
 			if (jsonObj.status == 1) {
 				let lesson = jsonObj.t;
-
 				let loc_no = lesson.locNo; //지역코드(ex:11011에 해당하는 주소지역 다 문자로 표현)
 				lsn_title = lesson.lsnTitle; //레슨명
 				let lsn_star_score = lesson.lsnStarScore; //레슨별점
@@ -29,7 +28,6 @@ $(function () {
 				let lsn_per_time = lesson.lsnPerTime + '분';
 				let lsn_days = lesson.lsnDays + '일';
 				let lsn_lv = lesson.lsnLv;
-
 				$('div.viewlesson>div.viewlesson-img>img').attr('src', '../lsn_images/' + queryString + '_LessonThumbnail.jpg').attr('alt', lsn_title);
 				$('div.viewlesson ul>div>li>span.loc_no').html(loc_no);	//지역은 api로 넘어갈때 수정
 				$('div.viewlesson ul>div>li>span.lsn_title').html(lsn_title);
@@ -42,10 +40,8 @@ $(function () {
 				$('div.viewlesson ul>div>li>span.lsn_days').html(lsn_days);
 				$('div.viewlesson ul>div>li>span.lsn_lv').html(lsn_lv);
 				$('div.viewlesson ul>div>li>span.lsn_price').html(lsn_price);
-
 				$('div.lsn_intro').html(lsn_intro);
 				$('div.pro_intro').html(pro_intro);
-
 				//-----------레슨후기 list START-------------
 				let lessonLines = lesson.lsnLines;
 				let $lsnObj = $('div.reviewlist');
@@ -55,7 +51,6 @@ $(function () {
 						$copyObj = $lsnObj.clone();
 						let reviewDt = element.lsnReview.reviewDt;
 						let review = element.lsnReview.review;
-
 						let lessonReview = '<ul>';
 						lessonReview += '<li><div>작성자아이디: <span class = "reviewId">' + reviewNickname + '</span></div></li>'
 						lessonReview += '<li><div>작성날짜: <span class = "reviewDt">' + reviewDt + '</span></div></li>'
@@ -65,24 +60,18 @@ $(function () {
 						$('div.lsn').append($copyObj);
 					}
 				});
-
-				lsnPrice = lsn_price;
-				lsnTitle = lsn_title;
+				// lsnPrice = lsn_price;
+				// lsnTitle = lsn_title;
 			}// if문
 		}, //success
 		error: function (jqXHR) {
 			alert('오류:' + jqXHR.status);
 		},
 	});
-
-
 	// console.log(lsn_price);
-
 	//------------수강신청 버튼 클릭 START-------------
-
 	//수강신청 버튼 찾기
 	let $btPayment = $("button[name=payment]");
-
 	//입력된 객체 찾기
 	let pay_method = "";
 	let name = localStorage.getItem("loginedName");
@@ -90,19 +79,15 @@ $(function () {
 	let nickname = localStorage.getItem("loginedNickname");
 	let email = localStorage.getItem("loginedId");
 	let phone = localStorage.getItem("loginedPhone");
-
 	$(document).ready(function () {
-
 		// $("div.viewlesson ul>div>li").on("click","div.payment>button",function () {
 		$($btPayment).on("click", function () {
 			console.log(lsn_price);
 			console.log(lsn_title);
-
 			// lsn_price= 5000;
 			// lsn_title= "아아"
 			var IMP = window.IMP; // 생략가능
 			IMP.init("imp84404721"); // 가맹점 식별코드(부여받음)
-
 			IMP.request_pay({
 				pg: "html5_inicis", //이니시스 결제 사용
 				pay_method: "card",
@@ -133,25 +118,24 @@ $(function () {
 			);
 		});
 	});
-
 	//------------레슨상세정보 네비바 클릭 START-------------
 	$(document).ready(function () {
 		$('#lsnIntroLink').click(function () {
-			var offset = $('div.lsn_intro').offset(); //선택한 태그의 위치를 반환                
+			var offset = $('div.lsn_intro').offset(); //선택한 태그의 위치를 반환                
 			//animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함
 			$('html').animate({ scrollTop: offset.top }, 400);
 		});
 	});
 	$(document).ready(function () {
 		$('#proIntroLink').click(function () {
-			var offset = $('div.pro_intro').offset(); //선택한 태그의 위치를 반환                
+			var offset = $('div.pro_intro').offset(); //선택한 태그의 위치를 반환                
 			//animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함
 			$('html').animate({ scrollTop: offset.top }, 400);
 		});
 	});
 	$(document).ready(function () {
 		$('#reviewLink').click(function () {
-			var offset = $('div.lsn').offset(); //선택한 태그의 위치를 반환                
+			var offset = $('div.lsn').offset(); //선택한 태그의 위치를 반환                
 			//animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함
 			$('html').animate({ scrollTop: offset.top }, 400);
 		});

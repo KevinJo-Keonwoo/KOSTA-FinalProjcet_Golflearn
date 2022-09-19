@@ -1,3 +1,5 @@
+package com.golflearn.dto.iamport;
+
 import com.google.gson.annotations.SerializedName;
 
 public class IamportResponse<T> {
