@@ -206,3 +206,11 @@ buildNumber.properties
 .classpath
 DockerFile
 wallet_golflearn
+
+application.yml
+.back/DockerFile
+.BackMeet/DockerFile
+.BackNotice/DockerFile
+.BackQnA/DockerFile
+.BackResale/DockerFile
+/BackRoundReview/DockerFile
