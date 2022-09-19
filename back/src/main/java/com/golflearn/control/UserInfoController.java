@@ -60,14 +60,14 @@ public class UserInfoController {
 	private ServletContext sc;
 
 
-	// 프로 회원가입 (파일 업로드를 곁들인..)
+	// 프로 회원가입
 	// 파일 업로드 시 formData 필요 > PathVariable 사용 불가
 	// 파일 업로드 시 요청전달데이터 꼭 필요 > RestfulAPI 사용 불가
 	// 파일 업로드 가능 방법 
 	// 1. @RequestPart MultipartFile 타입 사용
 	// 2. ServletRequest or MultipartHttpServletRequest
-	@Value("${spring.servlet.multipart.location}")
-	String uploadDirectory;
+//	@Value("${spring.servlet.multipart.location}")
+	String uploadDirectory = "C:\\Project\\GolfLearn\\front\\src\\main\\webapp\\";
 	@PostMapping("signuppro")
 	public ResponseEntity<?> signuppro (
 			@RequestPart(required = false) List<MultipartFile> certifFiles, 
