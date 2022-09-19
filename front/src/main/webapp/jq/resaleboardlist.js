@@ -29,15 +29,17 @@ $(function() {
                         $boardCopy.find("div.board-list__board__no").html(board.resaleBoardNo);
                         // $boardCopy.find("div>img.board-list__content__thumbnail").attr("src", src+ board.resaleBoardNo +"/s_1" +".jpg");
                         $.ajax({
-                            url:
-                            "http://localhost:1126/backresale/resale/downloadimage/"
-                            +board.resaleBoardNo,
-                            method: "get",                         
-                            cache: false,
-                            xhrFields: {
-                            responseType: "blob",
-                            },
-                            success: function (responseData) {
+                          url:
+                            "http://localhost:1126/backresale/resale/downloadimage/" +
+                            board.resaleBoardNo,
+                          method: "get",
+                          // credentials:true,
+                          cache: false,
+                          xhrFields: {
+                                responseType: "blob",
+                                withCredentials: true,
+                          },
+                          success: function (responseData) {
                             let url = URL.createObjectURL(responseData);
                             $boardCopy
                               .find("div>img.board-list__content__thumbnail")

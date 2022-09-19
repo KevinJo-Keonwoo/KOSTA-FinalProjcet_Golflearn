@@ -646,7 +646,7 @@ public class ResaleBoardContoller {
 		//		}
 		return rb;
 	}
-	@GetMapping("/downloadimage/{resaleBoardNo}")
+	@GetMapping(value ="/downloadimage/{resaleBoardNo}") //GetMapping 사용 가능
 	public ResponseEntity<?>  downloadImage(@PathVariable String resaleBoardNo){//String imageFileName) {
 		File thumbnailFile = new File(uploadDirectory+"/"+resaleBoardNo, "s_1.jpg");
 		HttpHeaders responseHeaders = new HttpHeaders();
