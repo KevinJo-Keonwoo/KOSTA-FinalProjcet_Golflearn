@@ -22,7 +22,7 @@ $(function () {
 			},
 			error: function (jqXHR) {
 				alert(jqXHR.status + ":" + jqXHR.statusText);
-			},
+			}
 		});
 		return false;
 	});
@@ -95,11 +95,11 @@ $(function () {
 			return false;
 		}
 
-		let idCheck = RegExp(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$/);
-		let pwdCheck = RegExp(/^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{4,20}$/);
-		let nameCheck = RegExp(/^[A-Za-z가-힣]{2,7}$/);
-		let nicknameCheck = RegExp(/^[A-Za-z가-힣0-9]{2,7}$/);
-		let phoneCheck = RegExp(/^[0-9]{3}+-[0-9]{4}+-[0-9]{4}$/);
+		// let idCheck = RegExp(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$/);
+		// let pwdCheck = RegExp(/^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{4,20}$/);
+		// let nameCheck = RegExp(/^[A-Za-z가-힣]{2,7}$/);
+		// let nicknameCheck = RegExp(/^[A-Za-z가-힣0-9]{2,7}$/);
+		// let phoneCheck = RegExp(/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/);
 		
 
 		// ----- 비밀번호 확인 START -----
@@ -129,7 +129,7 @@ $(function () {
 		console.log(JSON.stringify(obj));
 		// ("---------------------------------");
 		let obj2 = formData.get("profileImg");
-		let obj3 = formData.get("certifFile");
+		let obj3 = formData.get("certifFiles");
 		
 		$.ajax({
 			url: "http://localhost:1124/back/user/signuppro",
@@ -139,16 +139,14 @@ $(function () {
 			data: formData,
 			success: function() {
 				alert("가입 성공"); // jsonObj.msg로 작성 시 오류
-				location.href("http://localhost:1123/front/html/login.html");
-				// if (jsonObj.status == 1) {
-				// }
+				location.replace="http://localhost:1123/front/html/login.html";
 			},
 			error: function (jqXHR) {
 				alert(jqXHR.status + ":  가입실패");
+				console.log(formData.userId);
+				console.log(formData.userNickname);
 			},
 		});
-		console.log(formData.userId);
-		console.log(formData.userNickname);
 		return false;
 	});
 });

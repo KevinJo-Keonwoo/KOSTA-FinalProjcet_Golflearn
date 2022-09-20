@@ -207,5 +207,11 @@ $(function(){
         //         }
         //     }
         // })
+        
+    })
+    
+    //라운드리뷰 클릭하면 재로딩
+    $("h2").on('click', function(){
+        location.href = '';
     })
 })

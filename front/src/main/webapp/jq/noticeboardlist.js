@@ -2,6 +2,7 @@ $(function () {
     //로딩 되자마자 글 목록 불러오기(1 페이지)
     // let url = "http://localhost:1126/backresale/resale/board/list/1";
     showList("http://localhost:1128/noticeboard/notice/list");
+    let type = localStorage.getItem("loginedUserType");
     function showList(url) {
         $.ajax({
         url: url,
@@ -24,7 +25,23 @@ $(function () {
                 let $boardCopy = $board.clone();
                 console.log(board.userNickname); // 출력됨
                 console.log(board.noticeBoardNo);
-
+                $.ajax({
+                    url: "http://localhost:1128/noticeboard/notice/downloadimage",
+                    data: "boardNo=" + board.noticeBoardNo,
+                    method: "get",
+                    // credentials:true,
+                    cache: false,
+                    xhrFields: {
+                        responseType: "blob", //이미지 다운로드 문법
+                        // withCredentials: true,
+                    },
+                    success: function (responseData) { // 받아온 이미지들 객체를 넣어줌
+                        let url = URL.createObjectURL(responseData);
+                        $boardCopy
+                        .find("div>img.board-list__content__thumbnail")
+                        .attr("src", url);
+                    },
+                });
                 $boardCopy
                 .find("div.board-list__content__no")
                 .html(board.noticeBoardNo);
@@ -46,14 +63,15 @@ $(function () {
                 $boardCopy
                 .find("div.board-list__content__like-cnt")
                 .html(board.noticeBoardLikeCnt);
-                $boardCopy
-                .find("div>img.board-list__content__thumbnail")
-                .attr(
-                    "src",
-                    src  + board.noticeBoardNo +  "/" + board.noticeBoardNo + "_image_" + "s_1" + ".jpeg"
-                );
+                // $boardCopy
+                // .find("div>img.board-list__content__thumbnail")
+                // .attr(
+                //     "src",
+                //     src  + board.noticeBoardNo +  "/" + board.noticeBoardNo + "_image_" + "s_1" + ".jpeg"
+                // );
                 $board1.append($boardCopy);
             });
+
             $board.hide();
             // 페이지 그룹
             let $pagegroup = $("div.page-group");
@@ -108,12 +126,17 @@ $(function () {
         },
         });
     }
-
+    
     // 글쓰기 버튼 클릭 시 글쓰기 페이지로 이동
     let $btWrite = $("div.write > button");
-    $btWrite.click(function () {
-        location.href = "../html/noticeboardwrite.html";
-    });
+    if (type == 2) {
+        $btWrite.click(function () {
+            $btWrite.show();
+            location.href = "../html/noticeboardwrite.html";
+        });
+    } else {
+        $btWrite.hide();
+    }
 
     //클릭한 해당 게시물로 이동
     $("div.board").on("click", "div.boardlist__content", function () {

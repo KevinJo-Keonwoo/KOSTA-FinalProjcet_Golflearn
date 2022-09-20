@@ -1,8 +1,8 @@
 $(function(){
     //1. 상세내용 보여주기
     // html/roundreviewdetail.html?round_review_board_no=' + round_review_board_no
-    // let user_nickname = localStorage.getItem("loginedNickname");
-    let user_nickname = "데빌";
+    let user_nickname = localStorage.getItem("loginedNickname");
+    // let user_nickname = "데빌";
     let currentPage = location.search;
     let board_no = location.search.substring(1).split('=')[1];
     let url = 'http://localhost:1125/backroundreview/board/' + board_no;
@@ -226,7 +226,7 @@ $(function(){
         console.log(roundReviewCmtContent);
         // let userNickname = localStorage.getItem("loginedNickname");
         // 테스트용
-        let userNickname = "케빈"; 
+        // let userNickname = "케빈"; 
         $.ajax({
             url : "http://localhost:1125/backroundreview/comment/" + board_no,
             method : "post",
@@ -291,7 +291,7 @@ $(function(){
     
     $("img.board__like").on("click", function () {
         let roundReviewBoardNo = board_no;
-        let likedNickname = "데빌";
+        // let likedNickname = "데빌";
         console.log(user_nickname);
         console.log(likedNickname);
 
@@ -326,6 +326,7 @@ $(function(){
                     location.reload();
                 },
             });
+            alert("좋아요 삭제 성공");
         } else { // 세션 아이디와 좋아요한 닉네임이 같지 않으면
             let nickname = user_nickname;
             // let obj = { 
@@ -354,6 +355,7 @@ $(function(){
                     location.reload();
                 }, //error
             }); // ajax
+            alert("좋아요 추가 성공");
         } //else 끝
     }); //클릭 끝
     // ----------------------------------
