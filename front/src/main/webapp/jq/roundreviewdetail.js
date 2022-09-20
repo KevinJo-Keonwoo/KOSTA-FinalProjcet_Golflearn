@@ -224,7 +224,7 @@ $(function(){
         let roundReviewCmtParentNo = 0;
 
         console.log(roundReviewCmtContent);
-        // let userNickname = localStorage.getItem("loginedNickname");
+        let userNickname = localStorage.getItem("loginedNickname");
         // 테스트용
         // let userNickname = "케빈"; 
         $.ajax({
@@ -255,36 +255,74 @@ $(function(){
             error: function(jqXHR){
                 alert("에러:" + jqXHR.status);
             }
-        })
-    })
+        });
+        return false;
+    });
     //3. 댓글 수정하기
-    let $test = $("article");
-    let $test2 = $test.parents();
-    $test.on('click', "div.comment>div.comment-list>button.comment-list__modify", function(){
-        let roundReviewCmtNo = $(this).siblings("div.comment-list__no").html();
-        console.log(roundReviewCmtNo);
-        $.ajax({
-            url : "http://localhost:1125/backroundreview/comment/" + roundReviewCmtNo,
-            method : 'put',
-            timeout : 0,
-            header : {
-                "Content-Type": "application/json"
-            },
-            data : JSON.stringify({}),
-            success : function(){
-                alert("수정성공")
-            },
-            error : function (jqXHR) {
-                alert(
-                    "수정 에러: " +
-                    jqXHR.status + 
-                    ", jqXHR.responseText:" +
-                    jqXHR.responseTest
-                );
-            }
+    // let $test = $("article");
+    // let $test2 = $test.parents();
+    // $test.on('click', "div.comment>div.comment-list>button.comment-list__modify", function(){
+    //     let roundReviewCmtNo = $(this).siblings("div.comment-list__no").html();
+    //     console.log(roundReviewCmtNo);
+    //     $.ajax({
+    //         url : "http://localhost:1125/backroundreview/comment/" + roundReviewCmtNo,
+    //         method : 'put',
+    //         timeout : 0,
+    //         header : {
+    //             "Content-Type": "application/json"
+    //         },
+    //         data : JSON.stringify({}),
+    //         success : function(){
+    //             alert("수정성공")
+    //         },
+    //         error : function (jqXHR) {
+    //             alert(
+    //                 "수정 에러: " +
+    //                 jqXHR.status + 
+    //                 ", jqXHR.responseText:" +
+    //                 jqXHR.responseTest
+    //             );
+    //         }
 
-        })
-    })
+    //     })
+        
+    // })
+    //댓글수정실패
+    // $("div.comment").on("click", 
+    //     "div.comment-list">"button.comment-list__modify",
+    //     function(){
+    //         commentNo = $(this).parent().find("div.comment-list__no").text();
+    //         console.log(commentNo+"댓글")
+    //         // commentNo = commentNo.split("-")[1].trim();
+    //         // console.log("수정댓글번호:" + commentNo1);    
+    //     // if(loginedNickname == commentNickname){
+    //         let url = "http://localhost:1125/backroundreview/comment/" + commentNo;
+    //         // console.log(url);
+    //         let cmtContent = $(this).parent().find("input").val();
+    //         // console.log(cmtContent);
+    //         let obj = {
+    //         "roundReviewCmtNo": commentNo,
+    //         "roundReviewCmtContent": cmtContent,
+    //         "userNickname":user_nickname,
+    //         "roundReviewBoard" : {"roundReviewBoardNo" : board_no}};     
+    //         $.ajax({
+    //             url: url,
+    //             method: "put",
+    //             contentType: "application/json; charset=utf-8",
+    //             data: JSON.stringify(obj),
+    //             success: function (jsonObj) {
+    //                 alert(jsonObj.msg);
+    //                 location.reload();
+    //             },
+    //             error: function (jsonObj) {
+    //                 alert(jsonObj.msg);
+    //             }
+    //         });
+    //     // }else{ // if문
+    //        // alert("댓글 작성자가 아닙니다.");
+    //     // } 
+    //     return false;
+    // });
 
     
     //6. 좋아요 누르기/해제하기
@@ -326,6 +364,7 @@ $(function(){
                     location.reload();
                 },
             });
+            alert("좋아요 삭제 성공");
         } else { // 세션 아이디와 좋아요한 닉네임이 같지 않으면
             let nickname = user_nickname;
             // let obj = { 
@@ -354,6 +393,7 @@ $(function(){
                     location.reload();
                 }, //error
             }); // ajax
+            alert("좋아요 추가 성공");
         } //else 끝
     }); //클릭 끝
     // ----------------------------------

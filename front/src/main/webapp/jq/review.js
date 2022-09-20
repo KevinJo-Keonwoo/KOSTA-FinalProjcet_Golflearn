@@ -39,14 +39,16 @@ $(function(){
                 // let imgLine = '<img src = "../lsn_images/' + lsn_no + '.jpg" alt="' + lsn_no + '번째레슨">'
                 // $lineNoObj.html(lsn_line_no);
                 review_exist = 0;
+                
             },
             error : function(jqXHR){
                 alert('오류 : ' + jqXHR.status);
             }
         });
+    
     }else{ //후기조회요청 후기존재
         $.ajax({
-            url : "http://localhost:1124/back/review/previous",
+            url : "http://localhost:1124/back/review/previous/",
             method : 'get',
             data : {lsn_line_no : lsn_line_no},
             success : function(jsonObj){
@@ -65,35 +67,83 @@ $(function(){
                 // $("form.submit").attr("method", "put");
                 // $("form.submit").attr("action", "http://localhost:1124/back/review/modify");
                 // review_exist = 1;
+                
             },
             error : function(jqXHR){
                 alert('오류 : ' + jqXHR.status);
             }
         });
+        
     };
 
     //나중에 타이틀클릭하면 상세내용 페이지로? ->click
     //2) 제출 클릭시  addreview
     if(review_exist == 0){
-        let $form = $('form.submit');
-        $form.submit(function(){
-            let data = $(this).serialize();
-            let lsn_line_no = $(div.lsn_line_no);
-            data.set("lsn_line_no", lsn_line_no);
+        // let $form = $('form.submit');
+        // $form.submit(function(){
+        //     let data = $(this).serialize();
+        //     let lsn_line_no = $(div.lsn_line_no);
+        //     data.set("lsn_line_no", lsn_line_no);
+        //     $.ajax({
+        //         url : "http://localhost:1124/back/review/write",
+        //         method : 'post',
+        //         data : data,
+        //         success : function(){
+        //             alert('제출이 완료되었습니다');
+        //             // location.href="../html/mypage.html";
+        //         },
+        //         error : function(jqXHR){
+        //             alert('오류 : ' + jqXHR.status);
+        //             // location.href="../html/mypage.html";
+        //         }
+        //     });
+        // });
+        // return false;
+        $("input.submit").on('click', function(){
+            
+            let lsn_line_no = $("input.lsn_line_no").val();
+            let review = $("textarea#review").val();
+            let my_star_score = $("input[name='my_star_score']:checked").val();
+            let obj = {
+                lsnLine : {
+                    lsnLineNo : lsn_line_no
+                },
+                review : review,
+                myStarScore : my_star_score
+            }
             $.ajax({
                 url : "http://localhost:1124/back/review/write",
                 method : 'post',
-                data : data,
-                success : function(jsonObj){
-                    alert('제출이 완료되었습니다');
-                    // location.href="../html/mypage.html";
+                data : JSON.stringify(obj),
+                contentType: "application/json; charset=UTF-8",
+                success : function(){
+                    alert("글 작성 성공");
+                    location.href="../html/mypage.html";
                 },
                 error : function(jqXHR){
-                    alert('오류 : ' + jqXHR.status);
-                    // location.href="../html/mypage.html";
+                    alert('오류 : ' + jqXHR.responseText);
                 }
-            });
+            })
             return false;
+
+            // $form.submit(function(){
+            //     let data = $(this).serialize();
+            //     let lsn_line_no = $(div.lsn_line_no);
+            //     data.set("lsn_line_no", lsn_line_no);
+            //     $.ajax({
+            //         url : "http://localhost:1124/back/review/write",
+            //         method : 'post',
+            //         data : data,
+            //         success : function(){
+            //             alert('제출이 완료되었습니다');
+            //             // location.href="../html/mypage.html";
+            //         },
+            //         error : function(jqXHR){
+            //             alert('오류 : ' + jqXHR.status);
+            //             // location.href="../html/mypage.html";
+            //         }
+            //     });
+            // });
         });
     } else{
     //3) 후기 수정 
