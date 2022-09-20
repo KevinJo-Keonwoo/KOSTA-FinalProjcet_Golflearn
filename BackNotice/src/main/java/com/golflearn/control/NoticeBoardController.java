@@ -156,7 +156,7 @@ public class NoticeBoardController {
 		map.put("status", 0)
 	}
 	// 저장된 이미지 파일의 이름을 가지고 오는 것 -> 사진 불러올 때 저장된 개수만큼 불러와야함
-	String saveDirectory = uploadDirectory +"/"+ "notice_images" + "/" +boardNo + "/";
+	String saveDirectory = uploadDirectory + "notice_images" + "/" +boardNo + "/";
 //	System.out.println("경로는" + saveDirectory);
 	File dir = new File(saveDirectory);
 
