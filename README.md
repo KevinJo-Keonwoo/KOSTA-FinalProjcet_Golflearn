@@ -127,7 +127,7 @@ This is a golf platform for golf-beginner(a.k.a. 골린이)
 ✔️ 모임 게시판 담당<br>
 ✔️ Admin 레슨승인 페이지 담당<br> 
 ✔️ 모집상태별 필터링, 검색 그리고 페이징 처리 구현<br>
-✔️ Restful API를 이용한 <br>
+✔️ Restful API를 이용한 설계<br>
 ✔️ 담당 페이지 css 구현<br>
 <br>
 **전승현 [@cokesh](https://github.com/cokesh) - Git 관리자**<br>
