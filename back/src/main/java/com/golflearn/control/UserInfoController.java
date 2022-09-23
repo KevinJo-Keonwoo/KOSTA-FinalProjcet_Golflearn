@@ -304,6 +304,7 @@ public class UserInfoController {
 			rb.setStatus(1);
 			rb.setMsg("로그인 상태");
 //			rb.getT().setUserNickname(loginedNickname);
+//			logger.error("---------", rb.getT());
 			System.out.println(rb.getT().getUserNickname());
 		}
 		return rb;

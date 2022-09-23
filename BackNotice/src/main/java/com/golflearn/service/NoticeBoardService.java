@@ -210,8 +210,8 @@ public class NoticeBoardService {
 			throw new RemoveException("글이 없습니다.");
 		} else {
 
-			boardRepository.deleteReply(boardNo);
 			boardRepository.deleteLike(boardNo);
+			boardRepository.deleteReply(boardNo);
 			boardRepository.findById(boardNo);
 			boardRepository.deleteById(boardNo);
 		}
@@ -281,6 +281,7 @@ public class NoticeBoardService {
 	 * 좋아요 수 같이 증가
 	 * @param resaleLike
 	 */
+	@Transactional
 	public void addLike(NoticeLikeDto likeDto) throws AddException{
 		Long noticeBoardNo = likeDto.getNoticeBoardDto().getNoticeBoardNo();
 		

@@ -25,9 +25,9 @@
 	// })
 
 	function mypage() {
-	// let type = localStorage.getItem("loginedType");
+	let loginedId = localStorage.getItem("loginedId");
 	$.ajax({
-		url: "http://localhost:1124/back/mypage/student",
+		url: "http://localhost:1124/back/mypage/student"+"?userId="+loginedId,
 		//   dataType: "json",
 		success: function (jsonObj) {
 		// console.log("usertype =" + jsonObj.type);
@@ -41,8 +41,10 @@
 
 	function mypropage() {
 	// let type = localStorage.getItem("loginedType");
+	let loginedId = localStorage.getItem("loginedId");
+
 	$.ajax({
-		url: "http://localhost:1124/back/mypage/pro",
+		url: "http://localhost:1124/back/mypage/pro"+"?userId="+loginedId,
 		//   dataType: "json",
 		success: function (jsonObj) {
 		//   console.log("usertype =" + jsonObj.type);

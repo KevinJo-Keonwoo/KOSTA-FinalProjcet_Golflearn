@@ -19,12 +19,12 @@ $(function () {
             // 원본 하나 선택 후 나머지 게시글의 div삭제하는 작업
             $("div.board-list").not($board1).remove();
             let $board = $("div.boardlist__content").first();
-            let src = "../notice_image/";
+            // let src = "../notice_image/";
             $board1.empty();
             $(pageBeanObj.list).each(function (index, board) {
                 let $boardCopy = $board.clone();
                 console.log(board.userNickname); // 출력됨
-                console.log(board.noticeBoardNo);
+                console.log("게시판 번호"+board.noticeBoardNo);
                 $.ajax({
                     url: "http://localhost:1128/noticeboard/notice/downloadimage",
                     data: "boardNo=" + board.noticeBoardNo,
@@ -128,6 +128,7 @@ $(function () {
     }
     
     // 글쓰기 버튼 클릭 시 글쓰기 페이지로 이동
+    let loginedUserType = localStorage.getItem("loginedUserType");
     let $btWrite = $("div.write > button");
     if (type == 2) {
         $btWrite.click(function () {
@@ -198,4 +199,38 @@ $(function () {
         return false;
     });
     // --페이지 그룹의 페이지를 클릭 END
+
+    $.ajax({
+        url: "http://localhost:1124/back/user/loginstatus",
+        method: "get",
+        success: function (jsonObj) {
+          let $tabObj = $("div#content>div#content-right");
+          let $tabObjHtml = "";
+          let loginedUserType = localStorage.getItem("loginedUserType");
+    
+          console.log(jsonObj);
+          if (loginedUserType == 1 || loginedUserType == 0 ) {
+            // $('header div#logined').show();
+            $tabObjHtml += '<div id="logined"><div id="logout" onclick="logout()">로그아웃</div>';
+            if (loginedUserType== 1) {
+              $tabObjHtml +=
+                '<div id="addlsn"><a id="mypage" href="../html/addlesson.html">레슨등록</a></div>';
+            }
+            $tabObjHtml +=
+              '<div id="mypage" onclick="mypage()">마이페이지</div></div>';
+          } else {
+            // $('header div#normal').show();
+            $tabObjHtml +=
+              ' <div id="normal"><a href="../html/login.html">로그인</a>';
+            $tabObjHtml +=
+              '<a href="../html/signuptype.html">회원가입</a></div>';
+          }
+          $tabObj.html($tabObjHtml);
+    
+          // return false;
+        },
+        error: function (jqXHR) {
+          alert(jqXHR.status);
+        },
+      }); 
 }); // 맨 위의 funcion
