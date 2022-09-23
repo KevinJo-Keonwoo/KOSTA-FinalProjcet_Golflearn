@@ -19,6 +19,25 @@ $(function(){
         success : function(jsonObj){
             if (jsonObj.status == 1){
                 let roundReview = jsonObj.t;
+
+                
+                // let fileNameArr = jsonObj.t.imageFileNames;
+                // console.log("파일명 : " + fileNameArr);
+                // console.log("----");
+                // // console.log(dto);
+                // console.log("저장된 파일 개수는 : " + fileNameArr.length);
+
+                // let insertHtml = "";
+                // let $parent = $("div.board__content__images");
+                // for (let i = 0; i < fileNameArr.length; i++) {
+                //   insertHtml += "<img src=''";
+                //   // insertHtml += src + detailObj.resaleBoardNo + "/" + fileNameArr[i];
+                //   insertHtml += " alt='' width='250px;' height=' 250px;'/>";
+                //   insertHtml += "&nbsp;&nbsp";
+                //   //-----------------
+                // }
+                // $parent.append(insertHtml);
+
                 $("div.board__no").html("글번호&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + roundReview.roundReviewBoardNo)
                 $("div.board__title").html("제목&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + roundReview.roundReviewBoardTitle);
                 //likelist의 usernickname이 현재 살아잇는 nickname하고 같으면 좋아요 true
