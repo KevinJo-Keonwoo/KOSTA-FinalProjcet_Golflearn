@@ -184,11 +184,11 @@ public class NoticeBoardController {
 
 
 	@PostMapping(value = "/writeboard")
-	public ResponseEntity<?> write(@RequestPart(required = false) MultipartFile imageFile, NoticeBoardDto noticeBoard){
+	public ResponseEntity<?> write(@RequestPart(required = false) MultipartFile imageFiles, NoticeBoardDto noticeBoard){
 
 		logger.info("요청전달데이터 title=" + noticeBoard.getNoticeBoardTitle() + ", content=" + noticeBoard.getNoticeBoardContent());
 		//		logger.info("letterFiles.size()=" + letterFiles.size());
-		logger.info("imageFile.getSize()=" + imageFile.getSize() + ", imageFile.getOriginalFileName()=" + imageFile.getOriginalFilename());
+		logger.info("imageFile.getSize()=" + imageFiles.getSize() + ", imageFile.getOriginalFileName()=" + imageFile.getOriginalFilename());
 		HttpHeaders responseHeaders = new HttpHeaders();
 		System.out.println("제목" + noticeBoard.getNoticeBoardContent());
 		NoticeBoardDto nbDto = new NoticeBoardDto();
@@ -236,24 +236,24 @@ public class NoticeBoardController {
 		int savedletterFileCnt = 0;//서버에 저장된 파일수
 		logger.info("저장된 letter 파일개수: " + savedletterFileCnt);
 		File thumbnailFile = null;
-		long imageFileSize = imageFile.getSize();
+		long imageFileSize = imageFiles.getSize();
 		int imageFileCnt = 0;//서버에 저장된 이미지파일수
 		if(imageFileSize > 0) {
 			//이미지파일 저장하기
-			String imageOrignFileName = imageFile.getOriginalFilename(); //이미지파일원본이름얻기
+			String imageOrignFileName = imageFiles.getOriginalFilename(); //이미지파일원본이름얻기
 			String fileExtension = imageOrignFileName.substring(imageOrignFileName.lastIndexOf("."));
-			logger.info("이미지 파일이름:" + imageOrignFileName +", 파일크기: " + imageFile.getSize());
+			logger.info("이미지 파일이름:" + imageOrignFileName +", 파일크기: " + imageFiles.getSize());
 
 			//저장할 파일이름을 지정한다 ex) 글번호_image_XXXX_원본이름
 			String imageFileName = wroteBoardNo + "_image_1" + fileExtension;
 			//이미지파일생성
 			File savedImageFile = new File(saveDirectory, imageFileName);
 			try {
-				FileCopyUtils.copy(imageFile.getBytes(), savedImageFile);
+				FileCopyUtils.copy(imageFiles.getBytes(), savedImageFile);
 				logger.info("이미지 파일저장:" + savedImageFile.getAbsolutePath());
 
 				//파일형식 확인
-				String contentType = imageFile.getContentType();
+				String contentType = imageFiles.getContentType();
 				if(!contentType.contains("image/*")) { //이미지파일형식이 아닌 경우
 					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 				}
@@ -262,7 +262,7 @@ public class NoticeBoardController {
 				thumbnailFile = new File(saveDirectory,thumbnailName);
 				FileOutputStream thumbnailOS;
 				thumbnailOS = new FileOutputStream(thumbnailFile);
-				InputStream imageFileIS = imageFile.getInputStream();
+				InputStream imageFileIS = imageFiles.getInputStream();
 				int width = 100;
 				int height = 100;
 				Thumbnailator.createThumbnail(imageFileIS, thumbnailOS, width, height);

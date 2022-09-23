@@ -1,7 +1,5 @@
 $(function() {
 
-
-  
 	let $inputId = $('input[name=user_id]');
 	let $inputPhone = $('input[name=user_phone]');
 
