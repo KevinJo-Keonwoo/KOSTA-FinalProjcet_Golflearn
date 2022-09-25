@@ -126,7 +126,7 @@
 			//admin
 			// $('header div#normal').show();
 			$tabObjHtml +=
-			' <div id="normal"><a href="../html/login.html">로그인</a>';
+			' <div id="normal"><a href="../html/login.html">로그dkdn</a>';
 			$tabObjHtml += '<a href="../html/signuptype.html">회원가입</a></div>';
 		}
 		$tabObj.html($tabObjHtml);
