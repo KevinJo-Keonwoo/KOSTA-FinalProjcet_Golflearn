@@ -67,7 +67,7 @@ $(function () {
 
             $(commentObj).each(function (i, comment) {
             let $commentCopy = $comment.clone();
-            console.log(comment);
+            // console.log(comment);
             $commentCopy
                 .find("div.comment-list__nickname")
                 .html(comment.userNickname);
@@ -128,7 +128,7 @@ $(function () {
             let $imgs = $("div.board__content__images>img");
             for (let i = 0; i < fileNameArr.length; i++) {
             $.ajax({
-                url: "http://172.31.192.1:1126/backresale/resale/downloadimage/detail",
+                url: "http://localhost:1126/backresale/resale/downloadimage/detail",
                 data: { fileName: fileNameArr[i], resaleBoardNo: resaleBoardNo },
                 method: "get",
                 // credentials:true,
@@ -174,6 +174,8 @@ $(function () {
         userNickname: cmtNickname,
         resaleBoard: { resaleBoardNo: resaleBoardNo },
         };
+        console.log(obj);
+        console.log(resaleBoardNo);
         $.ajax({
         url: "http://localhost:1126/backresale/resale/comment/write",
         method: "post",
