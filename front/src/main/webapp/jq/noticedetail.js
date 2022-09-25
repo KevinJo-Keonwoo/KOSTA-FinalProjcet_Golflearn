@@ -83,7 +83,7 @@
             // $commentCopy.append("<button name='cmtModify'>수정</button>");
             // $commentCopy.append("<button name='cmtDelete'>댓글삭제</button>");
             cmtNickname = comment.userNickname;
-            cmtParentNo = comment.cmtParentNo;
+            // cmtParentNo = comment.cmtParentNo;
 
             // if(cmtParentNo == 0 ){
             //     $commentCopy.find("div.recomment-write").show();
@@ -99,11 +99,15 @@
                 commentNo = comment.resaleCmtNo;
                 commentParentNo = comment.resaleCmtParentNo;
                 // console.log("댓글 번호 : " + commentNo);
+                cmtNickname = loginedNickname;
                 $commentCopy.find("div.comment-list__content__modify").show();
             } else {
                 $commentCopy.find("div.comment-list__content__modify").hide();
             }
+            console.log(cmtNickname+"//");
+            console.log(loginedNickname+"//");
             });
+            
             $comment.remove();
 
             // 좋아요 누른 사람들 목록
@@ -120,7 +124,7 @@
                 } // each 의 if문
             // userNickname = detailObj.userNickname;
             });
-            boardNo = boardNo;
+            // boardNo = boardNo;
 
             // $("div.comment-list").html(jsonObj.t.noticeCommentList);
         
