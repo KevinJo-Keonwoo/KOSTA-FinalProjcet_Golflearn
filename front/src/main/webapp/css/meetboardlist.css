@@ -228,16 +228,13 @@ a.board-link:hover{
     color: white;
     border-radius: 3px;
     letter-spacing: 3px;
-    font-size: medium;
-    cursor: pointer;
     width: 100px;
     font-size: 15px;
     text-align: center;
     align-items:center; /*텍스트 가운데 정렬*/
     justify-content: center;/*텍스트 가운데 정렬*/
-    display: inline-block;
-    right: 0px;
-    margin-right: 0px;
+    display: flex;
+    margin-left: auto;
 }
 
 .chat:hover{
