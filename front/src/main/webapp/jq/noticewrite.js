@@ -96,7 +96,7 @@
             url: "http://localhost:1128/noticeboard/notice/" + noticeBoardNo,
             method: "get",
             success: function (jsonObj) {
-            let detailObj = jsonObj.t;
+            let detailObj = jsonObj.t.noticeBoard;
             let $formObj =$("form.write");
             console.log($formObj[0]);
             let content = detailObj.noticeBoardContent;

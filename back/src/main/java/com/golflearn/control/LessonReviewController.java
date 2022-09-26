@@ -60,12 +60,26 @@ public class LessonReviewController {
 		}
 		return rb;
 	}
+//	@PostMapping(value = "write", produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<?> write(@ModelAttribute LessonReview lsnReview, @RequestParam("lsn_line_no") int lsnLineNo) {
+//		try {
+//			LessonLine line = new LessonLine();
+//			line.setLsnLineNo(lsnLineNo);
+//			lsnReview.setLsnLine(line);
+//			service.writeReview(lsnReview);
+//			return new ResponseEntity<>(HttpStatus.OK);
+//		} catch (AddException e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<>("내용은 필수 입력 사항입니다", HttpStatus.BAD_REQUEST);
+//		}
+//	}
 	@PostMapping(value = "write", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> write(@ModelAttribute LessonReview lsnReview, @RequestParam("lsn_line_no") int lsnLineNo) {
-		try {
-			LessonLine line = new LessonLine();
-			line.setLsnLineNo(lsnLineNo);
-			lsnReview.setLsnLine(line);
+	public ResponseEntity<?> write(@RequestBody LessonReview lsnReview) {
+		try {				
+			if(lsnReview.getReview() == null || lsnReview.getReview().equals("") 
+					|| lsnReview.getMyStarScore() == 0) {
+				return new ResponseEntity<>("글 내용과 별점을 입력해주세요", HttpStatus.BAD_REQUEST);
+			}
 			service.writeReview(lsnReview);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (AddException e) {

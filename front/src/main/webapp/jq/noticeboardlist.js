@@ -128,6 +128,7 @@ $(function () {
     }
     
     // 글쓰기 버튼 클릭 시 글쓰기 페이지로 이동
+    let loginedUserType = localStorage.getItem("loginedUserType");
     let $btWrite = $("div.write > button");
     if (type == 2) {
         $btWrite.click(function () {
@@ -198,4 +199,38 @@ $(function () {
         return false;
     });
     // --페이지 그룹의 페이지를 클릭 END
+
+    $.ajax({
+        url: "http://localhost:1124/back/user/loginstatus",
+        method: "get",
+        success: function (jsonObj) {
+          let $tabObj = $("div#content>div#content-right");
+          let $tabObjHtml = "";
+          let loginedUserType = localStorage.getItem("loginedUserType");
+    
+          console.log(jsonObj);
+          if (loginedUserType == 1 || loginedUserType == 0 ) {
+            // $('header div#logined').show();
+            $tabObjHtml += '<div id="logined"><div id="logout" onclick="logout()">로그아웃</div>';
+            if (loginedUserType== 1) {
+              $tabObjHtml +=
+                '<div id="addlsn"><a id="mypage" href="../html/addlesson.html">레슨등록</a></div>';
+            }
+            $tabObjHtml +=
+              '<div id="mypage" onclick="mypage()">마이페이지</div></div>';
+          } else {
+            // $('header div#normal').show();
+            $tabObjHtml +=
+              ' <div id="normal"><a href="../html/login.html">로그인</a>';
+            $tabObjHtml +=
+              '<a href="../html/signuptype.html">회원가입</a></div>';
+          }
+          $tabObj.html($tabObjHtml);
+    
+          // return false;
+        },
+        error: function (jqXHR) {
+          alert(jqXHR.status);
+        },
+      }); 
 }); // 맨 위의 funcion

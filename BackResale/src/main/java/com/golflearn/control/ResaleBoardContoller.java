@@ -65,9 +65,9 @@ public class ResaleBoardContoller {
 	private ServletContext sc;
 
 	// 파일 저장 경로
-	//	@Value("${spring.servlet.multipart.location}") // 이 경로 사용 시 임시 파일이 만들어짐
-//	String uploadDirectory = "C:\\Project\\GolfLearn\\front\\src\\main\\webapp\\";
-	String uploadDirectory = "/images/";
+	String uploadDirectory = "C://Project/GolfLearn/BackResale/images/";
+	// 도커 사용 시 - 상대 경로로
+//	String uploadDirectory = "/images/";
 
 	/**
 	 * 게시글 목록보기
@@ -205,7 +205,7 @@ public class ResaleBoardContoller {
 		} catch (AddException e1) {
 			e1.printStackTrace();
 		}
-		logger.error("setUserNickName");
+//		logger.error("setUserNickName");
 		Long resaleBoardNo = boardDto.getResaleBoardNo();
 		//		logger.error("글번호는"+boardDto.getResaleBoardNo());
 
@@ -249,7 +249,7 @@ public class ResaleBoardContoller {
 						savedImgFileCnt++;
 
 						//썸네일 만들기
-						String thumbnailName = "s_" + (savedImgFileCnt) + fileExtension;
+						String thumbnailName = "s_" + (savedImgFileCnt) + ".jpg";
 						thumbnailFile = new File(saveDirectory, thumbnailName);
 						FileOutputStream thumbnailOS = new FileOutputStream(thumbnailFile);
 						InputStream imageFileIS = imageFile.getInputStream();
