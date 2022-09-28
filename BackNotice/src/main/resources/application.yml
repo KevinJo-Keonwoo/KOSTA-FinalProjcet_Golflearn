@@ -3,9 +3,9 @@ spring:
     hikari:
       username: admin
       driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      jdbc-url: jdbc:log4jdbc:oracle:thin:@golflearn_medium?TNS_ADMIN=/Users/jasonmilian/Desktop/dalmo/Wallet_golflearn
+      jdbc-url: jdbc:log4jdbc:oracle:thin:@golflearn_medium?TNS_ADMIN=wallet/Wallet_golflearn
       password: Dalmo08230823
-      minimum-idle: '2'
+      minimum-idle: '3'
   jpa:
     generate-ddl: 'true'
     open-in-view: 'false'
@@ -23,7 +23,7 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 150MB
-      location: /Users/jasonmilian/Desktop/projects/golflearn/front/src/main/webapp/notice_images
+      location: C:\Project\GolfLearn\front\src\main\webapp\notice_image\
       
   output:
     ansi:

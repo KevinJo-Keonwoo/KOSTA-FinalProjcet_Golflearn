@@ -168,7 +168,7 @@
         // formData.append(key, value);
     });
 
-    let obj2 = formData.get("imageFile");
+    let obj2 = formData.get("imageFiles");
     console.log(obj2);
     alert(obj2);
     if (obj2.size <= 0) {

@@ -1,24 +1,42 @@
-$(function(){
-    //1. 상세내용 보여주기
-    // html/roundreviewdetail.html?round_review_board_no=' + round_review_board_no
+$(function () {
+  //1. 상세내용 보여주기
+  // html/roundreviewdetail.html?round_review_board_no=' + round_review_board_no
     // let user_nickname = localStorage.getItem("loginedNickname");
+
+
     let user_nickname = "데빌";
     let currentPage = location.search;
-    let board_no = location.search.substring(1).split('=')[1];
-    let url = 'http://localhost:1125/backroundreview/board/' + board_no;
+    let board_no = location.search.substring(1).split("=")[1];
+    let url = "http://localhost:1125/backroundreview/board/" + board_no;
     let data = "";
     let likedNickname = "";
-    // let file1 = new Image;
-    // let file2 = new Image;
-    // let file3 = new Image;
-    
     $.ajax({
         url : url,
         method : "get",
         data : data,
         success : function(jsonObj){
             if (jsonObj.status == 1){
-                let roundReview = jsonObj.t;
+                let roundReview = jsonObj.t.roundReviewBoard;
+
+                //---이미지
+                let fileNameArr = jsonObj.t.imageFileNames;
+                // let dto = jsonObj.t.resaleBoard;
+                console.log("파일명 : " + fileNameArr);
+                console.log("----");
+                // console.log(dto);
+                console.log("저장된 파일 개수는 : " + fileNameArr.length);
+
+                let insertHtml = "";
+                let $parent = $("div.images");
+                for (let i = 0; i < fileNameArr.length; i++) {
+                  insertHtml += "<img src=''";
+                  // insertHtml += src + detailObj.resaleBoardNo + "/" + fileNameArr[i];
+                  insertHtml += " alt='' width='250px;' height=' 250px;'/>";
+                  insertHtml += "&nbsp;&nbsp";
+                  //-----------------
+                }
+                $parent.append(insertHtml);
+
                 $("div.board__no").html("글번호&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + roundReview.roundReviewBoardNo)
                 $("div.board__title").html("제목&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + roundReview.roundReviewBoardTitle);
                 //likelist의 usernickname이 현재 살아잇는 nickname하고 같으면 좋아요 true
@@ -31,55 +49,6 @@ $(function(){
                 $("img.board__images1").attr("src", "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_1.PNG");
                 $("img.board__images2").attr("src", "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_2.PNG");
                 $("img.board__images3").attr("src", "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_3.PNG");
-                // $("img.board__images2").attr("src", "../roundreview_images/noimage.PNG");
-                // $("img.board__images3").attr("src", "../roundreview_images/noimage.PNG");
-                
-                // file1.src = "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_1.PNG";
-                // file2.src = "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_2.PNG";
-                // file3.src = "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_3.PNG";
-                // if(file1.onload == true){
-                //     $("img.board__images1").attr("src", "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_1.PNG");
-                //     if(file2.onload == true){
-                //         $("img.board__images2").attr("src", "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_2.PNG");
-                //         if(file3.onload == true){
-                //             $("img.board__images3").attr("src", "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_3.PNG");
-                //         }
-                //     }
-                // } else{
-                //     $("img.board__images1").attr("src", "../roundreview_images/noimage.PNG");
-                //     $("img.board__images2").attr("src", "../roundreview_images/noimage.PNG");
-                //     $("img.board__images3").attr("src", "../roundreview_images/noimage.PNG");
-                // }
-
-                // files.onload = function(){
-                // }
-                // files.onerror = function(){
-                //     $("img.board__images1").attr("src", "../roundreview_images/noimage.PNG");
-                //     $("img.board__images2").attr("src", "../roundreview_images/noimage.PNG");
-                //     $("img.board__images3").attr("src", "../roundreview_images/noimage.PNG");
-                // }
-                // files.src = "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_2.PNG";
-                // files.onload = function(){
-                //     $("img.board__images2").attr("src", "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_2.PNG");
-                // }
-                // files.onerror = function(){
-                //     $("img.board__images1").attr("src", "../roundreview_images/noimage.PNG");
-                //     $("img.board__images2").attr("src", "../roundreview_images/noimage.PNG");
-                // }
-                // files.src = "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_3.PNG";
-                // files.onload = function(){
-                //     $("img.board__images1").attr("src", "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_1.PNG");
-                //     $("img.board__images2").attr("src", "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_2.PNG");
-                //     $("img.board__images3").attr("src", "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_3.PNG");
-                // }
-                // files.onerror = function(){
-                //     $("img.board__images1").attr("src", "../roundreview_images/noimage.PNG");
-                //     $("img.board__images2").attr("src", "../roundreview_images/noimage.PNG");
-                //     $("img.board__images3").attr("src", "../roundreview_images/noimage.PNG");
-                // }
-                // $("img.board__images2").attr("src", "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_2.PNG");
-                // $("img.board__images3").attr("src", "../roundreview_images/" + roundReview.roundReviewBoardNo + "/image_3.PNG");
-                // $("img.board__images").attr("src", "https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-medium/1f9e1.png");
                 $("div.board__content").html(roundReview.roundReviewBoardContent);
                 // $("div.board__map").html(roundReview.roundReviewBoardMap);
             
@@ -120,8 +89,6 @@ $(function(){
                         // 세션 아이디와 좋아요 한 닉네임이 같으면
                         likeNo = like.roundReviewLikeNo;
                         // likedNickname = likeNickname;
-                        // console.log("좋아요 한 사람 & 로그인 된 사람" + likedNickname);
-                        // console.log("좋아요 번호 : " + likeNo);
                     } // each 의 if문
                 // userNickname = detailObj.userNickname;
                 });
@@ -149,7 +116,7 @@ $(function(){
                     //마커를 클릭하면 장소명이 인포윈도위에 노출 
                     infowindow.setContent('<div style="padding:5px; font-size:12px;">' + msg + '</div>');
                     infowindow.open(map, marker);
-                })
+                });
 
                 //주소얻기 
                 // let geocoder = new kakao.maps.services.Geocoder();
@@ -203,12 +170,36 @@ $(function(){
                 //         }
                 //     }    
                 // }
+                let $imgs =  $('div.images>img');
+                for (let i = 0; i < fileNameArr.length; i++) {
+                  $.ajax({
+                    url: "http://localhost:1125/backroundreview/downloadimage/detail",
+                    data: {fileName : fileNameArr[i], roundReviewBoardNo : board_no},
+                    method: "get",
+                    // credentials:true,
+                    cache: false,
+                    xhrFields: {
+                      responseType: "blob", //이미지 다운로드 문법
+                      // withCredentials: true,
+                    },
+                    success: function (responseData) {
+                      // 받아온 이미지들 객체를 넣어줌
+                      let url = URL.createObjectURL(responseData);
+                      //body > main > article > div > div.board-container > div.board__content__images > img:nth-child(1)
+                      //"div.board__content__images
+                      console.log("----------");
+                      console.log($imgs); //[i]);
+                      $($imgs[i]).attr("src", url);
+                    },
+                  });
+                }//end for
             }
         },
         error : function(jqXHR){
             alert("에러:" + jqXHR.status);
         }
-    })
+    });
+	// });
 
     
 
@@ -226,7 +217,7 @@ $(function(){
         console.log(roundReviewCmtContent);
         // let userNickname = localStorage.getItem("loginedNickname");
         // 테스트용
-        let userNickname = "케빈"; 
+        let userNickname = "데빌"; 
         $.ajax({
             url : "http://localhost:1125/backroundreview/comment/" + board_no,
             method : "post",
@@ -240,134 +231,172 @@ $(function(){
                 "roundReviewCmtParentNo" : "roundReviewCmtParentNo",
                 "userNickname" : "userNickname",
             */
-            //보내줘야할것. boardno, content, parentno, nickname
-            data : JSON.stringify({
-                roundReviewCmtContent : roundReviewCmtContent,
-                roundReviewCmtParentNo : roundReviewCmtParentNo,
-                userNickname : userNickname,
-                roundReviewBoard : {
-                    roundReviewBoardNo : roundReviewBoardNo
-                }
-            }),
-            success : function(){
-                location.href = currentPage;
-            },
-            error: function(jqXHR){
-                alert("에러:" + jqXHR.status);
-            }
-        })
-    })
-    //3. 댓글 수정하기
-    let $test = $("article");
-    let $test2 = $test.parents();
-    $test.on('click', "div.comment>div.comment-list>button.comment-list__modify", function(){
-        let roundReviewCmtNo = $(this).siblings("div.comment-list__no").html();
-        console.log(roundReviewCmtNo);
-        $.ajax({
-            url : "http://localhost:1125/backroundreview/comment/" + roundReviewCmtNo,
-            method : 'put',
-            timeout : 0,
-            header : {
-                "Content-Type": "application/json"
-            },
-            data : JSON.stringify({}),
-            success : function(){
-                alert("수정성공")
-            },
-            error : function (jqXHR) {
-                alert(
-                    "수정 에러: " +
-                    jqXHR.status + 
-                    ", jqXHR.responseText:" +
-                    jqXHR.responseTest
-                );
-            }
+     	 //보내줘야할것. boardno, content, parentno, nickname
+			data: JSON.stringify({
+				roundReviewCmtContent: roundReviewCmtContent,
+				roundReviewCmtParentNo: roundReviewCmtParentNo,
+				userNickname: userNickname,
+				roundReviewBoard: {
+					roundReviewBoardNo: roundReviewBoardNo,
+				},
+			}),
+			success: function () {
+				location.href = currentPage;
+			},
+			error: function (jqXHR) {
+				alert("에러:" + jqXHR.status);
+			}
+   		});
+    return false;
+ 	});
+  //3. 댓글 수정하기
+  // let $test = $("article");
+  // let $test2 = $test.parents();
+  // $test.on('click', "div.comment>div.comment-list>button.comment-list__modify", function(){
+  //     let roundReviewCmtNo = $(this).siblings("div.comment-list__no").html();
+  //     console.log(roundReviewCmtNo);
+  //     $.ajax({
+  //         url : "http://localhost:1125/backroundreview/comment/" + roundReviewCmtNo,
+  //         method : 'put',
+  //         timeout : 0,
+  //         header : {
+  //             "Content-Type": "application/json"
+  //         },
+  //         data : JSON.stringify({}),
+  //         success : function(){
+  //             alert("수정성공")
+  //         },
+  //         error : function (jqXHR) {
+  //             alert(
+  //                 "수정 에러: " +
+  //                 jqXHR.status +
+  //                 ", jqXHR.responseText:" +
+  //                 jqXHR.responseTest
+  //             );
+  //         }
 
-        })
-    })
+  //     })
 
-    
-    //6. 좋아요 누르기/해제하기
-    
+  // })
+  //댓글수정실패
+  // $("div.comment").on("click",
+  //     "div.comment-list">"button.comment-list__modify",
+  //     function(){
+  //         commentNo = $(this).parent().find("div.comment-list__no").text();
+  //         console.log(commentNo+"댓글")
+  //         // commentNo = commentNo.split("-")[1].trim();
+  //         // console.log("수정댓글번호:" + commentNo1);
+  //     // if(loginedNickname == commentNickname){
+  //         let url = "http://localhost:1125/backroundreview/comment/" + commentNo;
+  //         // console.log(url);
+  //         let cmtContent = $(this).parent().find("input").val();
+  //         // console.log(cmtContent);
+  //         let obj = {
+  //         "roundReviewCmtNo": commentNo,
+  //         "roundReviewCmtContent": cmtContent,
+  //         "userNickname":user_nickname,
+  //         "roundReviewBoard" : {"roundReviewBoardNo" : board_no}};
+  //         $.ajax({
+  //             url: url,
+  //             method: "put",
+  //             contentType: "application/json; charset=utf-8",
+  //             data: JSON.stringify(obj),
+  //             success: function (jsonObj) {
+  //                 alert(jsonObj.msg);
+  //                 location.reload();
+  //             },
+  //             error: function (jsonObj) {
+  //                 alert(jsonObj.msg);
+  //             }
+  //         });
+  //     // }else{ // if문
+  //        // alert("댓글 작성자가 아닙니다.");
+  //     // }
+  //     return false;
+  // });
+
+  //6. 좋아요 누르기/해제하기
+
     $("img.board__like").on("click", function () {
-        let roundReviewBoardNo = board_no;
-        let likedNickname = "데빌";
-        console.log(user_nickname);
-        console.log(likedNickname);
+		let roundReviewBoardNo = board_no;
+		// let likedNickname = "데빌";
+		console.log(user_nickname);
+		console.log(likedNickname);
 
-        // console.log("보드 넘버는" + resaleBoardNo);
-        // 좋아요 여부
-        console.log("좋아요한 닉넴" + likedNickname);
-        // console.log("좋아요 번호 " + likeNo);
-        if (likedNickname == user_nickname) {
-            // localStorage.getItem("loginedNickname")
-            // 세션 아이디와 좋아요 한 닉네임이 같으면
-            // 좋아요 삭제
-            // let obj = {
-            //     userNickname : likedNickname,
-            // };
-            let data = {userNickname : likedNickname};
-            $("img.board__like").attr('src', "https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-large/1f90d.png");
-            $.ajax({
-                url: "http://localhost:1125/backroundreview/like/" + roundReviewBoardNo,
-                method: "delete",
-                // contentType: "application/json",
-                // data: JSON.stringify(obj),
-                data: data,
-                success: function (jsonObj) {
-                if (jsonObj.status == 1) {
-                    alert(jsonObj.msg);
-                    location.reload();
-                    //흰색 하트
-                }
-                },
-                error: function (jqXHR) {
-                    alert(jqXHR.status + ":" + "좋아요 삭제 실패");
-                    location.reload();
-                },
-            });
-        } else { // 세션 아이디와 좋아요한 닉네임이 같지 않으면
-            let nickname = user_nickname;
-            // let obj = { 
-            //     roundReviewLike : { 
-            //         userNickname : nickname
-            //     }
-            // };
-            let data = {userNickname : nickname}
-            $("img.board__like").attr('src', "https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-medium/1f9e1.png");
-            //좋아요 클릭
-            $.ajax({
-                url: "http://localhost:1125/backroundreview/like/" + roundReviewBoardNo,
-                method: "post",
-                // contentType: "application/json",
-                // data: JSON.stringify(obj),
-                data: data,
-                success: function (jsonObj) {
-                if ((jsonObj.status = 1)) {
-                    alert("좋아요 추가 성공");
-                    location.reload();
-                     //주황 하트
-                }
-                },
-                error: function (jqXHR) {
-                    alert(jqXHR.status + ":" + "좋아요 추가 실패");
-                    location.reload();
-                }, //error
-            }); // ajax
-        } //else 끝
-    }); //클릭 끝
-    // ----------------------------------
+		// console.log("보드 넘버는" + resaleBoardNo);
+		// 좋아요 여부
+		console.log("좋아요한 닉넴" + likedNickname);
+		// console.log("좋아요 번호 " + likeNo);
+		if (likedNickname == user_nickname) {
+		// localStorage.getItem("loginedNickname")
+		// 세션 아이디와 좋아요 한 닉네임이 같으면
+		// 좋아요 삭제
+		// let obj = {
+		//     userNickname : likedNickname,
+		// };
+		let data = { userNickname: likedNickname };
+		$("img.board__like").attr(
+			"src",
+			"https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-large/1f90d.png"
+		);
+		$.ajax({
+			url: "http://localhost:1125/backroundreview/like/" + roundReviewBoardNo,
+			method: "delete",
+			// contentType: "application/json",
+			// data: JSON.stringify(obj),
+			data: data,
+			success: function (jsonObj) {
+				if (jsonObj.status == 1) {
+					alert(jsonObj.msg);
+					location.reload();
+					//흰색 하트
+				}
+			},
+			error: function (jqXHR) {
+			alert(jqXHR.status + ":" + "좋아요 삭제 실패");
+			location.reload();
+			},
+		});
+		alert("좋아요 삭제 성공");
+		} else {
+		// 세션 아이디와 좋아요한 닉네임이 같지 않으면
+		let nickname = user_nickname;
+		// let obj = {
+		//     roundReviewLike : {
+		//         userNickname : nickname
+		//     }
+		// };
+		let data = { userNickname: nickname };
+		$("img.board__like").attr(
+			"src",
+			"https://a.slack-edge.com/production-standard-emoji-assets/14.0/google-medium/1f9e1.png"
+		);
+		//좋아요 클릭
+		$.ajax({
+			url: "http://localhost:1125/backroundreview/like/" + roundReviewBoardNo,
+			method: "post",
+			// contentType: "application/json",
+			// data: JSON.stringify(obj),
+			data: data,
+			success: function (jsonObj) {
+				if ((jsonObj.status = 1)) {
+					alert("좋아요 추가 성공");
+					location.reload();
+					//주황 하트
+				}
+			},
+			error: function (jqXHR) {
+				alert(jqXHR.status + ":" + "좋아요 추가 실패");
+				location.reload();
+			} //error
+		}); // ajax
+		alert("좋아요 추가 성공");
+		} //else 끝
+  	}); //클릭 끝
+  // ----------------------------------
 
-    //7. 이전 버튼 눌렀을 때 이전으로 넘어가기
-    $("div.footer").on('click', "button.previous", function(){
-        location.href = './roundreviewboardlist.html';
-    })
-
-
-
-
-
-
-
-
-})
+  //7. 이전 버튼 눌렀을 때 이전으로 넘어가기
+    $("div.footer").on("click", "button.previous", function () {
+    location.href = "./roundreviewboardlist.html";
+    });
+});

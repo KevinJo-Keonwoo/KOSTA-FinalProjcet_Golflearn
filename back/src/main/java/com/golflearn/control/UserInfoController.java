@@ -60,19 +60,19 @@ public class UserInfoController {
 	private ServletContext sc;
 
 
-	// 프로 회원가입 (파일 업로드를 곁들인..)
+	// 프로 회원가입
 	// 파일 업로드 시 formData 필요 > PathVariable 사용 불가
 	// 파일 업로드 시 요청전달데이터 꼭 필요 > RestfulAPI 사용 불가
 	// 파일 업로드 가능 방법 
 	// 1. @RequestPart MultipartFile 타입 사용
 	// 2. ServletRequest or MultipartHttpServletRequest
-	@Value("${spring.servlet.multipart.location}")
-	String uploadDirectory;
+//	@Value("${spring.servlet.multipart.location}")
+	String uploadDirectory = "C:\\Project\\GolfLearn\\front\\src\\main\\webapp\\";
 	@PostMapping("signuppro")
 	public ResponseEntity<?> signuppro (
 			@RequestPart(required = false) List<MultipartFile> certifFiles, 
 			@RequestPart(required = false) MultipartFile profileImg,
-			@Valid UserInfo userInfo, @Valid ProInfo proInfo, Errors error,
+			UserInfo userInfo, ProInfo proInfo, Errors error,
 			HttpSession session) {
 
 		logger.info("요청전달데이터 userNickname=" + userInfo.getUserNickname());
@@ -178,11 +178,9 @@ public class UserInfoController {
 	// 수강생 회원가입
 	//	@Value("${spring.servlet.multiple.location}")
 	//	String uploadDirectory;
-	@Transactional
 	@PostMapping("signupstdt")
 	public ResultBean<?> signupstdt (
-			@RequestPart(required = false) MultipartFile profileImg,
-			@Valid UserInfo userInfo, 
+			@RequestPart(required = false) MultipartFile profileImg, UserInfo userInfo, 
 			Errors error) {
 
 		ResultBean<?> rb = new ResultBean<>();
@@ -275,6 +273,7 @@ public class UserInfoController {
 			rb.setStatus(1);
 			rb.setMsg("로그인 성공");
 			rb.setT(userInfo);
+			
 			session.setAttribute("loginInfo", userId);
 			session.setAttribute("loginNickname", userInfo.getUserNickname());
 			session.setAttribute("userType", userInfo.getUserType());
@@ -305,6 +304,7 @@ public class UserInfoController {
 			rb.setStatus(1);
 			rb.setMsg("로그인 상태");
 //			rb.getT().setUserNickname(loginedNickname);
+//			logger.error("---------", rb.getT());
 			System.out.println(rb.getT().getUserNickname());
 		}
 		return rb;

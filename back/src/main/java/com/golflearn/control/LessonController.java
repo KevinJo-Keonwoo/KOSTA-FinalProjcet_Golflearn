@@ -2,12 +2,14 @@ package com.golflearn.control;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.ServletContext;
@@ -16,7 +18,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +26,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.golflearn.dto.Lesson;
+import com.golflearn.dto.LessonClassification;
 import com.golflearn.dto.LessonLine;
 import com.golflearn.dto.ResultBean;
 import com.golflearn.dto.UserInfo;
@@ -41,31 +45,53 @@ import com.golflearn.service.LessonService;
 
 import net.coobird.thumbnailator.Thumbnailator;
 
-@CrossOrigin(origins = "*")//모든포트에서 접속가능 + 메서드마다 각각 설정도 가능
+@CrossOrigin(origins = "*") // 모든포트에서 접속가능 + 메서드마다 각각 설정도 가능
 @RestController
-@RequestMapping("lesson/*") //합의 필요
+@RequestMapping("lesson/*")
 public class LessonController {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Autowired
 	private LessonService service;
 
 	@Autowired
-	private ServletContext sc;//파일path설정 시 필요
-	
+	private ServletContext sc;// 파일path설정 시 필요
+
 	@GetMapping("{lsnNo}")
-	public ResultBean<Lesson> viewLessonDetail(@PathVariable int lsnNo) {
-		ResultBean<Lesson> rb = new ResultBean<>();
+	public ResultBean<Map<String, Object>>viewLessonDetail(@PathVariable int lsnNo) {
+		Map<String, Object> map = new HashMap<>();
+
 		try {
-			Lesson l = service.viewLessonDetail(lsnNo);
-			rb.setStatus(1); //성공시 satus : 1
-			rb.setT(l); //lesson객체 담기
+			Lesson lesson= service.viewLessonDetail(lsnNo);
+			map.put("Lesson", lesson);
+			//map.put("status", 1);
 		} catch (FindException e) {
 			e.printStackTrace();
-			rb.setStatus(0); //성공 실패시 satus : 0
-			rb.setMsg(e.getMessage());
+			map.put("status", 0);
 		}
+
+		// 저장된 이미지 파일의 이름을 가지고 오는 것 -> 사진 불러올 때 저장된 개수만큼 불러와야함
+		String saveDirectory = uploadDirectory +"/"+ "lsn_images" + "/" +lsnNo + "/";
+//		System.out.println("경로는" + saveDirectory);
+		File dir = new File(saveDirectory);
+
+		String[] imageFiles = dir.list(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.contains("image_");
+			} //image라는 이름을 포함한 이미지명들 반환
+		});
+
+		map.put("imageFileNames", imageFiles);
+
+		ResultBean<Map<String,Object>> rb = new ResultBean<>();
+		rb.setStatus(1);
+		rb.setT(map);	
+
 		return rb;
 	}
+
 
 	@GetMapping(value = { "" })
 	public ResultBean<Lesson> list(@PathVariable Optional<Integer> optCp) { // 로그인 유무와 상관없이 다 볼수 있기때문에 httpSession 필요없음
@@ -87,18 +113,18 @@ public class LessonController {
 	public ResultBean<LessonLine> viewHistory(@PathVariable int optCp, HttpSession session) {
 		ResultBean<LessonLine> rb = new ResultBean<>();
 		// 로그인 여부를 받아와야한다 HttpSession?
-		String loginedId = (String)session.getAttribute("loginInfo");
-		if(loginedId == null) {
+		String loginedId = (String) session.getAttribute("loginInfo");
+		if (loginedId == null) {
 			rb.setStatus(0);
 			rb.setMsg("로그인하세요");
 			return rb;
-		}else {
+		} else {
 			try {
-				List<LessonLine> lsnHistories = service.viewLessonHistory(optCp);
+				List<Lesson> lessons = service.viewMain();
 				rb.setStatus(1);
-				rb.setLt(lsnHistories);
+//				rb.setLt(lessons);
 				return rb;
-			} catch (FindException e) {				
+			} catch (FindException e) {
 				e.printStackTrace();
 				rb.setStatus(-1);
 				rb.setMsg(e.getMessage());
@@ -106,38 +132,33 @@ public class LessonController {
 			}
 		}
 	}
-	
-	//restcontroller가 아님
 
-	@Value("${spring.servlet.multipart.location}")
-	String saveDirectory;// 파일경로생성
+//	@Value("${spring.servlet.multipart.location}")
+//	String saveDirectory;// 파일경로생성
+	String uploadDirectory = "/images/";
 	@PostMapping("request") // list타입 필드가 있는 Lesson전달과 파일첨부를 동시에 하기 위해 String타입으로 Lesson얻기
-	public ResponseEntity<?> reuqestLesson(@RequestPart(required = false) MultipartFile file, String strLesson,
-			HttpSession session) throws JsonMappingException, JsonProcessingException {
+	public ResponseEntity<?> reuqestLesson(@RequestPart(required = false) MultipartFile file, String strLesson) throws JsonMappingException, JsonProcessingException {
 
-		String loginedUserType = (String) session.getAttribute("userType");// 로그인한 유저의 유저타입가져오기
-		String loginedId = (String) session.getAttribute("loginInfo");// 로그인한 유저의 아이디 가져오기
-
-		if (loginedUserType == null) {// 로그인 여부 확인
+		ObjectMapper mapper = new ObjectMapper();
+		Lesson lesson = mapper.readValue(strLesson, Lesson.class);// String타입을 Lesson타입으로 변환
+//		String loginedId = lesson.getUserInfo().getUserId();
+		String loginedId = "jangpro@gmail.com";
+		if (loginedId == null) {// 로그인 여부 확인
 			return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.INTERNAL_SERVER_ERROR);
-		} else if (!loginedUserType.equals("1")) {// 프로여부 확인
-			return new ResponseEntity<>("프로만 접근가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		} else {
 			// -----Lesson DB에 저장-----
-			ObjectMapper mapper = new ObjectMapper();
-			Lesson lesson = mapper.readValue(strLesson, Lesson.class);// String타입을 Lesson타입으로 변환
-
 			UserInfo userInfo = new UserInfo();
 			userInfo.setUserId(loginedId);
 			lesson.setUserInfo(userInfo);// lesson객체 내 userInfo 저장
-			lesson.setLocNo("11002");// 테스트
 
 			List<LessonClassification> classifications = lesson.getLsnClassifications();// 클럽분류 저장
 			try {
 				service.addLesson(lesson);//서비스 호출
 
+				int lsnNo = lesson.getLsnNo();
 				// -----이미지 업로드-----
-				String lessonPath = saveDirectory + "lsn_images\\";// 파일경로
+				String lessonPath = uploadDirectory +"/"+ "lsn_images" + "/" + lsnNo + "/";
+				
 				if (!new File(lessonPath).exists()) {
 					logger.info("업로드 실제경로생성");
 					new File(lessonPath).mkdirs();
@@ -202,8 +223,7 @@ public class LessonController {
 				e.printStackTrace();
 				return new ResponseEntity<>("오류가 발생하였습니다. 다시 시도해주세요",HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-		}
 
+		}
 	}
-	
 }

@@ -143,8 +143,8 @@ $(function(){
     // }
 
     // 세션의 닉네임
-    // let loginedNickname = localStorage.getItem("loginedNickname");
-    let loginedNickname = "케빈";
+    let loginedNickname = localStorage.getItem("loginedNickname");
+    // let loginedNickname = "케빈";
     // 게시글 번호
     let queryString = location.search.split("=")[1];
     let roundReviewBoardNo = queryString;
@@ -229,5 +229,10 @@ $(function(){
     // 내용 trim해줄때 
     // $("span.board__content-content").html(jsonObj.t.meetBoardContent.replace(
     //     /&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g,'"').replace(/&#40;/g,'(').replace(/&#41;/g,')').replace(/&#35;/g,'#'));
+
+    $("div.footer").on('click', "button.previous", function(){
+        location.href = './roundreviewboardlist.html';
+    })
+
 }); //function
 

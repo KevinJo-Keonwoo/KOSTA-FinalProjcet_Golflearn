@@ -2,6 +2,7 @@ $(function () {
     //로딩 되자마자 글 목록 불러오기(1 페이지)
     // let url = "http://localhost:1126/backresale/resale/board/list/1";
     showList("http://localhost:1128/noticeboard/notice/list");
+    let type = localStorage.getItem("loginedUserType");
     function showList(url) {
         $.ajax({
         url: url,
@@ -18,13 +19,29 @@ $(function () {
             // 원본 하나 선택 후 나머지 게시글의 div삭제하는 작업
             $("div.board-list").not($board1).remove();
             let $board = $("div.boardlist__content").first();
-            let src = "../notice_image/";
+            // let src = "../notice_image/";
             $board1.empty();
             $(pageBeanObj.list).each(function (index, board) {
                 let $boardCopy = $board.clone();
                 console.log(board.userNickname); // 출력됨
-                console.log(board.noticeBoardNo);
-
+                console.log("게시판 번호"+board.noticeBoardNo);
+                $.ajax({
+                    url: "http://localhost:1128/noticeboard/notice/downloadimage",
+                    data: "boardNo=" + board.noticeBoardNo,
+                    method: "get",
+                    // credentials:true,
+                    cache: false,
+                    xhrFields: {
+                        responseType: "blob", //이미지 다운로드 문법
+                        // withCredentials: true,
+                    },
+                    success: function (responseData) { // 받아온 이미지들 객체를 넣어줌
+                        let url = URL.createObjectURL(responseData);
+                        $boardCopy
+                        .find("div>img.board-list__content__thumbnail")
+                        .attr("src", url);
+                    },
+                });
                 $boardCopy
                 .find("div.board-list__content__no")
                 .html(board.noticeBoardNo);
@@ -46,14 +63,15 @@ $(function () {
                 $boardCopy
                 .find("div.board-list__content__like-cnt")
                 .html(board.noticeBoardLikeCnt);
-                $boardCopy
-                .find("div>img.board-list__content__thumbnail")
-                .attr(
-                    "src",
-                    src  + board.noticeBoardNo +  "/" + board.noticeBoardNo + "_image_" + "s_1" + ".jpeg"
-                );
+                // $boardCopy
+                // .find("div>img.board-list__content__thumbnail")
+                // .attr(
+                //     "src",
+                //     src  + board.noticeBoardNo +  "/" + board.noticeBoardNo + "_image_" + "s_1" + ".jpeg"
+                // );
                 $board1.append($boardCopy);
             });
+
             $board.hide();
             // 페이지 그룹
             let $pagegroup = $("div.page-group");
@@ -108,12 +126,18 @@ $(function () {
         },
         });
     }
-
+    
     // 글쓰기 버튼 클릭 시 글쓰기 페이지로 이동
+    let loginedUserType = localStorage.getItem("loginedUserType");
     let $btWrite = $("div.write > button");
-    $btWrite.click(function () {
-        location.href = "../html/noticeboardwrite.html";
-    });
+    if (type == 2) {
+        $btWrite.click(function () {
+            $btWrite.show();
+            location.href = "../html/noticeboardwrite.html";
+        });
+    } else {
+        $btWrite.hide();
+    }
 
     //클릭한 해당 게시물로 이동
     $("div.board").on("click", "div.boardlist__content", function () {
@@ -175,4 +199,38 @@ $(function () {
         return false;
     });
     // --페이지 그룹의 페이지를 클릭 END
+
+    $.ajax({
+        url: "http://localhost:1124/back/user/loginstatus",
+        method: "get",
+        success: function (jsonObj) {
+          let $tabObj = $("div#content>div#content-right");
+          let $tabObjHtml = "";
+          let loginedUserType = localStorage.getItem("loginedUserType");
+    
+          console.log(jsonObj);
+          if (loginedUserType == 1 || loginedUserType == 0 ) {
+            // $('header div#logined').show();
+            $tabObjHtml += '<div id="logined"><div id="logout" onclick="logout()">로그아웃</div>';
+            if (loginedUserType== 1) {
+              $tabObjHtml +=
+                '<div id="addlsn"><a id="mypage" href="../html/addlesson.html">레슨등록</a></div>';
+            }
+            $tabObjHtml +=
+              '<div id="mypage" onclick="mypage()">마이페이지</div></div>';
+          } else {
+            // $('header div#normal').show();
+            $tabObjHtml +=
+              ' <div id="normal"><a href="../html/login.html">로그인</a>';
+            $tabObjHtml +=
+              '<a href="../html/signuptype.html">회원가입</a></div>';
+          }
+          $tabObj.html($tabObjHtml);
+    
+          // return false;
+        },
+        error: function (jqXHR) {
+          alert(jqXHR.status);
+        },
+      }); 
 }); // 맨 위의 funcion

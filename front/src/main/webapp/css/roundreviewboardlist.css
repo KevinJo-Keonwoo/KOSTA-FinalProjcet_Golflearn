@@ -1,6 +1,7 @@
 h2{
     margin-top: 30px;
     color: rgb(113, 139, 255);
+    cursor: pointer;
 }
 ul{
     list-style: none;
