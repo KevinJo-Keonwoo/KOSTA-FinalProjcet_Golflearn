@@ -64,8 +64,9 @@ public class RoundReviewBoardController {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	//파일 저장 경로
-	@Value("${spring.servlet.multipart.location}")
-	String uploadDirectory = "/images/";
+//	@Value("${spring.servlet.multipart.location}")
+//	String uploadDirectory = "/images/";
+	String uploadDirectory = "C:\\Project\\Golflearn\\BackRoundReview\\images";
 
 	@GetMapping(value = {"board/list", "board/list/{optOrderType}", "board/list/{optOrderType}/{optCp}"})
 	public ResultBean<Page<RoundReviewBoardDto>> list (HttpSession session, @PathVariable Optional<Integer> optOrderType, @PathVariable Optional<Integer> optCp, 
@@ -141,51 +142,50 @@ public class RoundReviewBoardController {
 	}
 	//게시물 상세보기 
 	@GetMapping(value = "board/{roundReviewBoardNo}")
-	public ResultBean<RoundReviewBoardDto> viewBoard(@PathVariable Long roundReviewBoardNo){
-//	public ResultBean<Map<String, Object>> viewBoard(@PathVariable Long roundReviewBoardNo){
-//		Map<String, Object> map = new HashMap<>();
-//		
-//		try {
-//			RoundReviewBoardDto roundReviewBoard = service.viewBoard(roundReviewBoardNo);
-//			map.put("roundReviewBoard", roundReviewBoard);
-//			//map.put("status", 1);
-//		} catch (FindException e) {
-//			e.printStackTrace();
-//			map.put("status", 0);
-//		}
-//
-//		// 저장된 이미지 파일의 이름을 가지고 오는 것 -> 사진 불러올 때 저장된 개수만큼 불러와야함
-//		String saveDirectory = uploadDirectory +"/"+ "roundReview_images" + "/" + roundReviewBoardNo + "/";
-////		System.out.println("경로는" + saveDirectory);
-//		File dir = new File(saveDirectory);
-//
-//		String[] imageFiles = dir.list(new FilenameFilter() {
-//			@Override
-//			public boolean accept(File dir, String name) {
-//				return name.contains("image_");
-//			} //image라는 이름을 포함한 이미지명들 반환
-//		});
-//
-//		map.put("imageFileNames", imageFiles);
-//		
-//		ResultBean<Map<String, Object>> rb = new ResultBean<>();
-//		rb.setStatus(1);
-//		rb.setT(map);
-//		
-//		return rb;
+//	public ResultBean<RoundReviewBoardDto> viewBoard(@PathVariable Long roundReviewBoardNo){
+	public ResultBean<Map<String, Object>> viewBoard(@PathVariable Long roundReviewBoardNo){
+		Map<String, Object> map = new HashMap<>();
+		
+		try {
+			RoundReviewBoardDto roundReviewBoard = service.viewBoard(roundReviewBoardNo);
+			map.put("roundReviewBoard", roundReviewBoard);
+			//map.put("status", 1);
+		} catch (FindException e) {
+			e.printStackTrace();
+			map.put("status", 0);
+		}
+
+		// 저장된 이미지 파일의 이름을 가지고 오는 것 -> 사진 불러올 때 저장된 개수만큼 불러와야함
+		String saveDirectory = uploadDirectory +"/"+ "roundReview_images" + "/" + roundReviewBoardNo + "/";
+//		System.out.println("경로는" + saveDirectory);
+		File dir = new File(saveDirectory);
+
+		String[] imageFiles = dir.list(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.contains("image_");
+			} //image라는 이름을 포함한 이미지명들 반환
+		});
+		map.put("imageFileNames", imageFiles);
+		
+		ResultBean<Map<String, Object>> rb = new ResultBean<>();
+		rb.setStatus(1);
+		rb.setT(map);
+		
+		return rb;
 		
 		//이전코드 
-		ResultBean<RoundReviewBoardDto> rb = new ResultBean<>();
-		try {
-			RoundReviewBoardDto dto = service.viewBoard(roundReviewBoardNo);
-			rb.setStatus(1);
-			rb.setT(dto);
-		}catch(FindException e) {
-			e.printStackTrace();
-			rb.setStatus(0);
-			rb.setMsg(e.getMessage());
-		}
-		return rb;
+//		ResultBean<RoundReviewBoardDto> rb = new ResultBean<>();
+//		try {
+//			RoundReviewBoardDto dto = service.viewBoard(roundReviewBoardNo);
+//			rb.setStatus(1);
+//			rb.setT(dto);
+//		}catch(FindException e) {
+//			e.printStackTrace();
+//			rb.setStatus(0);
+//			rb.setMsg(e.getMessage());
+//		}
+//		return rb;
 	}
 	//게시물 수정하기
 	@PutMapping(value = "board/{roundReviewBoardNo}", produces = MediaType.APPLICATION_JSON_VALUE) //세션 유저아이디 잡아오기
@@ -284,7 +284,8 @@ public class RoundReviewBoardController {
 						savedImgFileCnt++;
 						
 						//썸네일 만들기
-						String thumbnailName = "s_" + savedImageFileName;
+//						String thumbnailName = "s_" + savedImageFileName;
+						String thumbnailName = "s_" + (savedImgFileCnt+1) + ".PNG";
 						thumbnailFile = new File(saveDirectory, thumbnailName);
 						FileOutputStream thumbnailOS = new FileOutputStream(thumbnailFile);
 						InputStream imageFileIS = imageFile.getInputStream();
@@ -419,7 +420,7 @@ public class RoundReviewBoardController {
 	 */
 	@GetMapping(value ="/downloadimage")///{resaleBoardNo}") //GetMapping 사용 가능
 	public ResponseEntity<?>  downloadImage(String roundReviewBoardNo){//@PathVariable String resaleBoardNo){//String imageFileName) {
-		File thumbnailFile = new File(uploadDirectory+"/roundreview_images/"+roundReviewBoardNo, "s_1.jpg");
+		File thumbnailFile = new File(uploadDirectory+"/roundreview_images/"+roundReviewBoardNo, "s_1.PNG");
 		HttpHeaders responseHeaders = new HttpHeaders();
 		try {
 			responseHeaders.set(HttpHeaders.CONTENT_LENGTH, thumbnailFile.length()+"");
